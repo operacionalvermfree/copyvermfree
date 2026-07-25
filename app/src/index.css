@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --vf-green-dark: #1f3d2b;
+  --vf-green: #2f5233;
+  --vf-lime: #a8d95c;
+  --vf-cream: #f7f4ec;
+  --vf-cream-2: #efe9d8;
+  --vf-kids: #e78a3c;
+  --vf-kids-dark: #b8611f;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: var(--vf-cream);
+  color: var(--vf-green-dark);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
