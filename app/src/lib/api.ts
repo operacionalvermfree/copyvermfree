@@ -1,7 +1,13 @@
 import type { AppState, CompleteRunResult, ProfileInput, ProdutosComprados, QuizCheckout } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+// Fallback para as chaves públicas do projeto Supabase "VermeFree": a anon/publishable
+// key é feita pra ser exposta no client (RLS/policies protegem os dados de verdade,
+// e aqui o acesso passa por uma Edge Function com service role), então não há problema
+// em versionar um default — env vars (VITE_SUPABASE_URL/VITE_SUPABASE_ANON_KEY) continuam
+// tendo prioridade quando configuradas no host.
+const SUPABASE_URL = (import.meta.env.VITE_SUPABASE_URL as string) || 'https://xwusvksjnwydliicjveu.supabase.co';
+const SUPABASE_ANON_KEY =
+  (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || 'sb_publishable_4p9StZmxV7oS45VKTIsR5Q_wPALK22M';
 
 export class ApiError extends Error {
   status: number;
