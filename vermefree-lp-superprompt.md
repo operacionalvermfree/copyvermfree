@@ -1,0 +1,57 @@
+# vermefree-lp-superprompt.md — Design System & Regras Técnicas de LP
+
+> Ler antes de construir qualquer landing page. Cobre a parte **técnica/design** (como a página é feita). Pra tom de voz, claims e catálogo, ver `CLAUDE.md`. Pra fluxo de trabalho e onde buscar assets, ver `vermefree-lp-kit/`.
+
+---
+
+## 1. Contexto fixo
+
+- **Empresa/marca:** VermeFree
+- **Repositório:** `operacionalvermfree/copyvermfree`
+- **Loja (checkout):** `https://vermefree.com.br` · cupom padrão `5OFF` · frete grátis acima de **R$399**
+- **Branch de publicação das LPs:** `lp`
+- **Link publicado:** `https://raw.githack.com/operacionalvermfree/copyvermfree/lp/landing-<slug>/index.html`
+- **Checkout direto:** `https://vermefree.com.br/cart/<VARIANT_ID>:<QTD>` — variant IDs reais em `vermefree-lp-kit/FONTES.md`
+
+## 2. Convenções fixas (não negociáveis)
+
+1. **Uma pasta por produto:** `landing-<slug>/index.html`. HTML autocontido — sem build, sem bundler, sem dependência de arquivo externo do repo (CSS/JS inline ou no mesmo arquivo).
+2. **Tem que funcionar no Safari mobile ao vivo** (via raw.githack, sem servidor próprio): sempre incluir `html { overflow-x: hidden; }` e evitar qualquer recurso que dependa de HTTPS local/CORS especial.
+3. **Cada produto tem identidade visual e interativa própria.** Nunca clonar ou copiar código 1:1 de outra LP já publicada. O repertório de técnica abaixo é inspiração/repertório — não é template pra colar.
+4. **Validar antes de publicar:**
+   - `node --check` no(s) bloco(s) de JS inline (extrair pra um `.js` temporário se precisar rodar o check, mas o arquivo final continua autocontido).
+   - Conferir balanceamento de tags HTML (abre/fecha bate).
+5. **Nunca colocar identificador de modelo de IA** (nome do modelo, versão, etc.) em commit, PR, código-fonte ou comentário.
+6. **1 CTA claro por peça**, seguindo a régua de claim do `CLAUDE.md` (nunca "elimina/erradica/cura", nunca citar Dr. William Araujo, nunca diagnosticar o leitor).
+
+## 3. Repertório de técnica (inspiração — nunca copiar 1:1)
+
+Usar como banco de referência pra decidir a assinatura de cada LP, misturando com critério (não empilhar tudo numa página só):
+
+- Grid `rem` adaptativo.
+- Spring helper em JS puro (animações com física leve, sem lib externa).
+- Reveals com `clip-path` + blur-up ao entrar em viewport.
+- Loader com contador numérico na entrada da página.
+- Assinatura em `<canvas>` própria — partículas, fios ou ondas reagindo ao mouse.
+- Hero em "liquid reveal" (transição orgânica de entrada).
+- `<model-viewer>` pra elemento 3D do produto.
+- Pipeline Three.js procedural: 3 composers + `FinalPass` + simplex noise + motes (partículas ambiente) + scroll com double-damping.
+- UX de commerce: toggle de kit/variante, count-up de preço/desconto, botões magnéticos, tilt+glow em cards de produto, barra de compra fixa no mobile.
+
+## 4. Fluxo de uma LP
+
+1. Ler `vermefree-lp-kit/` (kit + assets do produto no Drive) e `PAGINAS.md`.
+2. Confirmar pasta (`landing-<slug>/`) e decidir a identidade própria dessa LP (paleta pode puxar da identidade visual do `CLAUDE.md` seção 10, mas a assinatura interativa/estrutural precisa ser única).
+3. Puxar a verdade do produto — preço, variant ID, composição, posologia, claim permitido — na loja e no Drive (ver `FONTES.md`).
+4. Construir o HTML autocontido com a assinatura única.
+5. Validar (`node --check` + balanço de tags).
+6. Publicar em `landing-<slug>/index.html` na branch `lp`.
+7. Atualizar `PAGINAS.md` (status + link).
+
+## 5. Identidade visual de referência (herdada do CLAUDE.md, seção 10)
+
+- Paleta: verde natural (folha + escuro) como primária, off-white/bege claro de fundo, verde-limão de acento.
+- Selos de rótulo disponíveis: "Vegetal 100%", "Metais Free".
+- UGC de referência: vertical 9:16, caseiro, luz natural, sem marca d'água.
+
+Cada LP pode variar tom/composição dentro dessa paleta — mas a paleta-base não muda entre produtos, pra manter reconhecimento de marca.

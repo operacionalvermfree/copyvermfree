@@ -5,6 +5,18 @@
 
 ---
 
+## 0. ANTES DE CRIAR OU EDITAR QUALQUER LANDING PAGE
+
+Landing page é tarefa técnica além de copy. Antes de escrever ou tocar em qualquer LP, ler nesta ordem:
+
+1. `PAGINAS.md` (raiz) — mapa de quais LPs já existem, status e slug, pra não duplicar.
+2. `vermefree-lp-superprompt.md` (raiz) — design system e regras técnicas fixas (convenção de pasta, branch de publicação, validação, checkout).
+3. `vermefree-lp-kit/` (raiz) — fluxo de trabalho, fontes de dados reais (loja/variant IDs) e onde está a matéria-prima (Drive).
+
+Este `CLAUDE.md` continua sendo a fonte de verdade de tom de voz, ICP, regras de claim ANVISA, catálogo, preços e funis — mas não repete as regras técnicas de construção de LP, que vivem nos três arquivos acima.
+
+---
+
 ## 1. A ESSÊNCIA DA VERMEFREE
 
 **O que é:** marca brasileira de **desparasitação natural** por fitoterapia. Protocolos à base de plantas, com critério e transparência — para adultos e crianças.
