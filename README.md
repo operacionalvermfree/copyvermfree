@@ -1,6 +1,7 @@
 # Copy — VermeFree
 
 > **Fonte de verdade atual: [`CLAUDE.md`](./CLAUDE.md)**, com o contexto real de marca, ICP, regras de claim ANVISA, catálogo de produtos, preços/cupons, funis e checklist de publicação.
+> **Identidade visual e criativos: [`DESIGN.md`](./DESIGN.md)** — cores, tipografia, estrutura de slides, banco de imagens reais (media_ids Higgsfield), configs de geração e status dos temas de conteúdo.
 
 O rascunho inicial de superprompt abaixo foi o ponto de partida (adaptado da estrutura do superprompt da Botanika, antes de termos o contexto real da VermeFree). A maioria dos campos marcados como **[PENDÊNCIA]** já foi respondida pelo `CLAUDE.md` — mantido aqui só como histórico/estrutura de referência.
 
