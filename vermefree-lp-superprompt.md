@@ -38,6 +38,8 @@ Usar como banco de referência pra decidir a assinatura de cada LP, misturando c
 - Pipeline Three.js procedural: 3 composers + `FinalPass` + simplex noise + motes (partículas ambiente) + scroll com double-damping.
 - UX de commerce: toggle de kit/variante, count-up de preço/desconto, botões magnéticos, tilt+glow em cards de produto, barra de compra fixa no mobile.
 
+**Catálogo real e destilado:** `vermefree-lp-kit/REPERTORIO-TECNICO.md` documenta ~35 referências técnicas reais (getlayers.com + meez.design) lidas e resumidas — com técnica de destaque, stack e uma recomendação explícita de quais combinam com o tom natural/consultivo da marca (evitar WebGL pesado tipo fluid-sim/Three.js como padrão; priorizar reveals de texto via clip-mask, liquid reveal em canvas 2D, grid rem-adaptativo, count-up em scroll). Consultar esse arquivo antes de escolher a assinatura de uma LP nova.
+
 ## 4. Fluxo de uma LP
 
 1. Ler `vermefree-lp-kit/` (kit + assets do produto no Drive) e `PAGINAS.md`.

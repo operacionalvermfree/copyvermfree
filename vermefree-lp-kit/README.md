@@ -10,6 +10,7 @@ Base de conhecimento técnica para construir landing pages (LPs) da VermeFree �
 |---|---|
 | `COMO-USAR.md` | Fluxo de trabalho pra criar uma LP nova: o que ler antes, onde subir asset pesado vs. leve, passo a passo. |
 | `FONTES.md` | Onde está cada fonte de verdade: loja/checkout, variant IDs reais, pastas do Drive (com IDs/links). |
+| `REPERTORIO-TECNICO.md` | Catálogo destilado de ~35 referências reais de técnica/animação de LP (getlayers.com + meez.design), já lidas e resumidas com recomendação de aplicação ao tom da marca. |
 | `prompts/00-INDEX.md` | Índice de prompts reutilizáveis pra gerar blocos de LP (hero, prova social, FAQ, oferta, etc.). |
 | `zips/README.md` | Regra de upload de zip pequeno/essencial direto no repo. |
 
