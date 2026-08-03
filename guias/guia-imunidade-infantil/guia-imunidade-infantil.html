@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia da Imunidade Infantil · VermeFree kids</title>
+<style>
+  :root{
+    --folha:#4E8A3A;        /* verde folha primário */
+    --folha-esc:#2E5222;    /* verde escuro */
+    --folha-prof:#1F3A18;   /* verde muito escuro (texto/títulos) */
+    --limao:#B7D64A;        /* verde-limão acento */
+    --limao-suave:#E9F2CE;  /* limão lavado p/ fundos de card */
+    --bege:#FAF6EC;         /* off-white / bege claro */
+    --bege-med:#F1E9D6;     /* bege médio */
+    --creme-card:#FFFDF8;   /* card claro */
+    --texto:#3A4433;        /* corpo */
+    --texto-suave:#5E6A54;  /* corpo secundário */
+    --linha:#E4DBC6;        /* divisórias */
+    --sol:#F4C95D;          /* amarelo sol (ícones) */
+    --agua:#7FC5D6;         /* azul água suave (ícones) */
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  @page{
+    size:A4 portrait;
+    margin:0;
+  }
+
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  body{
+    font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;
+    color:var(--texto);
+    background:var(--bege);
+    font-size:11.2pt;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- PÁGINA A4 ---------- */
+  .page{
+    position:relative;
+    width:210mm;
+    min-height:297mm;
+    padding:15mm 18mm 15mm 18mm;
+    background:var(--bege);
+    overflow:hidden;
+    page-break-after:always;
+  }
+  .page:last-child{ page-break-after:auto; }
+
+  /* faixa botânica lateral fininha */
+  .page::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; bottom:0;
+    width:8mm;
+    background:linear-gradient(180deg,var(--folha) 0%,var(--folha-esc) 100%);
+  }
+
+  h1,h2,h3,h4{ color:var(--folha-prof); font-weight:700; letter-spacing:-.2px; }
+
+  p{ margin-bottom:9px; }
+  strong{ color:var(--folha-esc); font-weight:700; }
+  .lead{ font-size:12pt; color:var(--texto-suave); }
+
+  /* ---------- CABEÇALHO DE SEÇÃO ---------- */
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--limao-suave);
+    color:var(--folha-esc);
+    font-size:8.6pt; font-weight:700; letter-spacing:1.4px; text-transform:uppercase;
+    padding:5px 12px; border-radius:40px; margin-bottom:12px;
+  }
+  .kicker .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--folha); color:#fff; font-size:8.5pt;
+  }
+  .section-title{ font-size:20pt; line-height:1.18; margin-bottom:6px; }
+  .section-sub{ color:var(--texto-suave); font-size:11pt; margin-bottom:18px; max-width:150mm; }
+  .rule{ height:3px; width:52px; background:var(--limao); border-radius:3px; margin:2px 0 18px; }
+
+  /* ---------- CARDS ---------- */
+  .card{
+    background:var(--creme-card);
+    border:1px solid var(--linha);
+    border-radius:16px;
+    padding:15px 18px;
+    margin-bottom:12px;
+  }
+  .card.leaf{ border-left:4px solid var(--folha); }
+  .card.lime{ background:var(--limao-suave); border:1px solid #D6E4AB; }
+  .card-title{ font-size:12.5pt; margin-bottom:5px; display:flex; align-items:center; gap:10px; }
+
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  /* lista de hábitos / passos */
+  .habit{
+    display:flex; gap:14px; align-items:flex-start;
+    background:var(--creme-card);
+    border:1px solid var(--linha);
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:11px;
+  }
+  .habit .ico{ flex:0 0 42px; }
+  .habit h4{ font-size:11.6pt; margin-bottom:2px; }
+  .habit p{ margin:0; font-size:10.4pt; color:var(--texto-suave); line-height:1.5; }
+
+  .num-badge{
+    flex:0 0 30px; height:30px; border-radius:50%;
+    background:var(--folha); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:11pt;
+  }
+
+  /* passos do protocolo */
+  .step{ display:flex; gap:14px; align-items:flex-start; margin-bottom:11px; }
+  .step .body h4{ font-size:11.8pt; margin-bottom:2px; }
+  .step .body p{ margin:0; font-size:10.5pt; color:var(--texto-suave); }
+
+  /* FAQ */
+  .faq{ margin-bottom:9px; padding-bottom:9px; border-bottom:1px dashed var(--linha); }
+  .faq:last-child{ border-bottom:none; }
+  .faq .q{ font-weight:700; color:var(--folha-esc); font-size:11.4pt; margin-bottom:3px; display:flex; gap:9px; align-items:flex-start;}
+  .faq .q .mark{ color:var(--folha); font-size:12pt; font-weight:800; }
+  .faq .a{ font-size:10.6pt; color:var(--texto-suave); margin-left:21px; }
+
+  /* selos */
+  .selos{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .selo{
+    display:inline-flex; align-items:center; gap:7px;
+    background:#fff; border:1.5px solid var(--folha);
+    color:var(--folha-esc); font-weight:700; font-size:9pt;
+    padding:6px 12px; border-radius:40px;
+  }
+  .selo .dot{ width:9px; height:9px; border-radius:50%; background:var(--limao); }
+
+  /* rodapé */
+  .foot{
+    position:absolute; left:18mm; right:18mm; bottom:9mm;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:8pt; color:var(--texto-suave);
+    border-top:1px solid var(--linha); padding-top:7px;
+  }
+  .foot b{ color:var(--folha-esc); }
+
+  .callout{
+    background:linear-gradient(135deg,var(--folha) 0%,var(--folha-esc) 100%);
+    color:#F3F8EC; border-radius:16px; padding:18px 22px; margin:6px 0 14px;
+  }
+  .callout h4{ color:#fff; font-size:12.5pt; margin-bottom:4px; }
+  .callout p{ color:#E7F1D8; margin:0; font-size:10.6pt; }
+
+  .tip{ font-size:9.6pt; color:var(--texto-suave); font-style:italic; margin-top:2px; }
+
+  .disclaimer{
+    background:var(--bege-med); border-radius:12px;
+    padding:12px 16px; font-size:8.8pt; color:var(--texto-suave);
+    line-height:1.5; margin-top:14px; border:1px dashed var(--linha);
+  }
+
+  /* ============ CAPA ============ */
+  .cover{
+    padding:0;
+    background:
+      radial-gradient(120% 80% at 80% 10%, #6AA84F 0%, transparent 55%),
+      linear-gradient(160deg,var(--folha-esc) 0%, var(--folha-prof) 60%, #16300F 100%);
+    color:#F3F8EC;
+    display:flex; flex-direction:column;
+  }
+  .cover::before{ display:none; }
+  .cover-top{ padding:22mm 20mm 0; flex:0 0 auto; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .mark{ display:flex; align-items:center; gap:9px; }
+  .brand .wt{ font-size:19pt; font-weight:800; letter-spacing:-.5px; color:#fff; }
+  .brand .wt .free{ color:var(--limao); }
+  .brand .kids{
+    font-size:9.5pt; font-weight:700; letter-spacing:1px;
+    background:var(--limao); color:var(--folha-prof);
+    padding:3px 10px; border-radius:30px; text-transform:uppercase;
+  }
+  .cover-mid{ padding:0 20mm; flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; }
+  .eyebrow{
+    display:inline-block; font-size:9.5pt; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--limao); font-weight:700; margin-bottom:14px;
+  }
+  .cover h1{
+    color:#fff; font-size:41pt; line-height:1.04; font-weight:800; letter-spacing:-1px;
+    margin-bottom:16px;
+  }
+  .cover h1 em{ font-style:normal; color:var(--limao); }
+  .cover .sub{ font-size:13.5pt; color:#DCEBCB; max-width:130mm; line-height:1.55; }
+  .cover-bottom{ padding:0 20mm 20mm; flex:0 0 auto; }
+  .cover-selos{ display:flex; gap:12px; margin-bottom:18px; }
+  .cover-selo{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.12); border:1.5px solid rgba(183,214,74,.55);
+    color:#fff; font-weight:700; font-size:9.5pt; padding:8px 15px; border-radius:40px;
+  }
+  .cover-selo .dot{ width:10px; height:10px; border-radius:50%; background:var(--limao); }
+  .cover-note{ font-size:9pt; color:#B9CFA6; border-top:1px solid rgba(255,255,255,.15); padding-top:12px; }
+
+  /* Cena infantil na capa */
+  .scene{ position:absolute; right:16mm; bottom:60mm; width:70mm; opacity:.96; }
+
+  /* Carta abertura */
+  .letter{
+    background:var(--creme-card); border:1px solid var(--linha); border-radius:18px;
+    padding:26px 30px; margin-top:6px;
+  }
+  .letter p{ font-size:11.6pt; line-height:1.72; }
+  .signature{ margin-top:14px; font-style:italic; color:var(--folha-esc); }
+  .signature b{ font-style:normal; }
+</style>
+</head>
+<body>
+
+<!-- ================= PÁGINA 1 — CAPA ================= -->
+<section class="page cover">
+  <div class="cover-top">
+    <div class="brand">
+      <div class="mark">
+        <!-- logo folha/onda -->
+        <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+          <path d="M6 30c0-12 10-22 28-22 0 14-10 24-22 24-3.5 0-6-1-6-2z" fill="#B7D64A"/>
+          <path d="M10 30c6-8 12-12 20-14" stroke="#2E5222" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="wt">Verme<span class="free">Free</span></span>
+      </div>
+      <span class="kids">kids</span>
+    </div>
+  </div>
+
+  <!-- cena infantil suave -->
+  <svg class="scene" viewBox="0 0 260 260" fill="none">
+    <!-- sol -->
+    <circle cx="205" cy="55" r="26" fill="#F4C95D" opacity=".9"/>
+    <g stroke="#F4C95D" stroke-width="3" stroke-linecap="round" opacity=".8">
+      <line x1="205" y1="14" x2="205" y2="4"/><line x1="240" y1="30" x2="248" y2="23"/>
+      <line x1="170" y1="30" x2="162" y2="23"/><line x1="250" y1="55" x2="260" y2="55"/>
+    </g>
+    <!-- folhas -->
+    <path d="M20 210c0-38 30-64 78-64-2 40-32 66-62 66-10 0-16-1-16-2z" fill="#6AA84F" opacity=".55"/>
+    <path d="M30 210c18-24 38-38 62-44" stroke="#2E5222" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+    <!-- criança 1 -->
+    <g>
+      <circle cx="120" cy="120" r="22" fill="#F6D9B8"/>
+      <path d="M100 118c2-16 38-16 40 0" fill="#5A3B24"/>
+      <circle cx="112" cy="120" r="2.4" fill="#3A2A1C"/><circle cx="128" cy="120" r="2.4" fill="#3A2A1C"/>
+      <path d="M114 130c3 3 9 3 12 0" stroke="#3A2A1C" stroke-width="2" stroke-linecap="round"/>
+      <path d="M98 200v-38c0-14 44-14 44 0v38z" fill="#B7D64A"/>
+    </g>
+    <!-- criança 2 -->
+    <g>
+      <circle cx="172" cy="140" r="19" fill="#E7B98F"/>
+      <path d="M155 138c2-14 32-14 34 0" fill="#2E2018"/>
+      <circle cx="165" cy="140" r="2.2" fill="#3A2A1C"/><circle cx="179" cy="140" r="2.2" fill="#3A2A1C"/>
+      <path d="M166 150c3 2.6 8 2.6 11 0" stroke="#3A2A1C" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M154 210v-34c0-12 38-12 38 0v34z" fill="#4E8A3A"/>
+    </g>
+    <!-- chão -->
+    <ellipse cx="130" cy="214" rx="120" ry="12" fill="#2E5222" opacity=".25"/>
+  </svg>
+
+  <div class="cover-mid">
+    <span class="eyebrow">Guia bônus · presente da VermeFree</span>
+    <h1>Guia da<br><em>Imunidade Infantil</em></h1>
+    <p class="sub">Cuidar da saúde dos pequenos de um jeito natural, com calma e constância — sem medo e sem química pesada.</p>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-selos">
+      <span class="cover-selo"><span class="dot"></span>Vegetal 100%</span>
+      <span class="cover-selo"><span class="dot"></span>Metais Free</span>
+    </div>
+    <div class="cover-note">Material educativo de bem-estar · uso familiar. Não substitui a orientação de um profissional de saúde de sua confiança.</div>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 2 — ABERTURA ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">1</span> Abertura</span>
+  <h2 class="section-title">De mãe pra mãe</h2>
+  <div class="rule"></div>
+
+  <div class="letter">
+    <p>Oi, tudo bem?</p>
+    <p>Primeiro: <strong>obrigada por confiar na VermeFree</strong> pra cuidar da sua família. Se você chegou até aqui, provavelmente é como eu — daquelas que leem o rótulo, pesquisam antes de dar qualquer coisa pro filho e preferem o caminho natural sempre que dá.</p>
+    <p>Esse guia nasceu de uma vontade simples: te ajudar a entender, com calma, como funciona a imunidade das crianças e por que uma <strong>rotina de cuidado natural</strong> faz tanta diferença no dia a dia. Sem promessa mirabolante, sem alarmismo, sem aquele discurso de "seu filho precisa disso agora".</p>
+    <p>A ideia aqui é outra: <strong>informação boa, no seu tempo</strong>. Pra você cuidar dos seus pequenos com mais tranquilidade e menos culpa — porque cuidar de forma natural não precisa ser complicado.</p>
+    <p>Leia com carinho, guarde o que fizer sentido pra sua rotina e volte sempre que precisar. 🌿</p>
+    <div class="signature">Com cuidado,<br><b>Equipe VermeFree kids</b></div>
+  </div>
+
+  <div class="callout">
+    <h4>Como usar este guia</h4>
+    <p>Ele acompanha o seu Manual da Desparasitação. Enquanto o Manual mostra o passo a passo do protocolo, este guia te ajuda a entender o "porquê" e a construir hábitos que apoiam o bem-estar da criançada ao longo do ano.</p>
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Desparasitação natural · fitoterapia</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 3 — POR QUE A IMUNIDADE PEDE ATENÇÃO ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">2</span> Contexto</span>
+  <h2 class="section-title">Por que a imunidade infantil pede atenção</h2>
+  <div class="rule"></div>
+  <p class="section-sub">A imunidade das crianças ainda está em formação — e o dia a dia delas é cheio de descobertas (o que é maravilhoso!). Entender esse cenário, sem susto, ajuda a cuidar com mais consciência.</p>
+
+  <div class="grid2">
+    <div class="card leaf">
+      <div class="card-title">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 20v-2a5 5 0 015-5h6a5 5 0 015 5v2" stroke="#4E8A3A" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="#4E8A3A" stroke-width="2"/></svg>
+        Corpinho em construção
+      </div>
+      <p>Nos primeiros anos, as defesas naturais estão amadurecendo. É totalmente normal — só significa que o cuidado do dia a dia conta ainda mais nessa fase.</p>
+    </div>
+    <div class="card leaf">
+      <div class="card-title">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="9" width="18" height="11" rx="2" stroke="#4E8A3A" stroke-width="2"/><path d="M8 9V6a4 4 0 018 0v3" stroke="#4E8A3A" stroke-width="2"/></svg>
+        Creche &amp; escola
+      </div>
+      <p>Conviver com outras crianças é ótimo pro desenvolvimento — e também significa mais contato, mãos que exploram tudo e brinquedos compartilhados o dia inteiro.</p>
+    </div>
+    <div class="card leaf">
+      <div class="card-title">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="10" r="3" stroke="#4E8A3A" stroke-width="2"/><path d="M15 8c2 0 4 2 4 5s-2 4-4 4" stroke="#4E8A3A" stroke-width="2" stroke-linecap="round"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5" stroke="#4E8A3A" stroke-width="2" stroke-linecap="round"/></svg>
+        Contato com pets
+      </div>
+      <p>Os bichinhos fazem parte da família e trazem afeto de sobra. Só vale lembrar que a rotina de higiene e de cuidado natural entra junto nesse combo.</p>
+    </div>
+    <div class="card leaf">
+      <div class="card-title">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 21v-3M5 12H2m20 0h-3" stroke="#4E8A3A" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="5" stroke="#4E8A3A" stroke-width="2"/></svg>
+        Ambiente e brincadeira
+      </div>
+      <p>Terra, areia, parquinho, chão... explorar o mundo é parte de crescer. A gente não quer frear isso — quer só somar cuidado à liberdade de brincar.</p>
+    </div>
+  </div>
+
+  <div class="card lime">
+    <div class="card-title">🌿 O ponto de equilíbrio</div>
+    <p>Nada aqui é motivo pra susto. A infância <strong>tem que</strong> ser de exploração, contato e ar livre. A proposta é simples: já que a criança vive descobrindo o mundo, a gente inclui uma <strong>rotina de cuidado natural</strong> no calendário da família — como quem escova os dentes, toma sol e dorme bem. Cuidado que caminha junto com a liberdade de ser criança.</p>
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Cuidado natural, sem alarmismo</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 4 — COMO A DESPARASITAÇÃO NATURAL APOIA ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">3</span> A lógica da rotina</span>
+  <h2 class="section-title">Como a desparasitação natural apoia o bem-estar</h2>
+  <div class="rule"></div>
+  <p class="section-sub">Aqui não existe fórmula mágica — existe constância. A desparasitação natural é uma rotina de cuidado, feita com calma e repetida algumas vezes ao ano.</p>
+
+  <div class="card leaf">
+    <div class="card-title">🍃 Pense em "rotina", não em "solução única"</div>
+    <p>Assim como a gente cuida da alimentação e do sono <strong>o ano todo</strong> — e não só num dia específico —, a desparasitação natural funciona como um <strong>hábito de manutenção</strong>. Ela apoia a rotina de limpeza natural do organismo e contribui pro bem-estar da criança de forma suave, feita com plantas.</p>
+  </div>
+
+  <div class="callout">
+    <h4>Por que repetir 2 a 4 vezes por ano?</h4>
+    <p>Porque o dia a dia da criança é dinâmico: creche, parquinho, pets, amiguinhos. Fazer a desparasitação natural em ciclos ao longo do ano é o que mantém a <strong>constância</strong> — e é a constância, não a pressa, que sustenta uma rotina de cuidado bem feita.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">🌱 Feito de planta</div>
+      <p>O protocolo Kids é fitoterápico: composição vegetal, pensada pra ser suave com o organismo da criança. Natural, com critério.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🗓️ Com calendário</div>
+      <p>A ideia é agendar. Escolher os períodos do ano e cumprir a rotina inteira — porque começar e não terminar não é a mesma coisa.</p>
+    </div>
+  </div>
+
+  <p style="margin-top:6px;"><strong>Em resumo:</strong> a desparasitação natural não promete nada de um dia pro outro. Ela é um cuidado de rotina — como tantos outros que você já faz pela sua família — que <strong>auxilia na desparasitação</strong> e apoia o bem-estar da criançada ao longo do tempo.</p>
+
+  <div class="disclaimer">
+    Este material é educativo e fala de <b>bem-estar e rotina de cuidado natural</b>. Ele não diagnostica, não trata doença e não substitui o acompanhamento de um profissional de saúde de sua confiança. Diante de qualquer dúvida sobre a saúde do seu filho, procure orientação profissional.
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Constância &gt; pressa</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 5 — HÁBITOS ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">4</span> Hábitos</span>
+  <h2 class="section-title">6 hábitos que fortalecem a imunidade</h2>
+  <div class="rule"></div>
+  <p class="section-sub">Nenhum deles é novidade — e é justamente aí que está a força. Pequenas coisas, repetidas todo dia, são o que constrói uma base natural sólida pra criançada.</p>
+
+  <div class="habit">
+    <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none"><path d="M14 30a10 10 0 1017-9 8 8 0 01-17 9z" fill="#E9F2CE" stroke="#4E8A3A" stroke-width="2.2"/><path d="M34 12l1.5 3 3 1.5-3 1.5L34 22l-1.5-3-3-1.5 3-1.5z" fill="#F4C95D"/></svg></div>
+    <div><h4>1 · Sono de qualidade</h4><p>É dormindo que o corpo se recupera e se organiza. Rotina de horário, quarto tranquilo e menos telas antes de deitar ajudam a criança a descansar de verdade.</p></div>
+  </div>
+
+  <div class="habit">
+    <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="26" r="13" fill="#E9F2CE" stroke="#4E8A3A" stroke-width="2.2"/><path d="M24 13c-2 4-2 6 0 8s2 4 0 8" stroke="#4E8A3A" stroke-width="2" stroke-linecap="round"/><path d="M31 10c2 3 2 6 0 8" stroke="#B7D64A" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><h4>2 · Comida de verdade</h4><p>Frutas, verduras, legumes e cores no prato. Quanto mais natural e menos ultraprocessado, mais o corpinho tem do que precisa pra se defender sozinho.</p></div>
+  </div>
+
+  <div class="habit">
+    <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none"><path d="M24 10c6 8 10 13 10 19a10 10 0 01-20 0c0-6 4-11 10-19z" fill="#E9F2CE" stroke="#4E8A3A" stroke-width="2.2"/><path d="M20 30a4 5 0 004 5" stroke="#7FC5D6" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><h4>3 · Água ao longo do dia</h4><p>Hidratação ajuda tudo a funcionar melhor — do intestino à disposição. Uma garrafinha à mão e lembretes gentis fazem a diferença, principalmente no calor.</p></div>
+  </div>
+
+  <div class="habit">
+    <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none"><path d="M16 22c0-4 3-7 8-7s8 3 8 7v2H16z" fill="#E9F2CE" stroke="#4E8A3A" stroke-width="2.2"/><path d="M14 24h20l-2 12H16z" fill="#fff" stroke="#4E8A3A" stroke-width="2.2"/><path d="M20 28v4M24 28v4M28 28v4" stroke="#B7D64A" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><h4>4 · Higiene sem neura</h4><p>Lavar as mãos antes de comer e ao chegar da rua, unhas curtinhas e brinquedos limpos. Hábitos simples que já resolvem grande parte — sem transformar em obsessão.</p></div>
+  </div>
+
+  <div class="habit">
+    <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="20" r="7" fill="#F4C95D"/><g stroke="#F4C95D" stroke-width="2.2" stroke-linecap="round"><path d="M24 8v-3M24 35v-3M11 20H8m32 0h-3M15 11l-2-2m24 2l2-2"/></g><path d="M10 40c3-5 8-7 14-7s11 2 14 7" stroke="#4E8A3A" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg></div>
+    <div><h4>5 · Brincar ao ar livre</h4><p>Sol na medida, correr, pular, tomar um solzinho da manhã. Movimento e ar livre fazem bem pro corpo, pro humor e pro sono — deixe a criança ser criança.</p></div>
+  </div>
+
+  <div class="habit">
+    <div class="ico"><svg width="42" height="42" viewBox="0 0 48 48" fill="none"><path d="M10 34c8 0 8-20 0-20m28 20c-8 0-8-20 0-20" stroke="#4E8A3A" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="24" r="6" fill="#E9F2CE" stroke="#4E8A3A" stroke-width="2.2"/><path d="M24 21v6M21 24h6" stroke="#B7D64A" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <div><h4>6 · Constância no cuidado</h4><p>O hábito mais importante de todos: manter a rotina. Incluir a desparasitação natural no calendário da família, 2 a 4x por ano, é o que dá continuidade a todo o resto.</p></div>
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>O básico, bem feito</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 6 — PROTOCOLO KIDS ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">5</span> Protocolo Kids</span>
+  <h2 class="section-title">Como funciona o Protocolo Kids da VermeFree</h2>
+  <div class="rule"></div>
+  <p class="section-sub">Aqui vai uma visão geral e educativa de como o protocolo entra na rotina — sempre com o Manual da Desparasitação por perto pra o passo a passo detalhado.</p>
+
+  <div class="grid2">
+    <div class="card lime">
+      <div class="card-title">💧 Líquido que a criança aceita</div>
+      <p>São dois frascos líquidos, pensados pra facilitar a hora de dar. Diluídos em água, entram na rotina sem drama — mais tranquilo pra criança e pra você.</p>
+    </div>
+    <div class="card lime">
+      <div class="card-title">👶 Dose conforme a idade</div>
+      <p>A quantidade acompanha a faixa etária da criança. No Manual você confere a orientação certinha pra idade do seu filho.</p>
+    </div>
+  </div>
+
+  <div class="card leaf">
+    <div class="card-title">🌑 Início na lua nova — um ritinho da marca</div>
+    <p>Na VermeFree, cada protocolo começa acompanhando a <strong>lua nova</strong>. É um detalhe simbólico que a gente carrega com carinho: marca o início de um novo ciclo de cuidado e vira um lembrete gostoso no calendário da família. Sem misticismo pesado — é só um jeito bonito de dar o pontapé na rotina.</p>
+  </div>
+
+  <h3 style="font-size:13pt;margin:16px 0 10px;">Os dois frascos, de forma geral</h3>
+
+  <div class="step">
+    <div class="num-badge">1</div>
+    <div class="body"><h4>Tintura de Desparasitação (frasco principal)</h4><p>Composição vegetal com ervas tradicionalmente usadas no cuidado natural. Diluída em água, é o coração do protocolo — o frasco que conduz a rotina.</p></div>
+  </div>
+  <div class="step">
+    <div class="num-badge">2</div>
+    <div class="body"><h4>Fitoterapia potencializadora</h4><p>Um segundo frasco que acompanha o principal, dado poucos minutinhos antes (ou junto, se a criança tiver dificuldade). Pensado pra somar ao cuidado.</p></div>
+  </div>
+  <div class="step">
+    <div class="num-badge">3</div>
+    <div class="body"><h4>Rotina ao longo dos dias</h4><p>O protocolo é feito de forma contínua por um período, algumas vezes ao dia, sempre diluído em água. Constância é a palavra — o Manual traz a frequência e a duração exatas.</p></div>
+  </div>
+
+  <div class="callout">
+    <h4>📖 Onde ver o passo a passo</h4>
+    <p>Modo de uso completo, quantidade por idade, horários e duração estão detalhados no <strong>Manual da Desparasitação</strong> que veio junto com este guia. Este material aqui é o "porquê"; o Manual é o "como".</p>
+  </div>
+
+  <div class="selos">
+    <span class="selo"><span class="dot"></span>Vegetal 100%</span>
+    <span class="selo"><span class="dot"></span>Metais Free</span>
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Educativo · sem promessa de resultado</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 7 — SINAIS DE BEM-ESTAR ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">6</span> Bem-estar</span>
+  <h2 class="section-title">Sinais de bem-estar pra observar na rotina</h2>
+  <div class="rule"></div>
+  <p class="section-sub">Aqui a gente olha pro lado bom: aquelas sensações de "tá tudo funcionando bem" que dá gosto de ver na criançada. São sinais de bem-estar pra acompanhar com carinho — nunca um diagnóstico.</p>
+
+  <div class="grid2">
+    <div class="card leaf">
+      <div class="card-title">😴 Sono mais tranquilo</div>
+      <p>Noites mais serenas, criança que pega no sono com mais facilidade e acorda descansada. Um sono bom é um ótimo termômetro de bem-estar.</p>
+    </div>
+    <div class="card leaf">
+      <div class="card-title">🍎 Apetite equilibrado</div>
+      <p>A fome que aparece na hora das refeições, de forma mais regular, sem aqueles extremos. Comer bem faz parte de se sentir bem.</p>
+    </div>
+    <div class="card leaf">
+      <div class="card-title">🌿 Sensação de leveza</div>
+      <p>Barriguinha funcionando bem, intestino mais regular, aquela sensação de corpo leve e confortável no dia a dia.</p>
+    </div>
+    <div class="card leaf">
+      <div class="card-title">⚡ Disposição pra brincar</div>
+      <p>Energia pra correr, brincar e explorar — humor mais estável e aquela alegria natural de criança bem cuidada.</p>
+    </div>
+  </div>
+
+  <div class="card lime">
+    <div class="card-title">📝 Uma ideia leve: o diário da rotina</div>
+    <p>Que tal anotar como está o sono, o apetite e a disposição do seu filho ao longo dos ciclos de cuidado? Não pra virar controle nem cobrança — só um jeito gostoso de acompanhar o bem-estar da criança e enxergar a rotina como um todo, com mais tranquilidade.</p>
+  </div>
+
+  <div class="disclaimer">
+    Estes são sinais de <b>bem-estar do dia a dia</b>, para você observar com leveza — não são sintomas, diagnóstico nem indicação de doença. Cada criança tem seu ritmo. Se notar qualquer coisa que te preocupe na saúde do seu filho, procure um profissional de saúde de sua confiança.
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Observar com carinho, não diagnosticar</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 8 — FAQ ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">7</span> Dúvidas</span>
+  <h2 class="section-title">Perguntas frequentes das mães</h2>
+  <div class="rule"></div>
+  <p class="section-sub">As dúvidas que mais aparecem por aqui, respondidas com calma. Pra detalhes de dose e duração, o Manual da Desparasitação é sempre a referência.</p>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> A partir de que idade posso usar o Protocolo Kids?</div>
+    <div class="a">O protocolo Kids é pensado para crianças a partir dos 2 anos, com a dose acompanhando a faixa etária. No Manual você confere a orientação certinha para a idade do seu filho. Em caso de dúvida sobre a criança em particular, vale conversar com um profissional de saúde de sua confiança.</div>
+  </div>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> Como faço pra dar sem drama?</div>
+    <div class="a">Os dois frascos são líquidos e vão diluídos em água — é só seguir a diluição indicada no Manual. Muitas mães dão junto com um momento tranquilo do dia, o que ajuda a criança a criar o hábito sem resistência.</div>
+  </div>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> Dou junto ou separado da refeição?</div>
+    <div class="a">O frasco principal costuma ser dado ao longo do dia, e o potencializador poucos minutinhos antes dele. Se a criança tiver dificuldade, os dois podem ser dados juntos. O modo de uso completo, com horários, está no Manual da Desparasitação.</div>
+  </div>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> Os dois frascos são sempre juntos?</div>
+    <div class="a">Eles trabalham em dupla: o potencializador acompanha o principal. O ideal é seguir a ordem sugerida no Manual, mas há a flexibilidade de dar juntos quando facilita para a criança.</div>
+  </div>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> Com que frequência devo repetir?</div>
+    <div class="a">Como é uma rotina de cuidado natural, o protocolo costuma ser feito de 2 a 4 vezes ao ano. Essa constância ao longo do tempo é justamente o que sustenta o hábito — pense nele como parte do calendário de cuidado da família.</div>
+  </div>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> Por que começa na lua nova?</div>
+    <div class="a">É um ritinho simbólico da VermeFree: começar o ciclo acompanhando a lua nova marca o início de uma nova rotina de cuidado e funciona como um lembrete bonito no calendário. Leve, sem complicação — só um jeito nosso de dar o pontapé.</div>
+  </div>
+
+  <div class="faq">
+    <div class="q"><span class="mark">?</span> Preciso mudar a alimentação do meu filho durante o protocolo?</div>
+    <div class="a">Não é preciso nada radical. O protocolo convive bem com a rotina normal da criança. Os hábitos da página anterior — comida de verdade, água, sono e brincadeira — são sempre bem-vindos e somam ao cuidado, no protocolo e fora dele.</div>
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Dúvidas de dose? Consulte o Manual</span>
+  </div>
+</section>
+
+<!-- ================= PÁGINA 9 — ENCERRAMENTO ================= -->
+<section class="page">
+  <span class="kicker"><span class="num">8</span> Encerramento</span>
+  <h2 class="section-title">Cuidar é constância — e você já começou</h2>
+  <div class="rule"></div>
+
+  <div class="letter">
+    <p>Se tem uma coisa pra levar deste guia, é esta: <strong>cuidado natural não é sobre um dia perfeito, é sobre repetição gentil</strong>. O sono de hoje, a água de amanhã, o prato colorido do fim de semana, a desparasitação natural nos ciclos do ano. Tudo isso, junto e com calma, é o que constrói uma base sólida pro bem-estar da criançada.</p>
+    <p>Você não precisa dar conta de tudo de uma vez. Vá no seu ritmo, escolha um hábito por vez e mantenha a <strong>constância</strong> — que é onde mora a diferença. E lembre: escolher o caminho natural, com critério, já é um baita cuidado.</p>
+    <p>A gente segue por aqui, torcendo pela sua família. 🌿</p>
+    <div class="signature">Com carinho,<br><b>Equipe VermeFree kids</b></div>
+  </div>
+
+  <div class="callout">
+    <h4>🗓️ Um convite suave</h4>
+    <p>Que tal já deixar marcado no calendário o próximo ciclo de cuidado da família? A manutenção da desparasitação natural costuma acontecer de 2 a 4 vezes por ano — anotar o próximo período é o jeitinho mais fácil de manter a rotina viva.</p>
+  </div>
+
+  <div class="card lime" style="text-align:center;">
+    <div class="card-title" style="justify-content:center;">Ficou com alguma dúvida?</div>
+    <p style="margin-bottom:4px;">Fala com a gente sempre que precisar — a gente adora ajudar a cuidar da sua família de forma natural.</p>
+    <p style="margin:0;"><strong>Chame no nosso atendimento</strong> ou consulte o Manual da Desparasitação que veio junto com o seu kit. 💚</p>
+  </div>
+
+  <div class="selos" style="justify-content:center;margin-top:14px;">
+    <span class="selo"><span class="dot"></span>Vegetal 100%</span>
+    <span class="selo"><span class="dot"></span>Metais Free</span>
+  </div>
+
+  <div class="disclaimer" style="text-align:center;">
+    Material educativo de bem-estar da <b>VermeFree kids</b>. Não substitui a orientação de um profissional de saúde de sua confiança. Fabricação: Sintonia Pharma. Guarde os frascos fora do alcance das crianças quando não estiverem em uso.
+  </div>
+
+  <div class="foot">
+    <span><b>VermeFree kids</b> · Guia da Imunidade Infantil</span>
+    <span>Desparasitação natural · feita com plantas</span>
+  </div>
+</section>
+
+</body>
+</html>
