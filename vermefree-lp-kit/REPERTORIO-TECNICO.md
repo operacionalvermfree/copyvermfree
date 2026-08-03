@@ -6,6 +6,36 @@
 
 ---
 
+## 0. Sistema de tokens/botão validado em código real (Botanika, 8 LPs publicadas)
+
+> Diferente do resto deste arquivo (prompts especulativos do getlayers/meez.design), isto veio de **código-fonte real e publicado**: as 8 LPs de produto da Botanika (`BotanikaHub/Botanika-Desing`, branch `lp`), lidas via `raw.githubusercontent.com` em 03/08. É o mesmo "template de tokens" reaproveitado nas 8 (só recolorindo hex por produto) — por isso vale mais confiança que os prompts do getlayers/meez. Já testado na prática: usado pra elevar `linktree-vermefree/index.html`.
+
+**Tokens (adaptar cores pra paleta de cada marca, manter a estrutura):**
+```css
+--bg / --bg2      /* dois tons de fundo próximos, nunca um só sólido */
+--grad            /* 2 cores da marca em diagonal, 115-120deg */
+--glass           /* branco a ~4.5% opacidade, pra cards translúcidos */
+--line            /* cor de acento a ~15-30% opacidade, pra bordas sutis */
+--ease            /* cubic-bezier(.2,.7,.2,1) — "overshoot suave", não linear */
+--radius: 22-24px (cards) · --radius-sm: 15-16px (ícones/chips) · botões sempre 100px (pílula)
+```
+
+**Botão CTA (o padrão de maior retorno visual, replicado nas 8 LPs sem variação):**
+- Pílula (`border-radius:100px`), fundo em `var(--grad)`.
+- Sombra em duas camadas: glow colorido difuso por fora (`0 12-14px 34px -12px rgba(cor-acento,.7)`) **+** inset de brilho por dentro (`inset 0 1px 0 rgba(255,255,255,.35-.4)`) — dá efeito "pílula de vidro 3D".
+- Hover: só intensifica a sombra (não muda cor) — `transition:transform .25-.3s var(--ease), box-shadow .3s var(--ease)`.
+- `:active{transform:scale(.97)}` (feedback de "pressionar") — variante mais simples que `translateY(-2px)` no hover.
+- Sheen opcional: `::after` com gradiente branco enviesado (`skewX(-18deg)`) que varre o botão via `@keyframes` só no `:hover`.
+- Botão magnético (opcional, desktop-only): no `mousemove`, desloca o próprio botão em fração da distância do cursor ao centro (`*.18-.35` em x, `*.28-.4` em y via `translate()`), volta a 0 no `mouseleave`. **Sempre** atrás de `matchMedia('(hover:hover) and (pointer:fine)')` e `prefers-reduced-motion` — nunca em mobile/touch.
+
+**Header/identidade:** pílula flutuante (`margin:12px auto`, `border-radius:100px`, `backdrop-filter:blur(14px)`), não barra full-width. Logo = wordmark tipográfico + um "pip" — ponto circular pequeno com `background:var(--grad)` e `box-shadow` glow — em vez de depender de arquivo de imagem.
+
+**Loader de entrada:** tela cheia com wordmark + contador `000→100` (fonte display com gradiente via `background-clip:text`) + barra fina. JS incrementa por `setInterval` com números aleatórios (não é progresso real de rede) e sempre tem **timeout de segurança** (`setTimeout` de 1.8-3s) pra garantir que a página nunca fica travada atrás do loader. Sempre checar `prefers-reduced-motion` (pula direto pro conteúdo) e ter fallback `<noscript>` que esconde o loader se JS não rodar.
+
+**O que NÃO portar pra página de tela única (bio-link, sem scroll de produto):** ScrollTrigger/Lenis, canvas/WebGL de fundo, parallax por seção, countdown de escassez, marquee de ingredientes — todo esse aparato pressupõe uma LP de venda longa. Ver seção 6 abaixo pra critério equivalente aplicado ao repertório getlayers/meez.
+
+---
+
 ## 1. Cenas 3D de fundo procedurais (`01_getlayers/Prompts/3D Scenes/`)
 
 Todas as 6 cenas compartilham o **mesmo esqueleto de engenharia** (vale reaproveitar como base genérica, trocando só geometria/paleta/deformação):
