@@ -32,7 +32,7 @@ Páginas fora do padrão `landing-<slug>` (sem checkout/variant ID) — mesma re
 
 | Página | Pasta | Status | Link publicado |
 |---|---|---|---|
-| Linktree (bio Instagram) | `linktree-vermefree/` | em revisão — 4 links são placeholders (`[LINK SITE VERMEFREE]`, `[LINK CADASTRO CREATOR]`, `[LINK GRUPO VIP]`, `[LINK ATENDIMENTO]`), preencher antes de publicar | — |
+| Linktree (bio Instagram) | `linktree-vermefree/` | em revisão — Site preenchido (`https://vermefree.com.br`); ainda faltam `[LINK CADASTRO CREATOR]`, `[LINK GRUPO VIP]`, `[LINK ATENDIMENTO]` | — |
 
 ---
 
