@@ -26,4 +26,14 @@ Status possíveis: `não iniciada` · `em construção` · `publicada` · `pausa
 
 ---
 
-*Nenhuma LP foi construída ainda — esta tabela é a fundação. Os slugs acima são sugestão, ajustar se o produto pedir outro.*
+## Outras páginas (não-produto)
+
+Páginas fora do padrão `landing-<slug>` (sem checkout/variant ID) — mesma regra de identidade visual e HTML autocontido, pasta própria.
+
+| Página | Pasta | Status | Link publicado |
+|---|---|---|---|
+| Linktree (bio Instagram) | `linktree-vermefree/` | em revisão — 4 links são placeholders (`[LINK SITE VERMEFREE]`, `[LINK CADASTRO CREATOR]`, `[LINK GRUPO VIP]`, `[LINK ATENDIMENTO]`), preencher antes de publicar | — |
+
+---
+
+*Os slugs de produto acima são sugestão, ajustar se o produto pedir outro.*
