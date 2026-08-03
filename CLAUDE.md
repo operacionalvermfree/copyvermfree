@@ -13,6 +13,8 @@ Landing page é tarefa técnica além de copy. Antes de escrever ou tocar em qua
 2. `vermefree-lp-superprompt.md` (raiz) — design system e regras técnicas fixas (convenção de pasta, branch de publicação, validação, checkout).
 3. `vermefree-lp-kit/` (raiz) — fluxo de trabalho, fontes de dados reais (loja/variant IDs) e onde está a matéria-prima (Drive).
 
+> Pra abrir o pedido de uma LP nova num chat novo, usar o comando pronto em `vermefree-lp-kit/COMANDO-CRIAR-LP.md`.
+
 Este `CLAUDE.md` continua sendo a fonte de verdade de tom de voz, ICP, regras de claim ANVISA, catálogo, preços e funis — mas não repete as regras técnicas de construção de LP, que vivem nos três arquivos acima.
 
 ---
