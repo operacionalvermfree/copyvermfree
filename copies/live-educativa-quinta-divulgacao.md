@@ -1,6 +1,8 @@
-# Copies — Divulgação Live Educativa de Quinta-feira · VermeFree
+# Copies — Divulgação Live Educativa de Quinta-feira (06/08) · VermeFree
 
-> ⚠️ Mesma situação da versão de terça: os dados da live (data exata, horário, canal, tema/convidada) vieram só como exemplo entre colchetes no briefing, não preenchidos de verdade. Usei placeholders em todas as peças — ver pendências no final antes de programar.
+> ✅ Dados reais confirmados até agora (Google Drive, observação registrada na copy de terça): quinta **06/08** · anfitriã **Grazi** (não Joingle — ela conduz a live de terça).
+> 🔎 Provável ligação: o `CLAUDE.md` da marca já registra uma farmacêutica responsável, **Graziele Antonini, CRF 6177**, como Farm. Resp. da fabricante Sintonia Pharma. "Grazi" muito provavelmente é a mesma pessoa — mas não assumi isso na copy sem confirmação (nome completo + credencial citados publicamente ainda dependem de aprovação, como já sinalizado antes).
+> ⚠️ Ainda faltam: **[HORÁRIO]**, **[ONDE]** (assumindo Instagram @vermefree, mesmo canal da terça — confirmar) e **[TEMA/CONVIDADA]** específico (o histórico anterior indicava foco no kit infantil/posologia com a farmacêutica da marca — confirmar se é o mesmo ângulo desta vez).
 
 ---
 
@@ -15,11 +17,11 @@
 ```
 Olá,
 
-Quinta-feira ([DATA]), às [HORÁRIO], vamos fazer uma live educativa aqui na VermeFree — sem pressa, sem venda, só pra conversar sobre o que muita mãe pergunta: como funciona o protocolo, qual a dose certa (inclusive pro kit infantil) e como usar com segurança.
+Quinta-feira (06/08), às [HORÁRIO], vamos fazer uma live educativa aqui na VermeFree — sem pressa, sem venda, só pra conversar sobre o que muita mãe pergunta: como funciona o protocolo, qual a dose certa (inclusive pro kit infantil) e como usar com segurança.
 
-Se você já ficou com dúvida na hora de decidir — ou só quer entender melhor antes de começar (ou repetir) o seu protocolo — essa live é pra você.
+A conversa é com a Grazi, e a ideia é essa mesma: tirar dúvida com calma. Se você já ficou insegura na hora de decidir — ou só quer entender melhor antes de começar (ou repetir) o seu protocolo — essa live é pra você.
 
-📌 Tema: [TEMA/CONVIDADA]
+📌 Tema: [TEMA/CONVIDADA — confirmar]
 📍 Onde: [ONDE]
 
 Um abraço,
@@ -34,9 +36,9 @@ Equipe VermeFree
 
 **Msg 1 — véspera/manhã**
 ```
-Quinta-feira ([DATA]), [HORÁRIO], vou fazer uma live aqui só pra tirar dúvida com calma — como funciona o protocolo, a dose certa (adulto e kids), segurança do kit infantil... tudo que vocês sempre perguntam por aqui.
+Quinta-feira (06/08), [HORÁRIO], vou fazer uma live aqui só pra tirar dúvida com calma — como funciona o protocolo, a dose certa (adulto e kids), segurança do kit infantil... tudo que vocês sempre perguntam por aqui.
 
-Não é venda, é conversa mesmo. Bora?
+Não é venda, é conversa mesmo. A live é com a Grazi. Bora?
 
 📍 [ONDE]
 ```
@@ -60,7 +62,7 @@ Nome sugerido do template: vermefree_live_quinta_lembrete
 Categoria: MARKETING (ou UTILITY, se a conta permitir classificar como lembrete de evento — confirmar com quem for submeter)
 
 BODY:
-Oi {{1}}, quinta ([DATA]) tem live educativa da VermeFree, [HORÁRIO] — vamos falar sobre [TEMA/CONVIDADA] e tirar dúvidas com calma.
+Oi {{1}}, quinta (06/08) tem live educativa da VermeFree, [HORÁRIO] — a Grazi vai falar sobre [TEMA/CONVIDADA] e tirar dúvidas com calma.
 
 FOOTER (opcional): Live gratuita, sem compromisso
 
@@ -73,7 +75,7 @@ BOTÃO (CTA URL): Quero participar → [LINK]
 
 - [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/garantido/em X dias) — nenhuma usa
 - [x] Sem comparação com remédio de farmácia, sem promessa de emagrecimento
-- [x] Sem citar Dr. William nem qualquer médico/influenciador como aval
+- [x] Sem citar Dr. William nem qualquer médico/influenciador como aval (Grazi citada só como quem conduz a conversa)
 - [x] Não diagnostica o leitor — nenhuma peça afirma "você tem verme"
 - [x] Tom acolhedor, consultivo, de amiga — enquadrado como tira-dúvidas, não pitch de venda
 - [x] 1 CTA por peça (participar/lembrete da live)
@@ -82,10 +84,8 @@ BOTÃO (CTA URL): Quero participar → [LINK]
 
 ## Pendências para finalizar
 
-1. **[DATA]** — qual quinta-feira exatamente.
-2. **[HORÁRIO]** — horário de início da live.
-3. **[ONDE]** — canal (Instagram @vermefree, YouTube etc.).
-4. **[TEMA/CONVIDADA]** — tema específico e quem conduz.
-5. **[LINK]** — link de acesso/lembrete da live, pra WhatsApp grupos (msg 2) e API.
-
-Assim que esses dados vierem, atualizo as 4 peças e reenvio prontas pra Sarah programar. Se não vier nada antes do prazo, segue direto pra ela preencher, como combinado na versão de terça.
+1. **[HORÁRIO]** — horário de início da live de quinta (06/08).
+2. **[ONDE]** — assumi Instagram @vermefree por ser o mesmo canal da live de terça, mas não veio confirmado especificamente pra quinta.
+3. **[TEMA/CONVIDADA]** — tema exato da conversa com a Grazi (se for posologia/kit infantil como nas lives anteriores dela, ou outro ângulo).
+4. **[LINK]** — link de acesso/lembrete da live, pra WhatsApp grupos (msg 2) e API.
+5. **Confirmar se "Grazi" = Graziele Antonini** (Farm. Resp. já documentada no CLAUDE.md) — só pra saber se dá pra citar credencial (farmacêutica) na copy pública, ou se ainda depende da mesma aprovação já sinalizada antes.
