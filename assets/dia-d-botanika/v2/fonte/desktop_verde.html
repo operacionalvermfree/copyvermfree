@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/montserrat.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#05070f}
+:root{--lime1:#c7ee5a;--lime2:#a4d92e;--lime3:#8bc31f;--cream:#f2f4ea;--muted:#b9c6ad;--dark:#0b130d}
+#stage{position:relative;width:1920px;height:600px;overflow:hidden;font-family:'Montserrat',sans-serif;
+  background:radial-gradient(75% 130% at 66% 46%, #17281a 0%, #0e1a12 44%, #080f09 100%);}
+.aura{position:absolute;right:280px;top:48%;transform:translateY(-50%);width:1000px;height:640px;pointer-events:none;
+  background:radial-gradient(46% 52% at 50% 50%, rgba(178,232,64,.6), rgba(164,217,46,.18) 44%, rgba(164,217,46,0) 72%);filter:blur(4px)}
+.bolt{position:absolute;pointer-events:none;opacity:.5}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.06;background-image:radial-gradient(#fff 1px,transparent 1.4px);background-size:6px 6px}
+.vign{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 130% at 60% 46%, transparent 42%, rgba(2,6,3,.8) 100%)}
+.floor{position:absolute;left:0;right:0;bottom:0;height:140px;pointer-events:none;background:linear-gradient(180deg,rgba(3,8,4,0),rgba(2,6,3,.6))}
+.dust{position:absolute;pointer-events:none}
+
+.prod{position:absolute}
+.prod img{display:block;height:100%;width:auto;filter:drop-shadow(0 0 16px rgba(164,217,46,.28)) drop-shadow(0 24px 22px rgba(0,0,0,.6))}
+.contact{position:absolute;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.6), rgba(0,0,0,0) 72%);filter:blur(7px)}
+
+.col{position:absolute;left:70px;top:0;width:820px;height:600px;display:flex;flex-direction:column;justify-content:center;z-index:6}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.logo img{height:34px}
+.kick{display:flex;align-items:center;gap:12px;margin:2px 0 6px}
+.kick .ln{width:34px;height:3px;background:var(--lime2)}
+.kick span{font-weight:800;font-size:16px;letter-spacing:3px;color:var(--lime1);text-transform:uppercase}
+.offer{display:flex;align-items:baseline;gap:16px}
+.offer .big{font-weight:900;font-size:150px;line-height:.8;letter-spacing:-4px;
+  background:linear-gradient(180deg,var(--lime1),var(--lime3));-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.25))}
+.offer .rt{display:flex;flex-direction:column}
+.offer .rt .em{font-weight:900;font-size:44px;color:var(--cream);line-height:.9}
+.offer .rt .sup{font-weight:600;font-size:22px;color:var(--muted);margin-top:4px;line-height:1.05}
+.benerow{margin-top:20px;display:flex;align-items:center;gap:16px}
+.fretepill{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border-radius:12px;background:linear-gradient(135deg,var(--lime1),var(--lime3));color:#12280a;font-weight:900;font-size:23px;letter-spacing:.5px;box-shadow:0 10px 24px rgba(120,190,20,.35)}
+.fretepill svg{width:20px;height:20px}
+.gift{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:18px;color:var(--cream)}
+.gift .g{color:var(--lime1);font-weight:900;font-size:22px;line-height:0}
+.cta{margin-top:26px}
+.cta a{display:inline-flex;align-items:center;gap:12px;padding:17px 42px;border-radius:14px;background:linear-gradient(135deg,var(--lime1),var(--lime2));color:#12280a;font-weight:900;font-size:22px;letter-spacing:.6px;text-decoration:none;text-transform:uppercase;box-shadow:0 16px 30px rgba(120,190,20,.4)}
+.cta a .arw{font-size:22px}
+</style></head>
+<body>
+<div id="stage">
+  <div class="aura"></div>
+  <svg class="bolt" style="right:360px;top:-20px;width:520px;height:640px" viewBox="0 0 520 640">
+    <path d="M300 -20 L250 240 L330 230 L210 640 L270 320 L190 330 Z" fill="rgba(199,238,90,.20)"/>
+  </svg>
+  <svg class="dust" style="right:60px;top:40px;width:900px;height:520px;opacity:.7;z-index:5" viewBox="0 0 900 520">
+    <g fill="#c7ee5a"><circle cx="120" cy="80" r="3"/><circle cx="300" cy="40" r="2.4"/><circle cx="520" cy="70" r="3"/><circle cx="760" cy="120" r="2.6"/><circle cx="840" cy="300" r="3.2"/><circle cx="80" cy="360" r="2.6"/><circle cx="420" cy="470" r="3"/><circle cx="660" cy="450" r="2.4"/></g>
+  </svg>
+
+  <!-- PRODUCT CLUSTER (right), dynamic angles -->
+  <div class="contact" style="left:1120px;bottom:96px;width:200px;height:30px"></div>
+  <div class="contact" style="left:1360px;bottom:92px;width:220px;height:32px"></div>
+  <div class="contact" style="left:1590px;bottom:98px;width:180px;height:28px"></div>
+  <div class="contact" style="left:1030px;bottom:104px;width:170px;height:26px"></div>
+  <div class="contact" style="left:1730px;bottom:104px;width:150px;height:24px"></div>
+
+  <!-- back boxes -->
+  <div class="prod" style="left:1180px;bottom:150px;height:300px;z-index:1;transform:rotate(-6deg)"><img src="prod/CAIXA_BOTANIKA_ADEK.png"></div>
+  <div class="prod" style="left:1360px;bottom:158px;height:250px;z-index:1;transform:rotate(5deg)"><img src="prod/BOTANIKA_SUPER_OMEGA_CAIXA.png"></div>
+  <div class="prod" style="left:1540px;bottom:150px;height:250px;z-index:1;transform:rotate(-4deg)"><img src="prod/BOTANIKA_CAIXA.png"></div>
+  <div class="prod" style="left:1010px;bottom:150px;height:250px;z-index:1;transform:rotate(6deg)"><img src="prod/BOTANIKA_TRI_MG_CAIXA.png"></div>
+  <!-- front jars -->
+  <div class="prod" style="left:1110px;bottom:80px;height:300px;z-index:3;transform:rotate(-7deg)"><img src="prod/ROTULO_BOTANIKA_WHEY_BALANCE.png"></div>
+  <div class="prod" style="left:1360px;bottom:78px;height:262px;z-index:3;transform:rotate(6deg)"><img src="prod/ROTULO_BOTANIKA_CREATINA.png"></div>
+  <div class="prod" style="left:1580px;bottom:84px;height:236px;z-index:3;transform:rotate(-5deg)"><img src="prod/BOTANIKA_SUPER_VITAMINA_C_ROTULO.png"></div>
+  <div class="prod" style="left:1720px;bottom:88px;height:232px;z-index:2;transform:rotate(9deg)"><img src="prod/ROTULO_BOTANIKA_TETRAVITD.png"></div>
+
+  <!-- OFFER (left) -->
+  <div class="col">
+    <div class="logo"><img src="brand/wordmark_cream.png"></div>
+    <div class="kick"><span class="ln"></span><span>DIA D BOTANIKA · 07 e 08.08</span></div>
+    <div class="offer">
+      <div class="big">8%</div>
+      <div class="rt"><div class="em">OFF</div><div class="sup">em todos os<br>suplementos</div></div>
+    </div>
+    <div class="benerow">
+      <span class="fretepill"><svg viewBox="0 0 24 24" fill="none" stroke="#12280a" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>FRETE GRÁTIS</span>
+      <span class="gift"><span class="g">+</span> Manual da Suplementação de brinde</span>
+    </div>
+    <div class="cta"><a href="#">Aproveitar agora <span class="arw">→</span></a></div>
+  </div>
+
+  <div class="floor"></div>
+  <div class="grain"></div>
+  <div class="vign"></div>
+</div>
+</body></html>
