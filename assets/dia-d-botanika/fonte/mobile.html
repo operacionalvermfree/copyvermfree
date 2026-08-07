@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/montserrat.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#05070f}
+#stage{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:'Montserrat',sans-serif;
+  background:radial-gradient(120% 90% at 50% 30%, #17306e 0%, #0e214f 38%, #0a1738 64%, #060d22 100%);
+  text-align:center}
+.grain{position:absolute;inset:0;opacity:.05;pointer-events:none;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:5px 5px}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(110% 90% at 50% 42%,transparent 52%,rgba(3,6,15,.6) 86%,rgba(2,4,10,.9) 100%)}
+.veins{position:absolute;inset:0;opacity:.45;mix-blend-mode:screen;pointer-events:none}
+.logo{margin:56px auto 0;display:flex;align-items:center;justify-content:center;gap:12px}
+.logo .mk{width:40px;height:40px}
+.logo .wm{font-weight:700;font-size:34px;color:#fff;letter-spacing:.3px}
+.kick{margin-top:30px;display:flex;align-items:center;justify-content:center;gap:14px}
+.kick .ln{width:40px;height:2px;background:linear-gradient(90deg,transparent,#e7c46b)}
+.kick .ln.r{background:linear-gradient(90deg,#e7c46b,transparent)}
+.kick span{font-weight:700;font-size:19px;letter-spacing:4px;color:#e6c877;text-transform:uppercase}
+.h1{margin-top:16px;font-weight:900;font-size:104px;line-height:.92;letter-spacing:1px;color:#fff;text-transform:uppercase}
+.h1 b{color:#e7c877}
+.sub{margin-top:20px;font-weight:600;font-size:38px;color:#e9eefb}
+.sub .off{font-weight:900;font-size:46px;background:linear-gradient(180deg,#f4d98a,#c89a3c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pool{position:absolute;left:50%;transform:translateX(-50%);top:560px;width:1000px;height:430px;pointer-events:none;
+  background:radial-gradient(55% 60% at 50% 55%,rgba(220,178,90,.20),rgba(220,178,90,0) 70%);filter:blur(10px)}
+.stagep{position:relative;height:470px;margin-top:30px}
+.prod{position:absolute;filter:drop-shadow(0 30px 30px rgba(0,0,0,.55))}
+.prod img{display:block;height:100%;width:auto}
+.pshadow{position:absolute;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.55),rgba(0,0,0,0) 72%);filter:blur(7px)}
+.benes{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:0 60px}
+.pill{display:inline-flex;align-items:center;gap:11px;padding:14px 28px;border-radius:44px;background:linear-gradient(135deg,#6aa84d,#4c7f37);color:#fff;font-weight:800;font-size:26px;letter-spacing:.6px;box-shadow:0 10px 22px rgba(40,80,25,.4)}
+.pill svg{width:22px;height:22px}
+.gift{display:inline-flex;align-items:center;gap:10px;color:#e9eefb;font-weight:600;font-size:26px}
+.gift .g{color:#e7c877;font-weight:900;font-size:30px;line-height:0}
+.timerwrap{margin-top:34px}
+.timerwrap .tl{font-weight:700;font-size:19px;letter-spacing:3px;color:#aebbd6;text-transform:uppercase;margin-bottom:12px}
+.timer{display:inline-flex;align-items:center;gap:16px;padding:18px 30px;border-radius:18px;border:2px solid rgba(231,196,107,.55);background:rgba(9,17,40,.55)}
+.timer .blk{display:flex;flex-direction:column;align-items:center;min-width:78px}
+.timer .num{font-weight:800;font-size:48px;color:#f0e4bf;font-variant-numeric:tabular-nums;line-height:1}
+.timer .lab{font-weight:600;font-size:15px;letter-spacing:2px;color:#8fa0c2;margin-top:8px}
+.timer .cln{font-weight:800;font-size:40px;color:#e7c877;margin-top:-22px}
+.cta{margin-top:40px}
+.cta a{display:inline-flex;align-items:center;gap:14px;padding:26px 66px;border-radius:60px;background:linear-gradient(135deg,#6fae50,#4c7f37);color:#fff;font-weight:800;font-size:34px;letter-spacing:.5px;text-decoration:none;box-shadow:0 16px 30px rgba(40,80,25,.45)}
+.sprig{position:absolute;pointer-events:none}
+</style></head>
+<body>
+<div id="stage">
+  <svg class="veins" viewBox="0 0 1080 1350" preserveAspectRatio="none">
+    <g fill="none" stroke="url(#gv)" stroke-width="1.4">
+      <path d="M-20 240 C 260 200, 420 320, 620 260 S 980 180, 1100 300"/>
+      <path d="M-20 720 C 240 690, 430 760, 640 720 S 980 660, 1100 740" opacity=".6"/>
+      <path d="M-20 1080 C 300 1040, 520 1120, 760 1070 S 1000 1030, 1100 1100" opacity=".5"/>
+    </g>
+    <defs><linearGradient id="gv" x1="0" x2="1"><stop offset="0" stop-color="#d8b25a" stop-opacity="0"/><stop offset=".5" stop-color="#e7c877" stop-opacity=".8"/><stop offset="1" stop-color="#d8b25a" stop-opacity="0"/></linearGradient></defs>
+  </svg>
+  <div class="grain"></div>
+
+  <!-- botanical sprigs -->
+  <svg class="sprig" style="left:-40px;top:70px;width:280px;height:300px;opacity:.5" viewBox="0 0 280 300">
+    <path d="M10 10 C 70 70, 110 120, 130 220" stroke="#3f6f4e" stroke-width="3" fill="none"/>
+    <g fill="#4b7d59"><ellipse cx="40" cy="60" rx="24" ry="13" transform="rotate(40 40 60)"/><ellipse cx="70" cy="110" rx="24" ry="13" transform="rotate(48 70 110)"/><ellipse cx="98" cy="160" rx="22" ry="12" transform="rotate(56 98 160)"/><ellipse cx="120" cy="210" rx="20" ry="11" transform="rotate(64 120 210)"/></g>
+  </svg>
+  <svg class="sprig" style="right:-40px;top:60px;width:280px;height:300px;opacity:.5;transform:scaleX(-1)" viewBox="0 0 280 300">
+    <path d="M10 10 C 70 70, 110 120, 130 220" stroke="#3f6f4e" stroke-width="3" fill="none"/>
+    <g fill="#4b7d59"><ellipse cx="40" cy="60" rx="24" ry="13" transform="rotate(40 40 60)"/><ellipse cx="70" cy="110" rx="24" ry="13" transform="rotate(48 70 110)"/><ellipse cx="98" cy="160" rx="22" ry="12" transform="rotate(56 98 160)"/><ellipse cx="120" cy="210" rx="20" ry="11" transform="rotate(64 120 210)"/></g>
+  </svg>
+
+  <div class="logo">
+    <svg class="mk" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M32 58 C 32 42 32 32 32 18" stroke="#fff" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path d="M32 40 C 19 41 11 33 8 20 C 23 19 33 27 32 40 Z" fill="#fff"/>
+      <path d="M32 32 C 45 33 53 25 56 12 C 41 11 31 19 32 32 Z" fill="#fff"/>
+      <path d="M32 50 C 24 51 18 46 15 38 C 25 37 32 42 32 50 Z" fill="#fff" opacity=".9"/>
+    </svg>
+    <div class="wm">Botanika</div>
+  </div>
+
+  <div class="kick"><span class="ln"></span><span>07 e 08.08 · só 2 dias</span><span class="ln r"></span></div>
+  <div class="h1">DIA D<br><b>BOTANIKA</b></div>
+  <div class="sub"><span class="off">8% OFF</span> em todos os suplementos</div>
+
+  <div class="pool"></div>
+  <div class="stagep">
+    <div class="pshadow" style="left:210px;bottom:6px;width:300px;height:40px"></div>
+    <div class="pshadow" style="left:540px;bottom:6px;width:300px;height:40px"></div>
+    <div class="pshadow" style="left:380px;bottom:-2px;width:340px;height:44px"></div>
+    <!-- back boxes -->
+    <div class="prod" style="left:178px;bottom:60px;height:344px;transform:rotate(-3deg);z-index:1"><img src="prod/BOTANIKA_SUPER_OMEGA_CAIXA.png"></div>
+    <div class="prod" style="left:636px;bottom:60px;height:344px;transform:rotate(3deg);z-index:1"><img src="prod/BOTANIKA_TRI_MG_CAIXA.png"></div>
+    <div class="prod" style="left:470px;bottom:70px;height:410px;z-index:1"><img src="prod/CAIXA_BOTANIKA_ADEK.png"></div>
+    <!-- front jars -->
+    <div class="prod" style="left:196px;bottom:0;height:388px;z-index:3"><img src="prod/ROTULO_BOTANIKA_WHEY_BALANCE.png"></div>
+    <div class="prod" style="left:566px;bottom:0;height:352px;z-index:3"><img src="prod/ROTULO_BOTANIKA_CREATINA.png"></div>
+  </div>
+
+  <div class="benes">
+    <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>FRETE GRÁTIS</span>
+    <span class="gift"><span class="g">+</span> Manual da Suplementação de brinde</span>
+  </div>
+
+  <div class="timerwrap">
+    <div class="tl">A oferta termina em</div>
+    <div class="timer" id="timer-slot">
+      <div class="blk"><div class="num">00</div><div class="lab">HORAS</div></div>
+      <div class="cln">:</div>
+      <div class="blk"><div class="num">00</div><div class="lab">MIN</div></div>
+      <div class="cln">:</div>
+      <div class="blk"><div class="num">00</div><div class="lab">SEG</div></div>
+    </div>
+  </div>
+
+  <div class="cta"><a href="#">Aproveitar agora →</a></div>
+  <div class="vignette"></div>
+</div>
+</body></html>
