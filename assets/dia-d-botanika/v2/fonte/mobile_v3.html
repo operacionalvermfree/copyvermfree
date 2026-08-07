@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/montserrat.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#0b0f14}
+:root{
+  --ivory1:#ffffff; --ivory2:#f6f2e7; --ivory3:#efe8d6; --ivory4:#e6dcc4;
+  --ink:#33372f; --indigo:#2b357e; --gold1:#dcb154; --gold2:#b6842f;
+  --goldln1:#e2c069; --goldln2:#c29a45; --kick:#b48a35; --green1:#5fa06a; --green2:#3e7d5a;}
+#stage{position:relative;width:1080px;height:1350px;overflow:hidden;font-family:'Montserrat',sans-serif;text-align:center;
+  background:radial-gradient(100% 70% at 50% 26%, var(--ivory1) 0%, var(--ivory2) 36%, var(--ivory3) 68%, var(--ivory4) 100%);}
+.spot{position:absolute;left:50%;top:120px;transform:translateX(-50%);width:1000px;height:620px;pointer-events:none;background:radial-gradient(50% 50% at 50% 45%, rgba(255,255,255,.85), rgba(255,255,255,0) 70%)}
+.paper{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:radial-gradient(rgba(120,110,80,.08) 1px,transparent 1.4px);background-size:7px 7px}
+.vign{position:absolute;inset:0;pointer-events:none;background:radial-gradient(115% 90% at 50% 40%, transparent 58%, rgba(120,105,70,.16) 100%)}
+.floor{position:absolute;left:0;right:0;bottom:0;height:250px;pointer-events:none;background:linear-gradient(180deg, rgba(206,192,160,0) 0%, rgba(198,183,150,.4) 100%)}
+.wm-mono{position:absolute;right:-160px;top:-120px;width:520px;opacity:.06;pointer-events:none}
+.frame{position:absolute;inset:26px;border:2px solid rgba(196,154,69,.45);pointer-events:none}
+.frame:before{content:"";position:absolute;inset:7px;border:1.2px solid rgba(196,154,69,.22)}
+.sprig{position:absolute;pointer-events:none}
+.logo{margin:70px auto 0;display:flex;align-items:center;justify-content:center;gap:12px}
+.logo img{height:44px}
+.kick{margin-top:26px;display:flex;align-items:center;justify-content:center;gap:14px}
+.kick .ln{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--goldln2))}
+.kick .ln.r{background:linear-gradient(90deg,var(--goldln2),transparent)}
+.kick span{font-weight:800;font-size:22px;letter-spacing:3px;color:var(--kick);text-transform:uppercase}
+.offer{margin-top:14px;display:flex;align-items:baseline;justify-content:center;gap:22px}
+.offer .big{font-weight:900;font-size:230px;line-height:.8;letter-spacing:-6px;background:linear-gradient(180deg,var(--gold1),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.offer .rt{display:flex;flex-direction:column;align-items:flex-start}
+.offer .rt .em{font-weight:900;font-size:64px;color:var(--indigo);line-height:.9}
+.offer .rt .sup{font-weight:600;font-size:34px;color:var(--ink);margin-top:6px;text-align:left;line-height:1.05}
+.frow{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;padding:0 60px}
+.fretepill{display:inline-flex;align-items:center;gap:12px;padding:15px 30px;border-radius:44px;background:linear-gradient(135deg,var(--green1),var(--green2));color:#fff;font-weight:800;font-size:30px;letter-spacing:.5px;box-shadow:0 10px 22px rgba(40,80,25,.3)}
+.fretepill svg{width:26px;height:26px}
+.gift{font-weight:700;font-size:27px;color:var(--ink)}
+.gift .g{color:var(--goldln2);font-weight:900}
+.stagep{position:relative;height:430px;margin-top:8px}
+.prod{position:absolute}
+.prod img{display:block;height:100%;width:auto;filter:drop-shadow(0 20px 18px rgba(40,46,30,.28))}
+.contact{position:absolute;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%, rgba(60,60,40,.4), rgba(60,60,40,0) 72%);filter:blur(7px)}
+.cta{margin-top:26px}
+.cta a{display:inline-flex;align-items:center;gap:14px;padding:26px 70px;border-radius:60px;background:linear-gradient(135deg,#2f3a86,#232c66);color:#fff;font-weight:800;font-size:36px;letter-spacing:.5px;text-decoration:none;box-shadow:0 16px 30px rgba(35,44,102,.32)}
+.cta a .arw{color:#e7c877}
+</style></head>
+<body>
+<div id="stage">
+  <div class="spot"></div>
+  <img class="wm-mono" src="brand/mono_lime.png">
+  <svg class="sprig" style="left:-30px;top:80px;width:250px;height:280px;opacity:.5" viewBox="0 0 250 280"><path d="M10 10 C 70 70, 108 118, 128 210" stroke="#8aa06a" stroke-width="3" fill="none"/><g fill="#a9c07e"><ellipse cx="40" cy="60" rx="22" ry="12" transform="rotate(40 40 60)"/><ellipse cx="68" cy="108" rx="22" ry="12" transform="rotate(48 68 108)"/><ellipse cx="94" cy="156" rx="20" ry="11" transform="rotate(56 94 156)"/></g></svg>
+  <svg class="sprig" style="right:-30px;top:80px;width:250px;height:280px;opacity:.5;transform:scaleX(-1)" viewBox="0 0 250 280"><path d="M10 10 C 70 70, 108 118, 128 210" stroke="#c2a04a" stroke-width="3" fill="none"/><g fill="#e2c069"><ellipse cx="40" cy="60" rx="22" ry="12" transform="rotate(40 40 60)"/><ellipse cx="68" cy="108" rx="22" ry="12" transform="rotate(48 68 108)"/><ellipse cx="94" cy="156" rx="20" ry="11" transform="rotate(56 94 156)"/></g></svg>
+
+  <div class="logo"><img src="brand/wordmark_indigo.png"></div>
+  <div class="kick"><span class="ln"></span><span>Dia D · 07 e 08.08</span><span class="ln r"></span></div>
+  <div class="offer">
+    <div class="big">8%</div>
+    <div class="rt"><div class="em">OFF</div><div class="sup">em todos os<br>suplementos</div></div>
+  </div>
+  <div class="frow">
+    <span class="fretepill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>FRETE GRÁTIS</span>
+    <span class="gift"><span class="g">+</span> Manual de brinde</span>
+  </div>
+
+  <div class="stagep">
+    <div class="contact" style="left:150px;bottom:36px;width:150px;height:26px"></div>
+    <div class="contact" style="left:300px;bottom:36px;width:150px;height:26px"></div>
+    <div class="contact" style="left:640px;bottom:36px;width:150px;height:26px"></div>
+    <div class="contact" style="left:790px;bottom:36px;width:150px;height:26px"></div>
+    <div class="contact" style="left:150px;bottom:-8px;width:200px;height:32px"></div>
+    <div class="contact" style="left:380px;bottom:-8px;width:220px;height:34px"></div>
+    <div class="contact" style="left:640px;bottom:-8px;width:190px;height:30px"></div>
+    <div class="contact" style="left:820px;bottom:-8px;width:170px;height:28px"></div>
+    <!-- back boxes -->
+    <div class="prod" style="left:150px;bottom:56px;height:300px;z-index:1"><img src="prod/CAIXA_BOTANIKA_ADEK.png"></div>
+    <div class="prod" style="left:300px;bottom:56px;height:250px;z-index:1;transform:rotate(-1.5deg)"><img src="prod/BOTANIKA_SUPER_OMEGA_CAIXA.png"></div>
+    <div class="prod" style="left:600px;bottom:56px;height:250px;z-index:1"><img src="prod/BOTANIKA_CAIXA.png"></div>
+    <div class="prod" style="left:760px;bottom:56px;height:250px;z-index:1;transform:rotate(1.5deg)"><img src="prod/BOTANIKA_TRI_MG_CAIXA.png"></div>
+    <!-- front jars -->
+    <div class="prod" style="left:150px;bottom:0;height:250px;z-index:3"><img src="prod/ROTULO_BOTANIKA_WHEY_BALANCE.png"></div>
+    <div class="prod" style="left:372px;bottom:0;height:224px;z-index:3"><img src="prod/ROTULO_BOTANIKA_CREATINA.png"></div>
+    <div class="prod" style="left:600px;bottom:2px;height:216px;z-index:3"><img src="prod/BOTANIKA_SUPER_VITAMINA_C_ROTULO.png"></div>
+    <div class="prod" style="left:800px;bottom:2px;height:236px;z-index:3"><img src="prod/ROTULO_BOTANIKA_TETRAVITD.png"></div>
+  </div>
+
+  <div class="cta"><a href="#">Aproveitar agora →</a></div>
+
+  <div class="floor"></div>
+  <div class="paper"></div>
+  <div class="vign"></div>
+  <div class="frame"></div>
+</div>
+</body></html>
