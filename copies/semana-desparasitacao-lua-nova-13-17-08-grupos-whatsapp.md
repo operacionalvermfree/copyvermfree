@@ -1,9 +1,9 @@
 # Semana da Desparasitação / Lua Nova (13–17/08) — 31 mensagens de Grupo WhatsApp · VermeFree
 
-> ⚠️ Datas atualizadas — a semana passou de 16-21/08 para **13-17/08**. Este arquivo substitui `semana-desparasitacao-lua-nova-16-21-08-grupos-whatsapp.md` (marcado como superado). Como a semana ficou mais curta (5 dias em vez de 6), os blocos de **prova social** e **"é amanhã"** agora caem no mesmo dia, domingo 16/08 (manhã/tarde e noite).
+> Grupos antigos, disparo orgânico (sem template Meta, sem variável de nome). Espinha em toda peça de venda: dor → solução (o protocolo) → benefício. Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até **17/08**. Lua nova usada com leveza — próxima é 11/09, preparo do protocolo começa 15 dias antes, em 27/08.
 
 ## O que preencher
-- `[LINK]` — em todas as mensagens de venda (3 a 31).
+- `[LINK]` — em todas as mensagens de venda (a partir da 3).
 
 ---
 
@@ -38,7 +38,7 @@ Todos os kits com 5% OFF.
 👉 [LINK]
 ```
 
-**4. — 11h — Manual em destaque**
+**4. — 10h — Manual em destaque**
 ```
 🎁 Um dos bônus dessa semana: os 100 primeiros pedidos ganham o Manual da Desparasitação — um guia completo com cronograma, o que esperar em cada fase, e como potencializar o protocolo.
 
@@ -48,7 +48,7 @@ Só essa semana.
 ```
 *[Sugestão: print da capa do Manual]*
 
-**5. — 14h — Protocolo Adulto**
+**5. — 12h — Protocolo Adulto**
 ```
 Cansaço sem explicação, aquele inchaço depois de comer, intestino que nunca regula... Se isso te soa familiar, o Protocolo Adulto auxilia na desparasitação e apoia a rotina de limpeza natural, pra você sentir o corpo mais leve, com constância.
 
@@ -57,7 +57,7 @@ Hoje com 5% OFF.
 👉 [LINK]
 ```
 
-**6. — 17h — Protocolo Kids**
+**6. — 14h — Protocolo Kids**
 ```
 Seu filho coça à noite, dorme agitado, range o dente sem motivo aparente? O Protocolo Kids é líquido, sabor bem aceito, feito pra cuidar da rotina da criança de forma natural e suave.
 
@@ -67,9 +67,18 @@ Também com 5% OFF essa semana.
 ```
 *[Sugestão: foto/print do Kids, se tiver UGC de alguma mãe autorizado — não inventar depoimento]*
 
-**7. — 20h — Sorteio anunciado**
+**7. — 17h — Sorteio anunciado**
 ```
 🎯 E tem mais: quem comprar até segunda (17/08) concorre a 1 Kit Adulto completo no sorteio da semana. Cada pedido é um número na urna.
+
+👉 [LINK]
+```
+
+**8. — 21h — Por que só essa semana**
+```
+Alguém me perguntou hoje por que o desconto é só essa semana e não sempre. É simples: não queremos que vire regra — queremos que continue valendo a pena.
+
+Se você tava esperando um motivo pra começar, esse é: 5% OFF + Manual da Desparasitação, só até segunda.
 
 👉 [LINK]
 ```
@@ -78,14 +87,23 @@ Também com 5% OFF essa semana.
 
 ## SEXTA 14/08 — Educativo (ciclo lunar)
 
-**8. — 09h**
+**9. — 09h**
 ```
 🌙 Uma pergunta que recebo bastante: por que o protocolo é sincronizado com a lua nova?
 
 É um rito da marca — a primeira fase (preparo) começa 15 dias antes da lua nova, pra deixar o corpo pronto. A próxima lua nova é 11/09, então o preparo começa em 27/08.
 ```
 
-**9. — 12h**
+**10. — 11h — Um dado importante**
+```
+1 em cada 3 crianças brasileiras tem parasitose intestinal (Fonte: Ministério da Saúde). É por isso que a gente sempre fala em cuidar da rotina da família inteira, não só de quem apresenta sinal.
+
+Essa semana, todos os kits (Adulto e Kids) estão com 5% OFF.
+
+👉 [LINK]
+```
+
+**11. — 13h**
 ```
 Garantindo seu kit essa semana, ele chega com folga pra você começar o preparo em 27/08 — sem correria de última hora.
 
@@ -94,14 +112,14 @@ Ainda com 5% OFF + Manual da Desparasitação pros 100 primeiros.
 👉 [LINK]
 ```
 
-**10. — 15h**
+**12. — 16h**
 ```
 Não é sobre pressa, é sobre começar no ciclo certo 🌿 A sincronia com a lua nova é só um jeito da marca organizar o protocolo — nada de mágica, só timing.
 
 👉 [LINK]
 ```
 
-**11. — 19h**
+**13. — 19h**
 ```
 Se você vem adiando o início da sua rotina, essa semana facilita: 5% OFF, Manual da Desparasitação pros 100 primeiros, e ainda dá tempo de garantir o preparo pra 27/08.
 
@@ -112,39 +130,46 @@ Se você vem adiando o início da sua rotina, essa semana facilita: 5% OFF, Manu
 
 ## SÁBADO 15/08 — Prazo por região
 
-**12. — 09h**
+**14. — 09h**
 ```
 📦 Aviso importante: o prazo de entrega varia conforme a região do Brasil. Pra começar o preparo em 27/08 com folga, vale garantir o pedido essa semana.
 
 👉 [LINK]
 ```
 
-**13. — 12h**
+**15. — 12h**
 ```
 Se você mora mais longe dos grandes centros, esse é o momento de fechar o pedido — assim o kit chega tranquilo, sem pressa de última hora.
 
 👉 [LINK]
 ```
 
-**14. — 15h**
+**16. — 14h**
 ```
 Resumindo o motivo da pressa (a única real): o preparo do protocolo começa 27/08, e o frete leva alguns dias. Quem garante agora, garante o timing certo.
 
 👉 [LINK]
 ```
 
-**15. — 19h**
+**17. — 17h**
 ```
-Ainda dá tempo de fechar o pedido hoje e entrar tranquila no ciclo de 27/08. 5% OFF + Manual da Desparasitação pros 100 primeiros.
+Sábado é um bom dia pra resolver isso com calma, sem a correria de segunda-feira. Ainda dá tempo de fechar o pedido hoje e entrar tranquila no ciclo de 27/08.
+
+👉 [LINK]
+```
+
+**18. — 20h**
+```
+Fechando o fim de semana: 5% OFF + Manual da Desparasitação pros 100 primeiros, e ainda dá pra garantir o timing certo pro preparo. Amanhã a semana já entra na reta final.
 
 👉 [LINK]
 ```
 
 ---
 
-## DOMINGO 16/08 — Prova social
+## DOMINGO 16/08 — Prova social + "é amanhã o último dia"
 
-**16. — 08h**
+**19. — 08h**
 ```
 "Comecei o protocolo e me sinto bem mais leve, o intestino funcionando melhor." — é isso que a gente mais ouve de quem completou o protocolo. 🌿
 
@@ -152,32 +177,21 @@ Ainda dá tempo de fechar o pedido hoje e entrar tranquila no ciclo de 27/08. 5%
 ```
 *[Sugestão: print de depoimento real, se tiver autorizado]*
 
-**17. — 10h**
+**20. — 11h**
 ```
-"Não foi milagre, foi constância — fiz certinho, do jeito que era pra fazer." Não prometemos resultado imediato, só um protocolo natural, feito com critério.
+"Não foi milagre, foi constância — fiz certinho, do jeito que era pra fazer." Não prometemos resultado imediato, só um protocolo natural, feito com critério. Resultados podem variar de pessoa pra pessoa, mas a constância é o que sustenta.
 
 👉 [LINK]
 ```
 
-**18. — 12h**
+**21. — 14h**
 ```
-"O corpo pede uma limpeza natural de vez em quando. Depois do protocolo, sinto isso de verdade." Se você reconhece essa sensação, essa semana facilita começar: 5% OFF + Manual.
+"O corpo pede uma limpeza natural de vez em quando. Depois do protocolo, sinto isso de verdade." Se você reconhece essa sensação, ainda dá tempo de começar essa semana: 5% OFF + Manual.
 
 👉 [LINK]
 ```
 
-**19. — 14h**
-```
-Relatos como esses são o motivo de eu insistir tanto nessa semana — não é sobre vender, é sobre quem já sentiu diferença de verdade. Resultados podem variar de pessoa pra pessoa, mas a constância é o que sustenta. Ainda dá tempo.
-
-👉 [LINK]
-```
-
----
-
-## DOMINGO 16/08 (noite) — "É amanhã", urgência
-
-**20. — 16h**
+**22. — 17h — É amanhã**
 ```
 ⏰ Amanhã é o último dia da Semana da Desparasitação / Lua Nova.
 
@@ -186,21 +200,7 @@ Relatos como esses são o motivo de eu insistir tanto nessa semana — não é s
 👉 [LINK]
 ```
 
-**21. — 18h**
-```
-Se aquele cansaço, o inchaço, ou a coceira e o sono agitado do seu filho ainda te incomodam, amanhã é a última chance dessa condição.
-
-👉 [LINK]
-```
-
-**22. — 19h**
-```
-🎁 O Manual da Desparasitação é só pros 100 primeiros pedidos — e a semana já tá quase fechando. Se você quer garantir, não deixa pra última hora.
-
-👉 [LINK]
-```
-
-**23. — 20h**
+**23. — 20h — Sorteio lembrete**
 ```
 🎯 Lembrete do sorteio: toda compra até amanhã concorre a 1 Kit Adulto completo. Amanhã é o último dia de participar.
 
@@ -286,10 +286,8 @@ Boa noite 🌙
 - [x] Tom informal, de amiga/grupo de família
 - [x] Desconto, Manual e sorteio enquadrados como janela pontual, nunca "promoção de sempre"
 - [x] 1 CTA claro nas peças de venda (3 a 31); as 2 de antecipação não têm link
+- [x] Variação ao longo da semana: dados (quinta 21h e sexta 11h), depoimentos (domingo manhã/tarde), prazo (sábado), urgência (domingo noite/segunda) e sorteio (quinta, domingo, segunda)
 
-## O que mudou desde a versão 16-21/08
+## Distribuição por dia (conforme briefing)
 
-- Antecipação: sábado → **quarta 12/08**. Abertura: domingo → **quinta 13/08**. Educativo: segunda → **sexta 14/08**. Prazo regional: terça → **sábado 15/08**.
-- Prova social e "é amanhã" agora caem no **mesmo dia**, domingo 16/08 (manhã/tarde e noite), com horários redistribuídos (08h–14h e 16h–22h).
-- Último dia + sorteio: sexta 21/08 → **segunda 17/08**. Mensagem 7 (sorteio) atualizada de "até sexta (21/08)" pra "até segunda (17/08)".
-- Narrativa da lua nova (11/09, preparo em 27/08) não mudou.
+QUA 12/08 (2) · QUI 13/08 (6) · SEX 14/08 (5) · SÁB 15/08 (5) · DOM 16/08 (6) · SEG 17/08 (7) = 31 mensagens.
