@@ -1,30 +1,31 @@
-# Semana da Desparasitação / Lua Nova (16–21/08) — 31 mensagens de Grupo WhatsApp · VermeFree
+# Semana da Desparasitação / Lua Nova (13–17/08) — 31 mensagens de Grupo WhatsApp · VermeFree
 
-> ⚠️ **SUPERADO — as datas mudaram.** A semana passou para **13-17/08**. Use `semana-desparasitacao-lua-nova-13-17-08-grupos-whatsapp.md`. Este arquivo fica só como histórico, não programar mais a partir dele.
+> ⚠️ Datas atualizadas — a semana passou de 16-21/08 para **13-17/08**. Este arquivo substitui `semana-desparasitacao-lua-nova-16-21-08-grupos-whatsapp.md` (marcado como superado). Como a semana ficou mais curta (5 dias em vez de 6), os blocos de **prova social** e **"é amanhã"** agora caem no mesmo dia, domingo 16/08 (manhã/tarde e noite).
 
-> Grupos antigos, disparo orgânico (sem template Meta, sem variável de nome). Espinha em toda peça de venda: dor → solução (o protocolo) → benefício. Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até 21/08. Lua nova usada com leveza — próxima é 11/09, preparo do protocolo começa 15 dias antes, em 27/08.
+## O que preencher
+- `[LINK]` — em todas as mensagens de venda (3 a 31).
 
 ---
 
-## SÁBADO 15/08 — Antecipação (sem link de compra)
+## QUARTA 12/08 — Antecipação (sem link de compra)
 
 **1. — 10h**
 ```
 Vive cansada e inchada mesmo comendo bem? Talvez não seja só a alimentação...
 
-Semana que vem a gente abre uma coisa aqui que pode ajudar com isso. Ainda não posso contar tudo, mas vale ficar de olho a partir de domingo 👀
+Tem algo vindo essa semana que pode ajudar a cuidar disso. Ainda não posso contar tudo, mas vale ficar de olho a partir de amanhã 👀
 ```
 
 **2. — 18h**
 ```
 Sei que tem mãe aqui que já reparou o filho coçando à noite, ou rangendo o dente sem motivo aparente...
 
-Semana que vem vem uma novidade que pode ajudar a cuidar disso com calma. Fica de olho 🌿
+Essa semana vem uma novidade que pode ajudar a cuidar disso com calma. Fica de olho 🌿
 ```
 
 ---
 
-## DOMINGO 16/08 — Abertura
+## QUINTA 13/08 — Abertura
 
 **3. — 08h — Começou!**
 ```
@@ -68,14 +69,14 @@ Também com 5% OFF essa semana.
 
 **7. — 20h — Sorteio anunciado**
 ```
-🎯 E tem mais: quem comprar até sexta (21/08) concorre a 1 Kit Adulto completo no sorteio da semana. Cada pedido é um número na urna.
+🎯 E tem mais: quem comprar até segunda (17/08) concorre a 1 Kit Adulto completo no sorteio da semana. Cada pedido é um número na urna.
 
 👉 [LINK]
 ```
 
 ---
 
-## SEGUNDA 17/08 — Educativo (ciclo lunar)
+## SEXTA 14/08 — Educativo (ciclo lunar)
 
 **8. — 09h**
 ```
@@ -109,7 +110,7 @@ Se você vem adiando o início da sua rotina, essa semana facilita: 5% OFF, Manu
 
 ---
 
-## TERÇA 18/08 — Prazo por região
+## SÁBADO 15/08 — Prazo por região
 
 **12. — 09h**
 ```
@@ -141,9 +142,9 @@ Ainda dá tempo de fechar o pedido hoje e entrar tranquila no ciclo de 27/08. 5%
 
 ---
 
-## QUARTA 19/08 — Prova social
+## DOMINGO 16/08 — Prova social
 
-**16. — 09h**
+**16. — 08h**
 ```
 "Comecei o protocolo e me sinto bem mais leve, o intestino funcionando melhor." — é isso que a gente mais ouve de quem completou o protocolo. 🌿
 
@@ -151,32 +152,32 @@ Ainda dá tempo de fechar o pedido hoje e entrar tranquila no ciclo de 27/08. 5%
 ```
 *[Sugestão: print de depoimento real, se tiver autorizado]*
 
-**17. — 12h**
+**17. — 10h**
 ```
 "Não foi milagre, foi constância — fiz certinho, do jeito que era pra fazer." Não prometemos resultado imediato, só um protocolo natural, feito com critério.
 
 👉 [LINK]
 ```
 
-**18. — 15h**
+**18. — 12h**
 ```
 "O corpo pede uma limpeza natural de vez em quando. Depois do protocolo, sinto isso de verdade." Se você reconhece essa sensação, essa semana facilita começar: 5% OFF + Manual.
 
 👉 [LINK]
 ```
 
-**19. — 19h**
+**19. — 14h**
 ```
-Relatos como esses são o motivo de eu insistir tanto nessa semana — não é sobre vender, é sobre quem já sentiu diferença de verdade. Ainda dá tempo.
+Relatos como esses são o motivo de eu insistir tanto nessa semana — não é sobre vender, é sobre quem já sentiu diferença de verdade. Resultados podem variar de pessoa pra pessoa, mas a constância é o que sustenta. Ainda dá tempo.
 
 👉 [LINK]
 ```
 
 ---
 
-## QUINTA 20/08 — "É amanhã", urgência
+## DOMINGO 16/08 (noite) — "É amanhã", urgência
 
-**20. — 09h**
+**20. — 16h**
 ```
 ⏰ Amanhã é o último dia da Semana da Desparasitação / Lua Nova.
 
@@ -185,28 +186,28 @@ Relatos como esses são o motivo de eu insistir tanto nessa semana — não é s
 👉 [LINK]
 ```
 
-**21. — 12h**
+**21. — 18h**
 ```
 Se aquele cansaço, o inchaço, ou a coceira e o sono agitado do seu filho ainda te incomodam, amanhã é a última chance dessa condição.
 
 👉 [LINK]
 ```
 
-**22. — 15h**
+**22. — 19h**
 ```
 🎁 O Manual da Desparasitação é só pros 100 primeiros pedidos — e a semana já tá quase fechando. Se você quer garantir, não deixa pra última hora.
 
 👉 [LINK]
 ```
 
-**23. — 18h**
+**23. — 20h**
 ```
 🎯 Lembrete do sorteio: toda compra até amanhã concorre a 1 Kit Adulto completo. Amanhã é o último dia de participar.
 
 👉 [LINK]
 ```
 
-**24. — 21h**
+**24. — 22h**
 ```
 Amanhã fecha tudo: 5% OFF, Manual da Desparasitação e sorteio do Kit Adulto. Se você tava esperando o momento certo, amanhã é o último.
 
@@ -215,7 +216,7 @@ Amanhã fecha tudo: 5% OFF, Manual da Desparasitação e sorteio do Kit Adulto. 
 
 ---
 
-## SEXTA 21/08 — Último dia + sorteio + urgência máxima
+## SEGUNDA 17/08 — Último dia + sorteio + urgência máxima
 
 **25. — 08h**
 ```
@@ -280,19 +281,15 @@ Boa noite 🌙
 - [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/garantido/em X dias) — nenhuma usa
 - [x] Sem comparação com remédio de farmácia, sem promessa de emagrecimento
 - [x] Sem citar Dr. William nem qualquer médico/influenciador como aval
-- [x] Não diagnostica o leitor — nenhuma peça afirma "você tem verme"
-- [x] Depoimentos (quarta 19/08) falam só de bem-estar/leveza/constância, nunca de doença
-- [x] Tom informal, de amiga/grupo de família — nada institucional
-- [x] Desconto, Manual e sorteio enquadrados como janela pontual da semana, nunca "promoção de sempre"
-- [x] 1 CTA claro nas peças de venda (3 a 31) — as 2 de antecipação (sábado) não têm link, como pedido
-- [x] Variação ao longo da semana: dados (segunda/terça), depoimentos (quarta), prazo (terça), urgência (quinta/sexta) e sorteio (domingo, quinta, sexta) — nenhum dia repete o ângulo do anterior
+- [x] Não diagnostica o leitor
+- [x] Depoimentos (domingo 16/08, manhã) falam só de bem-estar/leveza/constância, com "resultados podem variar" incluído
+- [x] Tom informal, de amiga/grupo de família
+- [x] Desconto, Manual e sorteio enquadrados como janela pontual, nunca "promoção de sempre"
+- [x] 1 CTA claro nas peças de venda (3 a 31); as 2 de antecipação não têm link
 
----
+## O que mudou desde a versão 16-21/08
 
-## Pendências para finalizar
-
-1. **Depoimentos (16, 17, 18)** — mesma observação de peças anteriores: as 3 frases são os exemplos de tom já aprovados no `CLAUDE.md` (seção 3), não depoimentos verificados de clientes reais. Trocar por depoimentos reais e autorizados, se houver.
-2. **Prazos por região (12, 13, 14)** — sem tabela real de prazo por região/CEP, fiquei no nível genérico ("quem mora mais longe deve se antecipar"). Se houver dados reais, dá pra deixar mais específico.
-3. **Mecânica do sorteio (7, 23, 29)** — não veio confirmado se é 1 número por pedido ou por unidade, nem onde/quando sai o resultado. Assumi "1 pedido = 1 número" de forma genérica.
-4. **Rastreio dos "100 primeiros" (4, 22, 26)** — sem visibilidade em tempo real do estoque de Manuais, as menções condicionais ("últimos dos 100 primeiros") ficam genéricas. Se quiserem, dá pra usar número real assim que houver — nunca estimado.
-5. **`[LINK]`** — preencher em todas as mensagens de venda antes de disparar.
+- Antecipação: sábado → **quarta 12/08**. Abertura: domingo → **quinta 13/08**. Educativo: segunda → **sexta 14/08**. Prazo regional: terça → **sábado 15/08**.
+- Prova social e "é amanhã" agora caem no **mesmo dia**, domingo 16/08 (manhã/tarde e noite), com horários redistribuídos (08h–14h e 16h–22h).
+- Último dia + sorteio: sexta 21/08 → **segunda 17/08**. Mensagem 7 (sorteio) atualizada de "até sexta (21/08)" pra "até segunda (17/08)".
+- Narrativa da lua nova (11/09, preparo em 27/08) não mudou.
