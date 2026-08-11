@@ -1,27 +1,27 @@
-# Semana da Desparasitação / Lua Nova (16–21/08) — 8 E-mails · VermeFree
+# Semana da Desparasitação / Lua Nova (13–17/08) — 8 E-mails · VermeFree
 
-> ⚠️ **SUPERADO — as datas mudaram.** A semana passou para **13-17/08**. Use `semana-desparasitacao-lua-nova-13-17-08-emails.md`. Este arquivo fica só como histórico, não programar mais a partir dele.
-
-> Espinha em todas: dor → solução (o protocolo) → benefício → oferta. Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até 21/08. Narrativa da lua nova usada com leveza (rito simbólico), nunca como âncora de venda — a próxima lua nova é 11/09, preparo do protocolo começa 15 dias antes, em 27/08.
+> ⚠️ Datas atualizadas — a semana passou de 16-21/08 para **13-17/08**. Esta versão substitui `semana-desparasitacao-lua-nova-16-21-08-emails.md`, que fica só como histórico (não usar mais pra programar).
+>
+> Espinha em todas: dor → solução (o protocolo) → benefício → oferta. Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até **17/08**. Narrativa da lua nova usada com leveza — a próxima lua nova é 11/09, preparo do protocolo começa 15 dias antes, em 27/08 (isso não mudou).
 
 ---
 
-## E-MAIL 1 — SÁB 15/08 · Antecipação (sem CTA de compra)
+## E-MAIL 1 — QUA 12/08 · Antecipação (sem CTA de compra)
 
 **Assunto:** Semana que vem tem novidade por aqui
 **Assunto (variação A/B):** Separa uma folguinha na sua rotina semana que vem
 
-**Pré-header:** Ainda não posso contar tudo, mas vale ficar de olho a partir de domingo.
+**Pré-header:** Ainda não posso contar tudo, mas vale ficar de olho a partir de amanhã.
 
 **Corpo:**
 ```
 Olá,
 
-Semana que vem a gente abre uma novidade aqui na VermeFree — e queria que você já soubesse, porque tem prazo.
+Amanhã a gente abre uma novidade aqui na VermeFree — e queria que você já soubesse, porque tem prazo.
 
 Não vou contar tudo agora. Só adianto: se você (ou sua família) vem adiando a rotina de desparasitação natural, essa vai ser uma boa semana pra decidir.
 
-A partir de domingo eu conto os detalhes.
+Amanhã eu conto os detalhes.
 
 Um abraço,
 Equipe VermeFree
@@ -31,7 +31,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 2 — DOM 16/08 · Abertura
+## E-MAIL 2 — QUI 13/08 · Abertura
 
 **Assunto:** Começou a Semana da Desparasitação
 **Assunto (variação A/B):** 5% OFF + Manual grátis pros 100 primeiros
@@ -50,9 +50,9 @@ Hoje começou a Semana da Desparasitação / Lua Nova:
 
 ✅ Todos os kits com 5% OFF
 ✅ Os 100 primeiros pedidos ganham o Manual da Desparasitação
-✅ Quem comprar até sexta (21/08) concorre a 1 Kit Adulto completo
+✅ Quem comprar até segunda (17/08) concorre a 1 Kit Adulto completo
 
-Vale até sexta.
+Vale até segunda.
 
 Um abraço,
 Equipe VermeFree
@@ -62,7 +62,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 3 — SEG 17/08 · Educativo (ciclo lunar)
+## E-MAIL 3 — SEX 14/08 · Educativo (ciclo lunar)
 
 **Assunto:** Por que a lua nova importa nesse protocolo
 **Assunto (variação A/B):** O motivo do timing (explico rapidinho)
@@ -91,7 +91,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 4 — TER 18/08 · Prazo por região
+## E-MAIL 4 — SÁB 15/08 · Prazo por região
 
 **Assunto:** Confere se seu kit chega a tempo
 **Assunto (variação A/B):** O prazo muda conforme sua região — confira
@@ -106,7 +106,7 @@ Como comentei ontem, o preparo do protocolo (com a Silimarina) começa em 27/08 
 
 Pra isso, o kit precisa chegar na sua casa com folga, e o prazo de entrega varia conforme a região do Brasil. Se você mora mais longe dos grandes centros, vale garantir o pedido ainda essa semana pra não correr risco de atraso.
 
-Essa semana, todos os kits seguem com 5% OFF, os 100 primeiros pedidos ganham o Manual da Desparasitação, e quem comprar até sexta concorre a 1 Kit Adulto no sorteio.
+Essa semana, todos os kits seguem com 5% OFF, os 100 primeiros pedidos ganham o Manual da Desparasitação, e quem comprar até segunda concorre a 1 Kit Adulto no sorteio.
 
 Um abraço,
 Equipe VermeFree
@@ -116,7 +116,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 5 — QUA 19/08 · Prova social
+## E-MAIL 5 — DOM 16/08 · Prova social
 
 **Assunto:** "Não é milagre, é constância"
 **Assunto (variação A/B):** O que sentem quem já fez o protocolo
@@ -137,7 +137,7 @@ Antes de mais nada, queríamos dividir com você o que a gente costuma ouvir de 
 
 A gente não promete resultado imediato nem fórmula mágica — só um protocolo natural, feito com critério.
 
-Essa semana ainda dá tempo: 5% OFF em todos os kits, Manual da Desparasitação pros 100 primeiros, e concorrência ao sorteio de 1 Kit Adulto até sexta.
+Essa semana ainda dá tempo: 5% OFF em todos os kits, Manual da Desparasitação pros 100 primeiros, e concorrência ao sorteio de 1 Kit Adulto até amanhã.
 
 Um abraço,
 Equipe VermeFree
@@ -147,7 +147,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 6 — QUI 20/08 · Urgência ("é amanhã")
+## E-MAIL 6 — DOM 16/08 (noite) · Urgência ("é amanhã")
 
 **Assunto:** É amanhã: último dia da semana
 **Assunto (variação A/B):** Faltam poucas horas pra fechar com 5% OFF
@@ -172,7 +172,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 7 — SEX 21/08 (09h) · Último dia (manhã)
+## E-MAIL 7 — SEG 17/08 (09h) · Último dia (manhã)
 
 **Assunto:** Último dia: 5% OFF + sorteio do Kit Adulto
 **Assunto (variação A/B):** Hoje é o último dia da semana
@@ -197,7 +197,7 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 8 — SEX 21/08 (19h) · Último dia (noite) + Sorteio
+## E-MAIL 8 — SEG 17/08 (19h) · Último dia (noite) + Sorteio
 
 **Assunto:** Últimas horas + sorteio do Kit Adulto
 **Assunto (variação A/B):** Encerra hoje: 5% OFF, Manual e sorteio
@@ -237,9 +237,16 @@ Equipe VermeFree
 
 ---
 
-## Pendências para finalizar
+## O que mudou desde a versão 16-21/08
 
-1. **Depoimentos do e-mail 5** — mesma observação de peças anteriores: as 3 frases usadas são os exemplos de tom já aprovados no `CLAUDE.md` (seção 3), não depoimentos verificados de clientes reais. Se houver depoimentos reais e autorizados, vale substituir antes de enviar.
-2. **Prazos por região (e-mail 4)** — não recebi uma tabela real de prazos de entrega por região/CEP, então o e-mail fica no nível "geral" (quem mora mais longe deve se antecipar), sem citar prazos específicos em dias. Se houver essa tabela, dá pra deixar o e-mail mais preciso (e mais convincente).
-3. **Mecânica do sorteio** — não veio confirmado como cada compra vira número na urna (por pedido? por unidade?), nem onde/quando o resultado é anunciado. Assumi "sorteio entre quem comprou durante a semana" de forma genérica no e-mail 8 — se houver uma live ou data de anúncio, posso deixar isso explícito e mais forte.
-4. **Rastreio dos "100 primeiros"** — os e-mails 6, 7 e 8 mencionam "se ainda houver Manual entre os 100 primeiros" de forma condicional, já que não tenho como saber em tempo real quantos já foram entregues. Se quiserem, dá pra criar uma versão com contador real (tipo "restam X Manuais") assim que houver visibilidade do estoque — mas, como já sinalizado em campanhas anteriores, só usar número real, nunca estimado.
+- Todas as datas de calendário (antecipação, abertura, cada dia da semana) avançaram pra 12-17/08.
+- Prazo do sorteio: **17/08** (era 21/08).
+- E-mails 5 e 6 (prova social e "é amanhã") agora caem no **mesmo dia**, domingo 16/08 — um de manhã/tarde, outro à noite — porque a semana ficou mais curta (5 dias em vez de 6).
+- Narrativa da lua nova (11/09, preparo em 27/08) **não mudou**.
+
+## Pendências para finalizar (mesmas da versão anterior)
+
+1. **Depoimentos do e-mail 5** — ainda são os exemplos de tom do `CLAUDE.md`, não depoimentos verificados de clientes reais.
+2. **Prazos por região (e-mail 4)** — sem tabela real de prazo de entrega por região/CEP.
+3. **Mecânica do sorteio** — não confirmada (número por pedido ou por unidade, local/data do anúncio).
+4. **Rastreio dos "100 primeiros"** — sem visibilidade em tempo real do estoque de Manuais.
