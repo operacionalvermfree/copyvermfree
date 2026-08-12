@@ -1,6 +1,6 @@
 # Reativação — E-mail 3 (14-08 Prova Social)
 
-> Campanha de Reativação/Recompra · 12–17/08 · Público: quem já comprou o protocolo (segmentos 90+ dias e 60-90 dias — ver observação de segmento).
+> Campanha de Reativação/Recompra · 12–17/08 · Público: quem já comprou o protocolo (segmentos 90+ dias, 60-90 dias e 30-60 dias — ver observação de segmento).
 
 ## O que preencher
 - `{{PRIMEIRO_NOME}}`
@@ -33,7 +33,7 @@ Equipe VermeFree
 
 **CTA (botão único):** Quero minha próxima rotina
 
-**Observação de segmento:** Enviar para os segmentos **90+ dias** e **60-90 dias**. Para o segmento **Só Kids**, adicionar este depoimento extra antes do fechamento:
+**Observação de segmento:** Enviar para os segmentos **90+ dias**, **60-90 dias** e **30-60 dias** (todos que compraram até 15/07). Excluir quem comprou no Dia D (07/08). Para o segmento **Só Kids**, adicionar este depoimento extra antes do fechamento:
 ```
 "Depois que fiz o protocolo do meu filho, decidi fazer o meu também — faz sentido cuidar da rotina da casa inteira, não só da dele."
 ```

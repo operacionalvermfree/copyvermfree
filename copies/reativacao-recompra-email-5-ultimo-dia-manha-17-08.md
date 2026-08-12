@@ -1,6 +1,6 @@
 # Reativação — E-mail 5 (17-08 Último Dia Manhã)
 
-> Campanha de Reativação/Recompra · 12–17/08 · Público: quem já comprou o protocolo (segmentos 90+ dias e 60-90 dias — ver observação de segmento).
+> Campanha de Reativação/Recompra · 12–17/08 · Público: quem já comprou o protocolo (segmentos 90+ dias, 60-90 dias e 30-60 dias — ver observação de segmento).
 
 ## O que preencher
 - `{{PRIMEIRO_NOME}}`
@@ -29,7 +29,7 @@ Equipe VermeFree
 
 **CTA (botão único):** Garantir meu voucher agora
 
-**Observação de segmento:** Enviar para os segmentos **90+ dias** e **60-90 dias**. Para o segmento **Só Kids**, no 2º parágrafo trocar "não perder o timing do próximo ciclo" por "começar seu próprio protocolo Adulto, já que quem mora junto continua exposto" (mantendo o restante do corpo, CTA e oferta iguais).
+**Observação de segmento:** Enviar para os segmentos **90+ dias**, **60-90 dias** e **30-60 dias** (todos que compraram até 15/07). Excluir quem comprou no Dia D (07/08). Para o segmento **Só Kids**, no 2º parágrafo trocar "não perder o timing do próximo ciclo" por "começar seu próprio protocolo Adulto, já que quem mora junto continua exposto" (mantendo o restante do corpo, CTA e oferta iguais).
 
 ## Checklist ANVISA
 - [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/garantido/em X dias)

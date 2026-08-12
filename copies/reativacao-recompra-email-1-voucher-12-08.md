@@ -1,6 +1,6 @@
 # Reativação — E-mail 1 (12-08 Voucher)
 
-> Campanha de Reativação/Recompra · 12–17/08 · Público: quem já comprou o protocolo (segmentos 90+ dias e 60-90 dias — ver observação de segmento).
+> Campanha de Reativação/Recompra · 12–17/08 · Público: quem já comprou o protocolo (segmentos 90+ dias, 60-90 dias e 30-60 dias — ver observação de segmento).
 
 ## O que preencher
 - `{{PRIMEIRO_NOME}}`
@@ -34,7 +34,7 @@ Equipe VermeFree
 
 **CTA (botão único):** Usar meu voucher
 
-**Observação de segmento:** Enviar para os segmentos **90+ dias** e **60-90 dias** (excluir quem comprou no Dia D, 07/08 — já fora das listas segmentadas). Para o segmento **Só Kids**, substituir o 3º parágrafo do corpo por:
+**Observação de segmento:** Enviar para os segmentos **90+ dias**, **60-90 dias** e **30-60 dias** (todos que compraram até 15/07). Excluir quem comprou no Dia D (07/08). Para o segmento **Só Kids**, substituir o 3º parágrafo do corpo por:
 ```
 Quem mora com a criança se expõe junto — é por isso que muita mãe que já fez o protocolo Kids do filho aproveita esse voucher pra começar o próprio protocolo Adulto agora. Você já confia no processo; falta só a sua vez.
 ```
