@@ -1,6 +1,6 @@
 # Semana da Desparasitação / Lua Nova (13–17/08) — 31 mensagens de Grupo WhatsApp · VermeFree
 
-> Grupos antigos, disparo orgânico (sem template Meta, sem variável de nome). Espinha em toda peça de venda: dor → solução (o protocolo) → benefício. Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até **17/08**. Lua nova usada com leveza — próxima é 11/09, preparo do protocolo começa 15 dias antes, em 27/08.
+> ⚠️ Reescrita sob a nova espinha de conversão (tese central: "o problema pode não ser o que você come — é quem pode estar comendo com você", sempre como pergunta/curiosidade, nunca diagnóstico). Datas e oferta inalteradas em relação à versão anterior.
 
 ## O que preencher
 - `[LINK]` — em todas as mensagens de venda (a partir da 3).
@@ -11,16 +11,16 @@
 
 **1. — 10h**
 ```
-Vive cansada e inchada mesmo comendo bem? Talvez não seja só a alimentação...
+Cortou glúten, lactose, açúcar... e continua inchada e cansada? 🤔
 
-Tem algo vindo essa semana que pode ajudar a cuidar disso. Ainda não posso contar tudo, mas vale ficar de olho a partir de amanhã 👀
+E se não for a comida? Semana que vem eu conto o que pode estar por trás disso 👀
 ```
 
 **2. — 18h**
 ```
-Sei que tem mãe aqui que já reparou o filho coçando à noite, ou rangendo o dente sem motivo aparente...
+Range os dentes dormindo? Coça sem ter alergia? Não é diagnóstico, é só um sinal pra observar.
 
-Essa semana vem uma novidade que pode ajudar a cuidar disso com calma. Fica de olho 🌿
+Semana que vem eu explico o que isso pode ter a ver com a rotina da família 🌿
 ```
 
 ---
@@ -31,7 +31,7 @@ Essa semana vem uma novidade que pode ajudar a cuidar disso com calma. Fica de o
 ```
 🚨 Começou a Semana da Desparasitação / Lua Nova!
 
-Se aquele cansaço sem explicação, o intestino que nunca regula, ou a sensação de sujeira por dentro te incomoda — essa semana é pra cuidar disso com calma.
+Alimento cru, água, terra do parquinho, pet em casa, escola, mão na boca — não é sujeira, é rotina normal de quem convive com gente. Por isso vale cuidar da desparasitação natural de tempos em tempos.
 
 Todos os kits com 5% OFF.
 
@@ -50,18 +50,18 @@ Só essa semana.
 
 **5. — 12h — Protocolo Adulto**
 ```
-Cansaço sem explicação, aquele inchaço depois de comer, intestino que nunca regula... Se isso te soa familiar, o Protocolo Adulto auxilia na desparasitação e apoia a rotina de limpeza natural, pra você sentir o corpo mais leve, com constância.
+Cortou tudo que podia da alimentação e ainda assim segue inchada e cansada? Talvez o problema nunca tenha sido só a comida.
 
-Hoje com 5% OFF.
+O Protocolo Adulto auxilia na desparasitação e apoia a rotina de limpeza natural — pra você sentir o intestino voltando a ser só seu. Hoje com 5% OFF.
 
 👉 [LINK]
 ```
 
 **6. — 14h — Protocolo Kids**
 ```
-Seu filho coça à noite, dorme agitado, range o dente sem motivo aparente? O Protocolo Kids é líquido, sabor bem aceito, feito pra cuidar da rotina da criança de forma natural e suave.
+Seu filho range o dente dormindo? Coça sem ter alergia? Vale só observar, sem susto.
 
-Também com 5% OFF essa semana.
+O Protocolo Kids é líquido, sabor bem aceito, feito pra cuidar da rotina da criança de forma natural e suave. Também com 5% OFF essa semana.
 
 👉 [LINK]
 ```
@@ -85,13 +85,13 @@ Se você tava esperando um motivo pra começar, esse é: 5% OFF + Manual da Desp
 
 ---
 
-## SEXTA 14/08 — Educativo (ciclo lunar)
+## SEXTA 14/08 — Educativo (por que o óbvio não basta)
 
 **9. — 09h**
 ```
-🌙 Uma pergunta que recebo bastante: por que o protocolo é sincronizado com a lua nova?
+Dieta muda o cardápio. Chá dá uma sensação de alívio por um dia. Probiótico repõe bactéria boa.
 
-É um rito da marca — a primeira fase (preparo) começa 15 dias antes da lua nova, pra deixar o corpo pronto. A próxima lua nova é 11/09, então o preparo começa em 27/08.
+Cada um cuida de uma coisa — nenhum cobre a rotina inteira sozinho.
 ```
 
 **10. — 11h — Um dado importante**
@@ -103,18 +103,18 @@ Essa semana, todos os kits (Adulto e Kids) estão com 5% OFF.
 👉 [LINK]
 ```
 
-**11. — 13h**
+**11. — 13h — Como funciona, na ordem certa**
 ```
-Garantindo seu kit essa semana, ele chega com folga pra você começar o preparo em 27/08 — sem correria de última hora.
+O protocolo segue uma ordem pensada: a Silimarina prepara o fígado 15 dias antes, a Tintura e o Óleo de Orégano auxiliam na desparasitação ao longo do ciclo, e a Ornitina apoia a eliminação no fim.
 
-Ainda com 5% OFF + Manual da Desparasitação pros 100 primeiros.
+Por isso é rotina — 2 a 4 vezes por ano — e não dose única.
 
 👉 [LINK]
 ```
 
 **12. — 16h**
 ```
-Não é sobre pressa, é sobre começar no ciclo certo 🌿 A sincronia com a lua nova é só um jeito da marca organizar o protocolo — nada de mágica, só timing.
+Não é sobre pressa, é sobre começar no ciclo certo 🌙 A sincronia com a lua nova é só um jeito da marca organizar o protocolo — nada de mágica, só timing.
 
 👉 [LINK]
 ```
@@ -144,9 +144,11 @@ Se você mora mais longe dos grandes centros, esse é o momento de fechar o pedi
 👉 [LINK]
 ```
 
-**16. — 14h**
+**16. — 14h — Família que faz junto**
 ```
-Resumindo o motivo da pressa (a única real): o preparo do protocolo começa 27/08, e o frete leva alguns dias. Quem garante agora, garante o timing certo.
+Quem mora junto, se expõe junto — divide banheiro, cozinha, toalha, sofá. Faz sentido pensar na família inteira, não só em quem apresentou algum sinal.
+
+O Kit Família reúne todo mundo no mesmo ciclo.
 
 👉 [LINK]
 ```
@@ -184,9 +186,11 @@ Fechando o fim de semana: 5% OFF + Manual da Desparasitação pros 100 primeiros
 👉 [LINK]
 ```
 
-**21. — 14h**
+**21. — 14h — Toque de recompra**
 ```
-"O corpo pede uma limpeza natural de vez em quando. Depois do protocolo, sinto isso de verdade." Se você reconhece essa sensação, ainda dá tempo de começar essa semana: 5% OFF + Manual.
+"O corpo pede uma limpeza natural de vez em quando. Depois do protocolo, sinto isso de verdade."
+
+Se já faz uns meses desde o seu último ciclo, vale lembrar: a exposição do dia a dia não parou. Ainda dá tempo de começar essa semana.
 
 👉 [LINK]
 ```
@@ -236,7 +240,7 @@ Recapitulando a oferta de hoje: 5% OFF em todos os kits, chance do Manual da Des
 
 **27. — 12h**
 ```
-Se aquele cansaço sem explicação, o intestino irregular, ou a sensação de sujeira por dentro te incomoda, hoje é o dia de cuidar disso com calma — e ainda dá tempo pro preparo de 27/08.
+Se você já cortou tudo que podia cortar da alimentação e ainda segue pesada, hoje é um bom dia pra olhar pra outro lado da rotina — e ainda dá tempo pro preparo de 27/08.
 
 👉 [LINK]
 ```
@@ -278,16 +282,24 @@ Boa noite 🌙
 
 ## Checklist ANVISA (aplicado às 31 peças)
 
-- [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/garantido/em X dias) — nenhuma usa
-- [x] Sem comparação com remédio de farmácia, sem promessa de emagrecimento
+- [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/em X dias) — nenhuma usa
+- [x] Sem comparação com remédio de farmácia, sem "biofilme", sem promessa de emagrecimento
 - [x] Sem citar Dr. William nem qualquer médico/influenciador como aval
-- [x] Não diagnostica o leitor
-- [x] Depoimentos (domingo 16/08, manhã) falam só de bem-estar/leveza/constância, com "resultados podem variar" incluído
+- [x] Não diagnostica o leitor — sinais sempre como pergunta/observação ("vale só observar"), nunca afirmação
+- [x] Depoimentos (domingo 16/08, manhã) falam só de bem-estar/leveza/constância, com "resultados podem variar"
 - [x] Tom informal, de amiga/grupo de família
 - [x] Desconto, Manual e sorteio enquadrados como janela pontual, nunca "promoção de sempre"
 - [x] 1 CTA claro nas peças de venda (3 a 31); as 2 de antecipação não têm link
-- [x] Variação ao longo da semana: dados (quinta 21h e sexta 11h), depoimentos (domingo manhã/tarde), prazo (sábado), urgência (domingo noite/segunda) e sorteio (quinta, domingo, segunda)
 
-## Distribuição por dia (conforme briefing)
+## Espinha aplicada (ICPs por bloco)
+
+- **Quarta (antecipação):** quebra de crença, em pergunta (banco de hooks: "cortou glúten...", "range os dentes...")
+- **Quinta (abertura):** inimigo educativo (exposição normal) + Mãe Guardiã + mecanismo do produto
+- **Sexta (educativo):** por que o óbvio não basta (dieta/chá/probiótico) + mecanismo na ordem certa (Silimarina → Tintura/Óleo de Orégano → Ornitina)
+- **Sábado (prazo):** Família que faz junto → Kit Família
+- **Domingo (prova social):** benefício "intestino que voltou a ser só seu" + toque de recompra ("último ciclo há uns meses")
+- **Segunda (último dia):** reforço da quebra de crença + urgência real (sorteio, meia-noite)
+
+## Distribuição por dia
 
 QUA 12/08 (2) · QUI 13/08 (6) · SEX 14/08 (5) · SÁB 15/08 (5) · DOM 16/08 (6) · SEG 17/08 (7) = 31 mensagens.

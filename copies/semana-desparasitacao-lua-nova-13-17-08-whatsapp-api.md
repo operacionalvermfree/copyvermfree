@@ -1,6 +1,6 @@
 # Semana da Desparasitação / Lua Nova (13–17/08) — 5 Templates WhatsApp API · VermeFree
 
-> ⚠️ Datas atualizadas — a semana passou de 16-21/08 para **13-17/08**. Este arquivo substitui `semana-desparasitacao-lua-nova-16-21-08-whatsapp-api.md` (marcado como superado).
+> ⚠️ Reescrita sob a nova espinha de conversão (tese central: "o problema pode não ser o que você come — é quem pode estar comendo com você", sempre como pergunta/curiosidade, nunca diagnóstico). Datas e oferta inalteradas em relação à versão anterior.
 
 ## O que preencher
 - `[LINK]` — nas 5 peças.
@@ -15,8 +15,8 @@ Nome sugerido do template: vermefree_semanalua_msg1_abertura
 Categoria: MARKETING
 
 BODY:
-Oi {{1}}! Começou a Semana da Desparasitação 🌿
-Todos os kits com 5% OFF, e os 100 primeiros pedidos ganham o Manual da Desparasitação — pra você (ou sua família) sentir o corpo mais leve, com uma rotina natural e constante.
+Oi {{1}}! Cortou tudo que podia da alimentação e ainda segue inchada e cansada? Talvez não seja só a comida.
+Começou a Semana da Desparasitação: todos os kits com 5% OFF, e os 100 primeiros pedidos ganham o Manual da Desparasitação.
 
 FOOTER (opcional): Vale até segunda (17/08)
 
@@ -32,7 +32,7 @@ Nome sugerido do template: vermefree_semanalua_msg2_prazo
 Categoria: MARKETING
 
 BODY:
-Oi {{1}}, o preparo do protocolo começa 27/08 (15 dias antes da próxima lua nova). Pra chegar a tempo, garanta seu kit essa semana — o prazo de entrega varia por região.
+Oi {{1}}, quem mora junto se expõe junto — a rotina de desparasitação vale pra família inteira, não só pra quem apresenta sinal. O preparo do protocolo começa 27/08 (15 dias antes da próxima lua nova): garanta seu kit essa semana, o prazo varia por região.
 
 FOOTER (opcional): 5% OFF + Manual da Desparasitação pros 100 primeiros
 
@@ -64,7 +64,7 @@ Nome sugerido do template: vermefree_semanalua_msg4_ultimodia_manha
 Categoria: MARKETING
 
 BODY:
-Oi {{1}}, hoje é o último dia! 5% OFF em todos os kits, e toda compra de hoje ainda concorre a 1 Kit Adulto no sorteio.
+Oi {{1}}, hoje é o último dia! Se você já cortou tudo que podia da alimentação e ainda segue pesada, hoje é um bom dia pra olhar pra outro lado da rotina. 5% OFF em todos os kits + sorteio do Kit Adulto pra quem comprar hoje.
 
 FOOTER (opcional): Até 23h59 de hoje
 
@@ -91,18 +91,16 @@ BOTÃO (CTA URL): Aproveitar agora → [LINK]
 
 ## Checklist ANVISA (aplicado às 5 peças)
 
-- [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/garantido/em X dias) — nenhuma usa
-- [x] Sem comparação com remédio de farmácia, sem promessa de emagrecimento
+- [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/em X dias) — nenhuma usa
+- [x] Sem comparação com remédio de farmácia, sem "biofilme", sem promessa de emagrecimento
 - [x] Sem citar Dr. William nem qualquer médico/influenciador como aval
-- [x] Não diagnostica o leitor
+- [x] Não diagnostica o leitor — sinais como pergunta, nunca afirmação
 - [x] Tom de amiga, curto e direto
 - [x] 5% OFF, Manual e sorteio enquadrados como janela pontual, nunca "promoção de sempre"
 - [x] 1 CTA por peça
 
-## O que mudou desde a versão 16-21/08
+## Espinha aplicada
 
-- MSG 1 (abertura): domingo 16/08 → **quinta 13/08**. Footer atualizado de "até sexta (21/08)" pra "até segunda (17/08)".
-- MSG 2 (regional): terça 18/08 → **sábado 15/08**.
-- MSG 3 ("é amanhã"): quinta 20/08 → **domingo 16/08**.
-- MSG 4 e 5 (último dia): sexta 21/08 → **segunda 17/08** (manhã e noite).
-- Narrativa da lua nova (11/09, preparo em 27/08) não mudou.
+- MSG 1: quebra de crença ("talvez não seja só a comida") + Mãe Guardiã/geral
+- MSG 2: Família que faz junto + mecanismo (timing 27/08)
+- MSG 3, 4, 5: urgência real, reforçando a quebra de crença sem repetir a mesma frase

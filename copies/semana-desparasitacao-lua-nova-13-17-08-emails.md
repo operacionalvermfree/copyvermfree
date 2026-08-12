@@ -1,27 +1,27 @@
 # Semana da Desparasitação / Lua Nova (13–17/08) — 8 E-mails · VermeFree
 
-> ⚠️ Datas atualizadas — a semana passou de 16-21/08 para **13-17/08**. Esta versão substitui `semana-desparasitacao-lua-nova-16-21-08-emails.md`, que fica só como histórico (não usar mais pra programar).
+> ⚠️ Reescrita sob a nova espinha de conversão (tese central: "o problema pode não ser o que você come — é quem pode estar comendo com você", sempre como pergunta/curiosidade, nunca diagnóstico). Datas e oferta inalteradas em relação à versão anterior.
 >
-> Espinha em todas: dor → solução (o protocolo) → benefício → oferta. Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até **17/08**. Narrativa da lua nova usada com leveza — a próxima lua nova é 11/09, preparo do protocolo começa 15 dias antes, em 27/08 (isso não mudou).
+> Oferta: todos os kits com 5% OFF, Manual da Desparasitação pros 100 primeiros pedidos, sorteio de 1 Kit Adulto entre quem comprar até **17/08**. Lua nova com leveza — próxima é 11/09, preparo do protocolo começa 15 dias antes, em 27/08.
 
 ---
 
 ## E-MAIL 1 — QUA 12/08 · Antecipação (sem CTA de compra)
 
-**Assunto:** Semana que vem tem novidade por aqui
-**Assunto (variação A/B):** Separa uma folguinha na sua rotina semana que vem
+**Assunto:** E se o problema nunca foi o que você come?
+**Assunto (variação A/B):** Uma pergunta que talvez ninguém te fez ainda
 
-**Pré-header:** Ainda não posso contar tudo, mas vale ficar de olho a partir de amanhã.
+**Pré-header:** Amanhã eu explico o que isso tem a ver com sua rotina.
 
 **Corpo:**
 ```
 Olá,
 
-Amanhã a gente abre uma novidade aqui na VermeFree — e queria que você já soubesse, porque tem prazo.
+Cortou glúten. Cortou lactose. Cortou açúcar. E mesmo assim, o inchaço, o cansaço e o intestino irregular continuam aí.
 
-Não vou contar tudo agora. Só adianto: se você (ou sua família) vem adiando a rotina de desparasitação natural, essa vai ser uma boa semana pra decidir.
+E se o problema nunca foi o que você come?
 
-Amanhã eu conto os detalhes.
+Amanhã eu conto o que isso pode ter a ver com uma coisa bem mais simples — e bem mais comum do que parece.
 
 Um abraço,
 Equipe VermeFree
@@ -33,26 +33,24 @@ Equipe VermeFree
 
 ## E-MAIL 2 — QUI 13/08 · Abertura
 
-**Assunto:** Começou a Semana da Desparasitação
-**Assunto (variação A/B):** 5% OFF + Manual grátis pros 100 primeiros
+**Assunto:** Não é sujeira. É rotina.
+**Assunto (variação A/B):** Começou a Semana da Desparasitação
 
-**Pré-header:** Todos os kits com 5% OFF — e os 100 primeiros pedidos ganham o Manual da Desparasitação.
+**Pré-header:** 5% OFF + Manual da Desparasitação pros 100 primeiros.
 
 **Corpo:**
 ```
 Olá,
 
-Aquele cansaço sem explicação, o intestino que nunca regula direito, a sensação de sujeira por dentro — ou, se você é mãe, a coceira do seu filho à noite, o sono agitado, o ranger de dente sem motivo aparente.
+Alimento cru, água, terra do parquinho, o cachorro de casa, a mão na boca, a escola, a creche — é assim que a vida de qualquer família funciona. Não é sujeira. É infância, é rotina, é o dia a dia normal de quem convive com gente.
 
-Muita gente sente isso e não sabe bem o porquê. O protocolo VermeFree auxilia na desparasitação e apoia a rotina de limpeza natural, com constância (feita 2 a 4 vezes por ano) — pra você (e sua família) sentir o corpo mais leve, com mais disposição.
+Se o seu filho range o dente dormindo, ou coça sem ter alergia — vale só observar, com calma, sem susto.
 
-Hoje começou a Semana da Desparasitação / Lua Nova:
+Por isso o protocolo VermeFree existe: pra apoiar a rotina de limpeza natural do corpo, de tempos em tempos, sem drama. Hoje começou a Semana da Desparasitação:
 
 ✅ Todos os kits com 5% OFF
 ✅ Os 100 primeiros pedidos ganham o Manual da Desparasitação
 ✅ Quem comprar até segunda (17/08) concorre a 1 Kit Adulto completo
-
-Vale até segunda.
 
 Um abraço,
 Equipe VermeFree
@@ -62,72 +60,66 @@ Equipe VermeFree
 
 ---
 
-## E-MAIL 3 — SEX 14/08 · Educativo (ciclo lunar)
+## E-MAIL 3 — SEX 14/08 · Educativo (por que o óbvio não basta)
 
-**Assunto:** Por que a lua nova importa nesse protocolo
-**Assunto (variação A/B):** O motivo do timing (explico rapidinho)
+**Assunto:** Por que dieta, chá e probiótico não resolvem sozinhos
+**Assunto (variação A/B):** O que cada coisa realmente faz (e o que nenhuma faz sozinha)
 
-**Pré-header:** A lua nova de setembro é dia 11 — e o motivo de garantir seu kit essa semana.
+**Pré-header:** E onde entra o protocolo, na ordem certa.
 
 **Corpo:**
 ```
 Olá,
 
-Uma pergunta que recebo bastante: "por que o protocolo é sincronizado com a lua nova?"
+Dieta muda o que você come. Chá dá uma sensação de alívio por um dia. Probiótico repõe bactéria boa. Cada um cuida de uma coisa — só que nenhum deles, sozinho, cobre a rotina inteira.
 
-É um rito da marca — a tradição fitoterápica sempre organizou a desparasitação natural em torno do ciclo lunar. Na prática, isso vira uma questão de timing: a primeira fase do protocolo (preparo com Silimarina) começa 15 dias antes da lua nova, pra deixar o corpo pronto antes da fase principal.
+O protocolo VermeFree segue uma ordem pensada: a Silimarina prepara o fígado 15 dias antes; a Tintura e o Óleo de Orégano auxiliam na desparasitação ao longo do ciclo; a Ornitina apoia a eliminação natural, no fim. Por isso funciona como rotina — feita 2 a 4 vezes por ano — e não como dose única.
 
-A próxima lua nova é dia 11 de setembro. Isso significa que o preparo começa em 27/08.
-
-Garantindo seu kit essa semana, ele chega com folga pra você começar no dia certo — sem correria de última hora.
-
-E lembrando: essa semana todos os kits estão com 5% OFF, e os 100 primeiros pedidos ainda ganham o Manual da Desparasitação.
+Essa semana, o kit sai com 5% OFF, e os 100 primeiros pedidos ainda levam o Manual da Desparasitação.
 
 Um abraço,
 Equipe VermeFree
 ```
 
-**CTA:** Garantir meu kit
+**CTA:** Entender meu protocolo
 
 ---
 
-## E-MAIL 4 — SÁB 15/08 · Prazo por região
+## E-MAIL 4 — SÁB 15/08 · Prazo por região (Kit Família)
 
-**Assunto:** Confere se seu kit chega a tempo
-**Assunto (variação A/B):** O prazo muda conforme sua região — confira
+**Assunto:** Quem mora junto, se expõe junto
+**Assunto (variação A/B):** Confere se seu kit chega a tempo
 
-**Pré-header:** Pra começar o preparo em 27/08, o pedido precisa sair com folga.
+**Pré-header:** O Kit Família reúne todo mundo no mesmo ciclo.
 
 **Corpo:**
 ```
 Olá,
 
-Como comentei ontem, o preparo do protocolo (com a Silimarina) começa em 27/08 — 15 dias antes da próxima lua nova.
+Quem divide casa, divide banheiro, cozinha, toalha, sofá — divide também a exposição do dia a dia. Por isso faz sentido pensar na família inteira, não só em quem apresentou algum sinal.
 
-Pra isso, o kit precisa chegar na sua casa com folga, e o prazo de entrega varia conforme a região do Brasil. Se você mora mais longe dos grandes centros, vale garantir o pedido ainda essa semana pra não correr risco de atraso.
+O Kit Família reúne o protocolo Adulto e o Kids no mesmo ciclo, começando e terminando junto. E como o preparo (Silimarina) começa 15 dias antes da lua nova — em 27/08 — vale garantir o pedido essa semana, principalmente se você mora mais longe dos grandes centros.
 
-Essa semana, todos os kits seguem com 5% OFF, os 100 primeiros pedidos ganham o Manual da Desparasitação, e quem comprar até segunda concorre a 1 Kit Adulto no sorteio.
+5% OFF em todos os kits + Manual da Desparasitação pros 100 primeiros, só essa semana.
 
 Um abraço,
 Equipe VermeFree
 ```
 
-**CTA:** Garantir meu kit com folga
+**CTA:** Garantir o Kit Família
 
 ---
 
 ## E-MAIL 5 — DOM 16/08 · Prova social
 
-**Assunto:** "Não é milagre, é constância"
+**Assunto:** "O intestino voltou a ser só meu"
 **Assunto (variação A/B):** O que sentem quem já fez o protocolo
 
-**Pré-header:** Relatos de bem-estar de quem completou a rotina de desparasitação natural.
+**Pré-header:** Relatos de leveza de quem completou a rotina.
 
 **Corpo:**
 ```
 Olá,
-
-Antes de mais nada, queríamos dividir com você o que a gente costuma ouvir de quem já completou o protocolo:
 
 "Comecei o protocolo e me sinto bem mais leve, o intestino funcionando melhor."
 
@@ -135,15 +127,13 @@ Antes de mais nada, queríamos dividir com você o que a gente costuma ouvir de 
 
 "O corpo pede uma limpeza natural de vez em quando. Depois do protocolo, sinto isso de verdade."
 
-A gente não promete resultado imediato nem fórmula mágica — só um protocolo natural, feito com critério.
-
-Essa semana ainda dá tempo: 5% OFF em todos os kits, Manual da Desparasitação pros 100 primeiros, e concorrência ao sorteio de 1 Kit Adulto até amanhã.
+Não prometemos resultado imediato, só constância. Resultados podem variar de pessoa pra pessoa. E se já faz um tempo desde o seu último ciclo — a exposição do dia a dia não parou. Essa semana ainda dá tempo: 5% OFF + Manual da Desparasitação pros 100 primeiros, até amanhã.
 
 Um abraço,
 Equipe VermeFree
 ```
 
-**CTA:** Quero começar minha rotina
+**CTA:** Quero minha rotina de volta
 
 ---
 
@@ -158,11 +148,9 @@ Equipe VermeFree
 ```
 Olá,
 
-Amanhã é o último dia da Semana da Desparasitação / Lua Nova.
+Amanhã é o último dia da Semana da Desparasitação.
 
-Se você reconheceu aquele cansaço, a sensação de sujeira por dentro, ou — se é mãe — a coceira e o sono agitado do seu filho, amanhã é a sua última chance de garantir o kit dentro dessa janela: 5% OFF, chance de ainda pegar o Manual da Desparasitação (últimos dos 100 primeiros), e concorrência ao sorteio de 1 Kit Adulto.
-
-Depois de amanhã, o preparo do protocolo (27/08) fica mais apertado pra quem mora mais longe.
+Se o cansaço, o inchaço, ou aquele intestino que nunca regula direito ainda estão aí mesmo comendo certo — talvez o problema nunca tenha sido só a comida. Amanhã é sua última chance de garantir o kit com 5% OFF, chance do Manual da Desparasitação e concorrência ao sorteio do Kit Adulto.
 
 Um abraço,
 Equipe VermeFree
@@ -183,11 +171,9 @@ Equipe VermeFree
 ```
 Olá,
 
-Hoje é o último dia da Semana da Desparasitação / Lua Nova.
+Hoje é o último dia da Semana da Desparasitação.
 
-Até o fim do dia: todos os kits com 5% OFF, e toda compra feita hoje ainda concorre ao sorteio de 1 Kit Adulto completo.
-
-Se você vem adiando o início da sua rotina (ou da do seu filho), esse é o dia de decidir — o preparo do protocolo começa em 27/08, e hoje é o último momento de garantir o kit dentro dessa janela.
+Se você já cortou tudo que podia cortar da alimentação e ainda segue pesada, hoje é um bom dia pra olhar pra outro lado da rotina. Até o fim do dia: todos os kits com 5% OFF, e toda compra feita hoje ainda concorre ao sorteio de 1 Kit Adulto completo.
 
 Um abraço,
 Equipe VermeFree
@@ -208,7 +194,7 @@ Equipe VermeFree
 ```
 Olá,
 
-Esse é o último e-mail da Semana da Desparasitação / Lua Nova.
+Esse é o último e-mail da Semana da Desparasitação.
 
 Faltam poucas horas: depois de hoje, o 5% OFF, a chance do Manual da Desparasitação (se ainda houver entre os 100 primeiros) e a participação no sorteio do Kit Adulto saem do ar.
 
@@ -226,27 +212,27 @@ Equipe VermeFree
 
 ## Checklist ANVISA (aplicado aos 8 e-mails)
 
-- [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/garantido/em X dias) — nenhum usa
-- [x] Sem comparação com remédio de farmácia, sem promessa de emagrecimento
+- [x] Sem claim proibido (cura/elimina/mata/erradica/100 tipos/milagre/em X dias) — nenhum usa
+- [x] Sem comparação com remédio de farmácia, sem "biofilme", sem promessa de emagrecimento
 - [x] Sem citar Dr. William nem qualquer médico/influenciador como aval
-- [x] Não diagnostica o leitor — nenhuma peça afirma "você tem verme"
-- [x] Depoimentos (e-mail 5) falam só de bem-estar/leveza/constância, nunca de doença ou eliminação
+- [x] Não diagnostica o leitor — sinais sempre em forma de pergunta/observação, nunca afirmação ("você tem verme")
+- [x] Depoimentos (e-mail 5) falam só de bem-estar/leveza/constância, com "resultados podem variar"
 - [x] Tom natural, acolhedor, consultivo — sem alarmismo nem promessa milagrosa
-- [x] Desconto e sorteio enquadrados como janela pontual da semana, nunca "promoção de sempre"
+- [x] Desconto e sorteio enquadrados como janela pontual, nunca "promoção de sempre"
 - [x] 1 CTA por e-mail (e-mail 1 usa CTA de expectativa, sem link de compra)
 
----
+## Espinha aplicada por e-mail
 
-## O que mudou desde a versão 16-21/08
+1. Antecipação — quebra de crença (pergunta)
+2. Abertura — inimigo educativo (exposição normal, não diagnóstico) + Mãe Guardiã
+3. Educativo — por que o óbvio não basta + mecanismo do protocolo, na ordem certa
+4. Prazo regional — ICP Família que faz junto (Kit Família)
+5. Prova social — benefício "intestino que voltou a ser só seu" + toque de recompra
+6, 7, 8 — urgência, reforçando a quebra de crença sem repetir a mesma frase
 
-- Todas as datas de calendário (antecipação, abertura, cada dia da semana) avançaram pra 12-17/08.
-- Prazo do sorteio: **17/08** (era 21/08).
-- E-mails 5 e 6 (prova social e "é amanhã") agora caem no **mesmo dia**, domingo 16/08 — um de manhã/tarde, outro à noite — porque a semana ficou mais curta (5 dias em vez de 6).
-- Narrativa da lua nova (11/09, preparo em 27/08) **não mudou**.
+## Pendências para finalizar
 
-## Pendências para finalizar (mesmas da versão anterior)
-
-1. **Depoimentos do e-mail 5** — ainda são os exemplos de tom do `CLAUDE.md`, não depoimentos verificados de clientes reais.
-2. **Prazos por região (e-mail 4)** — sem tabela real de prazo de entrega por região/CEP.
-3. **Mecânica do sorteio** — não confirmada (número por pedido ou por unidade, local/data do anúncio).
-4. **Rastreio dos "100 primeiros"** — sem visibilidade em tempo real do estoque de Manuais.
+1. Depoimentos do e-mail 5 — ainda são exemplos de tom do `CLAUDE.md`, não depoimentos verificados de clientes reais.
+2. Prazos por região (e-mail 4) — sem tabela real de prazo por região/CEP.
+3. Mecânica do sorteio — não confirmada.
+4. Rastreio dos "100 primeiros" — sem visibilidade em tempo real do estoque de Manuais.
