@@ -146,13 +146,27 @@
   .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(20,36,26,.15) 0%, rgba(20,36,26,.05) 40%, rgba(15,28,20,.65) 100%);pointer-events:none;}
   .hero-content{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6rem 1.25rem 3rem;}
   .hero-content .wrap{width:100%;}
-  .hero h1{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.1;margin-bottom:1rem;max-width:16ch;}
+  .hero-title{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.1;margin-bottom:1rem;max-width:16ch;font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
   .hero .lede{font-size:1.03rem;line-height:1.6;color:var(--muted-on-dark);max-width:34ch;margin-bottom:1.6rem;}
   .hero-cta-row{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.4rem;}
   .hero-proof{font-size:0.78rem;color:var(--muted-on-dark);margin-bottom:1.6rem;}
   .scroll-hint{position:absolute;left:50%;bottom:1.4rem;transform:translateX(-50%);z-index:2;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-on-dark);animation:hintbob 2.4s ease-in-out infinite;}
   @keyframes hintbob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,0.35rem);}}
   @media (prefers-reduced-motion:reduce){.scroll-hint{animation:none;}}
+
+  /* ===== PROBLEMA — abre a LP: fundo de tecido intestinal + vermes 3D
+     procedurais rastejando por cima (WebGL, contido a esta seção, pausado
+     fora da viewport). Ato 1 da estrutura problema→solução; a seção
+     seguinte (.hero, verde/limpo) é o "giro" pra marca/produto. ===== */
+  .problema{position:relative;overflow:hidden;color:var(--white);min-height:100svh;display:flex;flex-direction:column;background:linear-gradient(165deg,#2a0f0a 0%,#140604 100%);}
+  .problema-bg{position:absolute;inset:0;z-index:0;}
+  .problema-bg img{width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(1.05);}
+  #worm-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1;}
+  .problema-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg, rgba(20,8,6,.35) 0%, rgba(20,8,6,.15) 35%, rgba(14,5,4,.82) 100%);pointer-events:none;}
+  .problema-content{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.25rem;}
+  .problema-title{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.14;margin-bottom:1.1rem;max-width:17ch;font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .problema .lede{font-size:1.03rem;line-height:1.62;color:rgba(255,241,233,0.78);max-width:36ch;}
+  .problema .eyebrow.on-dark{color:#e8a06a;}
 
   .section-head{text-align:center;max-width:34rem;margin:0 auto 2.5rem;}
   .section-head h2{font-size:clamp(1.35rem, 1.05rem + 1.6vw, 1.85rem);margin-bottom:0.6rem;}
@@ -324,7 +338,27 @@
   </div>
 </div>
 
-<!-- HERO — palco WebGL: campo de partículas verde sob a "lua nova" -->
+<!-- PROBLEMA — ato 1: fundo de tecido intestinal + vermes 3D procedurais
+     rastejando (WebGL). Abre a LP com impacto visual antes do giro pra
+     marca/produto na seção seguinte. -->
+<section class="problema" id="problema">
+  <div class="problema-bg" aria-hidden="true">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_31ed6261-e69f-4d41-ae70-25720717ecd1.png" alt="" loading="eager">
+  </div>
+  <canvas id="worm-canvas" aria-hidden="true"></canvas>
+  <div class="problema-scrim" aria-hidden="true"></div>
+  <div class="problema-content">
+    <div class="wrap">
+      <div class="eyebrow on-dark" data-observe>Antes de tudo</div>
+      <h1 class="problema-title" data-observe>Cansaço, inchaço, sono ruim — às vezes o motivo mora onde você não vê</h1>
+      <p class="lede" data-observe>O intestino é o centro de tudo. Quando ele está sobrecarregado, o corpo inteiro sente — mesmo sem um motivo óbvio à vista.</p>
+    </div>
+  </div>
+  <div class="scroll-hint">role e conheça a rotina que muda isso</div>
+</section>
+
+<!-- HERO — o giro: palco WebGL "Campo Lunar" (verde/limpo), apresenta a
+     marca/rotina como resposta natural ao que foi mostrado no ato 1 -->
 <section class="hero" id="hero">
   <div class="hero-stage" aria-hidden="true">
     <canvas id="hero-canvas"></canvas>
@@ -332,9 +366,9 @@
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="wrap">
-      <div class="eyebrow on-dark" data-reveal-word>Protocolo Adulto · Desparasitação natural</div>
-      <h1 data-reveal-line>Vive cansada e inchada mesmo comendo bem?</h1>
-      <p class="lede" data-reveal-word>Talvez não seja só a alimentação. O Protocolo Adulto VermeFree é uma rotina natural de desparasitação, sincronizada com a lua nova — feita com critério, sem susto e sem promessa de milagre.</p>
+      <div class="eyebrow on-dark" data-reveal-word>A resposta é mais simples do que parece</div>
+      <h2 class="hero-title split-line" data-split>Uma rotina natural pra cuidar disso, no seu tempo</h2>
+      <p class="lede" data-reveal-word>O Protocolo Adulto VermeFree é uma rotina de desparasitação natural, sincronizada com a lua nova — feita com critério, sem susto e sem promessa de milagre.</p>
       <div class="hero-cta-row" data-observe>
         <a class="btn" href="#oferta">Conhecer o protocolo <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn-ghost" href="#composicao">Ver a composição</a>
@@ -443,7 +477,7 @@
     </div>
     <div class="composicao-grid" data-observe>
       <div class="composicao-visual">
-        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_31ed6261-e69f-4d41-ae70-25720717ecd1.png" alt="Ilustração científica do trato intestinal, representando a atuação natural dos ativos do protocolo" loading="lazy">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_121fe000-e27a-4cd0-81e6-9e970e5b277e.png" alt="Ilustração científica do trato digestivo, representando a atuação natural dos ativos do protocolo" loading="lazy">
       </div>
       <div class="ativos">
         <div class="ativo">
@@ -1019,6 +1053,140 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
   } else {
     start();
   }
+})();
+
+/* ===================================================================
+   SEÇÃO PROBLEMA — vermes 3D procedurais rastejando (não é imagem nem
+   partícula: são criaturas com corpo segmentado, orientadas e animadas
+   por segmento, feitas de cápsulas via InstancedMesh — um draw call só,
+   leve mesmo com várias criaturas). Contido à seção #problema, pausado
+   fora da viewport, reduzido no mobile, pulado com reduced-motion ou
+   sem WebGL — o fundo (foto + gradiente escuro) do CSS cobre sempre. ==== */
+(async function initWormScene(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const sectionEl = document.getElementById('problema');
+  const canvas = document.getElementById('worm-canvas');
+  if (!canvas || reduceMotion || !window.WebGLRenderingContext) return;
+
+  let THREE;
+  try { THREE = await import('three'); } catch(e) { return; }
+
+  const isMobile = window.innerWidth < 700;
+  const WORM_COUNT = isMobile ? 9 : 16;
+  const SEGMENTS = isMobile ? 7 : 10;
+  const SEG_SPACING = 0.22;
+
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true }); }
+  catch(e){ return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile?1.5:2));
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog('#1a0805', 6, 20);
+
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  camera.position.set(0, 0.4, 9);
+  camera.lookAt(0,0,0);
+
+  scene.add(new THREE.AmbientLight('#3a2a20', 0.9));
+  const key = new THREE.PointLight('#ffb27a', 3.2, 30);
+  key.position.set(3,4,6); scene.add(key);
+  const rim = new THREE.DirectionalLight('#8fae7a', 1.3);
+  rim.position.set(-4,2,-3); scene.add(rim);
+
+  const segGeo = new THREE.CapsuleGeometry(0.16, 0.24, 4, isMobile?6:8);
+  const segMat = new THREE.MeshStandardMaterial({
+    color:'#5b6b4a', emissive:'#7d9a5a', emissiveIntensity:0.55,
+    roughness:0.45, metalness:0.1, transparent:true, opacity:0.92
+  });
+  const totalInstances = WORM_COUNT * SEGMENTS;
+  const mesh = new THREE.InstancedMesh(segGeo, segMat, totalInstances);
+  mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(totalInstances*3), 3);
+  scene.add(mesh);
+
+  const dummy = new THREE.Object3D();
+  const tmpColor = new THREE.Color();
+  function rand(a,b){ return a + Math.random()*(b-a); }
+
+  const worms = [];
+  for (let i=0;i<WORM_COUNT;i++){
+    worms.push({
+      origin: new THREE.Vector3(rand(-7,7), rand(-3.2,3.2), rand(-6,3)),
+      heading: rand(0, Math.PI*2), speed: rand(0.12,0.32), turnSpeed: rand(-0.22,0.22),
+      phase: rand(0, Math.PI*2), undulateSpeed: rand(2.0,3.2), undulateAmp: rand(0.2,0.36),
+      waveK: rand(0.55,0.85), scale: rand(0.7,1.25)
+    });
+  }
+
+  function updateWorms(t, dt){
+    let idx = 0;
+    for (let w=0; w<worms.length; w++){
+      const worm = worms[w];
+      worm.heading += worm.turnSpeed * dt * 0.3;
+      const fx = Math.cos(worm.heading), fz = Math.sin(worm.heading);
+      worm.origin.x += fx * worm.speed * dt;
+      worm.origin.z += fz * worm.speed * dt;
+      if (worm.origin.x > 8) worm.origin.x = -8;
+      if (worm.origin.x < -8) worm.origin.x = 8;
+      if (worm.origin.z > 4) worm.origin.z = -7;
+      if (worm.origin.z < -7) worm.origin.z = 4;
+      const rightX = -fz, rightZ = fx;
+      let prev = null;
+      for (let s=0;s<SEGMENTS;s++){
+        const along = s*SEG_SPACING*worm.scale;
+        const wave = Math.sin(t*worm.undulateSpeed - s*worm.waveK + worm.phase) * worm.undulateAmp * worm.scale;
+        const px = worm.origin.x - fx*along + rightX*wave;
+        const pz = worm.origin.z - fz*along + rightZ*wave;
+        const py = worm.origin.y + Math.sin(t*1.1 + worm.phase + s*0.3) * 0.12;
+        const pos = new THREE.Vector3(px,py,pz);
+        if (prev){
+          const dir = new THREE.Vector3().subVectors(prev, pos).normalize();
+          dummy.position.copy(pos);
+          dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
+          dummy.scale.setScalar(worm.scale*(1-(s/SEGMENTS)*0.35));
+        } else {
+          dummy.position.copy(pos);
+          dummy.quaternion.identity();
+          dummy.scale.setScalar(worm.scale*1.1);
+        }
+        dummy.updateMatrix();
+        mesh.setMatrixAt(idx, dummy.matrix);
+        const tone = 0.5 + 0.5*Math.sin(worm.phase + s*0.4);
+        tmpColor.setHSL(0.24 - tone*0.05, 0.35, 0.32 + tone*0.18);
+        mesh.setColorAt(idx, tmpColor);
+        prev = pos;
+        idx++;
+      }
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+  }
+
+  function resize(){
+    const w = sectionEl.clientWidth, h = sectionEl.clientHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let running=false, rafId=null, t0=performance.now()/1000;
+  function loop(){
+    if (!running) return;
+    rafId = requestAnimationFrame(loop);
+    const t = performance.now()/1000;
+    const dt = Math.min(0.05, t-t0); t0=t;
+    updateWorms(t, dt);
+    renderer.render(scene, camera);
+  }
+  function start(){ if (!running){ running=true; t0=performance.now()/1000; loop(); } }
+  function stop(){ running=false; if (rafId) cancelAnimationFrame(rafId); }
+
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{ entry.isIntersecting ? start() : stop(); });
+    }, {threshold:0}).observe(sectionEl);
+  } else { start(); }
 })();
 </script>
 
