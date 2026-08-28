@@ -135,7 +135,38 @@ VermeFree/LP-KIT/LP-KIT/
 
 Dado o tom "natural, sério e honesto, sem alarmismo nem milagre" (CLAUDE.md, seção 3) e a régua de claim ANVISA, a leitura de todo esse repertório sugere:
 
-- **Evitar** os efeitos WebGL/3D mais pesados (Flowstate, Soda, Laocoön, as 6 cenas 3D de fundo) como padrão — combinam mais com marcas tech/luxo/bebida do que com o posicionamento consultivo/acolhedor da marca, e pesam no carregamento mobile (público-alvo é mãe pesquisando no celular).
+- **Atualizado em 28/08** — o Gabriel pediu explicitamente um nível WebGL/3D de verdade (trouxe prompts completos de Flow Wave, Laocoön e Baseline como referência técnica) depois de considerar a primeira versão da LP do Protocolo Adulto abaixo do nível esperado. Ver seção 7 abaixo pro padrão validado que resultou disso — WebGL contido ao hero (nunca a página inteira), com fallback CSS, pausa fora da viewport e ajuste de partículas/pixelRatio pra mobile, deixou de ser "evitar por padrão" e virou a assinatura esperada de hero pra LPs de venda.
+- Os efeitos WebGL/3D mais pesados de fora do padrão validado (Flowstate, Soda, as 6 cenas 3D de fundo genéricas do getlayers) continuam exigindo critério — avaliar peso mobile antes de aplicar como estão, mesmo assim.
 - **Priorizar** técnicas leves e editoriais: reveal de texto por palavra/linha via clip-mask (Loopstack, Baseline, Lumora), grid rem-adaptativo, liquid reveal via canvas 2D (Lumora — bom pra "antes/depois" do protocolo), count-up de estatísticas em scroll (Lumora), parallax simples com lerp (Celestial Renewal).
 - **Estruturas de referência mais próximas do nicho:** Wellness Balance (TerraElix), Celestial Renewal (Serene), CozyPaws, Wellbeing OS — olhar essas primeiro ao desenhar a estrutura de seções de uma LP de produto.
 - Sempre a mesma regra do `vermefree-lp-superprompt.md`: usar como inspiração pra montar uma identidade própria por produto, nunca clonar 1:1.
+
+---
+
+## 7. "Campo Lunar" — hero WebGL validado (Three.js, testado em código real)
+
+> Nasceu de três prompts completos que o Gabriel trouxe em 28/08 (recriações verbatim de sites reais — "Flow Wave" um campo de partículas Three.js, "Laocoön" um cavalo de bronze cinematográfico, "Baseline" um site institucional de tênis com grid rem-adaptativo). A instrução foi clara: **usar como inspiração de técnica, nunca clonar o conteúdo** (tênis/bronze não têm nada a ver com a marca). O que segue é a extração que sobreviveu pra `landing-protocolo-adulto/index.html`, já testada rodando (não é especulação como o resto deste arquivo).
+
+**O que é:** um campo de partículas verde brilhante (adaptado 1:1 da estrutura do shader "Flow Wave" — mesmo Simplex noise, mesmo pipeline de 3 `EffectComposer`s com bloom — só recolorido 100% na paleta oficial da marca). Sem o "corner-flame" genérico do original: virou um glow dourado/bronze sutil (`#C9A876`), e a "poeira ambiente" virou pólen/luz de lua também em bronze. Zero conteúdo do site original sobrou — só a engenharia do shader.
+
+**Onde entra:** só no hero, nunca na página inteira. É a diferença mais importante em relação ao prompt original do "Flow Wave" (que assume um `scroll-host` de 620vh dedicado só à cena) — aqui o mergulho de câmera é mapeado pro **progresso de saída do próprio hero** (`-heroRect.top / heroRect.height`, 0 a 1), então o usuário não perde scroll "vazio" só pra ver o efeito: o mergulho acontece durante a rolagem normal de saída do hero pro resto da LP.
+
+**Salvaguardas obrigatórias (todas testadas):**
+- Fundo CSS sólido (`--grad-deep`) sempre atrás do canvas — se o CDN do Three.js falhar ou o navegador não suportar WebGL, a página nunca fica quebrada, só sem o efeito.
+- `IntersectionObserver` no container do hero: o loop de `requestAnimationFrame` só roda enquanto o hero está visível — depois que a pessoa rola pra oferta/composição/FAQ, o WebGL para de consumir GPU/bateria.
+- Detecção simples de mobile (`innerWidth < 700`): reduz a geometria da malha de partículas (de `SphereGeometry(4.2,200,600)` — ~120 mil vértices — pra `(4.2,90,260)` — ~24 mil), reduz `pixelRatio` (2 → 1.5) e desliga o repelo de partícula pelo cursor (não faz sentido em touch).
+- `prefers-reduced-motion: reduce` pula o WebGL inteiro, direto pro fallback CSS.
+
+**Como testar isso localmente antes de publicar (o sandbox de LP bloqueia unpkg/jsdelivr/cdnjs, mas libera `registry.npmjs.org`):**
+```
+npm install three@0.160.0   # baixa via npm, permitido
+# aponte um importmap de teste pros arquivos em node_modules/three (build/ + examples/jsm/)
+# via um servidor local (python3 -m http.server) + screenshot via Playwright
+# só depois de confirmar que renderiza, troca o importmap pra
+# https://unpkg.com/three@0.160.0/... no arquivo publicado de verdade
+```
+Sem isso, um bug de shader falha em silêncio (canvas preto) e não tem como saber sem essa etapa.
+
+**Cores usadas (Linha Adulto, `CLAUDE.md` §10):** `colorLow`/`bgColor` = `#14241a`, `colorHigh` = `#C0DE96`, glow/poeira = `#C9A876`, glow secundário = `#E8F5E4`.
+
+**Bug real encontrado e corrigido nessa mesma sessão** (vale registrar pra não repetir): `transform-origin:center` não funciona em elementos SVG sem `transform-box:fill-box` — pegou os marcadores da linha do tempo lunar (seção "como funciona" da mesma LP), não o campo de partículas em si, mas é do mesmo lote de bugs silenciosos de motion/CSS que só aparecem em screenshot real, nunca em leitura de código.

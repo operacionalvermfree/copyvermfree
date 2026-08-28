@@ -15,7 +15,7 @@
 
 ## 2. Convenções fixas (não negociáveis)
 
-1. **Uma pasta por produto:** `landing-<slug>/index.html`. HTML autocontido — sem build, sem bundler, sem dependência de arquivo externo do repo (CSS/JS inline ou no mesmo arquivo).
+1. **Uma pasta por produto:** `landing-<slug>/index.html`. HTML autocontido — sem build, sem bundler, sem dependência de arquivo externo do repo (CSS/JS inline ou no mesmo arquivo). **Exceção explícita, a partir de 28/08:** um `<script type="importmap">` carregando Three.js via CDN (unpkg) é permitido especificamente pra montar um hero WebGL de assinatura (ver `REPERTORIO-TECNICO.md` seção 7 — "Campo Lunar"), desde que sempre: (a) tenha fallback CSS sólido por trás (a página nunca pode ficar quebrada se o CDN falhar ou o WebGL não existir no aparelho), (b) fique contido ao hero, nunca a página inteira, (c) pause via IntersectionObserver quando sair da viewport, (d) reduza contagem de partículas/pixelRatio em telas estreitas. Fora isso, nenhuma outra dependência de CDN além de Google Fonts.
 2. **Tem que funcionar no Safari mobile ao vivo** (via raw.githack, sem servidor próprio): sempre incluir `html { overflow-x: hidden; }` e evitar qualquer recurso que dependa de HTTPS local/CORS especial.
 3. **Cada produto tem identidade visual e interativa própria.** Nunca clonar ou copiar código 1:1 de outra LP já publicada. O repertório de técnica abaixo é inspiração/repertório — não é template pra colar.
 4. **Validar antes de publicar:**

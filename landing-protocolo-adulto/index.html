@@ -12,7 +12,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 <style>
+  /* ===== grid adaptativo em rem — a página inteira escala proporcionalmente
+     em qualquer largura, técnica emprestada de builds editoriais premium
+     (ver vermefree-lp-kit/REPERTORIO-TECNICO.md) ===== */
+  html{font-size:16px;}
+  @media (max-width:1920px){html{font-size:0.833333vw;}}
+  @media (max-width:1440px){html{font-size:1.111111vw;}}
+  @media (max-width:1024px){html{font-size:1.5625vw;}}
+  @media (max-width:640px){html{font-size:4.444444vw;}}
+
   :root{
     /* paleta oficial Linha Adulto — CLAUDE.md §10 */
     --green-light:#C0DE96;
@@ -33,9 +50,9 @@
     --glow:rgba(94,140,67,0.35);
     --bronze-glow:rgba(201,168,118,0.45);
     --ease:cubic-bezier(.2,.7,.2,1);
-    --radius:22px;
-    --radius-sm:15px;
-    --maxw:1080px;
+    --radius:1.4rem;
+    --radius-sm:0.95rem;
+    --maxw:68rem;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{overflow-x:hidden;scroll-behavior:smooth;}
@@ -44,40 +61,50 @@
     background:var(--bg);
     color:var(--text);
     overflow-x:hidden;
+    font-size:1rem;
   }
   h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
   img{max-width:100%;display:block;}
   a{color:inherit;}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem;}
   section{position:relative;}
   .eyebrow{
-    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--green-dark);margin-bottom:10px;
+    font-size:0.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--green-dark);margin-bottom:0.6rem;
   }
   .eyebrow.on-dark{color:var(--bronze);}
-  .selo-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .selo-row{display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;}
   .selo{
-    font-size:11.5px;font-weight:700;letter-spacing:.03em;
+    font-size:0.72rem;font-weight:700;letter-spacing:.03em;
     background:rgba(94,140,67,0.10);color:var(--green-dark);
-    border:1px solid var(--line);border-radius:100px;padding:6px 14px;
+    border:1px solid var(--line);border-radius:100px;padding:0.4rem 0.9rem;
   }
   .selo.on-dark{background:rgba(201,168,118,0.14);color:var(--bronze);border-color:rgba(201,168,118,0.30);}
 
-  /* reveal genérico — dispara ao entrar na viewport, nunca no load inteiro da página (LP é longa) */
-  [data-observe]{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  /* ===== revelação de texto por palavra/linha (clip-mask) — técnica
+     editorial: cada palavra some atrás de uma máscara e sobe suavemente,
+     em cascata, em vez de simplesmente aparecer ===== */
+  .split-line{overflow:hidden;display:block;padding-bottom:0.14em;margin-bottom:-0.14em;}
+  .split-line > span{display:inline-block;transform:translateY(115%);opacity:0;transition:transform .9s var(--ease), opacity .9s var(--ease);}
+  .split-line.is-visible > span{transform:translateY(0);opacity:1;}
+  .split-word{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;}
+  .split-word > span{display:inline-block;transform:translateY(100%);opacity:0;transition:transform .7s var(--ease), opacity .7s var(--ease);}
+  .split-word.is-visible > span{transform:translateY(0);opacity:1;}
+
+  [data-observe]{opacity:0;transform:translateY(1.5rem);transition:opacity .7s var(--ease), transform .7s var(--ease);}
   [data-observe].is-visible{opacity:1;transform:none;}
   @media (prefers-reduced-motion: reduce){
-    [data-observe]{opacity:1;transform:none;transition:none;}
+    [data-observe], .split-line > span, .split-word > span{opacity:1 !important;transform:none !important;transition:none !important;}
   }
 
-  /* botão — token validado (Botanika → linktree), reaproveitado aqui */
+  /* botão — token validado (Botanika → linktree), unidades em rem */
   .btn{
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;
     position:relative;overflow:hidden;
     background:var(--grad);border:0;border-radius:100px;
-    padding:16px 30px;text-decoration:none;color:var(--white);
-    font-weight:700;font-size:15.5px;cursor:pointer;
-    box-shadow:0 14px 30px -12px var(--glow), inset 0 1px 0 rgba(255,255,255,.28);
+    padding:1rem 1.9rem;text-decoration:none;color:var(--white);
+    font-weight:700;font-size:0.97rem;cursor:pointer;
+    box-shadow:0 0.9rem 1.9rem -0.75rem var(--glow), inset 0 1px 0 rgba(255,255,255,.28);
     transition:transform .25s var(--ease), box-shadow .3s var(--ease);
     white-space:nowrap;
   }
@@ -88,163 +115,173 @@
   }
   .btn:hover::after, .btn.sheen-play::after{animation:sheen 1.1s var(--ease);}
   @keyframes sheen{to{left:140%;}}
-  .btn:hover{box-shadow:0 20px 42px -12px rgba(94,140,67,.55), inset 0 1px 0 rgba(255,255,255,.35);}
+  .btn:hover{box-shadow:0 1.25rem 2.6rem -0.75rem rgba(94,140,67,.55), inset 0 1px 0 rgba(255,255,255,.35);}
+  .btn .arrow{width:0.9rem;height:0.9rem;stroke:currentColor;transition:transform .3s var(--ease);}
+  .btn:hover .arrow{transform:translateX(0.25rem);}
   .btn:active{transform:scale(.97);}
-  .btn-bronze{background:linear-gradient(120deg, var(--bronze) 0%, #e3cba0 100%);color:var(--black);box-shadow:0 14px 30px -12px var(--bronze-glow), inset 0 1px 0 rgba(255,255,255,.5);}
-  .btn-bronze:hover{box-shadow:0 20px 42px -12px rgba(201,168,118,.6), inset 0 1px 0 rgba(255,255,255,.6);}
+  .btn-bronze{background:linear-gradient(120deg, var(--bronze) 0%, #e3cba0 100%);color:var(--black);box-shadow:0 0.9rem 1.9rem -0.75rem var(--bronze-glow), inset 0 1px 0 rgba(255,255,255,.5);}
+  .btn-bronze:hover{box-shadow:0 1.25rem 2.6rem -0.75rem rgba(201,168,118,.6), inset 0 1px 0 rgba(255,255,255,.6);}
   .btn-block{width:100%;}
   .btn-ghost{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.35);box-shadow:none;}
   .btn-ghost:hover{box-shadow:none;border-color:rgba(255,255,255,.6);}
 
-  /* topo — só wordmark, sem navegação (nenhum ponto de fuga da LP) */
   .topbar{
     position:sticky;top:0;z-index:40;
-    background:rgba(20,36,26,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);
+    background:rgba(20,36,26,.72);backdrop-filter:blur(0.6rem);-webkit-backdrop-filter:blur(0.6rem);
+    padding:0.9rem 0;border-bottom:1px solid rgba(255,255,255,.06);
   }
   .topbar .wrap{display:flex;align-items:center;justify-content:center;}
-  .topbar .wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--white);}
+  .topbar .wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;color:var(--white);}
   .topbar .wordmark .dot{color:var(--green-light);}
 
-  /* HERO */
-  .hero{background:var(--grad-deep);color:var(--white);padding:52px 0 60px;overflow:hidden;}
-  .hero-grid{display:grid;grid-template-columns:1fr;gap:36px;align-items:center;}
-  .hero h1{font-size:clamp(30px,7vw,46px);line-height:1.12;margin-bottom:16px;}
-  .hero p.lede{font-size:16.5px;line-height:1.6;color:var(--muted-on-dark);max-width:52ch;margin-bottom:26px;}
-  .hero-cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px;}
-  .hero-proof{font-size:12.5px;color:var(--muted-on-dark);margin-bottom:26px;}
-  .hero-visual{position:relative;border-radius:28px;overflow:hidden;background:rgba(255,255,255,.03);aspect-ratio:4/5;max-width:420px;margin:0 auto;}
-  .hero-visual img{width:100%;height:100%;object-fit:cover;}
-  .hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,36,26,0) 40%, rgba(20,36,26,.55) 100%);pointer-events:none;}
-  @media (min-width:860px){
-    .hero-grid{grid-template-columns:1.1fr .9fr;}
-    .hero-visual{margin:0;max-width:none;}
+  /* ===== HERO — palco WebGL (campo de partículas "lua nova"), contido ao
+     hero (não a página inteira), pausado quando sai da viewport ===== */
+  .hero{
+    position:relative;overflow:hidden;color:var(--white);
+    min-height:100svh;display:flex;flex-direction:column;
+    background:var(--grad-deep); /* base sólida — se o WebGL não rodar, isso nunca falta */
   }
+  .hero-stage{position:absolute;inset:0;z-index:0;}
+  #hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(20,36,26,.15) 0%, rgba(20,36,26,.05) 40%, rgba(15,28,20,.65) 100%);pointer-events:none;}
+  .hero-content{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6rem 1.25rem 3rem;}
+  .hero-content .wrap{width:100%;}
+  .hero h1{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.1;margin-bottom:1rem;max-width:16ch;}
+  .hero .lede{font-size:1.03rem;line-height:1.6;color:var(--muted-on-dark);max-width:34ch;margin-bottom:1.6rem;}
+  .hero-cta-row{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.4rem;}
+  .hero-proof{font-size:0.78rem;color:var(--muted-on-dark);margin-bottom:1.6rem;}
+  .scroll-hint{position:absolute;left:50%;bottom:1.4rem;transform:translateX(-50%);z-index:2;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-on-dark);animation:hintbob 2.4s ease-in-out infinite;}
+  @keyframes hintbob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,0.35rem);}}
+  @media (prefers-reduced-motion:reduce){.scroll-hint{animation:none;}}
 
-  /* OFERTA — seleção invertida de potes */
-  .oferta{background:var(--bg);padding:64px 0;}
-  .section-head{text-align:center;max-width:560px;margin:0 auto 40px;}
-  .section-head h2{font-size:clamp(24px,5vw,32px);margin-bottom:10px;}
-  .section-head p{color:var(--muted);font-size:15px;line-height:1.55;}
-  .plans{display:grid;grid-template-columns:1fr;gap:16px;}
-  @media (min-width:760px){.plans{grid-template-columns:repeat(4,1fr);align-items:stretch;}}
+  .section-head{text-align:center;max-width:34rem;margin:0 auto 2.5rem;}
+  .section-head h2{font-size:clamp(1.35rem, 1.05rem + 1.6vw, 1.85rem);margin-bottom:0.6rem;}
+  .section-head p{color:var(--muted);font-size:0.95rem;line-height:1.55;}
+
+  /* OFERTA */
+  .oferta{background:var(--bg);padding:4.5rem 0;}
+  .plans{display:grid;grid-template-columns:1fr;gap:1rem;}
+  @media (min-width:48rem){.plans{grid-template-columns:repeat(4,1fr);align-items:stretch;}}
   .plan{
     position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
-    padding:22px 18px 20px;display:flex;flex-direction:column;gap:10px;
+    padding:1.4rem 1.1rem 1.25rem;display:flex;flex-direction:column;gap:0.6rem;
     transition:transform .3s var(--ease), box-shadow .3s var(--ease);
   }
-  .plan.featured{border-color:var(--bronze);box-shadow:0 18px 40px -18px var(--bronze-glow);transform:translateY(-6px);}
-  .plan:hover{transform:translateY(-4px);}
+  .plan.featured{border-color:var(--bronze);box-shadow:0 1.1rem 2.5rem -1.1rem var(--bronze-glow);}
+  .plan.featured{animation:floaty 5s ease-in-out infinite;}
+  @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-.4rem);}}
+  @media (prefers-reduced-motion:reduce){.plan.featured{animation:none;}}
+  .plan:hover{transform:translateY(-0.25rem);}
   .plan .badge{
-    align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
-    background:var(--soft-green);color:var(--green-dark);border-radius:100px;padding:4px 10px;
+    align-self:flex-start;font-size:0.65rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--soft-green);color:var(--green-dark);border-radius:100px;padding:0.25rem 0.6rem;
   }
   .plan.featured .badge{background:linear-gradient(120deg,var(--bronze),#e3cba0);color:var(--black);}
-  .plan .qty{font-family:'Fraunces',serif;font-size:21px;font-weight:600;}
-  .plan .full-price{font-size:12.5px;color:var(--muted);text-decoration:line-through;}
-  .plan .price{font-size:28px;font-weight:800;color:var(--black);line-height:1;margin:2px 0;}
-  .plan .price small{font-size:13px;font-weight:600;color:var(--muted);}
-  .plan .parcela{font-size:12.5px;color:var(--muted);}
-  .plan .economia{font-size:12px;font-weight:700;color:var(--green-dark);}
-  .plan .btn{margin-top:8px;}
-  .oferta-foot{text-align:center;margin-top:26px;font-size:12.5px;color:var(--muted);}
+  .plan .qty{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;}
+  .plan .full-price{font-size:0.78rem;color:var(--muted);text-decoration:line-through;}
+  .plan .price{font-size:1.75rem;font-weight:800;color:var(--black);line-height:1;margin:0.1rem 0;}
+  .plan .price small{font-size:0.8rem;font-weight:600;color:var(--muted);}
+  .plan .parcela{font-size:0.78rem;color:var(--muted);}
+  .plan .economia{font-size:0.75rem;font-weight:700;color:var(--green-dark);}
+  .plan .btn{margin-top:0.5rem;}
+  .oferta-foot{text-align:center;margin-top:1.6rem;font-size:0.78rem;color:var(--muted);}
 
   /* VIRADA */
-  .virada{background:var(--soft-green);padding:60px 0;}
-  .virada-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:760px;margin:0 auto;}
-  @media (min-width:700px){.virada-grid{grid-template-columns:repeat(2,1fr);}}
-  .virada-item{background:var(--white);border-radius:var(--radius-sm);padding:18px 20px;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);}
-  .virada-item .ico{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;}
-  .virada-item .ico svg{width:17px;height:17px;stroke:#fff;}
-  .virada-item p{font-size:14.5px;line-height:1.45;}
-  .virada-item strong{display:block;font-size:15px;margin-bottom:2px;}
+  .virada{background:var(--soft-green);padding:4rem 0;}
+  .virada-grid{display:grid;grid-template-columns:1fr;gap:0.85rem;max-width:48rem;margin:0 auto;}
+  @media (min-width:44rem){.virada-grid{grid-template-columns:repeat(2,1fr);}}
+  .virada-item{background:var(--white);border-radius:var(--radius-sm);padding:1.1rem 1.25rem;display:flex;gap:0.75rem;align-items:flex-start;border:1px solid var(--line);}
+  .virada-item .ico{flex:0 0 auto;width:2.1rem;height:2.1rem;border-radius:0.6rem;background:var(--grad);display:flex;align-items:center;justify-content:center;}
+  .virada-item .ico svg{width:1.05rem;height:1.05rem;stroke:#fff;}
+  .virada-item p{font-size:0.9rem;line-height:1.45;}
+  .virada-item strong{display:block;font-size:0.95rem;margin-bottom:0.1rem;}
 
-  /* COMPOSIÇÃO — dark, com imagem + cards de ativos */
-  .composicao{background:var(--grad-deep);color:var(--white);padding:64px 0;}
+  /* COMPOSIÇÃO */
+  .composicao{background:var(--grad-deep);color:var(--white);padding:4.5rem 0;}
   .composicao .section-head p{color:var(--muted-on-dark);}
-  .composicao-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;}
-  @media (min-width:900px){.composicao-grid{grid-template-columns:.85fr 1.15fr;}}
-  .composicao-visual{border-radius:24px;overflow:hidden;position:relative;aspect-ratio:3/4;}
+  .composicao-grid{display:grid;grid-template-columns:1fr;gap:1.75rem;align-items:start;}
+  @media (min-width:56rem){.composicao-grid{grid-template-columns:.85fr 1.15fr;}}
+  .composicao-visual{border-radius:1.5rem;overflow:hidden;position:relative;aspect-ratio:3/4;}
   .composicao-visual img{width:100%;height:100%;object-fit:cover;}
   .composicao-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,36,26,.05) 0%, rgba(20,36,26,.75) 100%);}
-  .ativos{display:grid;grid-template-columns:1fr;gap:12px;}
-  @media (min-width:560px){.ativos{grid-template-columns:1fr 1fr;}}
-  .ativo{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:16px 18px;}
-  .ativo .when{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--bronze);margin-bottom:6px;}
-  .ativo h3{font-size:16px;margin-bottom:4px;}
-  .ativo p{font-size:13px;line-height:1.5;color:var(--muted-on-dark);}
+  .ativos{display:grid;grid-template-columns:1fr;gap:0.75rem;}
+  @media (min-width:35rem){.ativos{grid-template-columns:1fr 1fr;}}
+  .ativo{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:1rem 1.1rem;}
+  .ativo .when{font-size:0.65rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--bronze);margin-bottom:0.4rem;}
+  .ativo h3{font-size:1rem;margin-bottom:0.25rem;}
+  .ativo p{font-size:0.82rem;line-height:1.5;color:var(--muted-on-dark);}
 
   /* BENEFÍCIOS + OBJEÇÃO */
-  .beneficios{background:var(--bg);padding:64px 0;}
-  .cards-grid{display:grid;grid-template-columns:1fr;gap:14px;}
-  @media (min-width:640px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
-  @media (min-width:960px){.cards-grid{grid-template-columns:repeat(3,1fr);}}
-  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
-  .card .tag{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-dark);margin-bottom:8px;}
+  .beneficios{background:var(--bg);padding:4.5rem 0;}
+  .cards-grid{display:grid;grid-template-columns:1fr;gap:0.85rem;}
+  @media (min-width:40rem){.cards-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (min-width:60rem){.cards-grid{grid-template-columns:repeat(3,1fr);}}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.25rem;transition:transform .3s var(--ease), box-shadow .3s var(--ease);}
+  .card:hover{transform:translateY(-0.2rem);box-shadow:0 1rem 2rem -1.2rem rgba(32,48,31,.35);}
+  .card .tag{font-size:0.65rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-dark);margin-bottom:0.5rem;}
   .card.objecao .tag{color:var(--bronze);}
-  .card h3{font-size:16.5px;margin-bottom:6px;}
-  .card p{font-size:13.5px;line-height:1.55;color:var(--muted);}
+  .card h3{font-size:1.03rem;margin-bottom:0.35rem;}
+  .card p{font-size:0.85rem;line-height:1.55;color:var(--muted);}
 
-  /* COMO FUNCIONA — linha do tempo lunar (assinatura própria desta LP) */
-  .como-funciona{background:var(--soft-green);padding:64px 0 72px;}
-  .timeline-wrap{max-width:760px;margin:0 auto;padding:20px 0 8px;}
+  /* COMO FUNCIONA — linha do tempo lunar */
+  .como-funciona{background:var(--soft-green);padding:4.5rem 0 4.75rem;}
+  .timeline-wrap{max-width:48rem;margin:0 auto;padding:1.25rem 0 0.5rem;}
   .timeline-svg{width:100%;height:auto;display:block;}
   .timeline-path{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.6s var(--ease);}
   .timeline-wrap.is-visible .timeline-path{stroke-dashoffset:0;}
   .timeline-node{opacity:0;transform:scale(.6);transform-box:fill-box;transform-origin:center;transition:opacity .5s var(--ease) .9s, transform .5s var(--ease) .9s;}
   .timeline-wrap.is-visible .timeline-node{opacity:1;transform:scale(1);}
   .timeline-node.node-2{transition-delay:1.5s;}
-  .timeline-labels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+  .timeline-labels{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.5rem;}
   .timeline-labels .lbl{text-align:center;}
-  .timeline-labels .lbl .day{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-dark);margin-bottom:4px;}
-  .timeline-labels .lbl p{font-size:13.5px;line-height:1.5;color:var(--text);}
-  .ciclo-note{text-align:center;font-size:13px;color:var(--muted);margin-top:24px;max-width:480px;margin-left:auto;margin-right:auto;}
+  .timeline-labels .lbl .day{font-size:0.7rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-dark);margin-bottom:0.25rem;}
+  .timeline-labels .lbl p{font-size:0.85rem;line-height:1.5;color:var(--text);}
+  .ciclo-note{text-align:center;font-size:0.82rem;color:var(--muted);margin-top:1.5rem;max-width:30rem;margin-left:auto;margin-right:auto;}
 
   /* DEPOIMENTOS */
-  .depoimentos{background:var(--bg);padding:64px 0;}
-  .testi-grid{display:grid;grid-template-columns:1fr;gap:14px;}
-  @media (min-width:700px){.testi-grid{grid-template-columns:repeat(2,1fr);}}
-  .testi{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
-  .testi p{font-size:14.5px;line-height:1.55;font-style:italic;margin-bottom:12px;}
-  .testi .who{font-size:12.5px;font-weight:700;color:var(--green-dark);}
+  .depoimentos{background:var(--bg);padding:4.5rem 0;}
+  .testi-grid{display:grid;grid-template-columns:1fr;gap:0.85rem;}
+  @media (min-width:44rem){.testi-grid{grid-template-columns:repeat(2,1fr);}}
+  .testi{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.25rem;}
+  .testi p{font-size:0.9rem;line-height:1.55;font-style:italic;margin-bottom:0.75rem;}
+  .testi .who{font-size:0.78rem;font-weight:700;color:var(--green-dark);}
 
   /* FAQ */
-  .faq{background:var(--soft-green);padding:64px 0;}
-  .faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:10px;}
+  .faq{background:var(--soft-green);padding:4.5rem 0;}
+  .faq-list{max-width:45rem;margin:0 auto;display:flex;flex-direction:column;gap:0.6rem;}
   .faq-item{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;}
-  .faq-item summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-item summary{list-style:none;cursor:pointer;padding:1rem 1.25rem;font-weight:700;font-size:0.94rem;display:flex;justify-content:space-between;align-items:center;gap:0.75rem;}
   .faq-item summary::-webkit-details-marker{display:none;}
-  .faq-item summary .plus{flex:0 0 auto;width:20px;height:20px;position:relative;}
+  .faq-item summary .plus{flex:0 0 auto;width:1.25rem;height:1.25rem;position:relative;}
   .faq-item summary .plus::before,.faq-item summary .plus::after{content:"";position:absolute;background:var(--green-dark);border-radius:2px;transition:transform .25s var(--ease);}
-  .faq-item summary .plus::before{width:14px;height:2px;top:9px;left:3px;}
-  .faq-item summary .plus::after{width:2px;height:14px;top:3px;left:9px;}
+  .faq-item summary .plus::before{width:0.9rem;height:2px;top:0.56rem;left:0.19rem;}
+  .faq-item summary .plus::after{width:2px;height:0.9rem;top:0.19rem;left:0.56rem;}
   .faq-item[open] summary .plus::after{transform:rotate(90deg);opacity:0;}
-  .faq-item .faq-a{padding:0 20px 18px;font-size:14px;line-height:1.6;color:var(--muted);}
+  .faq-item .faq-a{padding:0 1.25rem 1.1rem;font-size:0.87rem;line-height:1.6;color:var(--muted);}
 
   /* CTA FINAL */
-  .cta-final{background:var(--grad-deep);color:var(--white);padding:64px 0;text-align:center;}
-  .cta-final h2{font-size:clamp(24px,5vw,34px);margin-bottom:14px;}
-  .cta-final p.lede{color:var(--muted-on-dark);max-width:52ch;margin:0 auto 26px;font-size:15.5px;line-height:1.6;}
-  .cta-final .selo-row{margin-bottom:26px;}
-  .cta-final .fine{font-size:12px;color:var(--muted-on-dark);margin-top:16px;}
+  .cta-final{background:var(--grad-deep);color:var(--white);padding:4.5rem 0;text-align:center;}
+  .cta-final h2{font-size:clamp(1.45rem, 1.05rem + 2vw, 2.05rem);margin-bottom:0.85rem;}
+  .cta-final .lede{color:var(--muted-on-dark);max-width:34ch;margin:0 auto 1.6rem;font-size:0.97rem;line-height:1.6;}
+  .cta-final .selo-row{margin-bottom:1.6rem;}
+  .cta-final .fine{font-size:0.75rem;color:var(--muted-on-dark);margin-top:1rem;}
 
-  footer{background:var(--black);color:var(--muted-on-dark);text-align:center;padding:30px 20px;font-size:12px;line-height:1.7;}
+  footer{background:var(--black);color:var(--muted-on-dark);text-align:center;padding:1.9rem 1.25rem;font-size:0.75rem;line-height:1.7;}
   footer .moon{opacity:.75;}
 
-  /* barra fixa mobile — só aparece depois que o hero sai da viewport */
   .mobile-bar{
     position:fixed;left:0;right:0;bottom:0;z-index:50;
-    background:rgba(20,36,26,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:rgba(20,36,26,.94);backdrop-filter:blur(0.6rem);-webkit-backdrop-filter:blur(0.6rem);
+    padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;
     transform:translateY(120%);transition:transform .35s var(--ease);
     border-top:1px solid rgba(255,255,255,.08);
   }
   .mobile-bar.is-visible{transform:none;}
   .mobile-bar .info{color:var(--white);}
-  .mobile-bar .info .from{font-size:10.5px;color:var(--muted-on-dark);}
-  .mobile-bar .info .val{font-size:16px;font-weight:800;}
-  .mobile-bar .btn{padding:12px 20px;font-size:14px;}
-  @media (min-width:860px){.mobile-bar{display:none;}}
+  .mobile-bar .info .from{font-size:0.65rem;color:var(--muted-on-dark);}
+  .mobile-bar .info .val{font-size:1rem;font-weight:800;}
+  .mobile-bar .btn{padding:0.75rem 1.25rem;font-size:0.85rem;}
+  @media (min-width:54rem){.mobile-bar{display:none;}}
 
   /* pop-up de diagnóstico */
   .quiz-overlay{
@@ -252,29 +289,29 @@
     display:none;align-items:flex-end;justify-content:center;padding:0;
   }
   .quiz-overlay.is-open{display:flex;}
-  @media (min-width:640px){.quiz-overlay{align-items:center;padding:20px;}}
+  @media (min-width:40rem){.quiz-overlay{align-items:center;padding:1.25rem;}}
   .quiz-card{
-    background:var(--bg);width:100%;max-width:480px;border-radius:24px 24px 0 0;
-    padding:26px 22px 28px;position:relative;max-height:88vh;overflow-y:auto;
+    background:var(--bg);width:100%;max-width:30rem;border-radius:1.5rem 1.5rem 0 0;
+    padding:1.6rem 1.35rem 1.75rem;position:relative;max-height:88vh;overflow-y:auto;
   }
-  @media (min-width:640px){.quiz-card{border-radius:24px;}}
-  .quiz-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(94,140,67,.10);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-  .quiz-close svg{width:15px;height:15px;stroke:var(--green-dark);}
-  .quiz-eyebrow{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--green-dark);margin-bottom:8px;}
+  @media (min-width:40rem){.quiz-card{border-radius:1.5rem;}}
+  .quiz-close{position:absolute;top:0.9rem;right:0.9rem;width:2rem;height:2rem;border-radius:50%;background:rgba(94,140,67,.10);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .quiz-close svg{width:0.9rem;height:0.9rem;stroke:var(--green-dark);}
+  .quiz-eyebrow{font-size:0.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--green-dark);margin-bottom:0.5rem;}
   .quiz-step{display:none;}
   .quiz-step.is-active{display:block;}
-  .quiz-q{font-family:'Fraunces',serif;font-size:19px;margin-bottom:16px;}
+  .quiz-q{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:1rem;}
   .quiz-opt{
     display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--line);
-    border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:10px;font-size:14.5px;font-weight:600;
-    cursor:pointer;transition:border-color .2s var(--ease), background .2s var(--ease);
+    border-radius:var(--radius-sm);padding:0.8rem 1rem;margin-bottom:0.6rem;font-size:0.9rem;font-weight:600;
+    cursor:pointer;transition:border-color .2s var(--ease), background .2s var(--ease), transform .2s var(--ease);
   }
-  .quiz-opt:hover{border-color:var(--green-dark);background:var(--soft-green);}
-  .quiz-progress{display:flex;gap:6px;margin-bottom:18px;}
+  .quiz-opt:hover{border-color:var(--green-dark);background:var(--soft-green);transform:translateX(0.2rem);}
+  .quiz-progress{display:flex;gap:0.4rem;margin-bottom:1.1rem;}
   .quiz-progress i{flex:1;height:3px;border-radius:2px;background:var(--line);}
   .quiz-progress i.done{background:var(--green-dark);}
-  .quiz-result p{font-size:14.5px;line-height:1.6;margin-bottom:6px;}
-  .quiz-disclaimer{font-size:12px;color:var(--muted);font-style:italic;margin:14px 0 18px;}
+  .quiz-result p{font-size:0.9rem;line-height:1.6;margin-bottom:0.4rem;}
+  .quiz-disclaimer{font-size:0.75rem;color:var(--muted);font-style:italic;margin:0.9rem 0 1.1rem;}
 
   ::selection{background:var(--green-light);color:var(--black);}
 </style>
@@ -287,29 +324,29 @@
   </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div data-observe>
-      <div class="eyebrow on-dark">Protocolo Adulto · Desparasitação natural</div>
-      <h1>Vive cansada e inchada mesmo comendo bem?</h1>
-      <p class="lede">Talvez não seja só a alimentação. O Protocolo Adulto VermeFree é uma rotina natural de desparasitação, sincronizada com a lua nova — feita com critério, pra quem quer se sentir leve por dentro sem susto e sem promessa de milagre.</p>
-      <div class="hero-cta-row">
-        <a class="btn" href="#oferta">Conhecer o protocolo</a>
+<!-- HERO — palco WebGL: campo de partículas verde sob a "lua nova" -->
+<section class="hero" id="hero">
+  <div class="hero-stage" aria-hidden="true">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="wrap">
+      <div class="eyebrow on-dark" data-reveal-word>Protocolo Adulto · Desparasitação natural</div>
+      <h1 data-reveal-line>Vive cansada e inchada mesmo comendo bem?</h1>
+      <p class="lede" data-reveal-word>Talvez não seja só a alimentação. O Protocolo Adulto VermeFree é uma rotina natural de desparasitação, sincronizada com a lua nova — feita com critério, sem susto e sem promessa de milagre.</p>
+      <div class="hero-cta-row" data-observe>
+        <a class="btn" href="#oferta">Conhecer o protocolo <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn-ghost" href="#composicao">Ver a composição</a>
       </div>
-      <p class="hero-proof">Já faz parte da rotina de famílias em todo o Brasil — feito 2 a 4x por ano, sempre no ritmo da lua nova.</p>
-      <div class="selo-row" style="justify-content:flex-start;">
+      <p class="hero-proof" data-reveal-word>Já faz parte da rotina de famílias em todo o Brasil — feito 2 a 4x por ano, sempre no ritmo da lua nova.</p>
+      <div class="selo-row" style="justify-content:flex-start;" data-observe>
         <span class="selo on-dark">Vegetal 100%</span>
         <span class="selo on-dark">Metais Free</span>
       </div>
     </div>
-    <div data-observe>
-      <div class="hero-visual">
-        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_121fe000-e27a-4cd0-81e6-9e970e5b277e.png" alt="Ilustração do trato digestivo, representando a rotina de cuidado natural do Protocolo Adulto VermeFree" loading="eager">
-      </div>
-    </div>
   </div>
+  <div class="scroll-hint">role para saber mais</div>
 </section>
 
 <!-- OFERTA — seleção invertida de potes -->
@@ -317,7 +354,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">Escolha seu protocolo</div>
-      <h2>Quanto mais rotina, maior a economia</h2>
+      <h2><span class="split-line" data-split>Quanto mais rotina, maior a economia</span></h2>
       <p>O desconto de volume aplica sozinho no carrinho — sem precisar de cupom. Faça sozinha, com quem você ama, ou garanta o ciclo do ano inteiro de uma vez.</p>
     </div>
     <div class="plans" data-observe>
@@ -372,7 +409,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">A virada</div>
-      <h2>O que muda quando isso entra na sua rotina</h2>
+      <h2><span class="split-line" data-split>O que muda quando isso entra na sua rotina</span></h2>
       <p>Sem prometer milagre — é constância. É o que costuma mudar quando o protocolo passa a fazer parte do seu ciclo, algumas vezes ao ano.</p>
     </div>
     <div class="virada-grid" data-observe>
@@ -401,7 +438,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow on-dark" style="text-align:center;">Prova &amp; composição</div>
-      <h2>4 frascos, cada um no seu momento certo</h2>
+      <h2><span class="split-line" data-split>4 frascos, cada um no seu momento certo</span></h2>
       <p>Ingredientes de origem vegetal, num protocolo pensado pra atuar em conjunto com o ciclo da lua nova.</p>
     </div>
     <div class="composicao-grid" data-observe>
@@ -439,7 +476,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">Bem-estar &amp; dúvidas comuns</div>
-      <h2>Feito pra quem quer entender antes de comprar</h2>
+      <h2><span class="split-line" data-split>Feito pra quem quer entender antes de comprar</span></h2>
     </div>
     <div class="cards-grid" data-observe>
       <div class="card">
@@ -481,7 +518,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">Como funciona</div>
-      <h2>O protocolo segue o ritmo da lua nova</h2>
+      <h2><span class="split-line" data-split>O protocolo segue o ritmo da lua nova</span></h2>
       <p>Cada frasco entra num momento certo — não é tudo de uma vez.</p>
     </div>
 
@@ -514,7 +551,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">Quem já faz parte</div>
-      <h2>O que dizem sobre a rotina</h2>
+      <h2><span class="split-line" data-split>O que dizem sobre a rotina</span></h2>
     </div>
     <div class="testi-grid" data-observe>
       <div class="testi">
@@ -542,7 +579,7 @@
   <div class="wrap">
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">Perguntas frequentes</div>
-      <h2>Antes de decidir, vale entender</h2>
+      <h2><span class="split-line" data-split>Antes de decidir, vale entender</span></h2>
     </div>
     <div class="faq-list" data-observe>
       <details class="faq-item">
@@ -594,7 +631,7 @@
         <span class="selo on-dark">Garantia de 7 dias</span>
         <span class="selo on-dark">Frete grátis acima de R$399</span>
       </div>
-      <div style="margin-top:26px;">
+      <div style="margin-top:1.6rem;">
         <a class="btn btn-bronze" href="#oferta">Ver os protocolos disponíveis</a>
       </div>
       <p class="fine">Regras ANVISA aplicadas: nenhuma promessa de cura ou resultado — é rotina de bem-estar natural.</p>
@@ -607,13 +644,11 @@
   <div class="moon">🌙 protocolos sincronizados com a lua nova</div>
 </footer>
 
-<!-- barra fixa mobile -->
 <div class="mobile-bar" id="mobile-bar">
   <div class="info"><div class="from">A partir de</div><div class="val">R$277,60</div></div>
   <a class="btn btn-bronze" href="#oferta">Ver protocolos</a>
 </div>
 
-<!-- pop-up de diagnóstico -->
 <div class="quiz-overlay" id="quiz-overlay">
   <div class="quiz-card">
     <button class="quiz-close" id="quiz-close" aria-label="Fechar">
@@ -655,50 +690,407 @@
   </div>
 </div>
 
+<script type="module">
+/* ===================================================================
+   HERO WEBGL — "Campo Lunar": campo de partículas verde brilhante,
+   adaptado da técnica "Flow Wave" (ver vermefree-lp-kit/REPERTORIO-
+   TECNICO.md) e recolorido 100% na paleta oficial da marca. Contido
+   ao hero (não à página inteira) e pausado quando sai da viewport —
+   nunca compete por bateria/GPU com o resto da LP no celular.
+   Se WebGL não estiver disponível, o gradiente escuro do CSS já
+   cobre o hero — a página nunca fica quebrada. =========================== */
+(async function initHeroScene(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const heroEl = document.getElementById('hero');
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas || reduceMotion) return;
+  if (!window.WebGLRenderingContext) return;
+
+  let THREE, EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, GammaCorrectionShader, CopyShader;
+  try {
+    [THREE, {EffectComposer}, {RenderPass}, {UnrealBloomPass}, {ShaderPass}, {GammaCorrectionShader}, {CopyShader}] = await Promise.all([
+      import('three'),
+      import('three/addons/postprocessing/EffectComposer.js'),
+      import('three/addons/postprocessing/RenderPass.js'),
+      import('three/addons/postprocessing/UnrealBloomPass.js'),
+      import('three/addons/postprocessing/ShaderPass.js'),
+      import('three/addons/shaders/GammaCorrectionShader.js'),
+      import('three/addons/shaders/CopyShader.js')
+    ]);
+  } catch (e) {
+    return; // sem internet/CDN bloqueado — o gradiente CSS do hero já resolve
+  }
+
+  const isMobile = window.innerWidth < 700;
+
+  const bgColor='#14241a', flameColor='#C9A876', flameColor2='#E8F5E4', flameAmt=0.16;
+  const atmoColor='#C9A876', atmoCount=isMobile?140:260, atmoSize=22, atmoSpeed=0.8;
+  const colorLow='#14241a', colorHigh='#C0DE96';
+  const opacity=0.28, pointSize=isMobile?4.6:5.2, brightness=0.5;
+  const waveHeight=2.6, flow=0.8, tilt=0, scale=0.275, scrollRise=0.8;
+  const camStartY=6, camStartZ=14, camEndY=1.0, camEndZ=-1.5;
+  const lookStartZ=2, lookEndZ=-14, parallax=1.0;
+  const pointerRadius=6.5, pointerStrength=isMobile?0:0.7;
+
+  const Lerp=(a,b,t)=>a+(b-a)*t;
+  const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+  function hexToVec3(hex){ const n=parseInt(hex.slice(1),16); return new THREE.Vector3(((n>>16)&255)/255, ((n>>8)&255)/255, (n&255)/255); }
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+  } catch(e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile?1.5:2));
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x000000);
+  scene.fog = new THREE.Fog(0x000000, 0, 15);
+
+  const LAYERS = { NONE:0, TORUS_SCENE:1, BLOOM_SCENE:2, ENTIRE_SCENE:3 };
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 400);
+  camera.position.set(0, camStartY, camStartZ);
+  camera.layers.enable(LAYERS.TORUS_SCENE);
+  camera.layers.enable(LAYERS.BLOOM_SCENE);
+  camera.layers.enable(LAYERS.ENTIRE_SCENE);
+  scene.add(camera);
+
+  const SNOISE = `
+vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+float snoise(vec3 v){
+  const vec2 C = vec2(1.0/6.0, 1.0/3.0); const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+  vec3 i = floor(v + dot(v, C.yyy)); vec3 x0 = v - i + dot(i, C.xxx);
+  vec3 g = step(x0.yzx, x0.xyz); vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy); vec3 i2 = max(g.xyz, l.zxy);
+  vec3 x1 = x0 - i1 + 1.0 * C.xxx; vec3 x2 = x0 - i2 + 2.0 * C.xxx; vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+  i = mod(i, 289.0);
+  vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+  float n_ = 1.0/7.0; vec3 ns = n_ * D.wyz - D.xzx;
+  vec4 j = p - 49.0 * floor(p * ns.z *ns.z);
+  vec4 x_ = floor(j * ns.z); vec4 y_ = floor(j - 7.0 * x_);
+  vec4 x = x_ *ns.x + ns.yyyy; vec4 y = y_ *ns.x + ns.yyyy; vec4 h = 1.0 - abs(x) - abs(y);
+  vec4 b0 = vec4(x.xy, y.xy); vec4 b1 = vec4(x.zw, y.zw);
+  vec4 s0 = floor(b0)*2.0 + 1.0; vec4 s1 = floor(b1)*2.0 + 1.0; vec4 sh = -step(h, vec4(0.0));
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy; vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+  vec3 p0 = vec3(a0.xy,h.x); vec3 p1 = vec3(a0.zw,h.y); vec3 p2 = vec3(a1.xy,h.z); vec3 p3 = vec3(a1.zw,h.w);
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0); m = m * m;
+  return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+}`;
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const segs = isMobile ? [90,260] : [200,600];
+  const geometry = new THREE.SphereGeometry(4.2, segs[0], segs[1]);
+  const uniforms = {
+    uTime:{value:0}, uStream:{value:0}, uAppear:{value:0},
+    uColLow:{value:hexToVec3(colorLow)}, uColHigh:{value:hexToVec3(colorHigh)},
+    uOpacity:{value:opacity}, uSize:{value:pointSize}, uBrightness:{value:brightness},
+    uWaveHeight:{value:waveHeight}, uFlow:{value:flow}, uScale:{value:scale},
+    uCursor:{value:new THREE.Vector3()}, uRepelRadius:{value:pointerRadius},
+    uRepelStrength:{value:pointerStrength}, uActivity:{value:0}
+  };
+  const vert = `
+uniform float uTime; uniform float uStream; uniform float uSize; uniform float uWaveHeight; uniform float uFlow; uniform float uScale;
+uniform vec3 uColLow; uniform vec3 uColHigh;
+uniform vec3 uCursor; uniform float uRepelRadius; uniform float uRepelStrength; uniform float uActivity;
+varying float vFade; varying vec3 vColor;
+${SNOISE}
+void main() {
+  vec3 wp = vec3(position.x * 13.0, 0.0, position.z * 25.0);
+  wp.x += position.y * 6.0;
+  float zc = wp.z + uStream;
+  float wn = snoise(vec3(wp.x * 0.08, zc * 0.08, uTime * 0.15 * uFlow)) * 2.0;
+  wn += snoise(vec3(wp.x * 0.16, zc * 0.16, uTime * 0.3 * uFlow)) * 0.8;
+  wp.y += wn * uWaveHeight;
+  vec3 finalPos = wp * uScale;
+  vec4 modelPosition = modelMatrix * vec4(finalPos, 1.0);
+  vec3 toP = modelPosition.xyz - uCursor;
+  float cd = length(toP);
+  float fall = smoothstep(uRepelRadius, 0.0, cd);
+  modelPosition.xyz += normalize(toP + vec3(0.0001)) * fall * uRepelStrength * uActivity;
+  vec4 mvPosition = viewMatrix * modelPosition;
+  float colMix = smoothstep(-3.0, 3.0, position.y + position.x * 0.5);
+  vColor = mix(uColLow, uColHigh, clamp(colMix, 0.0, 1.0));
+  vFade = 1.0;
+  gl_PointSize = uSize * (10.0 / -mvPosition.z);
+  gl_PointSize = max(gl_PointSize, 1.5);
+  gl_Position = projectionMatrix * mvPosition;
+}`;
+  const frag = `
+uniform float uOpacity; uniform float uBrightness; uniform float uAppear;
+varying float vFade; varying vec3 vColor;
+void main() {
+  vec2 xy = gl_PointCoord - 0.5;
+  float ll = length(xy);
+  if (ll > 0.5) discard;
+  float a = smoothstep(0.5, 0.1, ll);
+  gl_FragColor = vec4(vColor * uBrightness, vFade * a * uOpacity * uAppear);
+}`;
+  const material = new THREE.ShaderMaterial({ uniforms, vertexShader:vert, fragmentShader:frag, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending });
+  const points = new THREE.Points(geometry, material);
+  points.frustumCulled = false;
+  points.layers.enable(LAYERS.ENTIRE_SCENE);
+  group.add(points);
+
+  const finalUniforms = {
+    iTime:{value:0}, tDiffuse:{value:null}, torusTexture:{value:null}, bloomTexture:{value:null},
+    uBg:{value:hexToVec3(bgColor)}, uFlameA:{value:hexToVec3(flameColor)}, uFlameB:{value:hexToVec3(flameColor2)}, uFlameAmt:{value:flameAmt}
+  };
+  const finalVert = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }`;
+  const finalFrag = `
+uniform float iTime; uniform sampler2D tDiffuse; uniform sampler2D bloomTexture; uniform sampler2D torusTexture;
+uniform vec3 uBg; uniform vec3 uFlameA; uniform vec3 uFlameB; uniform float uFlameAmt;
+varying vec2 vUv;
+vec3 warp3d(vec3 pos, float t){ float curv=.8,a=1.9,b=0.7; pos*=2.;
+  pos.x+=curv*sin(t+a*pos.y)+t*b; pos.y+=curv*cos(t+a*pos.x);
+  pos.y+=curv*sin(t+a*pos.z)+t*b; pos.z+=curv*cos(t+a*pos.y);
+  pos.z+=curv*sin(t+a*pos.x)+t*b; pos.x+=curv*cos(t+a*pos.z);
+  return 0.5+0.5*cos(pos.xyz+vec3(1,2,4)); }
+void main(){
+  vec2 uv = 2.*vUv - 1.;
+  vec3 w = pow(warp3d(vec3(uv.x, sin(uv.y), uv.y), iTime*1.5), vec3(1.5));
+  vec3 flame = 1.5*uFlameA*w.x; flame*=w.y; flame += uFlameB*w.z;
+  flame *= smoothstep(0.25, 1., abs(uv.y));
+  float md = smoothstep(-0.7, 1., -uv.y*uv.x); flame *= md*md;
+  vec3 bg = uBg * (1.0 - 0.4 * length(uv));
+  gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + texture2D(torusTexture, vUv).xyz + texture2D(tDiffuse, vUv).xyz, 1.);
+}`;
+  const finalPass = new ShaderPass({ uniforms:finalUniforms, vertexShader:finalVert, fragmentShader:finalFrag });
+
+  const renderPass = new RenderPass(scene, camera);
+
+  const torusComposer = new EffectComposer(renderer);
+  torusComposer.renderToScreen = false;
+  torusComposer.addPass(renderPass);
+  torusComposer.addPass(new ShaderPass(GammaCorrectionShader));
+  torusComposer.addPass(new UnrealBloomPass(new THREE.Vector2(1,1), 0.22, 0.2, 0));
+  torusComposer.addPass(new ShaderPass(CopyShader));
+
+  const bloomComposer = new EffectComposer(renderer);
+  bloomComposer.renderToScreen = false;
+  bloomComposer.addPass(renderPass);
+  bloomComposer.addPass(new UnrealBloomPass(new THREE.Vector2(1,1), 0.4, 0.55, 0));
+  bloomComposer.addPass(new ShaderPass(GammaCorrectionShader));
+
+  const finalComposer = new EffectComposer(renderer);
+  finalComposer.addPass(renderPass);
+  finalComposer.addPass(finalPass);
+  finalPass.uniforms.bloomTexture.value = bloomComposer.renderTarget1.texture;
+  finalPass.uniforms.torusTexture.value = torusComposer.renderTarget1.texture;
+
+  // poeira dourada — como luz de lua/pólen flutuando sobre o campo
+  let ptsAtmo, atmoMat;
+  (function(){
+    const N = Math.round(atmoCount);
+    const positions = new Float32Array(N*3), sizes = new Float32Array(N), seeds = new Float32Array(N);
+    for (let i=0;i<N;i++){
+      positions[i*3]=2*Math.random()-1; positions[i*3+1]=2*Math.random()-1; positions[i*3+2]=2*Math.random()-1;
+      sizes[i]=atmoSize*(0.4+Math.random()); seeds[i]=Math.random();
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    geo.setAttribute('size', new THREE.BufferAttribute(sizes,1));
+    geo.setAttribute('seed', new THREE.BufferAttribute(seeds,1));
+    atmoMat = new THREE.ShaderMaterial({
+      transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, depthTest:false,
+      uniforms:{ uTime:{value:0}, uColor:{value:hexToVec3(atmoColor)}, uRes:{value:new THREE.Vector2(1,1)} },
+      vertexShader:`
+attribute float size; attribute float seed; uniform float uTime; uniform vec2 uRes;
+varying float vA;
+vec3 warp(vec3 p, float t){ float c=0.9,a=1.9,b=0.02,s=0.05; p*=2.;
+  p.x+=c*sin(s*t+a*p.y)+t*b; p.y+=c*cos(s*t+a*p.x); p.y+=c*sin(s*t+a*p.z)+t*b;
+  p.z+=c*cos(s*t+a*p.y); p.z+=c*sin(s*t+a*p.x)+t*b; p.x+=c*cos(s*t+a*p.z);
+  return cos(p+vec3(1,2,4)); }
+void main(){
+  vec3 v = position*4.0 + warp(position, uTime)*1.2;
+  vec4 mv = modelViewMatrix * vec4(v, 1.0);
+  float r = length(v); float farF = 1.0 - smoothstep(5.0, 6.5, r); float nearF = smoothstep(0.0, 0.5, -mv.z);
+  vA = farF * nearF;
+  gl_PointSize = size * uRes.y / 900.0 / -mv.z; gl_PointSize = max(gl_PointSize, 1.0);
+  gl_Position = projectionMatrix * mv;
+}`,
+      fragmentShader:`
+uniform vec3 uColor; varying float vA;
+void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) discard;
+  float tex = smoothstep(0.5, 0.0, l); gl_FragColor = vec4(uColor * tex, tex * vA * 0.6); }`
+    });
+    ptsAtmo = new THREE.Points(geo, atmoMat);
+    ptsAtmo.frustumCulled = false;
+    ptsAtmo.layers.enable(LAYERS.ENTIRE_SCENE);
+    scene.add(ptsAtmo);
+  })();
+
+  // progresso "de saída" do hero: 0 quando o topo do hero está no topo da
+  // tela, 1 quando o hero já rolou inteiramente pra fora — dirige o
+  // mergulho de câmera durante a rolagem natural (sem página extra vazia)
+  let scrollTarget=0, scrollSmooth=0, scrollCurrent=0;
+  function computeHeroProgress(){
+    const r = heroEl.getBoundingClientRect();
+    return clamp(-r.top / Math.max(r.height,1), 0, 1);
+  }
+  window.addEventListener('scroll', ()=>{ scrollTarget = computeHeroProgress(); }, {passive:true});
+
+  let mouseTarget={x:0,y:0}, mouse={x:0,y:0};
+  const POINTER = { world:new THREE.Vector3(), activity:0, active:false, lastMove:performance.now() };
+  const canHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (canHover){
+    window.addEventListener('mousemove', (e)=>{
+      mouseTarget.x=(e.clientX/window.innerWidth)*2-1; mouseTarget.y=-((e.clientY/window.innerHeight)*2-1);
+      POINTER.active=true; POINTER.lastMove=performance.now();
+    }, {passive:true});
+    window.addEventListener('mouseout', ()=>{ POINTER.active=false; });
+  }
+
+  const _ndc=new THREE.Vector3(), _dir=new THREE.Vector3(), _tgt=new THREE.Vector3();
+  function updatePointerWorld(){
+    _tgt.set(0,0,0);
+    if (POINTER.active){
+      _ndc.set(mouse.x, mouse.y, 0.5).unproject(camera);
+      _dir.copy(_ndc).sub(camera.position).normalize();
+      const dn=_dir.z;
+      if (Math.abs(dn)>1e-4){ const tt=-camera.position.z/dn; if (tt>0 && Number.isFinite(tt)) _tgt.copy(camera.position).addScaledVector(_dir,tt); }
+    }
+    POINTER.world.lerp(_tgt,0.12);
+    const idle=(performance.now()-POINTER.lastMove)/1000;
+    POINTER.activity += (((POINTER.active && idle<3)?1:0)-POINTER.activity)*0.06;
+  }
+
+  let stream=0, t0=performance.now()/1000, appearStart=performance.now();
+  function renderFrame(scroll, m){
+    const t = performance.now()/1000;
+    const dt = Math.min(0.05, t-t0); t0=t;
+    uniforms.uTime.value=t;
+    stream += dt*(flow*2.0)*4.0;
+    uniforms.uStream.value=stream;
+    uniforms.uWaveHeight.value = waveHeight*(1+scroll*scrollRise);
+
+    const ea = Math.min(scroll/0.9,1.0);
+    const e = ea*ea*(3-2*ea);
+    const camY=Lerp(camStartY,camEndY,e), camZ=Lerp(camStartZ,camEndZ,e);
+    camera.position.set(m.x*parallax, camY+m.y*parallax*0.3, camZ);
+    camera.lookAt(m.x*parallax*0.5, Lerp(0.0,0.6,e), Lerp(lookStartZ,lookEndZ,e));
+    group.rotation.x=-tilt; group.rotation.y=0;
+    updatePointerWorld();
+    uniforms.uCursor.value.copy(POINTER.world);
+    uniforms.uActivity.value=POINTER.activity;
+    const elapsed=(performance.now()-appearStart)/1000;
+    uniforms.uAppear.value=Math.max(0,Math.min(1,(elapsed-0.2)/1.4));
+
+    if (ptsAtmo){ atmoMat.uniforms.uTime.value = t*atmoSpeed*8.0; ptsAtmo.position.copy(camera.position); }
+    finalPass.uniforms.iTime.value = t;
+  }
+
+  function resize(){
+    const w = heroEl.clientWidth, h = heroEl.clientHeight, dpr = Math.min(window.devicePixelRatio, isMobile?1.5:2);
+    renderer.setPixelRatio(dpr); renderer.setSize(w,h,false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    [torusComposer,bloomComposer,finalComposer].forEach(c=>{ c.setPixelRatio(dpr); c.setSize(w,h); });
+    if (atmoMat) atmoMat.uniforms.uRes.value.set(w*dpr, h*dpr);
+    scrollTarget = computeHeroProgress();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // roda só enquanto o hero está visível — economiza bateria/GPU no resto
+  // da página, que é longa (conversão não precisa de WebGL nas outras seções)
+  let running = false, rafId = null;
+  function loop(){
+    if (!running) return;
+    rafId = requestAnimationFrame(loop);
+    scrollSmooth=Lerp(scrollSmooth,scrollTarget,0.10);
+    scrollCurrent=Lerp(scrollCurrent,scrollSmooth,0.06);
+    mouse.x=Lerp(mouse.x,mouseTarget.x,0.06);
+    mouse.y=Lerp(mouse.y,mouseTarget.y,0.06);
+    renderFrame(scrollCurrent, mouse);
+    camera.layers.set(LAYERS.TORUS_SCENE); torusComposer.render();
+    camera.layers.set(LAYERS.BLOOM_SCENE); bloomComposer.render();
+    camera.layers.set(LAYERS.ENTIRE_SCENE); finalComposer.render();
+  }
+  function start(){ if (!running){ running = true; t0 = performance.now()/1000; loop(); } }
+  function stop(){ running = false; if (rafId) cancelAnimationFrame(rafId); }
+
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{ entry.isIntersecting ? start() : stop(); });
+    }, {threshold:0}).observe(heroEl);
+  } else {
+    start();
+  }
+})();
+</script>
+
 <script>
 (function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* reveal ao rolar — IntersectionObserver com fallback direto se indisponível */
-  var observed = document.querySelectorAll('[data-observe]');
+  /* revelação de texto — separa em palavras/linhas e anima em cascata */
+  function wrapWords(el){
+    // nunca fatiar um bloco que já tem elementos filhos (ex.: botões, selos)
+    // — isso destruiria a estrutura deles. Nesse caso só usa o fade padrão.
+    if (el.children.length > 0){ el.setAttribute('data-observe',''); el.removeAttribute('data-reveal-word'); return; }
+    var text = el.textContent;
+    var words = text.split(/(\s+)/);
+    el.innerHTML = '';
+    words.forEach(function(w){
+      if (/^\s+$/.test(w)){ el.appendChild(document.createTextNode(w)); return; }
+      if (!w) return;
+      var outer = document.createElement('span');
+      outer.className = 'split-word';
+      var inner = document.createElement('span');
+      inner.textContent = w;
+      outer.appendChild(inner);
+      el.appendChild(outer);
+    });
+  }
+  document.querySelectorAll('[data-reveal-word]').forEach(function(el){ wrapWords(el); });
+
+  document.querySelectorAll('[data-split]').forEach(function(el){
+    el.classList.add('split-line');
+    var inner = document.createElement('span');
+    inner.textContent = el.textContent;
+    el.textContent = '';
+    el.appendChild(inner);
+  });
+
+  var reveals = document.querySelectorAll('[data-observe], [data-reveal-word], [data-reveal-line]');
+  var splitLines = document.querySelectorAll('.split-line');
   if ('IntersectionObserver' in window && !reduceMotion){
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if (entry.isIntersecting){
           entry.target.classList.add('is-visible');
+          var words = entry.target.querySelectorAll('.split-word');
+          words.forEach(function(w, i){ w.style.transitionDelay = (i*40) + 'ms'; w.classList.add('is-visible'); });
           io.unobserve(entry.target);
         }
       });
     }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
-    observed.forEach(function(el){ io.observe(el); });
-    // rede de segurança — garante que nenhum bloco fique invisível pra sempre
-    // (ex.: navegação por âncora/#hash pulando direto pra uma seção)
+    reveals.forEach(function(el){ io.observe(el); });
+    splitLines.forEach(function(el){ io.observe(el); });
     setTimeout(function(){
-      observed.forEach(function(el){ el.classList.add('is-visible'); });
+      reveals.forEach(function(el){ el.classList.add('is-visible'); });
+      splitLines.forEach(function(el){ el.classList.add('is-visible'); });
     }, 5000);
   } else {
-    observed.forEach(function(el){ el.classList.add('is-visible'); });
+    reveals.forEach(function(el){ el.classList.add('is-visible'); });
+    splitLines.forEach(function(el){ el.classList.add('is-visible'); });
   }
 
-  /* linha do tempo lunar — dispara o "desenho" quando entra na tela */
   var timelineWrap = document.querySelector('[data-observe-timeline]');
   if (timelineWrap){
     if ('IntersectionObserver' in window && !reduceMotion){
       var tio = new IntersectionObserver(function(entries){
         entries.forEach(function(entry){
-          if (entry.isIntersecting){
-            entry.target.classList.add('is-visible');
-            tio.unobserve(entry.target);
-          }
+          if (entry.isIntersecting){ entry.target.classList.add('is-visible'); tio.unobserve(entry.target); }
         });
       }, {threshold:0.4});
       tio.observe(timelineWrap);
-    } else {
-      timelineWrap.classList.add('is-visible');
-    }
+    } else { timelineWrap.classList.add('is-visible'); }
   }
 
-  /* sheen automático nos botões primários, em rodízio — mesma técnica do linktree */
   var buttons = document.querySelectorAll('.btn:not(.btn-ghost)');
   if (!reduceMotion && buttons.length){
     var sheenIndex = 0;
@@ -710,23 +1102,18 @@
     }, 3200);
   }
 
-  /* barra fixa mobile — aparece quando o hero sai da tela */
   var mobileBar = document.getElementById('mobile-bar');
   var hero = document.querySelector('.hero');
   if (mobileBar && hero && 'IntersectionObserver' in window){
     var barIo = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
-        if (!entry.isIntersecting && entry.boundingClientRect.top < 0){
-          mobileBar.classList.add('is-visible');
-        } else {
-          mobileBar.classList.remove('is-visible');
-        }
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0){ mobileBar.classList.add('is-visible'); }
+        else { mobileBar.classList.remove('is-visible'); }
       });
     }, {threshold:0});
     barIo.observe(hero);
   }
 
-  /* pop-up de diagnóstico — 1x por sessão, dispara ao passar de 50% da página ou 20s */
   var overlay = document.getElementById('quiz-overlay');
   var quizClose = document.getElementById('quiz-close');
   var steps = document.querySelectorAll('.quiz-step');
@@ -738,22 +1125,18 @@
     var stepNum = {1:0,2:1,3:2,result:3}[id];
     progressBars.forEach(function(bar, i){ bar.classList.toggle('done', i < stepNum); });
   }
-
   document.querySelectorAll('.quiz-opt').forEach(function(opt){
     opt.addEventListener('click', function(){ goToStep(opt.getAttribute('data-next')); });
   });
-
   function openQuiz(){
     if (!overlay || sessionStorage.getItem(SEEN_KEY)) return;
     overlay.classList.add('is-open');
     sessionStorage.setItem(SEEN_KEY, '1');
   }
   function closeQuiz(){ if (overlay) overlay.classList.remove('is-open'); }
-
   if (quizClose) quizClose.addEventListener('click', closeQuiz);
   if (overlay) overlay.addEventListener('click', function(e){ if (e.target === overlay) closeQuiz(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeQuiz(); });
-
   try {
     if (!sessionStorage.getItem(SEEN_KEY)){
       var triggered = false;
@@ -764,8 +1147,7 @@
       });
       setTimeout(function(){ if (!triggered){ triggered = true; openQuiz(); } }, 20000);
     }
-  } catch(e){ /* sessionStorage indisponível (modo privado) — sem quiz automático, sem quebrar a página */ }
-
+  } catch(e){ /* sessionStorage indisponível — sem quiz automático, sem quebrar a página */ }
 })();
 </script>
 
