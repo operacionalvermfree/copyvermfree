@@ -93,10 +93,10 @@ Amiga/mãe que se cuida e cuida da família. Natural, honesto, acolhedor, consul
 
 ## 9. Identidade visual
 
-⚠️ Este documento propõe uma paleta/tipografia mais específica do que a herdada em `CLAUDE.md` §10 / `vermefree-lp-superprompt.md` §5 (que era só "verde natural + off-white + verde-limão", sem hex nem fonte definidos). Como LP de venda (tráfego pago) e bio-link são artefatos diferentes, isto pode ser intencional — não sobrescrevi a paleta-base do kit, só registrei aqui como proposta específica pra este tipo de peça. Confirmar antes de adotar como padrão fixo:
+⚠️ **Paleta e tipografia abaixo são a proposta original deste documento — desatualizadas.** A paleta oficial real está em `CLAUDE.md` §10 (trazida pelo Gabriel em 03/08, com imagens de inspiração ainda a chegar antes de qualquer LP fechar identidade definitiva) e no `vermefree-lp-superprompt.md` §5. Não usar os hex abaixo — conferir a fonte atualizada antes de construir.
 
-- **Paleta:** verde natural como primária — **#5EBC43** (verde-folha) e **#1B5E20** (verde escuro); fundos **off-white/bege** (#FAF8F2 / #F5F1E8); acento verde-limão **#C0DE96**. Vermelho **#E11D2E** só para urgência/desconto. Estética "clean clínico natural / fitoterapia".
-- **Tipografia:** título display **Caprasimo** (Google Fonts, usar com moderação); corpo **Inter** (Google Fonts). Escala tipográfica clara, texto respirando, largura de leitura ~65 caracteres.
+- ~~**Paleta:** verde natural como primária — #5EBC43 (verde-folha) e #1B5E20 (verde escuro); fundos off-white/bege (#FAF8F2 / #F5F1E8); acento verde-limão #C0DE96. Vermelho #E11D2E só para urgência/desconto.~~
+- **Tipografia:** título display **Caprasimo** (Google Fonts, usar com moderação); corpo **Inter** (Google Fonts). Escala tipográfica clara, texto respirando, largura de leitura ~65 caracteres. (Ainda em aberto se Caprasimo é a melhor escolha pro tom consultivo/sério da marca — discutir por LP.)
 - **Imagens:** foto real do produto (fundo bege editorial), fotos de mães/famílias em ambiente doméstico real (luz natural). Nada de banco de imagem clínico frio.
 - **Selos do rótulo:** *Vegetal 100%*, *Metais Free*.
 - Bordas suaves (radius ~14–16px), sombras leves, muito respiro. Um único ponto de destaque por seção.

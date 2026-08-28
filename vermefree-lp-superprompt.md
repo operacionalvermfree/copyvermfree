@@ -54,8 +54,9 @@ Usar como banco de referência pra decidir a assinatura de cada LP, misturando c
 
 ## 5. Identidade visual de referência (herdada do CLAUDE.md, seção 10)
 
-- Paleta: verde natural (folha + escuro) como primária, off-white/bege claro de fundo, verde-limão de acento.
+- **Paleta oficial** — ver `CLAUDE.md` §10 pra hex completo. Linha Adulto (Adulto, Kits mistos, Kit Família, Óleo de Alho): verde claro `#C0DE96` + verde escuro `#5E8C43`, preto `#1A1A1A`, branco, dourado/bronze `#C9A876` de acento premium, gradiente escuro `#1f3d1f`→`#14241a` pra peças cinematográficas/dark, verde-suave `#E8F5E4` pra blocos alternativos claros. Linha **Kids tem paleta própria** (vívida: verde `#009933`, magenta, laranja, azul royal) — nunca misturar as duas linhas numa mesma LP.
+- ⚠️ **Referência ainda incompleta** — o Gabriel vai trazer imagens de inspiração antes de qualquer LP fechar a identidade visual definitiva. Não travar uma LP nova só nesses hex sem conferir se chegaram imagens novas em `vermefree-lp-kit/FONTES.md` / Drive.
 - Selos de rótulo disponíveis: "Vegetal 100%", "Metais Free".
 - UGC de referência: vertical 9:16, caseiro, luz natural, sem marca d'água.
 
-Cada LP pode variar tom/composição dentro dessa paleta — mas a paleta-base não muda entre produtos, pra manter reconhecimento de marca.
+Cada LP pode variar tom/composição dentro da paleta da sua linha (Adulto ou Kids) — mas a paleta-base de cada linha não muda entre produtos dela, pra manter reconhecimento de marca.

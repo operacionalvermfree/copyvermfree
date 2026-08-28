@@ -188,7 +188,24 @@ Requer opt-in. Template HSM aprovado fora da janela 24h; quando o cliente respon
 
 ## 10. IDENTIDADE VISUAL (referência pra briefar peças)
 
-- **Paleta:** verde natural (folha + escuro) como primária, off-white/bege claro nos fundos, verde-limão de acento. Estética "clean clínico natural / fitoterapia".
+- **Paleta oficial** (referência trazida pelo Gabriel em 03/08 — imagens de inspiração ainda a vir, não usar pra fechar identidade de LP sem essas imagens):
+
+  **Linha Adulto:**
+  - Verde claro: `#C0DE96`
+  - Verde escuro: `#5E8C43`
+  - Preto: `#1A1A1A`
+  - Branco: `#FFFFFF`
+  - Dourado/bronze (acento premium): `#C9A876`
+  - Verde escuro profundo (gradiente premium): `#1f3d1f` → `#14241a`
+  - Verde claro suave (bloco alternativo): `#E8F5E4`
+
+  **Linha Kids** (paleta própria, vívida/lúdica — não misturar com a linha Adulto):
+  - Verde vivo: `#009933`
+  - Magenta: `#FF00FF`
+  - Laranja: `#FF6600`
+  - Azul royal: `#003399`
+
+  Estética "clean clínico natural / fitoterapia" pra linha Adulto.
 - **Logo:** wordmark "VermeFree" com pequeno verme/onda verde. Versão infantil: "VermeFree kids" com ilustração de crianças.
 - **Selos do rótulo:** "Vegetal 100%" e "Metais Free".
 - **UGC:** vertical 9:16, caseiro autêntico (luz natural, ambiente doméstico real), mulheres/mães, legendas queimadas, sem marca d'água de app.
