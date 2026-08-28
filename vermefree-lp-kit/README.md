@@ -10,6 +10,7 @@ Base de conhecimento técnica para construir landing pages (LPs) da VermeFree �
 |---|---|
 | `COMANDO-CRIAR-LP.md` | **Comando pronto pra colar num chat novo** e começar uma LP (equivalente ao fluxo já usado na Botanika). |
 | `COMO-USAR.md` | Fluxo de trabalho pra criar uma LP nova: o que ler antes, onde subir asset pesado vs. leve, passo a passo. |
+| `PROMPT-AGENTE-LP-VENDA.md` | Brief completo + ficha real (variant ID, preço, composição, dores/desejos/ganchos) de cada uma das 5 LPs de venda por produto. Ler junto do `COMANDO-CRIAR-LP.md` quando o produto for um dos 5 do `PAGINAS.md`. Tem 2 pontos em conflito com o resto do kit ainda não resolvidos — ver avisos ⚠️ dentro do arquivo. |
 | `FONTES.md` | Onde está cada fonte de verdade: loja/checkout, variant IDs reais, pastas do Drive (com IDs/links). |
 | `REPERTORIO-TECNICO.md` | Catálogo destilado de ~35 referências reais de técnica/animação de LP (getlayers.com + meez.design), já lidas e resumidas com recomendação de aplicação ao tom da marca. |
 | `prompts/00-INDEX.md` | Índice de prompts reutilizáveis pra gerar blocos de LP (hero, prova social, FAQ, oferta, etc.). |

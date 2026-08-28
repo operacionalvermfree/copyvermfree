@@ -2,6 +2,10 @@
 
 > Este arquivo aponta para os dados reais. Ele **não substitui** a checagem ao vivo na loja/Drive — se algo aqui parecer desatualizado (preço, estoque, variant ID), confirmar direto na fonte antes de publicar copy.
 
+> ⚠️ **2 conflitos abertos entre `PROMPT-AGENTE-LP-VENDA.md` e o resto do kit, ainda não resolvidos com o Gabriel:**
+> 1. **Desconto de volume do Óleo de Alho** — `CLAUDE.md` §6 diz 3 frascos=10%/6 frascos=15%; o prompt de agente diz 3=15%/6=15%. Não usar nenhum dos dois numa LP publicada até confirmar.
+> 2. **Convenção de arquivo** — o prompt de agente pede `lp-<slug>.html` solto; a convenção já em uso (`PAGINAS.md`, `vermefree-lp-superprompt.md`, e o padrão de link raw.githack) é pasta `landing-<slug>/index.html`. Manter a convenção de pasta até decisão em contrário.
+
 ---
 
 ## Loja (Shopify)
@@ -78,5 +82,6 @@ Em 31/07 o usuário subiu, dentro de `VermeFree/LP-KIT/`, uma pasta aninhada `LP
 - **Fonte única de tom de voz, ICP, regras ANVISA, catálogo e preços:** `CLAUDE.md` (raiz do repo).
 - **Design system / convenções técnicas de LP:** `vermefree-lp-superprompt.md` (raiz do repo).
 - **Mapa de LPs existentes:** `PAGINAS.md` (raiz do repo).
+- **Dores/desejos/ganchos por SKU + anatomia completa de página + elementos de conversão obrigatórios das 5 LPs de venda:** `vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md`.
 
 Se uma informação não estiver em nenhuma dessas fontes nem neste arquivo: **perguntar, não inventar.**

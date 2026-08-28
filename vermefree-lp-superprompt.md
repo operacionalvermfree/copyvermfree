@@ -23,6 +23,7 @@
    - Conferir balanceamento de tags HTML (abre/fecha bate).
 5. **Nunca colocar identificador de modelo de IA** (nome do modelo, versão, etc.) em commit, PR, código-fonte ou comentário.
 6. **1 CTA claro por peça**, seguindo a régua de claim do `CLAUDE.md` (nunca "elimina/erradica/cura", nunca citar Dr. William Araujo, nunca diagnosticar o leitor).
+7. **Elementos de conversão obrigatórios numa LP de venda por produto** (detalhado em `vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md`): seleção invertida de potes (maior kit/mais economia ancorando no topo), pop-up de diagnóstico ANVISA-safe (nunca diagnostica, só sugere protocolo a partir de bem-estar/rotina), selos + garantia de 7 dias ⚠️ política nova, confirmar com o Gabriel antes de publicar — não estava em `CLAUDE.md` até este documento.
 
 ## 3. Repertório de técnica (inspiração — nunca copiar 1:1)
 
@@ -42,6 +43,7 @@ Usar como banco de referência pra decidir a assinatura de cada LP, misturando c
 
 ## 4. Fluxo de uma LP
 
+0. Se for uma das 5 LPs de venda por produto (protocolo-adulto, kids-2-4, kids-5-9, kit-familia, oleo-de-alho): ler também `vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md` — tem a ficha completa (ganchos, dores, desejos, variant ID, anatomia de página) de cada uma.
 1. Ler `vermefree-lp-kit/` (kit + assets do produto no Drive) e `PAGINAS.md`.
 2. Confirmar pasta (`landing-<slug>/`) e decidir a identidade própria dessa LP (paleta pode puxar da identidade visual do `CLAUDE.md` seção 10, mas a assinatura interativa/estrutural precisa ser única).
 3. Puxar a verdade do produto — preço, variant ID, composição, posologia, claim permitido — na loja e no Drive (ver `FONTES.md`).
