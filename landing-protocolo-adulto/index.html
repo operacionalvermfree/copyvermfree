@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Protocolo Adulto VermeFree — Desparasitação Natural</title>
+<meta name="description" content="Protocolo Adulto VermeFree: desparasitação natural por fitoterapia, sincronizada com a lua nova. Rotina, critério e transparência — sem promessa milagrosa.">
+<meta name="theme-color" content="#14241a">
+<meta property="og:title" content="Protocolo Adulto VermeFree">
+<meta property="og:description" content="Desparasitação natural, com critério e transparência — no ritmo da lua nova.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* paleta oficial Linha Adulto — CLAUDE.md §10 */
+    --green-light:#C0DE96;
+    --green-dark:#5E8C43;
+    --black:#1A1A1A;
+    --white:#FFFFFF;
+    --bronze:#C9A876;
+    --deep-top:#1f3d1f;
+    --deep-base:#14241a;
+    --soft-green:#E8F5E4;
+    --bg:#FAF8F2;
+    --text:#20301F;
+    --muted:#6B7A6E;
+    --muted-on-dark:rgba(244,241,233,0.68);
+    --line:rgba(94,140,67,0.16);
+    --grad:linear-gradient(120deg, var(--green-dark) 0%, var(--green-light) 100%);
+    --grad-deep:linear-gradient(165deg, var(--deep-top) 0%, var(--deep-base) 100%);
+    --glow:rgba(94,140,67,0.35);
+    --bronze-glow:rgba(201,168,118,0.45);
+    --ease:cubic-bezier(.2,.7,.2,1);
+    --radius:22px;
+    --radius-sm:15px;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{overflow-x:hidden;scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+  section{position:relative;}
+  .eyebrow{
+    font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--green-dark);margin-bottom:10px;
+  }
+  .eyebrow.on-dark{color:var(--bronze);}
+  .selo-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+  .selo{
+    font-size:11.5px;font-weight:700;letter-spacing:.03em;
+    background:rgba(94,140,67,0.10);color:var(--green-dark);
+    border:1px solid var(--line);border-radius:100px;padding:6px 14px;
+  }
+  .selo.on-dark{background:rgba(201,168,118,0.14);color:var(--bronze);border-color:rgba(201,168,118,0.30);}
+
+  /* reveal genérico — dispara ao entrar na viewport, nunca no load inteiro da página (LP é longa) */
+  [data-observe]{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  [data-observe].is-visible{opacity:1;transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    [data-observe]{opacity:1;transform:none;transition:none;}
+  }
+
+  /* botão — token validado (Botanika → linktree), reaproveitado aqui */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    position:relative;overflow:hidden;
+    background:var(--grad);border:0;border-radius:100px;
+    padding:16px 30px;text-decoration:none;color:var(--white);
+    font-weight:700;font-size:15.5px;cursor:pointer;
+    box-shadow:0 14px 30px -12px var(--glow), inset 0 1px 0 rgba(255,255,255,.28);
+    transition:transform .25s var(--ease), box-shadow .3s var(--ease);
+    white-space:nowrap;
+  }
+  .btn::after{
+    content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent);
+    transform:skewX(-18deg);pointer-events:none;
+  }
+  .btn:hover::after, .btn.sheen-play::after{animation:sheen 1.1s var(--ease);}
+  @keyframes sheen{to{left:140%;}}
+  .btn:hover{box-shadow:0 20px 42px -12px rgba(94,140,67,.55), inset 0 1px 0 rgba(255,255,255,.35);}
+  .btn:active{transform:scale(.97);}
+  .btn-bronze{background:linear-gradient(120deg, var(--bronze) 0%, #e3cba0 100%);color:var(--black);box-shadow:0 14px 30px -12px var(--bronze-glow), inset 0 1px 0 rgba(255,255,255,.5);}
+  .btn-bronze:hover{box-shadow:0 20px 42px -12px rgba(201,168,118,.6), inset 0 1px 0 rgba(255,255,255,.6);}
+  .btn-block{width:100%;}
+  .btn-ghost{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.35);box-shadow:none;}
+  .btn-ghost:hover{box-shadow:none;border-color:rgba(255,255,255,.6);}
+
+  /* topo — só wordmark, sem navegação (nenhum ponto de fuga da LP) */
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(20,36,26,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:center;}
+  .topbar .wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--white);}
+  .topbar .wordmark .dot{color:var(--green-light);}
+
+  /* HERO */
+  .hero{background:var(--grad-deep);color:var(--white);padding:52px 0 60px;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:36px;align-items:center;}
+  .hero h1{font-size:clamp(30px,7vw,46px);line-height:1.12;margin-bottom:16px;}
+  .hero p.lede{font-size:16.5px;line-height:1.6;color:var(--muted-on-dark);max-width:52ch;margin-bottom:26px;}
+  .hero-cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px;}
+  .hero-proof{font-size:12.5px;color:var(--muted-on-dark);margin-bottom:26px;}
+  .hero-visual{position:relative;border-radius:28px;overflow:hidden;background:rgba(255,255,255,.03);aspect-ratio:4/5;max-width:420px;margin:0 auto;}
+  .hero-visual img{width:100%;height:100%;object-fit:cover;}
+  .hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,36,26,0) 40%, rgba(20,36,26,.55) 100%);pointer-events:none;}
+  @media (min-width:860px){
+    .hero-grid{grid-template-columns:1.1fr .9fr;}
+    .hero-visual{margin:0;max-width:none;}
+  }
+
+  /* OFERTA — seleção invertida de potes */
+  .oferta{background:var(--bg);padding:64px 0;}
+  .section-head{text-align:center;max-width:560px;margin:0 auto 40px;}
+  .section-head h2{font-size:clamp(24px,5vw,32px);margin-bottom:10px;}
+  .section-head p{color:var(--muted);font-size:15px;line-height:1.55;}
+  .plans{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media (min-width:760px){.plans{grid-template-columns:repeat(4,1fr);align-items:stretch;}}
+  .plan{
+    position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 18px 20px;display:flex;flex-direction:column;gap:10px;
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .plan.featured{border-color:var(--bronze);box-shadow:0 18px 40px -18px var(--bronze-glow);transform:translateY(-6px);}
+  .plan:hover{transform:translateY(-4px);}
+  .plan .badge{
+    align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--soft-green);color:var(--green-dark);border-radius:100px;padding:4px 10px;
+  }
+  .plan.featured .badge{background:linear-gradient(120deg,var(--bronze),#e3cba0);color:var(--black);}
+  .plan .qty{font-family:'Fraunces',serif;font-size:21px;font-weight:600;}
+  .plan .full-price{font-size:12.5px;color:var(--muted);text-decoration:line-through;}
+  .plan .price{font-size:28px;font-weight:800;color:var(--black);line-height:1;margin:2px 0;}
+  .plan .price small{font-size:13px;font-weight:600;color:var(--muted);}
+  .plan .parcela{font-size:12.5px;color:var(--muted);}
+  .plan .economia{font-size:12px;font-weight:700;color:var(--green-dark);}
+  .plan .btn{margin-top:8px;}
+  .oferta-foot{text-align:center;margin-top:26px;font-size:12.5px;color:var(--muted);}
+
+  /* VIRADA */
+  .virada{background:var(--soft-green);padding:60px 0;}
+  .virada-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:760px;margin:0 auto;}
+  @media (min-width:700px){.virada-grid{grid-template-columns:repeat(2,1fr);}}
+  .virada-item{background:var(--white);border-radius:var(--radius-sm);padding:18px 20px;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);}
+  .virada-item .ico{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;}
+  .virada-item .ico svg{width:17px;height:17px;stroke:#fff;}
+  .virada-item p{font-size:14.5px;line-height:1.45;}
+  .virada-item strong{display:block;font-size:15px;margin-bottom:2px;}
+
+  /* COMPOSIÇÃO — dark, com imagem + cards de ativos */
+  .composicao{background:var(--grad-deep);color:var(--white);padding:64px 0;}
+  .composicao .section-head p{color:var(--muted-on-dark);}
+  .composicao-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;}
+  @media (min-width:900px){.composicao-grid{grid-template-columns:.85fr 1.15fr;}}
+  .composicao-visual{border-radius:24px;overflow:hidden;position:relative;aspect-ratio:3/4;}
+  .composicao-visual img{width:100%;height:100%;object-fit:cover;}
+  .composicao-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,36,26,.05) 0%, rgba(20,36,26,.75) 100%);}
+  .ativos{display:grid;grid-template-columns:1fr;gap:12px;}
+  @media (min-width:560px){.ativos{grid-template-columns:1fr 1fr;}}
+  .ativo{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:16px 18px;}
+  .ativo .when{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--bronze);margin-bottom:6px;}
+  .ativo h3{font-size:16px;margin-bottom:4px;}
+  .ativo p{font-size:13px;line-height:1.5;color:var(--muted-on-dark);}
+
+  /* BENEFÍCIOS + OBJEÇÃO */
+  .beneficios{background:var(--bg);padding:64px 0;}
+  .cards-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+  @media (min-width:640px){.cards-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (min-width:960px){.cards-grid{grid-template-columns:repeat(3,1fr);}}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
+  .card .tag{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-dark);margin-bottom:8px;}
+  .card.objecao .tag{color:var(--bronze);}
+  .card h3{font-size:16.5px;margin-bottom:6px;}
+  .card p{font-size:13.5px;line-height:1.55;color:var(--muted);}
+
+  /* COMO FUNCIONA — linha do tempo lunar (assinatura própria desta LP) */
+  .como-funciona{background:var(--soft-green);padding:64px 0 72px;}
+  .timeline-wrap{max-width:760px;margin:0 auto;padding:20px 0 8px;}
+  .timeline-svg{width:100%;height:auto;display:block;}
+  .timeline-path{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.6s var(--ease);}
+  .timeline-wrap.is-visible .timeline-path{stroke-dashoffset:0;}
+  .timeline-node{opacity:0;transform:scale(.6);transform-box:fill-box;transform-origin:center;transition:opacity .5s var(--ease) .9s, transform .5s var(--ease) .9s;}
+  .timeline-wrap.is-visible .timeline-node{opacity:1;transform:scale(1);}
+  .timeline-node.node-2{transition-delay:1.5s;}
+  .timeline-labels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+  .timeline-labels .lbl{text-align:center;}
+  .timeline-labels .lbl .day{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--green-dark);margin-bottom:4px;}
+  .timeline-labels .lbl p{font-size:13.5px;line-height:1.5;color:var(--text);}
+  .ciclo-note{text-align:center;font-size:13px;color:var(--muted);margin-top:24px;max-width:480px;margin-left:auto;margin-right:auto;}
+
+  /* DEPOIMENTOS */
+  .depoimentos{background:var(--bg);padding:64px 0;}
+  .testi-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+  @media (min-width:700px){.testi-grid{grid-template-columns:repeat(2,1fr);}}
+  .testi{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:20px;}
+  .testi p{font-size:14.5px;line-height:1.55;font-style:italic;margin-bottom:12px;}
+  .testi .who{font-size:12.5px;font-weight:700;color:var(--green-dark);}
+
+  /* FAQ */
+  .faq{background:var(--soft-green);padding:64px 0;}
+  .faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:10px;}
+  .faq-item{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;}
+  .faq-item summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary .plus{flex:0 0 auto;width:20px;height:20px;position:relative;}
+  .faq-item summary .plus::before,.faq-item summary .plus::after{content:"";position:absolute;background:var(--green-dark);border-radius:2px;transition:transform .25s var(--ease);}
+  .faq-item summary .plus::before{width:14px;height:2px;top:9px;left:3px;}
+  .faq-item summary .plus::after{width:2px;height:14px;top:3px;left:9px;}
+  .faq-item[open] summary .plus::after{transform:rotate(90deg);opacity:0;}
+  .faq-item .faq-a{padding:0 20px 18px;font-size:14px;line-height:1.6;color:var(--muted);}
+
+  /* CTA FINAL */
+  .cta-final{background:var(--grad-deep);color:var(--white);padding:64px 0;text-align:center;}
+  .cta-final h2{font-size:clamp(24px,5vw,34px);margin-bottom:14px;}
+  .cta-final p.lede{color:var(--muted-on-dark);max-width:52ch;margin:0 auto 26px;font-size:15.5px;line-height:1.6;}
+  .cta-final .selo-row{margin-bottom:26px;}
+  .cta-final .fine{font-size:12px;color:var(--muted-on-dark);margin-top:16px;}
+
+  footer{background:var(--black);color:var(--muted-on-dark);text-align:center;padding:30px 20px;font-size:12px;line-height:1.7;}
+  footer .moon{opacity:.75;}
+
+  /* barra fixa mobile — só aparece depois que o hero sai da viewport */
+  .mobile-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(20,36,26,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+    transform:translateY(120%);transition:transform .35s var(--ease);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .mobile-bar.is-visible{transform:none;}
+  .mobile-bar .info{color:var(--white);}
+  .mobile-bar .info .from{font-size:10.5px;color:var(--muted-on-dark);}
+  .mobile-bar .info .val{font-size:16px;font-weight:800;}
+  .mobile-bar .btn{padding:12px 20px;font-size:14px;}
+  @media (min-width:860px){.mobile-bar{display:none;}}
+
+  /* pop-up de diagnóstico */
+  .quiz-overlay{
+    position:fixed;inset:0;z-index:100;background:rgba(20,36,26,.55);backdrop-filter:blur(4px);
+    display:none;align-items:flex-end;justify-content:center;padding:0;
+  }
+  .quiz-overlay.is-open{display:flex;}
+  @media (min-width:640px){.quiz-overlay{align-items:center;padding:20px;}}
+  .quiz-card{
+    background:var(--bg);width:100%;max-width:480px;border-radius:24px 24px 0 0;
+    padding:26px 22px 28px;position:relative;max-height:88vh;overflow-y:auto;
+  }
+  @media (min-width:640px){.quiz-card{border-radius:24px;}}
+  .quiz-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(94,140,67,.10);border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .quiz-close svg{width:15px;height:15px;stroke:var(--green-dark);}
+  .quiz-eyebrow{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--green-dark);margin-bottom:8px;}
+  .quiz-step{display:none;}
+  .quiz-step.is-active{display:block;}
+  .quiz-q{font-family:'Fraunces',serif;font-size:19px;margin-bottom:16px;}
+  .quiz-opt{
+    display:block;width:100%;text-align:left;background:var(--white);border:1.5px solid var(--line);
+    border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:10px;font-size:14.5px;font-weight:600;
+    cursor:pointer;transition:border-color .2s var(--ease), background .2s var(--ease);
+  }
+  .quiz-opt:hover{border-color:var(--green-dark);background:var(--soft-green);}
+  .quiz-progress{display:flex;gap:6px;margin-bottom:18px;}
+  .quiz-progress i{flex:1;height:3px;border-radius:2px;background:var(--line);}
+  .quiz-progress i.done{background:var(--green-dark);}
+  .quiz-result p{font-size:14.5px;line-height:1.6;margin-bottom:6px;}
+  .quiz-disclaimer{font-size:12px;color:var(--muted);font-style:italic;margin:14px 0 18px;}
+
+  ::selection{background:var(--green-light);color:var(--black);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <span class="wordmark">VermeFree<span class="dot">.</span></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div data-observe>
+      <div class="eyebrow on-dark">Protocolo Adulto · Desparasitação natural</div>
+      <h1>Vive cansada e inchada mesmo comendo bem?</h1>
+      <p class="lede">Talvez não seja só a alimentação. O Protocolo Adulto VermeFree é uma rotina natural de desparasitação, sincronizada com a lua nova — feita com critério, pra quem quer se sentir leve por dentro sem susto e sem promessa de milagre.</p>
+      <div class="hero-cta-row">
+        <a class="btn" href="#oferta">Conhecer o protocolo</a>
+        <a class="btn btn-ghost" href="#composicao">Ver a composição</a>
+      </div>
+      <p class="hero-proof">Já faz parte da rotina de famílias em todo o Brasil — feito 2 a 4x por ano, sempre no ritmo da lua nova.</p>
+      <div class="selo-row" style="justify-content:flex-start;">
+        <span class="selo on-dark">Vegetal 100%</span>
+        <span class="selo on-dark">Metais Free</span>
+      </div>
+    </div>
+    <div data-observe>
+      <div class="hero-visual">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_121fe000-e27a-4cd0-81e6-9e970e5b277e.png" alt="Ilustração do trato digestivo, representando a rotina de cuidado natural do Protocolo Adulto VermeFree" loading="eager">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA — seleção invertida de potes -->
+<section class="oferta" id="oferta">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">Escolha seu protocolo</div>
+      <h2>Quanto mais rotina, maior a economia</h2>
+      <p>O desconto de volume aplica sozinho no carrinho — sem precisar de cupom. Faça sozinha, com quem você ama, ou garanta o ciclo do ano inteiro de uma vez.</p>
+    </div>
+    <div class="plans" data-observe>
+
+      <div class="plan featured">
+        <span class="badge">Maior economia</span>
+        <span class="qty">8 protocolos</span>
+        <span class="full-price">De R$2.776,00</span>
+        <span class="price">R$2.220,80 <small>/ total</small></span>
+        <span class="parcela">10x de R$222,08</span>
+        <span class="economia">Economia de R$555,20 (20%)</span>
+        <a class="btn btn-bronze btn-block" href="https://vermefree.com.br/cart/48772143415515:8">Quero este</a>
+      </div>
+
+      <div class="plan">
+        <span class="badge">Mais escolhido</span>
+        <span class="qty">5 protocolos</span>
+        <span class="full-price">De R$1.735,00</span>
+        <span class="price">R$1.474,75 <small>/ total</small></span>
+        <span class="parcela">10x de R$147,48</span>
+        <span class="economia">Economia de R$260,25 (15%)</span>
+        <a class="btn btn-block" href="https://vermefree.com.br/cart/48772143415515:5">Quero este</a>
+      </div>
+
+      <div class="plan">
+        <span class="badge">Bom pra começar</span>
+        <span class="qty">3 protocolos</span>
+        <span class="full-price">De R$1.041,00</span>
+        <span class="price">R$936,90 <small>/ total</small></span>
+        <span class="parcela">10x de R$93,69</span>
+        <span class="economia">Economia de R$104,10 (10%)</span>
+        <a class="btn btn-block" href="https://vermefree.com.br/cart/48772143415515:3">Quero este</a>
+      </div>
+
+      <div class="plan">
+        <span class="badge" style="background:rgba(107,122,110,.12);color:var(--muted);">Experimente</span>
+        <span class="qty">1 protocolo</span>
+        <span class="full-price">&nbsp;</span>
+        <span class="price">R$347,00</span>
+        <span class="parcela">10x de R$40,93</span>
+        <span class="economia">&nbsp;</span>
+        <a class="btn btn-block" href="https://vermefree.com.br/cart/48772143415515:1">Quero este</a>
+      </div>
+
+    </div>
+    <p class="oferta-foot" data-observe>Frete grátis acima de R$399 · Garantia de 7 dias · <a href="https://vermefree.com.br/products/protocolo-desparasitacao-adulto-vermefree" style="text-decoration:underline;">ver página do produto</a></p>
+  </div>
+</section>
+
+<!-- A VIRADA -->
+<section class="virada">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">A virada</div>
+      <h2>O que muda quando isso entra na sua rotina</h2>
+      <p>Sem prometer milagre — é constância. É o que costuma mudar quando o protocolo passa a fazer parte do seu ciclo, algumas vezes ao ano.</p>
+    </div>
+    <div class="virada-grid" data-observe>
+      <div class="virada-item">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9Z"/></svg></span>
+        <p><strong>Corpo mais leve</strong>Sensação de leveza no dia a dia, sem inchaço depois das refeições.</p>
+      </div>
+      <div class="virada-item">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 13c1 1.5 2.3 2 4 2s3-.5 4-2"/></svg></span>
+        <p><strong>Intestino funcionando melhor</strong>Rotina intestinal mais regular, sem depender só da alimentação.</p>
+      </div>
+      <div class="virada-item">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/></svg></span>
+        <p><strong>Mais disposição</strong>Aquela sensação de energia que parecia ter sumido no meio do dia.</p>
+      </div>
+      <div class="virada-item">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 8-8m8 8a8 8 0 0 1-8 8"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4"/></svg></span>
+        <p><strong>Prevenção consciente</strong>Uma limpeza natural de rotina, feita com calma, 2 a 4 vezes por ano.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPOSIÇÃO -->
+<section class="composicao" id="composicao">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow on-dark" style="text-align:center;">Prova &amp; composição</div>
+      <h2>4 frascos, cada um no seu momento certo</h2>
+      <p>Ingredientes de origem vegetal, num protocolo pensado pra atuar em conjunto com o ciclo da lua nova.</p>
+    </div>
+    <div class="composicao-grid" data-observe>
+      <div class="composicao-visual">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_31ed6261-e69f-4d41-ae70-25720717ecd1.png" alt="Ilustração científica do trato intestinal, representando a atuação natural dos ativos do protocolo" loading="lazy">
+      </div>
+      <div class="ativos">
+        <div class="ativo">
+          <div class="when">15 dias antes da lua nova</div>
+          <h3>Silimarina 200mg</h3>
+          <p>1 cápsula após o café + 1 após o jantar. Prepara o terreno antes do início do protocolo.</p>
+        </div>
+        <div class="ativo">
+          <div class="when">A partir da lua nova</div>
+          <h3>Tintura 150ml</h3>
+          <p>Nogueira Negra, Cravo-da-Índia, Erva-de-Santa-Maria, Absinto e Berberis vulgaris. 3ml em água, 3x ao dia, antes das refeições.</p>
+        </div>
+        <div class="ativo">
+          <div class="when">Junto da tintura</div>
+          <h3>Óleo de Orégano</h3>
+          <p>70% carvacrol, 200mg. 1 cápsula 3x ao dia, antes das refeições, junto com a tintura.</p>
+        </div>
+        <div class="ativo">
+          <div class="when">À noite</div>
+          <h3>Ornitina 550mg</h3>
+          <p>1 cápsula por dia, 30 minutos antes de deitar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS + OBJEÇÃO -->
+<section class="beneficios">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">Bem-estar &amp; dúvidas comuns</div>
+      <h2>Feito pra quem quer entender antes de comprar</h2>
+    </div>
+    <div class="cards-grid" data-observe>
+      <div class="card">
+        <div class="tag">Bem-estar</div>
+        <h3>Sensação de leveza</h3>
+        <p>Rotina pensada pra apoiar a sensação de corpo limpo por dentro, sem química pesada.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Bem-estar</div>
+        <h3>Sono mais tranquilo</h3>
+        <p>Ornitina à noite, pensada pra fechar o dia com mais calma.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Bem-estar</div>
+        <h3>Disposição no dia a dia</h3>
+        <p>Menos aquela sensação de cansaço sem explicação nenhuma.</p>
+      </div>
+      <div class="card objecao">
+        <div class="tag">É seguro?</div>
+        <h3>Composição 100% vegetal</h3>
+        <p>Selo Vegetal 100% e Metais Free, com posologia clara no rótulo.</p>
+      </div>
+      <div class="card objecao">
+        <div class="tag">Vou passar mal?</div>
+        <h3>Rotina gradual, sem susto</h3>
+        <p>Silimarina prepara o corpo 15 dias antes — nada de choque nem promessa de resultado imediato.</p>
+      </div>
+      <div class="card objecao">
+        <div class="tag">É natural mesmo?</div>
+        <h3>Fórmula 100% fitoterápica</h3>
+        <p>Só ativos de origem vegetal, com posologia clara — pensado como cuidado natural de rotina, feito com critério.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA — linha do tempo lunar -->
+<section class="como-funciona">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">Como funciona</div>
+      <h2>O protocolo segue o ritmo da lua nova</h2>
+      <p>Cada frasco entra num momento certo — não é tudo de uma vez.</p>
+    </div>
+
+    <div class="timeline-wrap" data-observe-timeline>
+      <svg class="timeline-svg" viewBox="0 0 600 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <path class="timeline-path" d="M40 60 H560" stroke="#5E8C43" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle class="timeline-node node-1" cx="40" cy="60" r="14" fill="#5E8C43"/>
+        <circle class="timeline-node node-1" cx="40" cy="60" r="6" fill="#E8F5E4"/>
+        <circle class="timeline-node node-2" cx="560" cy="60" r="16" fill="#C9A876"/>
+        <path class="timeline-node node-2" d="M560 51a9 9 0 1 0 0 18 7 7 0 1 1 0-18Z" fill="#14241a"/>
+      </svg>
+      <div class="timeline-labels">
+        <div class="lbl">
+          <div class="day">Dia -15</div>
+          <p>Começa a Silimarina — preparação antes do ciclo.</p>
+        </div>
+        <div class="lbl">
+          <div class="day">Dia 0 · Lua nova</div>
+          <p>Tintura, Óleo de Orégano e Ornitina começam juntos.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="ciclo-note" data-observe>O protocolo costuma ser repetido de 2 a 4 vezes por ano — sempre no ritmo do próximo ciclo lunar, nunca por pressa.</p>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">Quem já faz parte</div>
+      <h2>O que dizem sobre a rotina</h2>
+    </div>
+    <div class="testi-grid" data-observe>
+      <div class="testi">
+        <p>"Comecei o protocolo na lua nova passada e já sinto o intestino funcionando melhor, bem mais leve."</p>
+        <div class="who">Renata, 38 anos</div>
+      </div>
+      <div class="testi">
+        <p>"Não prometeram milagre, e isso me deixou confiante. É rotina, é constância — senti a diferença depois do segundo ciclo."</p>
+        <div class="who">Camila, 41 anos</div>
+      </div>
+      <div class="testi">
+        <p>"Gosto de entender o que estou tomando antes de comprar. O rótulo é transparente, veio bem explicado."</p>
+        <div class="who">Juliana, 45 anos</div>
+      </div>
+      <div class="testi">
+        <p>"O que mais gostei foi a calma no processo — nada de prometer resultado da noite pro dia, é rotina mesmo."</p>
+        <div class="who">Fernanda, 47 anos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">Perguntas frequentes</div>
+      <h2>Antes de decidir, vale entender</h2>
+    </div>
+    <div class="faq-list" data-observe>
+      <details class="faq-item">
+        <summary>É seguro tomar todos os dias durante o protocolo?<span class="plus"></span></summary>
+        <p class="faq-a">O protocolo foi pensado pra ser seguido no período indicado no rótulo, com ingredientes de origem vegetal. Se você tem alguma condição de saúde específica, está grávida, amamentando ou em tratamento médico, o ideal é conversar com seu profissional de confiança antes de começar.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Vou sentir algum efeito colateral?<span class="plus"></span></summary>
+        <p class="faq-a">Cada corpo reage de um jeito. Algumas pessoas notam uma leve adaptação nos primeiros dias — vale manter uma boa hidratação e seguir a posologia do rótulo com calma.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Como funciona a posologia? Preciso fazer dieta especial?<span class="plus"></span></summary>
+        <p class="faq-a">Não exige dieta radical. É a rotina descrita na seção "como funciona" acima: Silimarina 15 dias antes da lua nova, e os outros três frascos a partir da lua nova, se encaixando nas suas refeições do dia.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Em quanto tempo o pedido chega?<span class="plus"></span></summary>
+        <p class="faq-a">O prazo varia por região — normalmente entre 5 e 12 dias úteis após a confirmação do pedido. Você acompanha tudo pelo código de rastreio.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Nunca fiz nenhum tipo de desparasitação. Posso começar por aqui?<span class="plus"></span></summary>
+        <p class="faq-a">Sim — o protocolo foi desenhado como uma rotina de cuidado que pode começar a qualquer momento, sempre no ritmo da próxima lua nova.</p>
+      </details>
+      <details class="faq-item">
+        <summary>E se eu não gostar?<span class="plus"></span></summary>
+        <p class="faq-a">Você tem 7 dias de garantia a partir do recebimento pra decidir se o protocolo faz sentido pra sua rotina.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Preciso de receita pra comprar?<span class="plus"></span></summary>
+        <p class="faq-a">Não — é um suplemento fitoterápico de venda livre. Mesmo assim, se você tiver dúvida específica sobre sua saúde, vale conversar com seu médico de confiança.</p>
+      </details>
+      <details class="faq-item">
+        <summary>O frete é grátis?<span class="plus"></span></summary>
+        <p class="faq-a">Sim, acima de R$399 em pedidos pra todo o Brasil.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="wrap">
+    <div data-observe>
+      <div class="eyebrow on-dark">Protocolo Adulto</div>
+      <h2>Sua rotina de leveza começa na próxima lua nova</h2>
+      <p class="lede">Natural, com critério e transparência. Sem promessa de milagre — só constância.</p>
+      <div class="selo-row">
+        <span class="selo on-dark">Vegetal 100%</span>
+        <span class="selo on-dark">Metais Free</span>
+        <span class="selo on-dark">Garantia de 7 dias</span>
+        <span class="selo on-dark">Frete grátis acima de R$399</span>
+      </div>
+      <div style="margin-top:26px;">
+        <a class="btn btn-bronze" href="#oferta">Ver os protocolos disponíveis</a>
+      </div>
+      <p class="fine">Regras ANVISA aplicadas: nenhuma promessa de cura ou resultado — é rotina de bem-estar natural.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>VermeFree · Desparasitação natural</div>
+  <div class="moon">🌙 protocolos sincronizados com a lua nova</div>
+</footer>
+
+<!-- barra fixa mobile -->
+<div class="mobile-bar" id="mobile-bar">
+  <div class="info"><div class="from">A partir de</div><div class="val">R$277,60</div></div>
+  <a class="btn btn-bronze" href="#oferta">Ver protocolos</a>
+</div>
+
+<!-- pop-up de diagnóstico -->
+<div class="quiz-overlay" id="quiz-overlay">
+  <div class="quiz-card">
+    <button class="quiz-close" id="quiz-close" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="quiz-eyebrow">Rotina de bem-estar</div>
+
+    <div class="quiz-progress">
+      <i class="p1"></i><i class="p2"></i><i class="p3"></i>
+    </div>
+
+    <div class="quiz-step is-active" data-step="1">
+      <p class="quiz-q">Como anda o seu intestino ultimamente?</p>
+      <button class="quiz-opt" data-next="2">Leve e regular</button>
+      <button class="quiz-opt" data-next="2">Meio irregular</button>
+      <button class="quiz-opt" data-next="2">Prefiro não responder</button>
+    </div>
+
+    <div class="quiz-step" data-step="2">
+      <p class="quiz-q">Há quanto tempo você não faz uma pausa pra cuidar da rotina de limpeza natural?</p>
+      <button class="quiz-opt" data-next="3">Menos de 6 meses</button>
+      <button class="quiz-opt" data-next="3">Mais de 6 meses</button>
+      <button class="quiz-opt" data-next="3">Nunca parei pra pensar nisso</button>
+    </div>
+
+    <div class="quiz-step" data-step="3">
+      <p class="quiz-q">O que mais pesa no seu dia a dia agora?</p>
+      <button class="quiz-opt" data-next="result">Cansaço sem explicação</button>
+      <button class="quiz-opt" data-next="result">Inchaço depois de comer</button>
+      <button class="quiz-opt" data-next="result">Sono ruim</button>
+    </div>
+
+    <div class="quiz-step quiz-result" data-step="result">
+      <p class="quiz-q">Pelo que você compartilhou, o Protocolo Adulto pode se encaixar bem na sua rotina.</p>
+      <p>Natural, no ritmo da lua nova, com critério e sem promessa de milagre.</p>
+      <p class="quiz-disclaimer">Isso não é um diagnóstico — é só uma sugestão de rotina de bem-estar. Qualquer dúvida sobre sua saúde, vale conversar com quem te acompanha de perto.</p>
+      <a class="btn btn-bronze btn-block" href="#oferta" id="quiz-cta">Ver o protocolo</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* reveal ao rolar — IntersectionObserver com fallback direto se indisponível */
+  var observed = document.querySelectorAll('[data-observe]');
+  if ('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
+    observed.forEach(function(el){ io.observe(el); });
+    // rede de segurança — garante que nenhum bloco fique invisível pra sempre
+    // (ex.: navegação por âncora/#hash pulando direto pra uma seção)
+    setTimeout(function(){
+      observed.forEach(function(el){ el.classList.add('is-visible'); });
+    }, 5000);
+  } else {
+    observed.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* linha do tempo lunar — dispara o "desenho" quando entra na tela */
+  var timelineWrap = document.querySelector('[data-observe-timeline]');
+  if (timelineWrap){
+    if ('IntersectionObserver' in window && !reduceMotion){
+      var tio = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            tio.unobserve(entry.target);
+          }
+        });
+      }, {threshold:0.4});
+      tio.observe(timelineWrap);
+    } else {
+      timelineWrap.classList.add('is-visible');
+    }
+  }
+
+  /* sheen automático nos botões primários, em rodízio — mesma técnica do linktree */
+  var buttons = document.querySelectorAll('.btn:not(.btn-ghost)');
+  if (!reduceMotion && buttons.length){
+    var sheenIndex = 0;
+    setInterval(function(){
+      var btn = buttons[sheenIndex % buttons.length];
+      btn.classList.add('sheen-play');
+      setTimeout(function(){ btn.classList.remove('sheen-play'); }, 1200);
+      sheenIndex++;
+    }, 3200);
+  }
+
+  /* barra fixa mobile — aparece quando o hero sai da tela */
+  var mobileBar = document.getElementById('mobile-bar');
+  var hero = document.querySelector('.hero');
+  if (mobileBar && hero && 'IntersectionObserver' in window){
+    var barIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0){
+          mobileBar.classList.add('is-visible');
+        } else {
+          mobileBar.classList.remove('is-visible');
+        }
+      });
+    }, {threshold:0});
+    barIo.observe(hero);
+  }
+
+  /* pop-up de diagnóstico — 1x por sessão, dispara ao passar de 50% da página ou 20s */
+  var overlay = document.getElementById('quiz-overlay');
+  var quizClose = document.getElementById('quiz-close');
+  var steps = document.querySelectorAll('.quiz-step');
+  var progressBars = document.querySelectorAll('.quiz-progress i');
+  var SEEN_KEY = 'vf_quiz_seen_protocolo_adulto';
+
+  function goToStep(id){
+    steps.forEach(function(s){ s.classList.toggle('is-active', s.getAttribute('data-step') === id); });
+    var stepNum = {1:0,2:1,3:2,result:3}[id];
+    progressBars.forEach(function(bar, i){ bar.classList.toggle('done', i < stepNum); });
+  }
+
+  document.querySelectorAll('.quiz-opt').forEach(function(opt){
+    opt.addEventListener('click', function(){ goToStep(opt.getAttribute('data-next')); });
+  });
+
+  function openQuiz(){
+    if (!overlay || sessionStorage.getItem(SEEN_KEY)) return;
+    overlay.classList.add('is-open');
+    sessionStorage.setItem(SEEN_KEY, '1');
+  }
+  function closeQuiz(){ if (overlay) overlay.classList.remove('is-open'); }
+
+  if (quizClose) quizClose.addEventListener('click', closeQuiz);
+  if (overlay) overlay.addEventListener('click', function(e){ if (e.target === overlay) closeQuiz(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeQuiz(); });
+
+  try {
+    if (!sessionStorage.getItem(SEEN_KEY)){
+      var triggered = false;
+      window.addEventListener('scroll', function(){
+        if (triggered) return;
+        var scrolled = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (scrolled > 0.5){ triggered = true; openQuiz(); }
+      });
+      setTimeout(function(){ if (!triggered){ triggered = true; openQuiz(); } }, 20000);
+    }
+  } catch(e){ /* sessionStorage indisponível (modo privado) — sem quiz automático, sem quebrar a página */ }
+
+})();
+</script>
+
+</body>
+</html>

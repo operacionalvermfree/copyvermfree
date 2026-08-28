@@ -16,7 +16,7 @@ Branch de publicação: `lp`. Pasta: `landing-<slug>/index.html` (HTML autoconti
 
 | Produto | Slug | Pasta | Status | Link publicado |
 |---|---|---|---|---|
-| Protocolo Adulto | `protocolo-adulto` | `landing-protocolo-adulto/` | não iniciada | — |
+| Protocolo Adulto | `protocolo-adulto` | `landing-protocolo-adulto/` | publicada | https://raw.githack.com/operacionalvermfree/copyvermfree/lp/landing-protocolo-adulto/index.html |
 | Kids 2 a 4 anos | `kids-2-4` | `landing-kids-2-4/` | não iniciada | — |
 | Kids 5 a 9 anos | `kids-5-9` | `landing-kids-5-9/` | não iniciada | — |
 | Kit Família | `kit-familia` | `landing-kit-familia/` | não iniciada | — |
