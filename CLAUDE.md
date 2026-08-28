@@ -188,7 +188,7 @@ Requer opt-in. Template HSM aprovado fora da janela 24h; quando o cliente respon
 
 ## 10. IDENTIDADE VISUAL (referência pra briefar peças)
 
-- **Paleta oficial** (referência trazida pelo Gabriel em 03/08 — imagens de inspiração ainda a vir, não usar pra fechar identidade de LP sem essas imagens):
+- **Paleta oficial** (referência trazida pelo Gabriel em 03/08):
 
   **Linha Adulto:**
   - Verde claro: `#C0DE96`
@@ -206,6 +206,11 @@ Requer opt-in. Template HSM aprovado fora da janela 24h; quando o cliente respon
   - Azul royal: `#003399`
 
   Estética "clean clínico natural / fitoterapia" pra linha Adulto.
+
+- **Referência de imagem — Linha Adulto** (3 renders 3D/CGI trazidos pelo Gabriel em 04/08, pra hero e/ou seção de composição de LP): anatomia interna do corpo (intestino/estômago) em estilo médico-científico premium — (1) macro de tecido intestinal rosado/coral com um verme segmentado azul-acinzentado dentro de uma membrana translúcida + bactérias bacilares + bolhas; (2) vista em túnel do interior do intestino (estilo endoscopia), vermelho escuro, várias lombrigas brancas espalhadas pelas dobras; (3) estômago/esôfago ilustrado com textura celular, brilho dourado/âmbar contornando o órgão sobre fundo escuro quase preto — mais conceitual, sem parasita visível, a mais "vendável" das três pra abertura de página.
+  - **Leitura de cor:** nenhuma das 3 é verde — dominam tons quentes (vermelho/coral/laranja do tecido) com acento frio (azul-acinzentado do parasita) e glow dourado/âmbar sobre fundo escuro na imagem 3. Isso confirma o padrão já visto nas artes reais da marca e no fundo do linktree: **verde é paleta de UI/marca** (botão, texto, selo — hex acima), **essas imagens quentes/glow são conteúdo de seção específica** (hero/composição), não fundo geral de página inteira. O dourado/bronze `#C9A876` já registrado acima é o elo entre as duas — é o mesmo "rim light" da imagem 3.
+  - **Aplicação sugerida (não decidida ainda — aguardando ok pra construir a LP):** um render nesse estilo (glow dourado sobre fundo escuro, como a imagem 3) como imagem de hero ou da seção "prova/composição"; a imagem 2 (túnel com vermes) é mais pesada e cabe melhor numa seção de meio de página (explicação/composição) do que na abertura, pra não abrir a LP com algo alarmista antes de a pessoa entender do que se trata.
+  - As imagens em si não foram salvas no repo (chegaram coladas no chat, sem arquivo local acessível) — se quiser guardar os arquivos de verdade como matéria-prima, subir em `VermeFree/LP-KIT/02_referencias/` no Drive.
 - **Logo:** wordmark "VermeFree" com pequeno verme/onda verde. Versão infantil: "VermeFree kids" com ilustração de crianças.
 - **Selos do rótulo:** "Vegetal 100%" e "Metais Free".
 - **UGC:** vertical 9:16, caseiro autêntico (luz natural, ambiente doméstico real), mulheres/mães, legendas queimadas, sem marca d'água de app.
