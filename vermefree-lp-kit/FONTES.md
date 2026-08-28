@@ -2,9 +2,7 @@
 
 > Este arquivo aponta para os dados reais. Ele **não substitui** a checagem ao vivo na loja/Drive — se algo aqui parecer desatualizado (preço, estoque, variant ID), confirmar direto na fonte antes de publicar copy.
 
-> ⚠️ **2 conflitos abertos entre `PROMPT-AGENTE-LP-VENDA.md` e o resto do kit, ainda não resolvidos com o Gabriel:**
-> 1. **Desconto de volume do Óleo de Alho** — `CLAUDE.md` §6 diz 3 frascos=10%/6 frascos=15%; o prompt de agente diz 3=15%/6=15%. Não usar nenhum dos dois numa LP publicada até confirmar.
-> 2. **Convenção de arquivo** — o prompt de agente pede `lp-<slug>.html` solto; a convenção já em uso (`PAGINAS.md`, `vermefree-lp-superprompt.md`, e o padrão de link raw.githack) é pasta `landing-<slug>/index.html`. Manter a convenção de pasta até decisão em contrário.
+> Os 2 conflitos que existiam entre `PROMPT-AGENTE-LP-VENDA.md` e o resto do kit já foram resolvidos com o Gabriel (confirmado em 03/08): desconto do Óleo de Alho é **3=10%/6=15%** (o `CLAUDE.md` estava certo); convenção de arquivo é **`landing-<slug>/index.html`** (a já em uso em todo o kit). `PROMPT-AGENTE-LP-VENDA.md` já foi atualizado, sem mais ⚠️ pendente.
 
 ---
 

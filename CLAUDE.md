@@ -121,6 +121,8 @@ Fabricante: **Sintonia Pharma** · Farm. Resp. Graziele Antonini CRF 6177. Todo 
 
 **Frete grátis:** acima de R$399.
 
+**Garantia:** 7 dias.
+
 **Regra de mecânica (importante):** descontos de promoção (ex: 5% Lua Nova) entram no PREÇO do produto, não como cupom — pra empilhar com volume E cupom de influencer sem conflito. (Contexto técnico; o copy só precisa saber que dá pra combinar cupom + desconto.)
 
 **Diretriz de copy sobre desconto:** posicionar sempre como **exceção/oportunidade pontual**, nunca como "sempre tem promoção" (protege margem e percepção de valor).

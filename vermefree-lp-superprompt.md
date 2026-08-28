@@ -23,7 +23,7 @@
    - Conferir balanceamento de tags HTML (abre/fecha bate).
 5. **Nunca colocar identificador de modelo de IA** (nome do modelo, versão, etc.) em commit, PR, código-fonte ou comentário.
 6. **1 CTA claro por peça**, seguindo a régua de claim do `CLAUDE.md` (nunca "elimina/erradica/cura", nunca citar Dr. William Araujo, nunca diagnosticar o leitor).
-7. **Elementos de conversão obrigatórios numa LP de venda por produto** (detalhado em `vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md`): seleção invertida de potes (maior kit/mais economia ancorando no topo), pop-up de diagnóstico ANVISA-safe (nunca diagnostica, só sugere protocolo a partir de bem-estar/rotina), selos + garantia de 7 dias ⚠️ política nova, confirmar com o Gabriel antes de publicar — não estava em `CLAUDE.md` até este documento.
+7. **Elementos de conversão obrigatórios numa LP de venda por produto** (detalhado em `vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md`): seleção invertida de potes (maior kit/mais economia ancorando no topo), pop-up de diagnóstico ANVISA-safe (nunca diagnostica, só sugere protocolo a partir de bem-estar/rotina), selos + garantia de 7 dias (confirmada, ver `CLAUDE.md` §6).
 
 ## 3. Repertório de técnica (inspiração — nunca copiar 1:1)
 

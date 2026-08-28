@@ -3,7 +3,7 @@
 Equivalente ao fluxo que já existe pra Botanika (`botanika-lp-kit/COMANDO-CRIAR-LP.md`). Copiar o bloco abaixo, trocar só a URL/produto, colar num **chat novo** com acesso ao repo `operacionalvermfree/copyvermfree`.
 
 ```
-Leia vermefree-lp-kit/COMO-USAR.md neste repo e siga-o à risca (ele manda ler antes, nesta ordem: CLAUDE.md, PAGINAS.md, vermefree-lp-superprompt.md, vermefree-lp-kit/FONTES.md e REPERTORIO-TECNICO.md). Se o produto for um dos 5 do PAGINAS.md, leia também vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md (ficha completa: ganchos, variant ID, anatomia de página) — mas ignore os 2 pontos marcados com ⚠️ nele até eu confirmar. Use como régua git show origin/lp:linktree-vermefree/index.html [+ qualquer landing-<slug>/index.html já publicada — conferir PAGINAS.md]. Vou criar a LP do [nome do produto / URL na loja]. Responda só com (a) pasta, (b) identidade proposta e (c) referências — e aguarde meu ok.
+Leia vermefree-lp-kit/COMO-USAR.md neste repo e siga-o à risca (ele manda ler antes, nesta ordem: CLAUDE.md, PAGINAS.md, vermefree-lp-superprompt.md, vermefree-lp-kit/FONTES.md e REPERTORIO-TECNICO.md). Se o produto for um dos 5 do PAGINAS.md, leia também vermefree-lp-kit/PROMPT-AGENTE-LP-VENDA.md (ficha completa: ganchos, variant ID, anatomia de página). Use como régua git show origin/lp:linktree-vermefree/index.html [+ qualquer landing-<slug>/index.html já publicada — conferir PAGINAS.md]. Vou criar a LP do [nome do produto / URL na loja]. Responda só com (a) pasta, (b) identidade proposta e (c) referências — e aguarde meu ok.
 ```
 
 ## Por que esse formato (a/b/c + aguardar ok)

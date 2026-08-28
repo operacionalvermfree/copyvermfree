@@ -4,7 +4,7 @@
 >
 > **Antes de usar este documento pra construir uma LP, ler também:** `CLAUDE.md` (marca/ANVISA — tem prioridade sobre qualquer coisa aqui em caso de conflito), `PAGINAS.md`, `vermefree-lp-superprompt.md` e o resto de `vermefree-lp-kit/`. Ver `COMANDO-CRIAR-LP.md` pra abrir o pedido num chat novo.
 >
-> ⚠️ **Dois pontos deste documento estavam em conflito com o que já era fonte de verdade e ainda não foram resolvidos** — ver aviso no topo de `FONTES.md` e `vermefree-lp-superprompt.md`. Não usar os números/convenção em conflito até isso ser confirmado.
+> Dois pontos deste documento estavam em conflito com o resto do kit — já resolvidos com o Gabriel em 03/08 e corrigidos abaixo: desconto do Óleo de Alho (era 3=15%/6=15% neste doc, o correto é 3=10%/6=15%, igual ao `CLAUDE.md`) e convenção de arquivo (era `lp-<slug>.html` solto neste doc, o correto é `landing-<slug>/index.html`, igual ao resto do kit).
 
 ---
 
@@ -18,7 +18,7 @@ Você é especialista em **landing pages de conversão** para e-commerce de saú
 - **Sem frameworks, sem build, sem dependências** de CDN (exceto a tag de Google Fonts). Precisa abrir direto do arquivo e funcionar em qualquer hospedagem estática (será servido via git/raw e depois apontado pra hospedagem própria).
 - **Mobile-first e responsivo** (a maior parte do tráfego é celular). Nada pode estourar a largura no mobile.
 - **Performático e acessível**: HTML semântico, imagens com `alt`, foco visível no teclado, respeitar `prefers-reduced-motion`, contraste legível.
-- Nome do arquivo: ⚠️ ver aviso de convenção de pasta no topo — este documento original pedia `lp-<slug-do-produto>.html` solto, mas a convenção já em uso no kit (`PAGINAS.md`, `vermefree-lp-superprompt.md`) é pasta `landing-<slug>/index.html`. Confirmar com o Gabriel antes da primeira publicação.
+- Nome do arquivo: pasta `landing-<slug>/index.html` — convenção já em uso em todo o kit (`PAGINAS.md`, `vermefree-lp-superprompt.md`, o linktree). Não usar `lp-<slug>.html` solto.
 
 ## 3. A marca (contexto)
 
@@ -73,13 +73,13 @@ Amiga/mãe que se cuida e cuida da família. Natural, honesto, acolhedor, consul
 
 ## 7. Elementos de conversão OBRIGATÓRIOS
 
-**a) Seleção invertida de potes/kits.** Mostrar as opções de quantidade em ordem **decrescente de destaque a partir da maior** (a de maior valor/economia aparece primeiro/topo, ancorando o preço), com badges "Menor preço" / "Mais escolhido". Preço cheio riscado + preço com desconto de volume + parcela + economia. O **desconto de volume aplica sozinho no checkout** (não usar cupom). Faixas de volume dos protocolos: **3 un = 10% · 5 un = 15% · 8 un = 20%**. (Para o Óleo de Alho: ⚠️ ver conflito de percentual no aviso do topo deste arquivo.) O **Kit Família NUNCA entra em desconto de ação/volume** — vender pelo combo.
+**a) Seleção invertida de potes/kits.** Mostrar as opções de quantidade em ordem **decrescente de destaque a partir da maior** (a de maior valor/economia aparece primeiro/topo, ancorando o preço), com badges "Menor preço" / "Mais escolhido". Preço cheio riscado + preço com desconto de volume + parcela + economia. O **desconto de volume aplica sozinho no checkout** (não usar cupom). Faixas de volume dos protocolos: **3 un = 10% · 5 un = 15% · 8 un = 20%**. Óleo de Alho: **3 frascos = 10% · 6 frascos = 15%**. O **Kit Família NUNCA entra em desconto de ação/volume** — vender pelo combo.
 
 **b) Pop-up interativo de diagnóstico.** Um mini-quiz leve (2–4 perguntas de bem-estar/rotina, ex.: "Como anda seu intestino ultimamente?", "Quando foi sua última limpeza natural?") que, ao final, **sugere o protocolo** e leva ao CTA. **Regra ANVISA:** o quiz **não diagnostica** nem afirma que a pessoa "tem verme" — ele fala de **rotina e bem-estar** e recomenda o protocolo como cuidado preventivo natural. Aparecer 1x por sessão (exit-intent ou após rolar ~50%).
 
 **c) Benefícios + quebra de objeção.** Cards com os benefícios de bem-estar (leveza, intestino regulado, sono, disposição) **e** as objeções quebradas ("é seguro?", "passa mal?", "é natural mesmo?", "criança pode?"). Sempre em linguagem segura.
 
-**d) Selos e garantia.** Selos *Vegetal 100%*, *Metais Free*, "manipulado no Brasil", padrão farmacêutico. **Garantia de 7 dias** ⚠️ política nova, não estava em `CLAUDE.md` — confirmar antes de publicar. Frete grátis acima de R$ 399.
+**d) Selos e garantia.** Selos *Vegetal 100%*, *Metais Free*, "manipulado no Brasil", padrão farmacêutico. **Garantia de 7 dias** (ver `CLAUDE.md` §6). Frete grátis acima de R$ 399.
 
 ## 8. CTA e checkout
 
@@ -159,7 +159,7 @@ Amiga/mãe que se cuida e cuida da família. Natural, honesto, acolhedor, consul
 
 ### 🧄 Óleo de Alho Desodorizado 500mg
 - **Slug/pasta:** `landing-oleo-de-alho/` · **Handle:** `oleo-de-alho-desodorizado-500mg` · **VARIANT_ID:** `48968692891867`
-- **Preço:** R$ 67,00 (1 frasco = 30 dias) · **Parcela:** 10x de R$ 7,90 · volume: ⚠️ ver conflito de percentual no aviso do topo deste arquivo.
+- **Preço:** R$ 67,00 (1 frasco = 30 dias) · **Parcela:** 10x de R$ 7,90 · volume: **3 frascos = 10% · 6 frascos = 15%**.
 - **Público:** quem já fez o protocolo e quer **manutenção mensal**; também entrada de baixo ticket.
 - **Ângulo:** passo de **manutenção do mês** — ajuda a manter a rotina de bem-estar do intestino entre um ciclo e outro. Desodorizado (sem hálito de alho). Seleção invertida de potes 6 → 3 → 1 (cada frasco = 30 dias).
 - **Ganchos:** "Mantenha a leveza depois do protocolo." · "O passo simples de manutenção do mês."
