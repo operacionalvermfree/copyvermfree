@@ -15,8 +15,7 @@
 <script type="importmap">
 {
   "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
   }
 }
 </script>
@@ -55,12 +54,19 @@
     --maxw:68rem;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  html{overflow-x:hidden;scroll-behavior:smooth;}
+  /* overflow-x:hidden é a rede de segurança padrão do kit contra rolagem
+     horizontal indesejada — mas força overflow-y:auto (regra da spec CSS
+     quando só um eixo é setado), o que quebra position:sticky (usado na
+     seção .jornada). overflow-x:clip resolve os dois: contém a rolagem
+     horizontal sem criar container de scroll. hidden fica de fallback
+     pra navegador sem suporte a clip (Safari <16, raro em 2026). */
+  html{overflow-x:hidden;overflow-x:clip;scroll-behavior:smooth;}
   body{
     font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     background:var(--bg);
     color:var(--text);
     overflow-x:hidden;
+    overflow-x:clip;
     font-size:1rem;
   }
   h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
@@ -134,39 +140,31 @@
   .topbar .wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;color:var(--white);}
   .topbar .wordmark .dot{color:var(--green-light);}
 
-  /* ===== HERO — palco WebGL (campo de partículas "lua nova"), contido ao
-     hero (não a página inteira), pausado quando sai da viewport ===== */
-  .hero{
-    position:relative;overflow:hidden;color:var(--white);
-    min-height:100svh;display:flex;flex-direction:column;
-    background:var(--grad-deep); /* base sólida — se o WebGL não rodar, isso nunca falta */
-  }
-  .hero-stage{position:absolute;inset:0;z-index:0;}
-  #hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
-  .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(20,36,26,.15) 0%, rgba(20,36,26,.05) 40%, rgba(15,28,20,.65) 100%);pointer-events:none;}
-  .hero-content{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:6rem 1.25rem 3rem;}
-  .hero-content .wrap{width:100%;}
-  .hero-title{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.1;margin-bottom:1rem;max-width:16ch;font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
-  .hero .lede{font-size:1.03rem;line-height:1.6;color:var(--muted-on-dark);max-width:34ch;margin-bottom:1.6rem;}
-  .hero-cta-row{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.4rem;}
-  .hero-proof{font-size:0.78rem;color:var(--muted-on-dark);margin-bottom:1.6rem;}
-  .scroll-hint{position:absolute;left:50%;bottom:1.4rem;transform:translateX(-50%);z-index:2;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-on-dark);animation:hintbob 2.4s ease-in-out infinite;}
+  /* ===== JORNADA — abre a LP inteira como UM voo contínuo por dentro do
+     intestino (WebGL: túnel + vermes 3D grudados na parede), que limpa de
+     vermelho/infestado pra verde/marca conforme a pessoa rola. A seção é
+     alta (260vh) com um palco `position:sticky` por dentro — a cena fica
+     fixa na tela enquanto os 3 "beats" de texto se revezam por cima,
+     dirigidos pelo progresso de rolagem só dentro desta seção. ===== */
+  .jornada{position:relative;height:260vh;}
+  .jornada-stage{position:sticky;top:0;height:100svh;overflow:hidden;color:var(--white);background:linear-gradient(165deg,#2a0f0a 0%,#140604 100%);}
+  #tunnel-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;}
+  .jornada-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(10,10,8,.25) 0%, rgba(10,10,8,.05) 40%, rgba(8,8,7,.7) 100%);pointer-events:none;}
+  .beat{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.25rem;opacity:0;transition:opacity .6s var(--ease);pointer-events:none;}
+  .beat.is-active{opacity:1;}
+  .beat-title{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.14;margin-bottom:1.1rem;max-width:17ch;font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  .beat .lede{font-size:1.03rem;line-height:1.62;color:rgba(255,241,233,0.82);max-width:36ch;margin-bottom:1.6rem;}
+  .beat-3{justify-content:flex-end;padding-bottom:3rem;}
+  .beat-3 .beat-title{max-width:16ch;}
+  .beat-cta-row{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.4rem;pointer-events:none;}
+  .beat.is-active .beat-cta-row a{pointer-events:auto;}
+  .beat-proof{font-size:0.78rem;color:rgba(255,241,233,0.7);margin-bottom:1.6rem;}
+  .jornada-eyebrow{color:#e8a06a;}
+  .beat-3 .jornada-eyebrow{color:var(--bronze);}
+  .scroll-hint{position:absolute;left:50%;bottom:1.4rem;transform:translateX(-50%);z-index:3;font-size:0.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,241,233,0.7);animation:hintbob 2.4s ease-in-out infinite;opacity:0;transition:opacity .5s var(--ease);}
+  .scroll-hint.is-visible{opacity:1;}
   @keyframes hintbob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,0.35rem);}}
   @media (prefers-reduced-motion:reduce){.scroll-hint{animation:none;}}
-
-  /* ===== PROBLEMA — abre a LP: fundo de tecido intestinal + vermes 3D
-     procedurais rastejando por cima (WebGL, contido a esta seção, pausado
-     fora da viewport). Ato 1 da estrutura problema→solução; a seção
-     seguinte (.hero, verde/limpo) é o "giro" pra marca/produto. ===== */
-  .problema{position:relative;overflow:hidden;color:var(--white);min-height:100svh;display:flex;flex-direction:column;background:linear-gradient(165deg,#2a0f0a 0%,#140604 100%);}
-  .problema-bg{position:absolute;inset:0;z-index:0;}
-  .problema-bg img{width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(1.05);}
-  #worm-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1;}
-  .problema-scrim{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg, rgba(20,8,6,.35) 0%, rgba(20,8,6,.15) 35%, rgba(14,5,4,.82) 100%);pointer-events:none;}
-  .problema-content{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;justify-content:center;padding:5rem 1.25rem;}
-  .problema-title{font-size:clamp(1.75rem, 1.1rem + 4.5vw, 3.1rem);line-height:1.14;margin-bottom:1.1rem;max-width:17ch;font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
-  .problema .lede{font-size:1.03rem;line-height:1.62;color:rgba(255,241,233,0.78);max-width:36ch;}
-  .problema .eyebrow.on-dark{color:#e8a06a;}
 
   .section-head{text-align:center;max-width:34rem;margin:0 auto 2.5rem;}
   .section-head h2{font-size:clamp(1.35rem, 1.05rem + 1.6vw, 1.85rem);margin-bottom:0.6rem;}
@@ -215,12 +213,14 @@
   .composicao .section-head p{color:var(--muted-on-dark);}
   .composicao-grid{display:grid;grid-template-columns:1fr;gap:1.75rem;align-items:start;}
   @media (min-width:56rem){.composicao-grid{grid-template-columns:.85fr 1.15fr;}}
-  .composicao-visual{border-radius:1.5rem;overflow:hidden;position:relative;aspect-ratio:3/4;}
-  .composicao-visual img{width:100%;height:100%;object-fit:cover;}
-  .composicao-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,36,26,.05) 0%, rgba(20,36,26,.75) 100%);}
+  .composicao-visual{border-radius:1.5rem;overflow:hidden;position:relative;aspect-ratio:3/4;background:#0d1a10;}
+  .composicao-visual img{width:100%;height:100%;object-fit:contain;}
+  .composicao-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,36,26,0) 0%, rgba(20,36,26,.55) 100%);pointer-events:none;}
   .ativos{display:grid;grid-template-columns:1fr;gap:0.75rem;}
   @media (min-width:35rem){.ativos{grid-template-columns:1fr 1fr;}}
-  .ativo{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:1rem 1.1rem;}
+  .ativo{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:1rem 1.1rem;display:flex;gap:0.85rem;align-items:flex-start;}
+  .ativo .thumb{flex:0 0 auto;width:3.4rem;height:3.4rem;border-radius:0.7rem;overflow:hidden;background:#fff;}
+  .ativo .thumb img{width:100%;height:100%;object-fit:cover;}
   .ativo .when{font-size:0.65rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--bronze);margin-bottom:0.4rem;}
   .ativo h3{font-size:1rem;margin-bottom:0.25rem;}
   .ativo p{font-size:0.82rem;line-height:1.5;color:var(--muted-on-dark);}
@@ -338,55 +338,55 @@
   </div>
 </div>
 
-<!-- PROBLEMA — ato 1: fundo de tecido intestinal + vermes 3D procedurais
-     rastejando (WebGL). Abre a LP com impacto visual antes do giro pra
-     marca/produto na seção seguinte. -->
-<section class="problema" id="problema">
-  <div class="problema-bg" aria-hidden="true">
-    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_31ed6261-e69f-4d41-ae70-25720717ecd1.png" alt="" loading="eager">
-  </div>
-  <canvas id="worm-canvas" aria-hidden="true"></canvas>
-  <div class="problema-scrim" aria-hidden="true"></div>
-  <div class="problema-content">
-    <div class="wrap">
-      <div class="eyebrow on-dark" data-observe>Antes de tudo</div>
-      <h1 class="problema-title" data-observe>Cansaço, inchaço, sono ruim — às vezes o motivo mora onde você não vê</h1>
-      <p class="lede" data-observe>O intestino é o centro de tudo. Quando ele está sobrecarregado, o corpo inteiro sente — mesmo sem um motivo óbvio à vista.</p>
-    </div>
-  </div>
-  <div class="scroll-hint">role e conheça a rotina que muda isso</div>
-</section>
+<!-- JORNADA — um voo contínuo por dentro do intestino, controlado pela
+     rolagem: começa infestado (vermes 3D grudados na parede) e limpa pra
+     verde/marca até o beat final, que apresenta o Protocolo Adulto. -->
+<section class="jornada" id="jornada">
+  <div class="jornada-stage" id="jornada-stage">
+    <canvas id="tunnel-canvas" aria-hidden="true"></canvas>
+    <div class="jornada-scrim" aria-hidden="true"></div>
 
-<!-- HERO — o giro: palco WebGL "Campo Lunar" (verde/limpo), apresenta a
-     marca/rotina como resposta natural ao que foi mostrado no ato 1 -->
-<section class="hero" id="hero">
-  <div class="hero-stage" aria-hidden="true">
-    <canvas id="hero-canvas"></canvas>
-  </div>
-  <div class="hero-scrim" aria-hidden="true"></div>
-  <div class="hero-content">
-    <div class="wrap">
-      <div class="eyebrow on-dark" data-reveal-word>A resposta é mais simples do que parece</div>
-      <h2 class="hero-title split-line" data-split>Uma rotina natural pra cuidar disso, no seu tempo</h2>
-      <p class="lede" data-reveal-word>O Protocolo Adulto VermeFree é uma rotina de desparasitação natural, sincronizada com a lua nova — feita com critério, sem susto e sem promessa de milagre.</p>
-      <div class="hero-cta-row" data-observe>
-        <a class="btn" href="#oferta">Conhecer o protocolo <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-ghost" href="#composicao">Ver a composição</a>
-      </div>
-      <p class="hero-proof" data-reveal-word>Já faz parte da rotina de famílias em todo o Brasil — feito 2 a 4x por ano, sempre no ritmo da lua nova.</p>
-      <div class="selo-row" style="justify-content:flex-start;" data-observe>
-        <span class="selo on-dark">Vegetal 100%</span>
-        <span class="selo on-dark">Metais Free</span>
+    <div class="beat beat-1" data-beat="1">
+      <div class="wrap">
+        <div class="eyebrow jornada-eyebrow">Antes de tudo</div>
+        <h1 class="beat-title">Cansaço, inchaço, sono ruim — às vezes o motivo mora onde você não vê</h1>
+        <p class="lede">O intestino é o centro de tudo. Quando ele está sobrecarregado, o corpo inteiro sente — mesmo sem um motivo óbvio à vista.</p>
       </div>
     </div>
+
+    <div class="beat beat-2" data-beat="2">
+      <div class="wrap">
+        <div class="eyebrow jornada-eyebrow">A resposta é natural</div>
+        <h2 class="beat-title">O corpo pede uma pausa pra se limpar — com calma, sem susto</h2>
+      </div>
+    </div>
+
+    <div class="beat beat-3" data-beat="3">
+      <div class="wrap">
+        <div class="eyebrow jornada-eyebrow" data-reveal-word>Protocolo Adulto · Desparasitação natural</div>
+        <h2 class="beat-title split-line" data-split>Uma rotina natural pra cuidar disso, no seu tempo</h2>
+        <p class="lede" data-reveal-word>O Protocolo Adulto VermeFree é uma rotina de desparasitação natural, sincronizada com a lua nova — feita com critério, sem susto e sem promessa de milagre.</p>
+        <div class="beat-cta-row">
+          <a class="btn" href="#oferta">Conhecer o protocolo <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#composicao">Ver a composição</a>
+        </div>
+        <p class="beat-proof">Já faz parte da rotina de famílias em todo o Brasil — feito 2 a 4x por ano, sempre no ritmo da lua nova.</p>
+        <div class="selo-row" style="justify-content:flex-start;">
+          <span class="selo on-dark">Vegetal 100%</span>
+          <span class="selo on-dark">Metais Free</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint" id="scroll-hint">role e sinta a rotina limpar essa jornada</div>
   </div>
-  <div class="scroll-hint">role para saber mais</div>
 </section>
 
 <!-- OFERTA — seleção invertida de potes -->
 <section class="oferta" id="oferta">
   <div class="wrap">
     <div class="section-head" data-observe>
+      <img src="https://cdn.shopify.com/s/files/1/0827/3267/9387/files/produto-card-1-adulto_901f4e4f-5bf9-4919-aa54-382006a76276.png?v=1779135064" alt="Kit completo do Protocolo Adulto VermeFree" loading="lazy" style="width:9rem;margin:0 auto 1.25rem;">
       <div class="eyebrow" style="text-align:center;">Escolha seu protocolo</div>
       <h2><span class="split-line" data-split>Quanto mais rotina, maior a economia</span></h2>
       <p>O desconto de volume aplica sozinho no carrinho — sem precisar de cupom. Faça sozinha, com quem você ama, ou garanta o ciclo do ano inteiro de uma vez.</p>
@@ -477,28 +477,40 @@
     </div>
     <div class="composicao-grid" data-observe>
       <div class="composicao-visual">
-        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260828_140742_121fe000-e27a-4cd0-81e6-9e970e5b277e.png" alt="Ilustração científica do trato digestivo, representando a atuação natural dos ativos do protocolo" loading="lazy">
+        <img src="https://cdn.shopify.com/s/files/1/0827/3267/9387/files/produto-card-1-adulto_901f4e4f-5bf9-4919-aa54-382006a76276.png?v=1779135064" alt="Kit completo do Protocolo Adulto VermeFree — os 4 frascos: Silimarina, Tintura, Óleo de Orégano e Ornitina" loading="lazy">
       </div>
       <div class="ativos">
         <div class="ativo">
-          <div class="when">15 dias antes da lua nova</div>
-          <h3>Silimarina 200mg</h3>
-          <p>1 cápsula após o café + 1 após o jantar. Prepara o terreno antes do início do protocolo.</p>
+          <div class="thumb"><img src="https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-07-silimarina.jpg?v=1778772118" alt="Frasco de Silimarina VermeFree" loading="lazy"></div>
+          <div>
+            <div class="when">15 dias antes da lua nova</div>
+            <h3>Silimarina 200mg</h3>
+            <p>1 cápsula após o café + 1 após o jantar. Prepara o terreno antes do início do protocolo.</p>
+          </div>
         </div>
         <div class="ativo">
-          <div class="when">A partir da lua nova</div>
-          <h3>Tintura 150ml</h3>
-          <p>Nogueira Negra, Cravo-da-Índia, Erva-de-Santa-Maria, Absinto e Berberis vulgaris. 3ml em água, 3x ao dia, antes das refeições.</p>
+          <div class="thumb"><img src="https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-05-tintura-gota.jpg?v=1778772119" alt="Frasco da Tintura VermeFree" loading="lazy"></div>
+          <div>
+            <div class="when">A partir da lua nova</div>
+            <h3>Tintura 150ml</h3>
+            <p>Nogueira Negra, Cravo-da-Índia, Erva-de-Santa-Maria, Absinto e Berberis vulgaris. 3ml em água, 3x ao dia, antes das refeições.</p>
+          </div>
         </div>
         <div class="ativo">
-          <div class="when">Junto da tintura</div>
-          <h3>Óleo de Orégano</h3>
-          <p>70% carvacrol, 200mg. 1 cápsula 3x ao dia, antes das refeições, junto com a tintura.</p>
+          <div class="thumb"><img src="https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-01-oregano-frontal.jpg?v=1778772118" alt="Frasco do Óleo Essencial de Orégano VermeFree" loading="lazy"></div>
+          <div>
+            <div class="when">Junto da tintura</div>
+            <h3>Óleo de Orégano</h3>
+            <p>70% carvacrol, 200mg. 1 cápsula 3x ao dia, antes das refeições, junto com a tintura.</p>
+          </div>
         </div>
         <div class="ativo">
-          <div class="when">À noite</div>
-          <h3>Ornitina 550mg</h3>
-          <p>1 cápsula por dia, 30 minutos antes de deitar.</p>
+          <div class="thumb"><img src="https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-06-ornitina.jpg?v=1778772119" alt="Frasco de Ornitina VermeFree" loading="lazy"></div>
+          <div>
+            <div class="when">À noite</div>
+            <h3>Ornitina 550mg</h3>
+            <p>1 cápsula por dia, 30 minutos antes de deitar.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -726,67 +738,59 @@
 
 <script type="module">
 /* ===================================================================
-   HERO WEBGL — "Campo Lunar": campo de partículas verde brilhante,
-   adaptado da técnica "Flow Wave" (ver vermefree-lp-kit/REPERTORIO-
-   TECNICO.md) e recolorido 100% na paleta oficial da marca. Contido
-   ao hero (não à página inteira) e pausado quando sai da viewport —
-   nunca compete por bateria/GPU com o resto da LP no celular.
-   Se WebGL não estiver disponível, o gradiente escuro do CSS já
-   cobre o hero — a página nunca fica quebrada. =========================== */
-(async function initHeroScene(){
+   JORNADA — voo contínuo por dentro do intestino: um túnel WebGL (visto
+   por dentro, paredes orgânicas deformadas por ruído) com vermes 3D
+   procedurais grudados na parede (InstancedMesh de cápsulas — mesma
+   técnica validada antes, agora orientada à superfície cilíndrica em
+   vez de espaço livre). A cor migra de infestado (vermelho/marrom) pra
+   limpo (verde/bronze da marca) conforme o progresso de rolagem DENTRO
+   da seção .jornada (via position:sticky) avança — os vermes também
+   somem nessa transição. Contido à seção, pausado fora da viewport,
+   reduzido no mobile, pulado com reduced-motion ou sem WebGL — o
+   gradiente CSS do palco cobre sempre. Ver vermefree-lp-kit/
+   REPERTORIO-TECNICO.md §7 pro histórico completo da técnica. =========== */
+(async function initJourneyScene(){
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const heroEl = document.getElementById('hero');
-  const canvas = document.getElementById('hero-canvas');
-  if (!canvas || reduceMotion) return;
-  if (!window.WebGLRenderingContext) return;
+  const sectionEl = document.getElementById('jornada');
+  const stageEl = document.getElementById('jornada-stage');
+  const canvas = document.getElementById('tunnel-canvas');
+  const beats = document.querySelectorAll('.beat');
+  const scrollHint = document.getElementById('scroll-hint');
 
-  let THREE, EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, GammaCorrectionShader, CopyShader;
-  try {
-    [THREE, {EffectComposer}, {RenderPass}, {UnrealBloomPass}, {ShaderPass}, {GammaCorrectionShader}, {CopyShader}] = await Promise.all([
-      import('three'),
-      import('three/addons/postprocessing/EffectComposer.js'),
-      import('three/addons/postprocessing/RenderPass.js'),
-      import('three/addons/postprocessing/UnrealBloomPass.js'),
-      import('three/addons/postprocessing/ShaderPass.js'),
-      import('three/addons/shaders/GammaCorrectionShader.js'),
-      import('three/addons/shaders/CopyShader.js')
-    ]);
-  } catch (e) {
-    return; // sem internet/CDN bloqueado — o gradiente CSS do hero já resolve
+  function setBeatProgress(p){
+    // 3 beats distribuídos ao longo do progresso 0..1 da seção
+    var idx = p < 0.30 ? 0 : (p < 0.68 ? 1 : 2);
+    beats.forEach(function(b,i){ b.classList.toggle('is-active', i===idx); });
+    if (scrollHint) scrollHint.classList.toggle('is-visible', p < 0.06);
+  }
+
+  if (!canvas || reduceMotion || !window.WebGLRenderingContext){
+    // sem WebGL/CDN/ou reduced-motion: mostra o beat 1 fixo, página segue normal
+    if (beats[0]) beats[0].classList.add('is-active');
+    return;
+  }
+
+  let THREE;
+  try { THREE = await import('three'); } catch(e) {
+    if (beats[0]) beats[0].classList.add('is-active');
+    return;
   }
 
   const isMobile = window.innerWidth < 700;
-
-  const bgColor='#14241a', flameColor='#C9A876', flameColor2='#E8F5E4', flameAmt=0.16;
-  const atmoColor='#C9A876', atmoCount=isMobile?140:260, atmoSize=22, atmoSpeed=0.8;
-  const colorLow='#14241a', colorHigh='#C0DE96';
-  const opacity=0.28, pointSize=isMobile?4.6:5.2, brightness=0.5;
-  const waveHeight=2.6, flow=0.8, tilt=0, scale=0.275, scrollRise=0.8;
-  const camStartY=6, camStartZ=14, camEndY=1.0, camEndZ=-1.5;
-  const lookStartZ=2, lookEndZ=-14, parallax=1.0;
-  const pointerRadius=6.5, pointerStrength=isMobile?0:0.7;
-
-  const Lerp=(a,b,t)=>a+(b-a)*t;
+  const TUNNEL_RADIUS = 3.2, TUNNEL_LENGTH = 90, TRAVEL = 78;
   const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
-  function hexToVec3(hex){ const n=parseInt(hex.slice(1),16); return new THREE.Vector3(((n>>16)&255)/255, ((n>>8)&255)/255, (n&255)/255); }
+  const Lerp=(a,b,t)=>a+(b-a)*t;
+  function hexToVec3(hex){ const n=parseInt(hex.slice(1),16); return new THREE.Vector3(((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255); }
+  function smoothstepJS(e0,e1,x){ const t=clamp((x-e0)/(e1-e0),0,1); return t*t*(3-2*t); }
 
   let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
-  } catch(e) { return; }
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias:true }); }
+  catch(e){ if (beats[0]) beats[0].classList.add('is-active'); return; }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile?1.5:2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  scene.fog = new THREE.Fog(0x000000, 0, 15);
-
-  const LAYERS = { NONE:0, TORUS_SCENE:1, BLOOM_SCENE:2, ENTIRE_SCENE:3 };
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 400);
-  camera.position.set(0, camStartY, camStartZ);
-  camera.layers.enable(LAYERS.TORUS_SCENE);
-  camera.layers.enable(LAYERS.BLOOM_SCENE);
-  camera.layers.enable(LAYERS.ENTIRE_SCENE);
-  scene.add(camera);
+  const camera = new THREE.PerspectiveCamera(65, 1, 0.05, 60);
+  camera.position.set(0,0,0);
 
   const SNOISE = `
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
@@ -813,359 +817,149 @@ float snoise(vec3 v){
   return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
 }`;
 
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const segs = isMobile ? [90,260] : [200,600];
-  const geometry = new THREE.SphereGeometry(4.2, segs[0], segs[1]);
-  const uniforms = {
-    uTime:{value:0}, uStream:{value:0}, uAppear:{value:0},
-    uColLow:{value:hexToVec3(colorLow)}, uColHigh:{value:hexToVec3(colorHigh)},
-    uOpacity:{value:opacity}, uSize:{value:pointSize}, uBrightness:{value:brightness},
-    uWaveHeight:{value:waveHeight}, uFlow:{value:flow}, uScale:{value:scale},
-    uCursor:{value:new THREE.Vector3()}, uRepelRadius:{value:pointerRadius},
-    uRepelStrength:{value:pointerStrength}, uActivity:{value:0}
+  // ===== TÚNEL — cilindro visto por dentro (BackSide), parede deformada
+  // por ruído (respiração), cor migra infestado→limpo com uProgress
+  const segsRadial = isMobile ? 20 : 32, segsHeight = isMobile ? 48 : 80;
+  const tunnelGeo = new THREE.CylinderGeometry(TUNNEL_RADIUS, TUNNEL_RADIUS, TUNNEL_LENGTH, segsRadial, segsHeight, true);
+  tunnelGeo.rotateX(Math.PI/2);
+  const tunnelUniforms = {
+    uTime:{value:0},
+    uColorInfested:{value:hexToVec3('#3a0f08')}, uColorInfestedDeep:{value:hexToVec3('#160604')},
+    uColorClean:{value:hexToVec3('#1f3d1f')}, uColorCleanDeep:{value:hexToVec3('#14241a')},
+    uGlowInfested:{value:hexToVec3('#c85a3a')}, uGlowClean:{value:hexToVec3('#C9A876')},
+    uProgress:{value:0}
   };
-  const vert = `
-uniform float uTime; uniform float uStream; uniform float uSize; uniform float uWaveHeight; uniform float uFlow; uniform float uScale;
-uniform vec3 uColLow; uniform vec3 uColHigh;
-uniform vec3 uCursor; uniform float uRepelRadius; uniform float uRepelStrength; uniform float uActivity;
-varying float vFade; varying vec3 vColor;
-${SNOISE}
-void main() {
-  vec3 wp = vec3(position.x * 13.0, 0.0, position.z * 25.0);
-  wp.x += position.y * 6.0;
-  float zc = wp.z + uStream;
-  float wn = snoise(vec3(wp.x * 0.08, zc * 0.08, uTime * 0.15 * uFlow)) * 2.0;
-  wn += snoise(vec3(wp.x * 0.16, zc * 0.16, uTime * 0.3 * uFlow)) * 0.8;
-  wp.y += wn * uWaveHeight;
-  vec3 finalPos = wp * uScale;
-  vec4 modelPosition = modelMatrix * vec4(finalPos, 1.0);
-  vec3 toP = modelPosition.xyz - uCursor;
-  float cd = length(toP);
-  float fall = smoothstep(uRepelRadius, 0.0, cd);
-  modelPosition.xyz += normalize(toP + vec3(0.0001)) * fall * uRepelStrength * uActivity;
-  vec4 mvPosition = viewMatrix * modelPosition;
-  float colMix = smoothstep(-3.0, 3.0, position.y + position.x * 0.5);
-  vColor = mix(uColLow, uColHigh, clamp(colMix, 0.0, 1.0));
-  vFade = 1.0;
-  gl_PointSize = uSize * (10.0 / -mvPosition.z);
-  gl_PointSize = max(gl_PointSize, 1.5);
-  gl_Position = projectionMatrix * mvPosition;
-}`;
-  const frag = `
-uniform float uOpacity; uniform float uBrightness; uniform float uAppear;
-varying float vFade; varying vec3 vColor;
-void main() {
-  vec2 xy = gl_PointCoord - 0.5;
-  float ll = length(xy);
-  if (ll > 0.5) discard;
-  float a = smoothstep(0.5, 0.1, ll);
-  gl_FragColor = vec4(vColor * uBrightness, vFade * a * uOpacity * uAppear);
-}`;
-  const material = new THREE.ShaderMaterial({ uniforms, vertexShader:vert, fragmentShader:frag, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending });
-  const points = new THREE.Points(geometry, material);
-  points.frustumCulled = false;
-  points.layers.enable(LAYERS.ENTIRE_SCENE);
-  group.add(points);
-
-  const finalUniforms = {
-    iTime:{value:0}, tDiffuse:{value:null}, torusTexture:{value:null}, bloomTexture:{value:null},
-    uBg:{value:hexToVec3(bgColor)}, uFlameA:{value:hexToVec3(flameColor)}, uFlameB:{value:hexToVec3(flameColor2)}, uFlameAmt:{value:flameAmt}
-  };
-  const finalVert = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }`;
-  const finalFrag = `
-uniform float iTime; uniform sampler2D tDiffuse; uniform sampler2D bloomTexture; uniform sampler2D torusTexture;
-uniform vec3 uBg; uniform vec3 uFlameA; uniform vec3 uFlameB; uniform float uFlameAmt;
-varying vec2 vUv;
-vec3 warp3d(vec3 pos, float t){ float curv=.8,a=1.9,b=0.7; pos*=2.;
-  pos.x+=curv*sin(t+a*pos.y)+t*b; pos.y+=curv*cos(t+a*pos.x);
-  pos.y+=curv*sin(t+a*pos.z)+t*b; pos.z+=curv*cos(t+a*pos.y);
-  pos.z+=curv*sin(t+a*pos.x)+t*b; pos.x+=curv*cos(t+a*pos.z);
-  return 0.5+0.5*cos(pos.xyz+vec3(1,2,4)); }
-void main(){
-  vec2 uv = 2.*vUv - 1.;
-  vec3 w = pow(warp3d(vec3(uv.x, sin(uv.y), uv.y), iTime*1.5), vec3(1.5));
-  vec3 flame = 1.5*uFlameA*w.x; flame*=w.y; flame += uFlameB*w.z;
-  flame *= smoothstep(0.25, 1., abs(uv.y));
-  float md = smoothstep(-0.7, 1., -uv.y*uv.x); flame *= md*md;
-  vec3 bg = uBg * (1.0 - 0.4 * length(uv));
-  gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + texture2D(torusTexture, vUv).xyz + texture2D(tDiffuse, vUv).xyz, 1.);
-}`;
-  const finalPass = new ShaderPass({ uniforms:finalUniforms, vertexShader:finalVert, fragmentShader:finalFrag });
-
-  const renderPass = new RenderPass(scene, camera);
-
-  const torusComposer = new EffectComposer(renderer);
-  torusComposer.renderToScreen = false;
-  torusComposer.addPass(renderPass);
-  torusComposer.addPass(new ShaderPass(GammaCorrectionShader));
-  torusComposer.addPass(new UnrealBloomPass(new THREE.Vector2(1,1), 0.22, 0.2, 0));
-  torusComposer.addPass(new ShaderPass(CopyShader));
-
-  const bloomComposer = new EffectComposer(renderer);
-  bloomComposer.renderToScreen = false;
-  bloomComposer.addPass(renderPass);
-  bloomComposer.addPass(new UnrealBloomPass(new THREE.Vector2(1,1), 0.4, 0.55, 0));
-  bloomComposer.addPass(new ShaderPass(GammaCorrectionShader));
-
-  const finalComposer = new EffectComposer(renderer);
-  finalComposer.addPass(renderPass);
-  finalComposer.addPass(finalPass);
-  finalPass.uniforms.bloomTexture.value = bloomComposer.renderTarget1.texture;
-  finalPass.uniforms.torusTexture.value = torusComposer.renderTarget1.texture;
-
-  // poeira dourada — como luz de lua/pólen flutuando sobre o campo
-  let ptsAtmo, atmoMat;
-  (function(){
-    const N = Math.round(atmoCount);
-    const positions = new Float32Array(N*3), sizes = new Float32Array(N), seeds = new Float32Array(N);
-    for (let i=0;i<N;i++){
-      positions[i*3]=2*Math.random()-1; positions[i*3+1]=2*Math.random()-1; positions[i*3+2]=2*Math.random()-1;
-      sizes[i]=atmoSize*(0.4+Math.random()); seeds[i]=Math.random();
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes,1));
-    geo.setAttribute('seed', new THREE.BufferAttribute(seeds,1));
-    atmoMat = new THREE.ShaderMaterial({
-      transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, depthTest:false,
-      uniforms:{ uTime:{value:0}, uColor:{value:hexToVec3(atmoColor)}, uRes:{value:new THREE.Vector2(1,1)} },
-      vertexShader:`
-attribute float size; attribute float seed; uniform float uTime; uniform vec2 uRes;
-varying float vA;
-vec3 warp(vec3 p, float t){ float c=0.9,a=1.9,b=0.02,s=0.05; p*=2.;
-  p.x+=c*sin(s*t+a*p.y)+t*b; p.y+=c*cos(s*t+a*p.x); p.y+=c*sin(s*t+a*p.z)+t*b;
-  p.z+=c*cos(s*t+a*p.y); p.z+=c*sin(s*t+a*p.x)+t*b; p.x+=c*cos(s*t+a*p.z);
-  return cos(p+vec3(1,2,4)); }
-void main(){
-  vec3 v = position*4.0 + warp(position, uTime)*1.2;
-  vec4 mv = modelViewMatrix * vec4(v, 1.0);
-  float r = length(v); float farF = 1.0 - smoothstep(5.0, 6.5, r); float nearF = smoothstep(0.0, 0.5, -mv.z);
-  vA = farF * nearF;
-  gl_PointSize = size * uRes.y / 900.0 / -mv.z; gl_PointSize = max(gl_PointSize, 1.0);
-  gl_Position = projectionMatrix * mv;
-}`,
-      fragmentShader:`
-uniform vec3 uColor; varying float vA;
-void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) discard;
-  float tex = smoothstep(0.5, 0.0, l); gl_FragColor = vec4(uColor * tex, tex * vA * 0.6); }`
-    });
-    ptsAtmo = new THREE.Points(geo, atmoMat);
-    ptsAtmo.frustumCulled = false;
-    ptsAtmo.layers.enable(LAYERS.ENTIRE_SCENE);
-    scene.add(ptsAtmo);
-  })();
-
-  // progresso "de saída" do hero: 0 quando o topo do hero está no topo da
-  // tela, 1 quando o hero já rolou inteiramente pra fora — dirige o
-  // mergulho de câmera durante a rolagem natural (sem página extra vazia)
-  let scrollTarget=0, scrollSmooth=0, scrollCurrent=0;
-  function computeHeroProgress(){
-    const r = heroEl.getBoundingClientRect();
-    return clamp(-r.top / Math.max(r.height,1), 0, 1);
-  }
-  window.addEventListener('scroll', ()=>{ scrollTarget = computeHeroProgress(); }, {passive:true});
-
-  let mouseTarget={x:0,y:0}, mouse={x:0,y:0};
-  const POINTER = { world:new THREE.Vector3(), activity:0, active:false, lastMove:performance.now() };
-  const canHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if (canHover){
-    window.addEventListener('mousemove', (e)=>{
-      mouseTarget.x=(e.clientX/window.innerWidth)*2-1; mouseTarget.y=-((e.clientY/window.innerHeight)*2-1);
-      POINTER.active=true; POINTER.lastMove=performance.now();
-    }, {passive:true});
-    window.addEventListener('mouseout', ()=>{ POINTER.active=false; });
-  }
-
-  const _ndc=new THREE.Vector3(), _dir=new THREE.Vector3(), _tgt=new THREE.Vector3();
-  function updatePointerWorld(){
-    _tgt.set(0,0,0);
-    if (POINTER.active){
-      _ndc.set(mouse.x, mouse.y, 0.5).unproject(camera);
-      _dir.copy(_ndc).sub(camera.position).normalize();
-      const dn=_dir.z;
-      if (Math.abs(dn)>1e-4){ const tt=-camera.position.z/dn; if (tt>0 && Number.isFinite(tt)) _tgt.copy(camera.position).addScaledVector(_dir,tt); }
-    }
-    POINTER.world.lerp(_tgt,0.12);
-    const idle=(performance.now()-POINTER.lastMove)/1000;
-    POINTER.activity += (((POINTER.active && idle<3)?1:0)-POINTER.activity)*0.06;
-  }
-
-  let stream=0, t0=performance.now()/1000, appearStart=performance.now();
-  function renderFrame(scroll, m){
-    const t = performance.now()/1000;
-    const dt = Math.min(0.05, t-t0); t0=t;
-    uniforms.uTime.value=t;
-    stream += dt*(flow*2.0)*4.0;
-    uniforms.uStream.value=stream;
-    uniforms.uWaveHeight.value = waveHeight*(1+scroll*scrollRise);
-
-    const ea = Math.min(scroll/0.9,1.0);
-    const e = ea*ea*(3-2*ea);
-    const camY=Lerp(camStartY,camEndY,e), camZ=Lerp(camStartZ,camEndZ,e);
-    camera.position.set(m.x*parallax, camY+m.y*parallax*0.3, camZ);
-    camera.lookAt(m.x*parallax*0.5, Lerp(0.0,0.6,e), Lerp(lookStartZ,lookEndZ,e));
-    group.rotation.x=-tilt; group.rotation.y=0;
-    updatePointerWorld();
-    uniforms.uCursor.value.copy(POINTER.world);
-    uniforms.uActivity.value=POINTER.activity;
-    const elapsed=(performance.now()-appearStart)/1000;
-    uniforms.uAppear.value=Math.max(0,Math.min(1,(elapsed-0.2)/1.4));
-
-    if (ptsAtmo){ atmoMat.uniforms.uTime.value = t*atmoSpeed*8.0; ptsAtmo.position.copy(camera.position); }
-    finalPass.uniforms.iTime.value = t;
-  }
-
-  function resize(){
-    const w = heroEl.clientWidth, h = heroEl.clientHeight, dpr = Math.min(window.devicePixelRatio, isMobile?1.5:2);
-    renderer.setPixelRatio(dpr); renderer.setSize(w,h,false);
-    camera.aspect = w/h; camera.updateProjectionMatrix();
-    [torusComposer,bloomComposer,finalComposer].forEach(c=>{ c.setPixelRatio(dpr); c.setSize(w,h); });
-    if (atmoMat) atmoMat.uniforms.uRes.value.set(w*dpr, h*dpr);
-    scrollTarget = computeHeroProgress();
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  // roda só enquanto o hero está visível — economiza bateria/GPU no resto
-  // da página, que é longa (conversão não precisa de WebGL nas outras seções)
-  let running = false, rafId = null;
-  function loop(){
-    if (!running) return;
-    rafId = requestAnimationFrame(loop);
-    scrollSmooth=Lerp(scrollSmooth,scrollTarget,0.10);
-    scrollCurrent=Lerp(scrollCurrent,scrollSmooth,0.06);
-    mouse.x=Lerp(mouse.x,mouseTarget.x,0.06);
-    mouse.y=Lerp(mouse.y,mouseTarget.y,0.06);
-    renderFrame(scrollCurrent, mouse);
-    camera.layers.set(LAYERS.TORUS_SCENE); torusComposer.render();
-    camera.layers.set(LAYERS.BLOOM_SCENE); bloomComposer.render();
-    camera.layers.set(LAYERS.ENTIRE_SCENE); finalComposer.render();
-  }
-  function start(){ if (!running){ running = true; t0 = performance.now()/1000; loop(); } }
-  function stop(){ running = false; if (rafId) cancelAnimationFrame(rafId); }
-
-  if ('IntersectionObserver' in window){
-    new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{ entry.isIntersecting ? start() : stop(); });
-    }, {threshold:0}).observe(heroEl);
-  } else {
-    start();
-  }
-})();
-
-/* ===================================================================
-   SEÇÃO PROBLEMA — vermes 3D procedurais rastejando (não é imagem nem
-   partícula: são criaturas com corpo segmentado, orientadas e animadas
-   por segmento, feitas de cápsulas via InstancedMesh — um draw call só,
-   leve mesmo com várias criaturas). Contido à seção #problema, pausado
-   fora da viewport, reduzido no mobile, pulado com reduced-motion ou
-   sem WebGL — o fundo (foto + gradiente escuro) do CSS cobre sempre. ==== */
-(async function initWormScene(){
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sectionEl = document.getElementById('problema');
-  const canvas = document.getElementById('worm-canvas');
-  if (!canvas || reduceMotion || !window.WebGLRenderingContext) return;
-
-  let THREE;
-  try { THREE = await import('three'); } catch(e) { return; }
-
-  const isMobile = window.innerWidth < 700;
-  const WORM_COUNT = isMobile ? 9 : 16;
-  const SEGMENTS = isMobile ? 7 : 10;
-  const SEG_SPACING = 0.22;
-
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true }); }
-  catch(e){ return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile?1.5:2));
-
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog('#1a0805', 6, 20);
-
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
-  camera.position.set(0, 0.4, 9);
-  camera.lookAt(0,0,0);
-
-  scene.add(new THREE.AmbientLight('#3a2a20', 0.9));
-  const key = new THREE.PointLight('#ffb27a', 3.2, 30);
-  key.position.set(3,4,6); scene.add(key);
-  const rim = new THREE.DirectionalLight('#8fae7a', 1.3);
-  rim.position.set(-4,2,-3); scene.add(rim);
-
-  const segGeo = new THREE.CapsuleGeometry(0.16, 0.24, 4, isMobile?6:8);
-  const segMat = new THREE.MeshStandardMaterial({
-    color:'#5b6b4a', emissive:'#7d9a5a', emissiveIntensity:0.55,
-    roughness:0.45, metalness:0.1, transparent:true, opacity:0.92
+  const tunnelMat = new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    uniforms: tunnelUniforms,
+    vertexShader: `
+      uniform float uTime;
+      varying vec2 vUv; varying float vRipple;
+      ${SNOISE}
+      void main(){
+        vUv = uv;
+        vec3 p = position;
+        float n = snoise(vec3(p.z*0.18, uv.x*8.0, uTime*0.25));
+        float ripple = n*0.22;
+        vRipple = n;
+        vec3 dir = normalize(vec3(p.x, p.y, 0.0));
+        p.x += dir.x*ripple; p.y += dir.y*ripple;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p,1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform float uProgress; varying vec2 vUv; varying float vRipple;
+      uniform vec3 uColorInfested; uniform vec3 uColorInfestedDeep; uniform vec3 uColorClean; uniform vec3 uColorCleanDeep;
+      uniform vec3 uGlowInfested; uniform vec3 uGlowClean;
+      void main(){
+        vec3 deep = mix(uColorInfestedDeep, uColorCleanDeep, uProgress);
+        vec3 mid  = mix(uColorInfested, uColorClean, uProgress);
+        vec3 glow = mix(uGlowInfested, uGlowClean, uProgress);
+        vec3 color = mix(deep, mid, 0.5 + vRipple*0.6);
+        color += glow * smoothstep(0.35,0.9,vRipple) * 0.5;
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `
   });
-  const totalInstances = WORM_COUNT * SEGMENTS;
-  const mesh = new THREE.InstancedMesh(segGeo, segMat, totalInstances);
-  mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(totalInstances*3), 3);
-  scene.add(mesh);
+  const tunnel = new THREE.Mesh(tunnelGeo, tunnelMat);
+  scene.add(tunnel);
 
-  const dummy = new THREE.Object3D();
-  const tmpColor = new THREE.Color();
-  function rand(a,b){ return a + Math.random()*(b-a); }
+  const fogColorInfested = new THREE.Color('#160604');
+  const fogColorClean = new THREE.Color('#14241a');
+  scene.fog = new THREE.Fog('#160604', 3, 14);
+  scene.background = new THREE.Color('#160604');
 
+  const camLight = new THREE.PointLight('#ffb27a', 4.0, 9, 2.0);
+  scene.add(camLight);
+  scene.add(new THREE.AmbientLight('#3a2a20', 0.5));
+
+  // ===== VERMES nas paredes do túnel — InstancedMesh de cápsulas,
+  // orientados pra grudar e rastejar pela superfície cilíndrica
+  const WORM_COUNT = isMobile ? 12 : 22, SEGMENTS = isMobile ? 6 : 9, SEG_SPACING = 0.2;
+  const segGeo = new THREE.CapsuleGeometry(0.1, 0.16, 4, isMobile?4:6);
+  const segMat = new THREE.MeshStandardMaterial({ color:'#5b6b4a', emissive:'#7d9a5a', emissiveIntensity:0.6, roughness:0.5, transparent:true, opacity:0.95 });
+  const totalInstances = WORM_COUNT*SEGMENTS;
+  const wormMesh = new THREE.InstancedMesh(segGeo, segMat, totalInstances);
+  wormMesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(totalInstances*3),3);
+  scene.add(wormMesh);
+
+  function rand(a,b){return a+Math.random()*(b-a);}
   const worms = [];
   for (let i=0;i<WORM_COUNT;i++){
     worms.push({
-      origin: new THREE.Vector3(rand(-7,7), rand(-3.2,3.2), rand(-6,3)),
-      heading: rand(0, Math.PI*2), speed: rand(0.12,0.32), turnSpeed: rand(-0.22,0.22),
-      phase: rand(0, Math.PI*2), undulateSpeed: rand(2.0,3.2), undulateAmp: rand(0.2,0.36),
-      waveK: rand(0.55,0.85), scale: rand(0.7,1.25)
+      angle: rand(0,Math.PI*2), z: rand(-TUNNEL_LENGTH/2, TUNNEL_LENGTH/2),
+      crawlSpeed: rand(0.08,0.22), spin: rand(-0.06,0.06),
+      phase: rand(0,Math.PI*2), undulateSpeed: rand(2,3.4), undulateAmp: rand(0.12,0.22),
+      waveK: rand(0.5,0.8), scale: rand(0.7,1.2)
     });
   }
+  const dummy = new THREE.Object3D();
+  const tmpColor = new THREE.Color();
 
-  function updateWorms(t, dt){
-    let idx = 0;
+  function updateWorms(t,dt,progress){
+    let idx=0;
+    const alive = 1.0 - smoothstepJS(0.5, 0.85, progress);
     for (let w=0; w<worms.length; w++){
       const worm = worms[w];
-      worm.heading += worm.turnSpeed * dt * 0.3;
-      const fx = Math.cos(worm.heading), fz = Math.sin(worm.heading);
-      worm.origin.x += fx * worm.speed * dt;
-      worm.origin.z += fz * worm.speed * dt;
-      if (worm.origin.x > 8) worm.origin.x = -8;
-      if (worm.origin.x < -8) worm.origin.x = 8;
-      if (worm.origin.z > 4) worm.origin.z = -7;
-      if (worm.origin.z < -7) worm.origin.z = 4;
-      const rightX = -fz, rightZ = fx;
-      let prev = null;
+      worm.z += worm.crawlSpeed*dt*6.0;
+      worm.angle += worm.spin*dt;
+      if (worm.z > TUNNEL_LENGTH/2) worm.z = -TUNNEL_LENGTH/2;
+      const wallR = TUNNEL_RADIUS - 0.15;
+      let prev=null;
       for (let s=0;s<SEGMENTS;s++){
-        const along = s*SEG_SPACING*worm.scale;
-        const wave = Math.sin(t*worm.undulateSpeed - s*worm.waveK + worm.phase) * worm.undulateAmp * worm.scale;
-        const px = worm.origin.x - fx*along + rightX*wave;
-        const pz = worm.origin.z - fz*along + rightZ*wave;
-        const py = worm.origin.y + Math.sin(t*1.1 + worm.phase + s*0.3) * 0.12;
+        const along = worm.z - s*SEG_SPACING*worm.scale;
+        const wave = Math.sin(t*worm.undulateSpeed - s*worm.waveK + worm.phase)*worm.undulateAmp*worm.scale;
+        const ang = worm.angle + wave*0.12;
+        const px = Math.cos(ang)*wallR, py = Math.sin(ang)*wallR, pz = along;
         const pos = new THREE.Vector3(px,py,pz);
+        const outward = new THREE.Vector3(Math.cos(ang), Math.sin(ang), 0);
         if (prev){
-          const dir = new THREE.Vector3().subVectors(prev, pos).normalize();
-          dummy.position.copy(pos);
+          const dir = new THREE.Vector3().subVectors(prev,pos).normalize();
+          dummy.position.copy(pos).addScaledVector(outward, 0.05);
           dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir);
-          dummy.scale.setScalar(worm.scale*(1-(s/SEGMENTS)*0.35));
+          dummy.scale.setScalar(worm.scale*(1-(s/SEGMENTS)*0.4)*alive);
         } else {
-          dummy.position.copy(pos);
-          dummy.quaternion.identity();
-          dummy.scale.setScalar(worm.scale*1.1);
+          dummy.position.copy(pos).addScaledVector(outward,0.05);
+          dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), outward);
+          dummy.scale.setScalar(worm.scale*1.1*alive);
         }
         dummy.updateMatrix();
-        mesh.setMatrixAt(idx, dummy.matrix);
-        const tone = 0.5 + 0.5*Math.sin(worm.phase + s*0.4);
-        tmpColor.setHSL(0.24 - tone*0.05, 0.35, 0.32 + tone*0.18);
-        mesh.setColorAt(idx, tmpColor);
-        prev = pos;
-        idx++;
+        wormMesh.setMatrixAt(idx, dummy.matrix);
+        const tone = 0.5+0.5*Math.sin(worm.phase+s*0.4);
+        tmpColor.setHSL(0.24 - tone*0.05, 0.35, 0.10 + tone*0.14);
+        wormMesh.setColorAt(idx, tmpColor);
+        prev=pos; idx++;
       }
     }
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    wormMesh.instanceMatrix.needsUpdate = true;
+    if (wormMesh.instanceColor) wormMesh.instanceColor.needsUpdate = true;
+  }
+
+  // progresso 0..1 baseado só na seção .jornada (que é 260vh com palco
+  // sticky) — 0 quando o topo da seção alcança o topo da tela, 1 quando
+  // a seção termina de rolar (o palco solta do sticky)
+  let scrollTarget=0, scrollSmooth=0;
+  function computeProgress(){
+    const r = sectionEl.getBoundingClientRect();
+    const total = r.height - window.innerHeight;
+    return total>0 ? clamp(-r.top/total, 0, 1) : 0;
+  }
+  window.addEventListener('scroll', ()=>{ scrollTarget = computeProgress(); }, {passive:true});
+
+  let mouseTarget={x:0,y:0}, mouse={x:0,y:0};
+  const canHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if (canHover){
+    window.addEventListener('mousemove', (e)=>{
+      mouseTarget.x=(e.clientX/window.innerWidth)*2-1;
+      mouseTarget.y=(e.clientY/window.innerHeight)*2-1;
+    }, {passive:true});
   }
 
   function resize(){
-    const w = sectionEl.clientWidth, h = sectionEl.clientHeight;
+    const w = stageEl.clientWidth, h = stageEl.clientHeight;
     renderer.setSize(w,h,false);
     camera.aspect = w/h; camera.updateProjectionMatrix();
+    scrollTarget = computeProgress();
   }
   window.addEventListener('resize', resize);
   resize();
@@ -1176,7 +970,22 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
     rafId = requestAnimationFrame(loop);
     const t = performance.now()/1000;
     const dt = Math.min(0.05, t-t0); t0=t;
-    updateWorms(t, dt);
+    scrollSmooth = Lerp(scrollSmooth, scrollTarget, 0.08);
+    mouse.x = Lerp(mouse.x, mouseTarget.x, 0.06);
+    mouse.y = Lerp(mouse.y, mouseTarget.y, 0.06);
+
+    const camZ = TUNNEL_LENGTH/2 - 3 - scrollSmooth*TRAVEL;
+    camera.position.set(0,0,camZ);
+    camera.lookAt(mouse.x*1.2, -mouse.y*1.0, camZ - 4);
+    camLight.position.set(0,0,camZ - 1);
+
+    tunnelUniforms.uTime.value = t;
+    tunnelUniforms.uProgress.value = scrollSmooth;
+    updateWorms(t, dt, scrollSmooth);
+    scene.background.copy(fogColorInfested).lerp(fogColorClean, scrollSmooth);
+    scene.fog.color.copy(scene.background);
+
+    setBeatProgress(scrollSmooth);
     renderer.render(scene, camera);
   }
   function start(){ if (!running){ running=true; t0=performance.now()/1000; loop(); } }
@@ -1271,7 +1080,7 @@ void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) dis
   }
 
   var mobileBar = document.getElementById('mobile-bar');
-  var hero = document.querySelector('.hero');
+  var hero = document.querySelector('.jornada');
   if (mobileBar && hero && 'IntersectionObserver' in window){
     var barIo = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){

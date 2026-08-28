@@ -143,30 +143,42 @@ Dado o tom "natural, sério e honesto, sem alarmismo nem milagre" (CLAUDE.md, se
 
 ---
 
-## 7. "Campo Lunar" — hero WebGL validado (Three.js, testado em código real)
+## 7. "Jornada" — voo imersivo por dentro do corpo (Three.js, WebGL, testado em código real)
 
-> Nasceu de três prompts completos que o Gabriel trouxe em 28/08 (recriações verbatim de sites reais — "Flow Wave" um campo de partículas Three.js, "Laocoön" um cavalo de bronze cinematográfico, "Baseline" um site institucional de tênis com grid rem-adaptativo). A instrução foi clara: **usar como inspiração de técnica, nunca clonar o conteúdo** (tênis/bronze não têm nada a ver com a marca). O que segue é a extração que sobreviveu pra `landing-protocolo-adulto/index.html`, já testada rodando (não é especulação como o resto deste arquivo).
+> Nasceu de três prompts completos que o Gabriel trouxe em 28/08 (recriações verbatim de sites reais — "Flow Wave" um campo de partículas Three.js, "Laocoön" um cavalo de bronze cinematográfico, "Baseline" um site institucional de tênis com grid rem-adaptativo). A instrução foi clara: **usar como inspiração de técnica, nunca clonar o conteúdo** (tênis/bronze não têm nada a ver com a marca). Esta seção passou por duas versões dentro da mesma LP (`landing-protocolo-adulto/index.html`) antes de chegar na que ficou — registrado porque o histórico ensina tanto quanto o resultado final:
 
-**O que é:** um campo de partículas verde brilhante (adaptado 1:1 da estrutura do shader "Flow Wave" — mesmo Simplex noise, mesmo pipeline de 3 `EffectComposer`s com bloom — só recolorido 100% na paleta oficial da marca). Sem o "corner-flame" genérico do original: virou um glow dourado/bronze sutil (`#C9A876`), e a "poeira ambiente" virou pólen/luz de lua também em bronze. Zero conteúdo do site original sobrou — só a engenharia do shader.
+- **v1 (Campo Lunar):** um campo de partículas verde brilhante recolorido do shader "Flow Wave", só no hero. Feedback do Gabriel: "recolorir o conceito da referência não é criar algo novo pra nossa marca" — a ambição pedida era vermes 3D de verdade, não uma paisagem abstrata.
+- **v2 (Problema + Hero separados):** vermes 3D procedurais (`InstancedMesh` de cápsulas) numa seção "problema" isolada, seguida por uma seção "hero" separada com o Campo Lunar. Feedback: ainda parecia "duas seções", não uma experiência imersiva única — e faltavam fotos reais do produto.
+- **v3/final (Jornada única):** as duas cenas viraram UMA só — um túnel intestinal (cilindro visto por dentro, `side:BackSide`) com vermes 3D grudados na parede, e a câmera voa por dentro dele conforme a pessoa rola. A cor do túnel migra de infestado (vermelho/marrom) pra limpo (verde/bronze da marca) ao longo do voo, e os vermes desaparecem na mesma transição — a limpeza acontece na frente dos olhos, não por corte de seção. É essa versão que fica documentada abaixo.
 
-**Onde entra:** só no hero, nunca na página inteira. É a diferença mais importante em relação ao prompt original do "Flow Wave" (que assume um `scroll-host` de 620vh dedicado só à cena) — aqui o mergulho de câmera é mapeado pro **progresso de saída do próprio hero** (`-heroRect.top / heroRect.height`, 0 a 1), então o usuário não perde scroll "vazio" só pra ver o efeito: o mergulho acontece durante a rolagem normal de saída do hero pro resto da LP.
+**Arquitetura — `position:sticky`, não duas seções `100vh`:** a seção `.jornada` tem `height:260vh`; dentro dela, `.jornada-stage` é `position:sticky;top:0;height:100svh` — a cena fica "pinada" na tela enquanto a pessoa rola os 260vh, e o progresso 0→1 usado por tudo (cor, câmera, vermes, qual dos 3 "beats" de texto está ativo) vem de `-sectionRect.top / (sectionRect.height - innerHeight)`. Isso substitui o esquema anterior de duas seções `min-height:100svh` empilhadas — permite a transição de cor acontecer **durante** o voo, não num corte entre seções.
+
+**Túnel:** `CylinderGeometry` rotacionado (eixo ao longo de Z), material `ShaderMaterial` com `side:THREE.BackSide` (a câmera fica *dentro*, então as faces de fora precisam ser as visíveis), parede deformada por Simplex noise (mesma função `snoise` já catalogada, reaproveitada) simulando respiração/peristalse. `scene.background` e `scene.fog.color` precisam ser atualizados a cada frame junto com a cor do túnel — sem isso a abertura no fim do túnel aparece como um buraco preto sólido, quebrando a ilusão (bug real, encontrado e corrigido nessa sessão).
+
+**Vermes na parede:** mesma técnica de `InstancedMesh` de cápsulas da v2, mas agora com a matemática de posição em coordenadas cilíndricas (ângulo + posição ao longo do eixo do túnel) em vez de espaço livre — cada verme rasteja ao longo da parede em vez de flutuar solto. A opacidade/escala de cada verme é multiplicada por um fator `alive` que cai a zero conforme o progresso avança — é assim que eles "somem" na limpeza.
+
+**3 beats de texto** (`.beat`, `opacity` cross-fade via classe `is-active`) por cima da cena, trocando em faixas do progresso (0–30% problema, 30–68% transição, 68–100% marca/CTA) — em vez de 2 seções de conteúdo, é 1 cena com 3 "cartões" de texto se revezando.
 
 **Salvaguardas obrigatórias (todas testadas):**
-- Fundo CSS sólido (`--grad-deep`) sempre atrás do canvas — se o CDN do Three.js falhar ou o navegador não suportar WebGL, a página nunca fica quebrada, só sem o efeito.
-- `IntersectionObserver` no container do hero: o loop de `requestAnimationFrame` só roda enquanto o hero está visível — depois que a pessoa rola pra oferta/composição/FAQ, o WebGL para de consumir GPU/bateria.
-- Detecção simples de mobile (`innerWidth < 700`): reduz a geometria da malha de partículas (de `SphereGeometry(4.2,200,600)` — ~120 mil vértices — pra `(4.2,90,260)` — ~24 mil), reduz `pixelRatio` (2 → 1.5) e desliga o repelo de partícula pelo cursor (não faz sentido em touch).
-- `prefers-reduced-motion: reduce` pula o WebGL inteiro, direto pro fallback CSS.
+- Fundo CSS sólido (`.jornada-stage{background:...}`) sempre atrás do canvas — se o CDN do Three.js falhar ou o navegador não suportar WebGL, a página nunca fica quebrada, só sem o efeito (nesse caso o beat 1 fica fixo visível via JS).
+- `IntersectionObserver` na seção inteira: o loop de `requestAnimationFrame` só roda enquanto a jornada está visível.
+- Detecção simples de mobile (`innerWidth < 700`): reduz a malha do túnel, o número de vermes/segmentos e o `pixelRatio`.
+- `prefers-reduced-motion: reduce` pula o WebGL inteiro.
+
+**⚠️ Bug real e importante — `position:sticky` quebrado por `overflow-x:hidden`:** o kit inteiro usa `html,body{overflow-x:hidden}` como regra fixa (convenção #2 do `vermefree-lp-superprompt.md`, pra nunca ter scroll horizontal no Safari mobile). Isso **quebra `position:sticky`** nos dois navegadores testados (Chromium/swiftshader) — porque `overflow-x:hidden` sozinho força `overflow-y:auto` (regra da spec CSS: só um eixo setado como não-`visible` faz o outro virar `auto`), e isso muda a "ancestral de rolagem" que o sticky usa como referência. Sintoma: o elemento sticky rola junto com o pai, como se fosse `position:static`, sem erro nenhum no console. **Correção:** `overflow-x:hidden; overflow-x:clip;` na mesma regra (a segunda linha vence em navegador que suporta `clip`; `hidden` fica de fallback). Testado e confirmado que resolve os dois (sticky funciona E não aparece scroll horizontal). Qualquer LP futura que use `position:sticky` (pra qualquer coisa "pinada" durante um trecho de rolagem, não só WebGL) precisa dessa troca — não é específico dessa cena.
 
 **Como testar isso localmente antes de publicar (o sandbox de LP bloqueia unpkg/jsdelivr/cdnjs, mas libera `registry.npmjs.org`):**
 ```
 npm install three@0.160.0   # baixa via npm, permitido
-# aponte um importmap de teste pros arquivos em node_modules/three (build/ + examples/jsm/)
+# aponte um importmap de teste pros arquivos em node_modules/three (build/)
 # via um servidor local (python3 -m http.server) + screenshot via Playwright
 # só depois de confirmar que renderiza, troca o importmap pra
 # https://unpkg.com/three@0.160.0/... no arquivo publicado de verdade
 ```
-Sem isso, um bug de shader falha em silêncio (canvas preto) e não tem como saber sem essa etapa.
+Sem isso, um bug de shader ou de `position:sticky` falha em silêncio (canvas preto, ou elemento simplesmente não gruda) e não tem como saber sem essa etapa — os dois bugs reais desta seção só apareceram no screenshot, nunca na leitura do código.
 
-**Cores usadas (Linha Adulto, `CLAUDE.md` §10):** `colorLow`/`bgColor` = `#14241a`, `colorHigh` = `#C0DE96`, glow/poeira = `#C9A876`, glow secundário = `#E8F5E4`.
+**Cores usadas (Linha Adulto, `CLAUDE.md` §10):** infestado = `#3a0f08`/`#160604`, limpo = `#1f3d1f`/`#14241a`, glow infestado = `#c85a3a`, glow limpo (bronze) = `#C9A876`.
 
-**Bug real encontrado e corrigido nessa mesma sessão** (vale registrar pra não repetir): `transform-origin:center` não funciona em elementos SVG sem `transform-box:fill-box` — pegou os marcadores da linha do tempo lunar (seção "como funciona" da mesma LP), não o campo de partículas em si, mas é do mesmo lote de bugs silenciosos de motion/CSS que só aparecem em screenshot real, nunca em leitura de código.
+**Fotos reais de produto:** puxadas ao vivo da Shopify (`mcp__Shopify__get-product`), não geradas — o kit completo (`produto-card-1-adulto`) e as 4 fotos individuais de frasco (`pdp-adulto-01-oregano-frontal`, `-05-tintura-gota`, `-06-ornitina`, `-07-silimarina`) já existiam cadastradas no produto ativo e nunca tinham sido usadas em nenhuma LP até essa sessão — vale conferir o produto na Shopify antes de gerar qualquer imagem nova de "produto", a foto de verdade quase sempre já existe.
+
+**Outro bug real encontrado e corrigido nessa mesma sessão** (vale registrar pra não repetir): `transform-origin:center` não funciona em elementos SVG sem `transform-box:fill-box` — pegou os marcadores da linha do tempo lunar (seção "como funciona" da mesma LP).
