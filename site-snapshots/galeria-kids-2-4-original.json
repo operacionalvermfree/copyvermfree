@@ -1,0 +1,29 @@
+{
+  "_descricao": "SNAPSHOT do estado ORIGINAL da galeria de imagens do produto Kids 2-4, capturado ANTES de adicionar as imagens UGC com texto queimado. Ponto de restauracao: se o novo layout de galeria nao ficar bom, restaurar exatamente esta lista/ordem de media e este featuredMedia, e remover qualquer MediaImage adicionada depois (as UGC 'hf_...').",
+  "capturado_em": "2026-08-30",
+  "produto": {
+    "handle": "antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos",
+    "product_id": "gid://shopify/Product/9345665827035",
+    "titulo": "Antiparasitário Infantil Natural | VermeFree Kids 2 a 4 anos"
+  },
+  "featuredMedia_original": "gid://shopify/MediaImage/43037773791451",
+  "ordem_original_media": [
+    { "pos": 1, "id": "gid://shopify/MediaImage/43037773791451", "arquivo": "produto-card-2-kids-2a4.png", "w": 1024, "h": 1024, "featured": true },
+    { "pos": 2, "id": "gid://shopify/MediaImage/43062005956827", "arquivo": "kit-kids-01-dois-frascos.jpg", "w": 2000, "h": 1333 },
+    { "pos": 3, "id": "gid://shopify/MediaImage/43062005924059", "arquivo": "pdp-kids-01-fitoterapia.jpg", "w": 1333, "h": 2000 },
+    { "pos": 4, "id": "gid://shopify/MediaImage/43062005891291", "arquivo": "pdp-kids-02-tintura.jpg", "w": 1333, "h": 2000 }
+  ],
+  "como_restaurar": [
+    "1) Remover as MediaImage adicionadas depois (as UGC 'hf_...') do produto via productDeleteMedia (mediaIds) ou desanexar.",
+    "2) Reordenar a media restante para a ordem acima via productReorderMedia (moves na ordem pos 1..4).",
+    "3) Garantir que featuredMedia volte a ser gid://shopify/MediaImage/43037773791451 (produto-card-2-kids-2a4.png).",
+    "Assim a galeria volta 100% ao estado original deste snapshot."
+  ],
+  "ugc_geradas_para_galeria": {
+    "_nota": "Imagens UGC 1:1 com texto queimado geradas para a galeria (aprovadas, ainda NAO subidas ao produto). Guardadas aqui as URLs de origem (Higgsfield) para referencia.",
+    "1_sala_desparasitacao_gotinhas": "https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260830_004153_ba0fb2d7-5964-455b-99a6-f1a74e9b06e7.png",
+    "2_dois_frascos_dose_por_idade": "https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260830_004153_80e2c3f6-d499-4d53-9522-e88c7364d5c2.png",
+    "3_mesa_e_depois_rotina": "https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260830_004153_7065f33d-357d-46b8-8ab2-bd60f586eb4c.png",
+    "4_cozinha_diluiu_deu_pronto_REFEITA": "https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260830_004628_c8bf9297-cd2f-469b-9186-766ccd1762be.png"
+  }
+}
