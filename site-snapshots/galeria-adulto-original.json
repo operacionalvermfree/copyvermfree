@@ -1,0 +1,24 @@
+{
+  "_descricao": "SNAPSHOT do estado ORIGINAL da galeria do Protocolo Adulto, ANTES de adicionar os 5 cards de galeria (3 produto + 1 UGC + 1 ficha). Ponto de restauracao.",
+  "capturado_em": "2026-09-01",
+  "produto": {
+    "handle": "protocolo-desparasitacao-adulto-vermefree",
+    "product_id": "gid://shopify/Product/9345664614619",
+    "titulo": "Protocolo de Desparasitação Natural | VermeFree Adulto"
+  },
+  "featuredMedia_original": "gid://shopify/MediaImage/43139275849947",
+  "ordem_original_media": [
+    { "pos": 1, "id": "gid://shopify/MediaImage/43139275849947", "arquivo": "produto-card-1-adulto.png", "featured": true },
+    { "pos": 2, "id": "gid://shopify/MediaImage/43055996993755", "arquivo": "pdp-adulto-01-oregano-frontal.jpg" },
+    { "pos": 3, "id": "gid://shopify/MediaImage/43055996960987", "arquivo": "pdp-adulto-02-oregano-flatlay.jpg" },
+    { "pos": 4, "id": "gid://shopify/MediaImage/43055996895451", "arquivo": "pdp-adulto-03-oregano-deitado-capsulas.jpg" },
+    { "pos": 5, "id": "gid://shopify/MediaImage/43055996928219", "arquivo": "pdp-adulto-05-tintura-gota.jpg" },
+    { "pos": 6, "id": "gid://shopify/MediaImage/43055997124827", "arquivo": "pdp-adulto-06-ornitina.jpg" },
+    { "pos": 7, "id": "gid://shopify/MediaImage/43055997026523", "arquivo": "pdp-adulto-07-silimarina.jpg" }
+  ],
+  "como_restaurar": [
+    "Remover as MediaImage adicionadas depois (os 5 cards novos) via productDeleteMedia.",
+    "Reordenar a media restante para a ordem acima via productReorderMedia.",
+    "featuredMedia volta a ser gid://shopify/MediaImage/43139275849947."
+  ]
+}
