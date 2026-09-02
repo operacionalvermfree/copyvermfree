@@ -13,7 +13,7 @@
 
 > Os dois terminam em pergunta de propósito — fora da janela de 24h o disparo é HSM; a resposta do cliente abre a janela de conversa livre.
 
-### API 01 — TER 02/09 · 08h · Educacional (abre janela)
+### API 01 — QUA 02/09 · 08h · Educacional (abre janela)
 ```
 Categoria: UTILITY
 
@@ -28,7 +28,7 @@ Escrevi com calma o que fazer nos dias e semanas seguintes. Foi pro seu e-mail h
 Quer que eu mande?
 ```
 
-### API 02 — SEX 05/09 · 20h · Benefício — Óleo de Alho
+### API 02 — SAB 05/09 · 20h · Benefício — Óleo de Alho
 ```
 Categoria: MARKETING
 
@@ -49,7 +49,7 @@ Quer o link?
 
 > Oito mensagens no mesmo grupo em seis dias, cada uma com ângulo diferente — repetir o mesmo argumento é o que faz as pessoas silenciarem o grupo.
 
-### GRUPO 01 — TER 02/09 · 09h · Abertura de semana — rotina
+### GRUPO 01 — QUA 02/09 · 09h · Abertura de semana — rotina
 ```
 Setembro começou. 🌿
 
@@ -62,7 +62,7 @@ A maioria das famílias que acompanha a gente faz de 2 a 4 vezes por ano, geralm
 Se você perdeu a conta, o corpo já deve estar cobrando: aquele inchaço depois de comer, aquele cansaço sem explicação. Talvez seja a hora de olhar pro calendário.
 ```
 
-### GRUPO 02 — TER 02/09 · 19h · A dúvida do "e depois"
+### GRUPO 02 — QUA 02/09 · 19h · A dúvida do "e depois"
 ```
 A pergunta que mais chega no nosso direct:
 
@@ -79,7 +79,7 @@ E no intervalo entre um e outro, uma cápsula de Óleo de Alho por dia segura a 
 Simples assim. O difícil é a constância, não a complexidade.
 ```
 
-### GRUPO 03 — QUA 03/09 · 10h · Kids — escola e creche
+### GRUPO 03 — QUI 03/09 · 10h · Kids — escola e creche
 ```
 Mãe de criança em creche ou escola sabe do que eu tô falando. 🧒
 
@@ -92,7 +92,7 @@ O protocolo Kids é líquido, com óleo essencial de laranja, diluído em 50ml d
 Fazer a criança aceitar é metade da batalha. Essa parte a gente já resolveu.
 ```
 
-### GRUPO 04 — QUA 03/09 · 19h · Composição — transparência
+### GRUPO 04 — QUI 03/09 · 19h · Composição — transparência
 ```
 Vou abrir o kit adulto aqui pra vocês verem o que tem dentro. 🌿
 
@@ -108,7 +108,7 @@ Nada disso é novidade: é fitoterapia que existe há muito tempo. O que a gente
 No rótulo: Vegetal 100% e Metais Free. Fabricação Sintonia Pharma, farmacêutica responsável Graziele Antonini.
 ```
 
-### GRUPO 05 — QUI 04/09 · 10h · Engajamento — relato real
+### GRUPO 05 — SEX 04/09 · 10h · Engajamento — relato real
 ```
 Uma coisa que a gente adora ler por aqui: relato de quem já fez. 💬
 
@@ -119,7 +119,7 @@ Não precisa ser história bonita. Serve o "não senti nada demais", serve o "me
 Quem está pensando em começar aprende muito mais com relato real do que com propaganda. E a gente também.
 ```
 
-### GRUPO 06 — QUI 04/09 · 19h · Óleo de Alho — manutenção
+### GRUPO 06 — SEX 04/09 · 19h · Óleo de Alho — manutenção
 ```
 Sobre o Óleo de Alho — o produto que menos aparece aqui e o que mais faz sentido no dia a dia. 🧄
 
@@ -132,7 +132,7 @@ Ele não substitui o protocolo. Ele ocupa o intervalo entre um e outro, sustenta
 R$67 os 30 dias. A partir de 3 frascos, 10% de desconto.
 ```
 
-### GRUPO 07 — SEX 05/09 · 10h · Prático — frete e Kit Família
+### GRUPO 07 — SAB 05/09 · 10h · Prático — frete e Kit Família
 ```
 Lembrete prático: acima de R$399 o frete é por nossa conta. 📦
 
@@ -141,9 +141,9 @@ Só isso mesmo. Se você já ia pedir e estava esperando alguma coisa, o kit adu
 E se for pedir pra família toda, vale olhar o Kit Família — 2 adultos + 2 crianças no mesmo combo, pra todo mundo em casa manter a rotina junto.
 ```
 
-### GRUPO 08 — SÁB 06/09 · 10h · Fechamento suave + gancho
+### GRUPO 08 — SAB 05/09 · 19h · Fechamento suave + gancho
 ```
-Fim de semana chegando, então fica só uma pergunta pra pensar. 🌙
+Mais um fim de semana por aí, então fica só uma pergunta pra pensar. 🌙
 
 O corpo pede uma limpeza natural de vez em quando. A gente lembra de trocar o filtro, de levar o carro na revisão, de trocar a escova de dente a cada três meses.
 
@@ -151,15 +151,15 @@ E do intestino, a gente lembra quando?
 
 Não é urgência. É rotina — e rotina boa é aquela que a gente organiza com calma, sentindo a diferença no corpo todo dia, não só no dia que faz o protocolo.
 
-Semana que vem tem novidade por aqui. 👀
+Novidade a caminho por aqui. 👀
 ```
-*Nota: a última linha é ponte pro Dia D de 09/09 (antecipação começa domingo 07), sem revelar nada — nem que tem desconto, nem quanto. Se o Gabriel preferir separar totalmente perpétuo de campanha, é só cortar essa linha; a peça fecha sozinha sem ela.*
+*Nota: a última linha é ponte pro Dia D de 09/09, cuja antecipação (Gestão Alliance) já entra no ar no dia seguinte, domingo 06/09 — por isso o Grupo 08 foi antecipado pro sábado à noite, pra não competir no mesmo dia com a peça de antecipação da campanha. Sem revelar nada — nem que tem desconto, nem quanto. Se o Gabriel preferir separar totalmente perpétuo de campanha, é só cortar essa linha; a peça fecha sozinha sem ela.*
 
 ---
 
 ## E-MAIL — 2 envios (base antiga: compradores + leads)
 
-### E-MAIL 1 — TER 02/09 · 10h · Educacional — a dúvida do "e agora?"
+### E-MAIL 1 — QUA 02/09 · 10h · Educacional — a dúvida do "e agora?"
 
 **Assunto:** E depois da desparasitação, o que eu faço?
 **Pré-header:** A pergunta que mais chega aqui — e a resposta com calma.
@@ -201,7 +201,7 @@ Equipe VermeFree
 
 *Nota: CTA único, link direto na página do Óleo de Alho, nunca na home.*
 
-### E-MAIL 2 — SEX 05/09 · 10h · Benefício de produto — Óleo de Alho
+### E-MAIL 2 — SAB 05/09 · 10h · Benefício de produto — Óleo de Alho
 
 **Assunto:** A cápsula que fica entre um protocolo e outro
 **Pré-header:** Manutenção não é fazer mais. É não parar.
@@ -396,7 +396,8 @@ só em retargeting, nunca em topo de funil.
 
 ## Notas para Sarah
 
-- Limite da semana: 2 disparos de API e 2 e-mails por dia contando tudo; nenhuma campanha dispara entre 01 e 07/09. O Dia D começa a antecipação no domingo 07 — o Grupo 08 (sábado) abre gancho sem revelar nada.
+- **Correção de calendário:** os rótulos de dia da semana desta semana foram corrigidos — 01/09/2026 cai numa terça-feira, não numa segunda (confirmado cruzando com as datas de DIA D — 09/09 e DIA D KIDS — 26 a 30/09 no ClickUp, que trazem dia+data juntos). Se algum disparo desta semana já tiver sido programado com o rótulo antigo, vale reconferir contra a data numérica.
+- Limite da semana: 2 disparos de API e 2 e-mails por dia contando tudo; nenhuma campanha dispara entre 01 e 07/09 além da antecipação do Dia D, que começa domingo 06/09 (não 07 como constava antes) — por isso o Grupo 08 foi antecipado pro sábado 05/09 à noite.
 - Prova social (Grupo 05) convida relatos reais em vez de inventar depoimento — alimenta o acervo de depoimentos já em organização no ClickUp.
 - Sem cupom e sem desconto de campanha nesta semana: a única oferta é frete grátis acima de R$399, padrão da loja. O desconto por volume do Óleo de Alho (3 frascos = 10%) é preço de tabela, não promoção.
 
@@ -404,7 +405,7 @@ só em retargeting, nunca em topo de funil.
 
 1. **Data da lua nova de setembro.** Todas as menções ao ciclo lunar ficaram genéricas ("no ritmo da lua nova", "próximo ciclo") por falta da data confirmada. Com a data, dá pra deixar as peças mais concretas — data específica converte melhor que referência vaga.
 2. **"4 c/ desc." nos criativos em imagem.** O cronograma marcava as 4 imagens da semana como "com desconto", mas o perpétuo é 0% OFF (oferta é frete grátis). Tratei como frete grátis, não desconto — se era desconto mesmo, a Imagem 04 muda.
-3. **Gancho do Dia D na peça de sábado.** A última linha do Grupo 08 abre expectativa para a campanha de 09/09 sem revelar nada. Se preferir separar totalmente perpétuo de campanha, é só cortar — a peça fecha sem ela.
+3. **Gancho do Dia D na peça de sábado.** A última linha do Grupo 08 (agora sábado 05/09 à noite) abre expectativa para a campanha de 09/09 sem revelar nada. Se preferir separar totalmente perpétuo de campanha, é só cortar — a peça fecha sem ela.
 
 ## CHECKLIST ANVISA
 
