@@ -146,61 +146,54 @@ Aparece **antes** do resultado, em todos os 6 caminhos:
 
 ## FASE 3 — Implementação (o que foi construído de verdade)
 
-Implementei como página nativa do Shopify (mesma tecnologia do site: seção Liquid + template), não como arquivo solto, porque é assim que o site da VermeFree já funciona — a página fica no mesmo painel, editável pelo time, sem depender de outra plataforma.
+> ⚠️ Nota de correção: a primeira versão desta entrega foi construída errado — implementei a página dentro do Shopify (tema + página nativa), o que não é o padrão deste kit. Revertida completamente (página e tema-rascunho apagados da loja). O padrão correto do projeto, documentado em `vermefree-lp-superprompt.md` e `vermefree-lp-kit/COMO-USAR.md`, é: **HTML autocontido em `landing-<slug>/index.html`, publicado via git na branch `lp`, servido por `raw.githack.com`** — igual à `landing-protocolo-adulto/`. É isso que está implementado agora.
 
-**⚠️ Importante — não editei o tema publicado (ao vivo).** O sistema tem uma trava de segurança que bloqueia escrita direta no tema publicado — corretamente, porque isso poderia quebrar o site pra visitantes reais sem revisão. Segui o caminho certo: **dupliquei o tema em um tema-rascunho (não publicado)** e construí tudo lá.
+Pasta: `landing-descubra-seu-protocolo/index.html` — um único arquivo HTML autocontido (CSS e JS inline, só Google Fonts como dependência externa, igual às outras LPs do kit). Reaproveita o mesmo design system (paleta Linha Adulto, tipografia Fraunces/Inter, tokens de cor, `.btn`, reveal-on-scroll) já validado em `landing-protocolo-adulto/`, pra manter a mesma identidade de marca entre o hub e as páginas de produto.
 
-**O que existe agora, pronto e funcional, no tema rascunho `VermFree — Draft LP VSL+Quiz (25/09)`:**
-- `sections/vf-lp-vsl-quiz.liquid` — VSL no topo + quiz completo logo abaixo, com todo o texto e a lógica de roteamento das 6 combinações, mobile-first (o player vira 9:16 em telas pequenas, 16:9 a partir de 700px).
-- `templates/page.vsl-quiz.json` — template que usa essa seção.
-- `assets/vf-vsl-legendas.vtt` — legendas em português já escritas e sincronizadas com os timestamps do roteiro, conectadas ao `<track>` do vídeo.
-- Página `Adulto ou Kids? Descubra seu protocolo` (`/pages/descubra-seu-protocolo`), criada como **rascunho (não publicada)**, apontando pro template acima.
+**O que tem na página:**
+- VSL no topo, player 9:16 no mobile / 16:9 a partir de 700px. Como o vídeo ainda não foi gravado (Fase 1 pediu o roteiro, não a gravação), o player mostra um aviso interno claro ("Vídeo em produção...") em vez de tela quebrada. Assim que o vídeo existir, basta colar a URL do `.mp4` na constante `VIDEO_SRC` no fim do arquivo e publicar de novo — o player e as legendas (embutidas no próprio HTML, convertidas em `Blob` via JS pra evitar depender de um segundo arquivo `.vtt`) entram em ação sozinhos.
+- Quiz completo abaixo, com a lógica das 6 combinações, opt-in explícito e obrigatório antes do resultado.
+- **Captura de e-mail:** como esta página é um arquivo estático servido por `raw.githack` (fora do domínio da Shopify), não dá pra usar a tag `{% form %}` nativa do Shopify (isso só existe dentro do próprio tema). A solução tecnicamente real que usei: um `<form>` HTML comum, com `target` apontando pra um `<iframe>` invisível, enviando `POST` pro endpoint público e nativo da Shopify `https://vermefree.com.br/contact` com `form_type=customer` — o mesmo mecanismo usado há anos por landing pages externas pra capturar newsletter de lojas Shopify. Funciona porque é uma submissão de formulário normal (navegação), não um `fetch`/`XHR`, então não esbarra em CORS. Grava `contact[accepts_marketing]=1` só depois do checkbox marcado, e as tags `quiz-lp-vsl`, `quiz-lp-<publico>`, `quiz-lp-<resultado>`.
+  - **Isso ainda depende de uma confirmação real que eu não consigo fazer sozinha:** meu ambiente bloqueia acesso a `vermefree.com.br` (ver Fase 4), então não consegui enviar um e-mail de teste de verdade e confirmar que ele aparece como cliente na Shopify. Peço que alguém do time faça esse teste único antes de considerar a captura "no ar" — é 2 minutos: abrir a página publicada, preencher um e-mail de teste, marcar o opt-in, enviar, e conferir em Shopify Admin → Clientes se o contato apareceu com as tags certas.
 
-**Vídeo:** ainda não existe o arquivo final (a Fase 1 pediu o roteiro pronto pra gravar, não um vídeo pronto). Deixei a seção pronta pra receber a URL do arquivo assim que for gravado — tem um campo "Vídeo (URL .mp4)" no editor de tema. Enquanto esse campo estiver vazio, a página mostra um aviso interno claro ("Vídeo em produção...") no lugar do player, pra ninguém publicar por engano sem o vídeo.
+## Correção de rumo no meio da tarefa
 
-**Como revisar/editar:**
-- Preview do tema rascunho (visual completo, inclusive com o quiz funcionando): abra o painel do Shopify → Loja Online → Temas → tema **"VermFree — Draft LP VSL+Quiz (25/09)"** → **Visualizar**. Ou direto: `https://vermefree.com.br/pages/descubra-seu-protocolo?preview_theme_id=164655497435` (só funciona logado no admin da loja).
-- Editor visual: painel do tema rascunho → Personalizar → template da página `vsl-quiz` → seção "LP · VSL + Quiz" (lá dá pra colar a URL do vídeo final, trocar textos, etc. sem mexer em código).
-- Página no admin: Loja Online → Páginas → "Adulto ou Kids? Descubra seu protocolo".
-
-**Pra ir ao ar:** depois que o vídeo estiver gravado e revisado, o caminho mais seguro é pedir pra um dev copiar só os 3 arquivos novos (`sections/vf-lp-vsl-quiz.liquid`, `templates/page.vsl-quiz.json`, `assets/vf-vsl-legendas.vtt`) pro tema **publicado** e então publicar a página — em vez de publicar o tema-rascunho inteiro, que substituiria o tema ao vivo por completo e poderia perder qualquer mudança feita nele desde a duplicação.
+A primeira entrega desta LP foi construída dentro do Shopify (tema duplicado + página nativa) — errado pro padrão deste projeto, que é HTML estático publicado via git. Motivo do erro: pulei o passo 0 do `CLAUDE.md` ("antes de criar ou editar qualquer landing page, ler `PAGINAS.md`, `vermefree-lp-superprompt.md` e `vermefree-lp-kit/`") e fui direto pra o Shopify por já ter acesso a ele nesta conversa. Corrigido: apaguei a página e vou pedir que um humano apague também o tema-rascunho `VermFree — Draft LP VSL+Quiz (25/09)` que ficou pra trás na Shopify (Admin → Loja Online → Temas → ⋯ → Excluir — o sistema me bloqueou de apagar temas por segurança, corretamente), e reconstruí do zero como arquivo estático seguindo a convenção real.
 
 ---
 
 ## FASE 4 — Testes obrigatórios
 
-**⚠️ Limitação que preciso ser transparente sobre:** o ambiente onde eu rodo bloqueia o acesso direto a `vermefree.com.br` e também ao domínio `myshopify.com` da loja (confirmei isso tentando abrir os dois de várias formas — todos retornaram bloqueio de rede por política do ambiente, não erro da loja). Ou seja, **eu não consegui abrir a página publicada/pré-visualização real com meu próprio navegador** pra clicar nela como um humano faria. Isso não é uma limitação da Shopify nem da página — é só uma restrição do ambiente onde eu processo essa tarefa. Um humano logado no admin da loja, no navegador normal, não tem esse bloqueio.
+**⚠️ Limitação que preciso ser transparente sobre:** o ambiente onde eu processo esta tarefa bloqueia acesso de rede a `vermefree.com.br` (confirmei isso de três formas diferentes — `curl`, busca de página e navegador automatizado — todas retornaram bloqueio de política do ambiente, não erro da loja). Isso não afeta a página em si (que só depende do domínio pra 2 coisas: os links de produto no resultado do quiz, e o envio do formulário de e-mail) — só significa que eu não consegui fazer, com meu próprio navegador, um clique de ponta a ponta contra o site real. Um humano no navegador normal não tem esse bloqueio.
 
-Pra compensar isso com rigor, extraí o HTML/CSS/JS **exatamente igual** ao que está no arquivo publicado no tema (não uma versão simplificada) e rodei em um navegador automatizado local, em viewport de celular (390×844, tamanho de iPhone), testando as seis combinações ponta a ponta:
+Pra compensar com rigor, rodei o arquivo real (`landing-descubra-seu-protocolo/index.html`, exatamente o que está publicado, não uma cópia simplificada) num navegador automatizado local, em viewport de celular (390×844), testando as seis combinações ponta a ponta:
 
-| # | Caminho testado | Chegou na página certa? | Título do resultado bate com a tabela? | Opt-in bloqueava o botão até marcar? |
-|---|---|---|---|---|
-| 1 | Adulto → nunca fez | ✅ `protocolo-desparasitacao-adulto-vermefree` | ✅ | ✅ |
-| 2 | Adulto → já fez → +3 meses | ✅ `protocolo-desparasitacao-adulto-vermefree` | ✅ | ✅ |
-| 3 | Adulto → já fez → -3 meses | ✅ `oleo-de-alho-desodorizado-500mg` | ✅ | ✅ |
-| 4 | Criança → 2 a 4 anos | ✅ `antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos` | ✅ | ✅ |
-| 5 | Criança → 5 a 9 anos | ✅ `antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos` | ✅ | ✅ |
-| 6 | Família (adulto + criança) | ✅ `kit-familia-vermefree-2-adultos-2-criancas` | ✅ | ✅ |
+| # | Caminho testado | Chegou no link certo? | Título do resultado bate com a tabela? | Opt-in bloqueava o botão até marcar? | Tags/consentimento gravados certos no form oculto? |
+|---|---|---|---|---|---|
+| 1 | Adulto → nunca fez | ✅ `protocolo-desparasitacao-adulto-vermefree` | ✅ | ✅ | ✅ `accepts_marketing=1`, `quiz-lp-vsl,quiz-lp-adulto,quiz-lp-adulto-nunca` |
+| 2 | Adulto → já fez → +3 meses | ✅ `protocolo-desparasitacao-adulto-vermefree` | ✅ | ✅ | ✅ `quiz-lp-adulto-mais3` |
+| 3 | Adulto → já fez → -3 meses | ✅ `oleo-de-alho-desodorizado-500mg` | ✅ | ✅ | ✅ `quiz-lp-adulto-menos3` |
+| 4 | Criança → 2 a 4 anos | ✅ `antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos` | ✅ | ✅ | ✅ `quiz-lp-kids-2-4` |
+| 5 | Criança → 5 a 9 anos | ✅ `antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos` | ✅ | ✅ | ✅ `quiz-lp-kids-5-9` |
+| 6 | Família (adulto + criança) | ✅ `kit-familia-vermefree-2-adultos-2-criancas` | ✅ | ✅ | ✅ `quiz-lp-familia` |
 
-Em todos os 6: zero erros de JavaScript, o cupom `5OFF` e os parâmetros de UTM foram montados corretamente na URL final, e o registro que seria enviado ao Shopify veio com `contact[accepts_marketing]: "1"` **só depois** do checkbox marcado (testei também tentar enviar com e-mail preenchido mas checkbox desmarcado — o botão continuou desabilitado nos 6 casos).
+Zero erros de JavaScript nos 6 casos. Testei também tentar avançar com e-mail preenchido mas checkbox desmarcado — o botão continuou desabilitado nos 6 casos, e só habilitou depois de marcar. Além do teste automatizado, também validei o arquivo com `node --check` (sintaxe do JS) e um checador de balanceamento de tags HTML — ambos passaram sem erro.
 
 **Confirmação: nenhum dos 6 resultados soa como diagnóstico.** Rodei um filtro automático procurando frases do tipo "você tem", "indica presença/infestação", "apresenta sinais" nos 6 textos de resultado — nenhuma ocorrência. Os 6 textos usam sempre a forma "pelo que você contou / faz mais sentido / é o protocolo pensado pra..." — recomendação de produto, nunca veredito de saúde.
 
-**O que eu NÃO consegui testar por mim mesma (peço que o time confirme antes de publicar):**
-- Assistir a VSL de verdade no celular com/sem som — porque o arquivo de vídeo ainda não existe (é o roteiro que estava pedido nesta fase, não a gravação). As legendas já estão escritas e conectadas; recomendo, assim que gravarem, only conferir se o tempo de fala bateu com os timestamps do `.vtt` (ajustar timestamps é rápido se a fala ficar mais rápida/lenta que o estimado).
-- Clicar na página de verdade dentro do painel do Shopify (bloqueio do meu ambiente, explicado acima) — pedi que isso seja o único passo manual antes de publicar: abrir o link de preview do tema rascunho e passar pelo quiz uma vez.
-- Conferir que a página não conflita visualmente/tecnicamente com o pop-up ao vivo: como são independentes (o pop-up é global via `theme.liquid`, a LP é uma página isolada) e a LP não foi tocada no tema publicado, não há como um conflitar com o outro em produção — mas o pop-up VAI continuar aparecendo por cima da LP também (ele dispara em qualquer página do site, exceto cart/checkout/account). Isso é esperado e não é um bug; se quiserem que a LP fique sem o pop-up por cima, dá pra adicionar a rota da LP na lista de exclusão do pop-up (`vf-diagnostico-popup.liquid`, variável `path`) — não fiz essa mudança porque webria mexer no tema publicado, fora do escopo que me foi dado sem confirmação.
+**O que eu NÃO consegui testar por mim mesma (peço que o time confirme antes de considerar 100% pronta):**
+- Assistir a VSL de verdade no celular com/sem som — o arquivo de vídeo ainda não existe (Fase 1 pediu o roteiro, não a gravação). As legendas já estão escritas e embutidas no HTML; depois de gravar, vale conferir se o tempo de fala bateu com os timestamps (ajustar é rápido se a fala ficar mais rápida/lenta que o estimado).
+- Um envio de e-mail de teste de verdade contra `vermefree.com.br/contact` (bloqueio do meu ambiente, explicado acima) — é o único passo manual que falta pra confirmar 100% que a captura de e-mail "cai na base".
+- Conferir que a página não conflita com o pop-up de diagnóstico que já está no ar: como são páginas/domínios tecnicamente independentes (o pop-up só roda dentro do tema Shopify, via `theme.liquid`; esta LP é um arquivo isolado fora do Shopify), **o pop-up NÃO vai aparecer** por cima desta LP — ele só existe nas páginas servidas pelo próprio Shopify. Ou seja, não há conflito possível entre os dois por construção.
 
 ---
 
 ## Link da página
 
-- **Preview (tema rascunho, ainda não publicada):** `https://vermefree.com.br/pages/descubra-seu-protocolo?preview_theme_id=164655497435` (abrir logado no admin da loja)
-- **Admin da página:** Shopify Admin → Loja Online → Páginas → "Adulto ou Kids? Descubra seu protocolo"
-- **Tema rascunho:** "VermFree — Draft LP VSL+Quiz (25/09)"
+**Publicada:** `https://raw.githack.com/operacionalvermfree/copyvermfree/lp/landing-descubra-seu-protocolo/index.html`
 
-## Pendências antes de ir ao ar
-1. Gravar a VSL com o roteiro acima e subir o `.mp4` no campo "Vídeo (URL .mp4)" da seção (editor de tema).
-2. Conferir/ajustar o timing das legendas (`assets/vf-vsl-legendas.vtt`) contra o áudio real.
-3. Um humano abrir o preview e passar pelo quiz uma vez (meu ambiente não teve acesso pra fazer esse clique final).
-4. Pedir a um dev pra copiar os 3 arquivos novos pro tema publicado e então publicar a página.
+## Pendências antes de considerar 100% pronta
+1. Gravar a VSL com o roteiro acima, subir o `.mp4` em algum storage estável (Drive/CDN) e colar a URL na constante `VIDEO_SRC` no fim do `index.html`.
+2. Conferir/ajustar o timing das legendas embutidas contra o áudio real.
+3. Alguém do time enviar um e-mail de teste pelo formulário e confirmar em Shopify Admin → Clientes que o contato chegou com `accepts_marketing` marcado e as tags certas.
+4. Apagar manualmente o tema-rascunho órfão `VermFree — Draft LP VSL+Quiz (25/09)` que ficou na Shopify por causa do erro de implementação inicial (Admin → Loja Online → Temas → ⋯ → Excluir tema) — a página que ele hospedava já foi apagada por mim.

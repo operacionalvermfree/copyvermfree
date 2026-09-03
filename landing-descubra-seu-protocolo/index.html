@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adulto, Kids ou os dois? — VermeFree</title>
+<meta name="description" content="Assista e responda um quiz rápido pra descobrir qual protocolo natural de desparasitação faz sentido pra sua rotina: Adulto, Kids ou Kit Família.">
+<meta name="theme-color" content="#14241a">
+<meta property="og:title" content="Adulto, Kids ou os dois? — VermeFree">
+<meta property="og:description" content="Assista aos poucos minutos e responda o quiz — descubra qual protocolo natural VermeFree faz sentido pro seu caso.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* grid rem-adaptativo — mesmo sistema do kit (ver landing-protocolo-adulto) */
+  html{font-size:16px;}
+  @media (max-width:1920px){html{font-size:0.833333vw;}}
+  @media (max-width:1440px){html{font-size:1.111111vw;}}
+  @media (max-width:1024px){html{font-size:1.5625vw;}}
+  @media (max-width:640px){html{font-size:4.444444vw;}}
+
+  :root{
+    /* paleta oficial Linha Adulto — CLAUDE.md §10 (página é um hub Adulto/Kids/Família, usa a base Adulto como chrome neutro) */
+    --green-light:#C0DE96;
+    --green-dark:#5E8C43;
+    --black:#1A1A1A;
+    --white:#FFFFFF;
+    --bronze:#C9A876;
+    --deep-top:#1f3d1f;
+    --deep-base:#14241a;
+    --soft-green:#E8F5E4;
+    --bg:#FAF8F2;
+    --text:#20301F;
+    --muted:#6B7A6E;
+    --line:rgba(94,140,67,0.16);
+    --grad:linear-gradient(120deg, var(--green-dark) 0%, var(--green-light) 100%);
+    --grad-deep:linear-gradient(165deg, var(--deep-top) 0%, var(--deep-base) 100%);
+    --glow:rgba(94,140,67,0.35);
+    --ease:cubic-bezier(.2,.7,.2,1);
+    --radius:1.4rem;
+    --radius-sm:0.95rem;
+    --maxw:44rem;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  /* overflow-x:hidden sozinho força overflow-y:auto (spec CSS) e quebraria
+     position:sticky se algum dia essa página ganhar uma seção sticky —
+     overflow-x:clip resolve os dois ao mesmo tempo (ver superprompt §2.2). */
+  html{overflow-x:hidden;overflow-x:clip;scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+    overflow-x:clip;
+    font-size:1rem;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;}
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem;}
+  section{position:relative;}
+  .eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--green-dark);margin-bottom:0.6rem;text-align:center;}
+
+  [data-observe]{opacity:0;transform:translateY(1.5rem);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  [data-observe].is-visible{opacity:1;transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    [data-observe]{opacity:1 !important;transform:none !important;transition:none !important;}
+  }
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;
+    position:relative;overflow:hidden;
+    background:var(--grad);border:0;border-radius:100px;
+    padding:1rem 1.9rem;text-decoration:none;color:var(--white);
+    font-weight:700;font-size:0.97rem;cursor:pointer;
+    box-shadow:0 0.9rem 1.9rem -0.75rem var(--glow);
+    transition:transform .2s var(--ease), opacity .2s var(--ease);
+  }
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:hover:not(:disabled){transform:translateY(-0.1rem);}
+  .btn-ghost{background:transparent;color:var(--muted);box-shadow:none;border:1.5px solid var(--line);font-weight:600;}
+  .btn-ghost:hover{color:var(--green-dark);border-color:var(--green-dark);}
+
+  /* ---------- VSL ---------- */
+  .vsl{padding:4.5rem 1.25rem 3rem;background:linear-gradient(180deg, var(--soft-green) 0%, var(--bg) 100%);text-align:center;}
+  .vsl-heading{font-size:clamp(1.7rem, 1.1rem + 2.6vw, 2.6rem);line-height:1.18;margin-bottom:0.9rem;}
+  .vsl-sub{font-size:1rem;line-height:1.6;color:var(--muted);max-width:34rem;margin:0 auto 2rem;}
+  .player{position:relative;width:100%;max-width:38rem;margin:0 auto;border-radius:var(--radius);overflow:hidden;box-shadow:0 1.5rem 3.5rem -1rem rgba(20,50,20,.28);background:var(--grad-deep);aspect-ratio:9/16;max-height:76vh;}
+  @media (min-width:44rem){.player{aspect-ratio:16/9;max-height:none;}}
+  .player video{width:100%;height:100%;display:block;object-fit:cover;background:transparent;}
+  .player-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;padding:2rem;color:rgba(244,241,233,0.9);text-align:center;}
+  .player-placeholder .ico{font-size:2.4rem;}
+  .player-placeholder strong{color:#fff;font-size:1rem;}
+  .player-placeholder p{margin:0;font-size:0.8rem;line-height:1.5;max-width:22rem;color:rgba(244,241,233,0.72);}
+  .scroll-cue{display:inline-block;margin-top:1.6rem;color:var(--green-dark);font-weight:700;text-decoration:none;font-size:0.95rem;border-bottom:2px solid var(--green-light);padding-bottom:0.15rem;}
+
+  /* ---------- QUIZ ---------- */
+  .quiz-section{padding:3rem 1.25rem 5rem;}
+  .quiz-card{max-width:34rem;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:2.2rem 1.75rem;box-shadow:0 0.7rem 2.5rem rgba(20,40,20,.07);}
+  .quiz-dots{display:flex;gap:0.4rem;justify-content:center;margin-bottom:1.1rem;}
+  .quiz-dots i{width:0.45rem;height:0.45rem;border-radius:100px;background:var(--line);display:block;transition:all .25s var(--ease);}
+  .quiz-dots i.is-on{background:var(--green-dark);width:1.3rem;}
+  .quiz-title{font-size:1.35rem;text-align:center;margin-bottom:0.4rem;}
+  .quiz-sub{font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:1.6rem;}
+  .qstep{display:none;}
+  .qstep.is-active{display:block;}
+  .qstep legend, .qstep .legend{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;margin-bottom:1rem;line-height:1.35;}
+  .qhint{font-size:0.8rem;color:var(--muted);font-style:italic;margin:-0.5rem 0 1rem;}
+  .qback{border:0;background:transparent;color:var(--muted);font-size:0.8rem;cursor:pointer;padding:0 0 0.9rem;}
+  .qback:hover{color:var(--green-dark);}
+  .qopts{display:flex;flex-direction:column;gap:0.6rem;}
+  .qopt{display:flex;align-items:center;gap:0.75rem;width:100%;text-align:left;padding:0.9rem 1rem;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:#fff;cursor:pointer;transition:border-color .18s ease, transform .12s ease;}
+  .qopt:hover{border-color:var(--green-dark);background:var(--soft-green);transform:translateX(0.15rem);}
+  .qopt .emo{font-size:1.4rem;flex:0 0 auto;}
+  .qopt .txt{display:flex;flex-direction:column;gap:0.1rem;}
+  .qopt .txt strong{font-size:0.92rem;color:var(--text);font-weight:700;}
+  .qopt .txt span{font-size:0.76rem;color:var(--muted);}
+
+  .qemail-label{display:block;font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:0.4rem;}
+  .qemail-input{width:100%;padding:0.85rem 0.9rem;border:1.5px solid var(--line);border-radius:var(--radius-sm);font-size:0.95rem;margin-bottom:1rem;font-family:inherit;}
+  .qemail-input:focus{outline:none;border-color:var(--green-dark);}
+  .qconsent{display:flex;align-items:flex-start;gap:0.6rem;background:#FFF8E1;border:1px solid #FCD34D;border-radius:var(--radius-sm);padding:0.8rem 0.9rem;margin-bottom:1.1rem;cursor:pointer;}
+  .qconsent input{margin-top:0.15rem;flex:0 0 auto;width:1.1rem;height:1.1rem;accent-color:var(--green-dark);cursor:pointer;}
+  .qconsent span{font-size:0.78rem;line-height:1.45;color:#6B4E02;}
+  .qmini{font-size:0.7rem;color:var(--muted);text-align:center;margin:0.6rem 0 0;}
+
+  .qresult-title{font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem;margin:0.2rem 0 0.6rem;}
+  .qresult-desc{font-size:0.88rem;line-height:1.55;color:var(--text);margin:0 0 1.3rem;}
+  .qresult-actions{display:flex;flex-direction:column;gap:0.6rem;}
+
+  footer{padding:2.5rem 1.25rem 3rem;text-align:center;}
+  .footnote{font-size:0.72rem;color:var(--muted);max-width:34rem;margin:0 auto;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<section class="vsl">
+  <div class="wrap">
+    <p class="eyebrow" data-observe>🌿 Antes de escolher, entenda</p>
+    <h1 class="vsl-heading" data-observe>Adulto, Kids, ou os dois? Vamos descobrir juntas.</h1>
+    <p class="vsl-sub" data-observe>Assista aos poucos minutos abaixo e depois responda o quiz rápido — ele te leva direto pro protocolo certo pro seu caso.</p>
+
+    <div class="player" data-observe>
+      <video id="vsl-video" controls playsinline preload="metadata" style="display:none;"></video>
+      <div class="player-placeholder" id="vsl-placeholder">
+        <span class="ico">🎬</span>
+        <strong>Vídeo em produção.</strong>
+        <p>Grave conforme o roteiro da VSL (documentado em <code>copies/lp-vsl-quiz-diagnostico.md</code>), suba o arquivo final e edite a constante <code>VIDEO_SRC</code> no fim deste HTML antes de publicar de novo na branch <code>lp</code>. As legendas já estão prontas e conectadas.</p>
+      </div>
+    </div>
+
+    <a href="#quiz" class="scroll-cue" data-observe>Responder o quiz agora ↓</a>
+  </div>
+</section>
+
+<section class="quiz-section" id="quiz">
+  <div class="quiz-card" data-observe>
+    <div class="quiz-dots" aria-hidden="true">
+      <i class="is-on" data-dot="1"></i><i data-dot="2"></i><i data-dot="3"></i>
+    </div>
+    <h2 class="quiz-title">Qual protocolo faz sentido pro seu caso?</h2>
+    <p class="quiz-sub">Poucas perguntas — no final você recebe uma recomendação, não um diagnóstico.</p>
+
+    <form id="qform">
+
+      <fieldset class="qstep is-active" data-step="publico">
+        <p class="legend">Pra quem é o protocolo?</p>
+        <div class="qopts">
+          <button type="button" class="qopt" data-answer data-field="publico" data-value="adulto">
+            <span class="emo">🧍‍♀️</span><span class="txt"><strong>Pra mim / pra nós adultos</strong><span>Quero cuidar do meu corpo</span></span>
+          </button>
+          <button type="button" class="qopt" data-answer data-field="publico" data-value="kids">
+            <span class="emo">🧒</span><span class="txt"><strong>Pra meu filho</strong><span>Cuidar da criança de forma natural</span></span>
+          </button>
+          <button type="button" class="qopt" data-answer data-field="publico" data-value="familia">
+            <span class="emo">👨‍👩‍👧‍👦</span><span class="txt"><strong>Pra família toda</strong><span>Adultos e crianças juntos</span></span>
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="qstep" data-step="kids-idade" hidden>
+        <button type="button" class="qback" data-back="publico">← voltar</button>
+        <p class="legend">Qual a idade do seu filho?</p>
+        <div class="qopts">
+          <button type="button" class="qopt" data-answer data-field="faixa" data-value="2-4">
+            <span class="emo">🧸</span><span class="txt"><strong>2 a 4 anos</strong></span>
+          </button>
+          <button type="button" class="qopt" data-answer data-field="faixa" data-value="5-9">
+            <span class="emo">🎒</span><span class="txt"><strong>5 a 9 anos</strong></span>
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="qstep" data-step="adulto-historico" hidden>
+        <button type="button" class="qback" data-back="publico">← voltar</button>
+        <p class="legend">Você já fez algum protocolo de desparasitação natural antes?</p>
+        <div class="qopts">
+          <button type="button" class="qopt" data-answer data-field="historico" data-value="nao">
+            <span class="emo">🌱</span><span class="txt"><strong>Não, é minha primeira vez</strong></span>
+          </button>
+          <button type="button" class="qopt" data-answer data-field="historico" data-value="sim">
+            <span class="emo">🔁</span><span class="txt"><strong>Sim, já fiz antes</strong></span>
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="qstep" data-step="adulto-recencia" hidden>
+        <button type="button" class="qback" data-back="adulto-historico">← voltar</button>
+        <p class="legend">Há quanto tempo foi o seu último protocolo?</p>
+        <div class="qopts">
+          <button type="button" class="qopt" data-answer data-field="recencia" data-value="mais3">
+            <span class="emo">📅</span><span class="txt"><strong>Mais de 3 meses</strong></span>
+          </button>
+          <button type="button" class="qopt" data-answer data-field="recencia" data-value="menos3">
+            <span class="emo">🕐</span><span class="txt"><strong>Menos de 3 meses</strong></span>
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="qstep" data-step="email" hidden>
+        <p class="legend">Só mais um passo pra eu te mostrar a recomendação</p>
+        <p class="qhint">Deixo sua recomendação guardada nesse e-mail também, caso você queira decidir com calma depois.</p>
+        <label class="qemail-label" for="q-email">Seu melhor e-mail</label>
+        <input type="email" id="q-email" class="qemail-input" placeholder="seuemail@exemplo.com" required autocomplete="email">
+        <label class="qconsent">
+          <input type="checkbox" id="q-consent" required>
+          <span>Aceito receber e-mails da VermeFree com novidades e cuidado natural pra família. Posso cancelar quando quiser.</span>
+        </label>
+        <button type="button" class="btn" id="q-submit" disabled>Ver minha recomendação →</button>
+        <p class="qmini">Sem opt-in marcado, não conseguimos te enviar nada — por isso ele é obrigatório aqui.</p>
+      </fieldset>
+
+      <fieldset class="qstep" data-step="result" hidden>
+        <p class="eyebrow" style="text-align:left;">✨ Pelo que você contou</p>
+        <h3 class="qresult-title" data-result-title></h3>
+        <p class="qresult-desc" data-result-desc></p>
+        <div class="qresult-actions">
+          <a href="#" class="btn" data-result-cta target="_blank" rel="noopener">Ver esse protocolo →</a>
+          <button type="button" class="btn btn-ghost" data-restart>Refazer o quiz</button>
+        </div>
+      </fieldset>
+
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p class="footnote">Isso não é um diagnóstico — é só uma recomendação de rotina de bem-estar a partir do que você contou. Qualquer dúvida sobre sua saúde, vale conversar com quem te acompanha de perto. Desparasitação natural, 2 a 4x por ano, com constância — não é fórmula mágica nem remédio de farmácia.</p>
+</footer>
+
+<!-- captions da VSL (pt-BR), guardadas como texto inerte e convertidas em Blob em runtime
+     pra evitar o problema de quebra de linha em atributo HTML de data: URI -->
+<script id="vsl-vtt" type="text/plain">WEBVTT
+
+00:00:00.000 --> 00:00:04.500
+Oi. Se você chegou até aqui, você
+provavelmente tá com uma dúvida bem específica.
+
+00:00:04.500 --> 00:00:09.000
+E não é "será que funciona".
+É outra: "isso é pra mim, pro meu filho, ou pros dois?"
+
+00:00:09.000 --> 00:00:14.000
+Eu vou responder essa pergunta com calma
+nos próximos minutos.
+
+00:00:14.000 --> 00:00:20.000
+E no final, tem um quiz de menos de um minuto
+que te leva direto pro protocolo certo.
+
+00:00:20.000 --> 00:00:24.000
+Sem você ter que adivinhar sozinha.
+
+00:00:30.000 --> 00:00:35.500
+Antes de entrar no como funciona, deixa eu te contar
+o que a desparasitação natural É — e o que ela NÃO é.
+
+00:00:35.500 --> 00:00:41.000
+Não é uma emergência. Não é "descobri que tenho
+verme, preciso tratar agora".
+
+00:00:41.000 --> 00:00:47.000
+É uma rotina — igual malhar, igual fazer
+aquele check-up anual.
+
+00:00:47.000 --> 00:00:52.000
+A recomendação é fazer de 2 a 4 vezes por ano.
+
+00:00:52.000 --> 00:00:58.000
+E tem um detalhe que faz parte da nossa forma de fazer:
+sincronizamos o início com a lua nova.
+
+00:00:58.000 --> 00:01:05.000
+Não é papo místico prometendo resultado mágico —
+é só um jeito de criar um ritual.
+
+00:01:05.000 --> 00:01:10.000
+Uma data fácil de lembrar, pra você não deixar
+a rotina de lado.
+
+00:01:30.000 --> 00:01:35.000
+Vou te mostrar como é o protocolo adulto,
+os 4 frascos, um por um.
+
+00:01:35.000 --> 00:01:43.000
+O primeiro é a Silimarina. Ela começa ANTES
+dos outros — 15 dias antes da lua nova.
+
+00:01:43.000 --> 00:01:49.000
+É uma cápsula depois do café da manhã e
+uma depois do jantar.
+
+00:01:49.000 --> 00:01:55.000
+Esse começo adiantado é só pra preparar o terreno
+antes dos outros três entrarem.
+
+00:01:55.000 --> 00:02:02.000
+Aí, no dia da lua nova, entram os outros três juntos:
+a Tintura, o Óleo de Orégano e a Ornitina.
+
+00:02:02.000 --> 00:02:09.000
+A Tintura você dilui em água e toma 3 vezes ao dia,
+antes das refeições.
+
+00:02:09.000 --> 00:02:15.000
+O Óleo de Orégano, uma cápsula também 3 vezes ao dia,
+junto com a tintura.
+
+00:02:15.000 --> 00:02:22.000
+E a Ornitina, só 1 cápsula por dia, à noite,
+meia hora antes de deitar.
+
+00:02:22.000 --> 00:02:30.000
+Parece complicado escrito, mas na prática é só
+criar um lembrete no celular e seguir a ordem.
+
+00:02:30.000 --> 00:02:34.000
+Não tem mistério.
+
+00:03:00.000 --> 00:03:06.000
+Se é pro seu filho, o processo é bem mais simples —
+e diferente de propósito.
+
+00:03:06.000 --> 00:03:14.000
+Kids são 2 frascos líquidos, e a dose é a mesma
+pra 2 a 4 anos e pra 5 a 9 anos.
+
+00:03:14.000 --> 00:03:21.000
+O que muda é a forma como a gente recomenda dar,
+pra facilitar a aceitação em cada fase.
+
+00:03:21.000 --> 00:03:27.000
+É diluído em água e tomado 3 vezes ao dia,
+também por 30 dias.
+
+00:03:27.000 --> 00:03:34.000
+Eu sei que toda mãe pergunta a mesma coisa:
+"a partir de que idade posso dar?"
+
+00:03:34.000 --> 00:03:37.000
+A partir de 2 anos.
+
+00:03:37.000 --> 00:03:44.000
+E sobre o sabor — é laranja, pensado pra criança
+aceitar sem drama.
+
+00:03:44.000 --> 00:03:51.000
+Dá pra dar puro ou, se ela tiver mais resistência,
+misturado em outra coisa gelada.
+
+00:03:51.000 --> 00:03:58.000
+Isso aqui não substitui uma emergência médica, viu?
+É rotina, cuidado, prevenção.
+
+00:03:58.000 --> 00:04:00.000
+Não é remédio de farmácia.
+
+00:04:00.000 --> 00:04:06.000
+Agora a segunda dúvida que mais chega pra gente:
+"terminei o protocolo, e agora?"
+
+00:04:06.000 --> 00:04:13.000
+Entre um ciclo e outro — lembra, 2 a 4 vezes por ano —
+não é pra ficar parada.
+
+00:04:13.000 --> 00:04:21.000
+É aí que entra o Óleo de Alho Desodorizado:
+a manutenção mensal, uma cápsula por dia.
+
+00:04:21.000 --> 00:04:27.000
+Nos meses em que você não tá fazendo
+o protocolo completo.
+
+00:04:27.000 --> 00:04:34.000
+Pensa assim: o protocolo dos 4 frascos é o cuidado
+grande, que você faz de tempos em tempos.
+
+00:04:34.000 --> 00:04:39.000
+O óleo de alho é o que segura a rotina
+no meio do caminho.
+
+00:05:00.000 --> 00:05:06.000
+Antes de eu te convidar pro quiz, preciso ser
+honesta com você sobre uma coisa.
+
+00:05:06.000 --> 00:05:10.000
+Isso aqui não é milagre.
+
+00:05:10.000 --> 00:05:17.000
+Não existe protocolo — nosso ou de qualquer marca —
+que resolve tudo em 3 dias.
+
+00:05:17.000 --> 00:05:21.000
+Ou garante o mesmo resultado pra todo mundo.
+
+00:05:21.000 --> 00:05:28.000
+O que existe é constância: fazer certinho, no seu tempo,
+e repetir a rotina ao longo do ano.
+
+00:05:28.000 --> 00:05:34.000
+Se você tá procurando uma solução instantânea,
+esse não é o produto certo pra você agora.
+
+00:05:34.000 --> 00:05:41.000
+Mas se você quer um cuidado natural, sério, que vira
+hábito — aí sim, faz sentido continuarmos.
+
+00:05:41.000 --> 00:05:46.000
+Beleza. Se você ainda tá em dúvida se é o protocolo
+Adulto, o Kids, os dois, ou o óleo de alho...
+
+00:05:46.000 --> 00:05:49.000
+Não precisa decidir sozinha.
+
+00:05:49.000 --> 00:05:56.000
+Logo abaixo desse vídeo tem um quiz rápido,
+menos de 1 minuto, poucas perguntas.
+
+00:05:56.000 --> 00:06:03.000
+No final ele te mostra qual protocolo faz mais
+sentido pro seu caso, com a explicação do porquê.
+
+00:06:03.000 --> 00:06:08.000
+Responde aí embaixo. Te vejo do outro lado.
+</script>
+
+<!-- form oculto (submit via iframe invisível, sem sair da página) que grava o
+     contato como customer no Shopify usando o endpoint público e nativo de
+     newsletter/customer signup — funciona de qualquer domínio externo porque
+     é um <form> POST simples (navegação), não um fetch/XHR sujeito a CORS. -->
+<iframe name="vf-hidden-submit" style="display:none;" title="envio de e-mail"></iframe>
+<form id="vf-customer-form" action="https://vermefree.com.br/contact#ContactFooter" method="post" target="vf-hidden-submit" style="display:none;">
+  <input type="hidden" name="form_type" value="customer">
+  <input type="hidden" name="utf8" value="✓">
+  <input type="hidden" name="contact[email]" id="vf-c-email">
+  <input type="hidden" name="contact[accepts_marketing]" id="vf-c-consent" value="0">
+  <input type="hidden" name="contact[tags]" id="vf-c-tags" value="">
+</form>
+
+<script>
+(function(){
+  // ---------- reveal on scroll ----------
+  var observed = document.querySelectorAll('[data-observe]');
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, {threshold:0.15});
+    observed.forEach(function(el){ io.observe(el); });
+    setTimeout(function(){ observed.forEach(function(el){ el.classList.add('is-visible'); }); }, 5000);
+  } else {
+    observed.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  // ---------- VSL: liga o vídeo só se houver URL configurada ----------
+  // Cole aqui a URL do .mp4 final assim que a VSL for gravada (ver roteiro em
+  // copies/lp-vsl-quiz-diagnostico.md) e publique de novo na branch `lp`.
+  var VIDEO_SRC = '';
+
+  var video = document.getElementById('vsl-video');
+  var placeholder = document.getElementById('vsl-placeholder');
+  if (VIDEO_SRC) {
+    var vttText = document.getElementById('vsl-vtt').textContent;
+    var vttBlobUrl = URL.createObjectURL(new Blob([vttText], {type:'text/vtt'}));
+    var source = document.createElement('source');
+    source.src = VIDEO_SRC;
+    source.type = 'video/mp4';
+    var track = document.createElement('track');
+    track.kind = 'captions';
+    track.srclang = 'pt-BR';
+    track.label = 'Português';
+    track.src = vttBlobUrl;
+    track.default = true;
+    video.appendChild(source);
+    video.appendChild(track);
+    video.style.display = 'block';
+    placeholder.style.display = 'none';
+  }
+
+  // ---------- QUIZ ----------
+  var state = { publico:'', faixa:'', historico:'', recencia:'' };
+  var form = document.getElementById('qform');
+  var steps = form.querySelectorAll('[data-step]');
+  var dots = document.querySelectorAll('[data-dot]');
+  var emailInput = document.getElementById('q-email');
+  var consentInput = document.getElementById('q-consent');
+  var submitBtn = document.getElementById('q-submit');
+
+  var RESULTS = {
+    'adulto-nunca': {
+      title: 'Protocolo Adulto VermeFree',
+      desc: 'Pelo que você contou, o Protocolo Adulto é o que faz mais sentido pra começar: são os 4 frascos que compõem a rotina completa de desparasitação natural, no seu primeiro ciclo.',
+      handle: 'protocolo-desparasitacao-adulto-vermefree',
+      tag: 'quiz-lp-adulto-nunca'
+    },
+    'adulto-mais3': {
+      title: 'Protocolo Adulto VermeFree',
+      desc: 'Como já faz mais de 3 meses do seu último protocolo, esse é um bom momento pra recomeçar o ciclo — a recomendação é repetir a rotina completa de 2 a 4 vezes por ano.',
+      handle: 'protocolo-desparasitacao-adulto-vermefree',
+      tag: 'quiz-lp-adulto-mais3'
+    },
+    'adulto-menos3': {
+      title: 'Óleo de Alho Desodorizado VermeFree',
+      desc: 'Como você fez o protocolo há pouco tempo, faz mais sentido agora apoiar a rotina com o Óleo de Alho — a manutenção mensal pra manter o cuidado entre um ciclo completo e outro.',
+      handle: 'oleo-de-alho-desodorizado-500mg',
+      tag: 'quiz-lp-adulto-menos3'
+    },
+    'kids-2-4': {
+      title: 'VermeFree Kids 2 a 4 anos',
+      desc: 'Pra essa faixa de idade, o VermeFree Kids 2 a 4 anos é o protocolo pensado certinho pro seu filho — líquido, com dose ajustada e fácil de aceitar.',
+      handle: 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos',
+      tag: 'quiz-lp-kids-2-4'
+    },
+    'kids-5-9': {
+      title: 'VermeFree Kids 5 a 9 anos',
+      desc: 'Pra essa faixa de idade, o VermeFree Kids 5 a 9 anos é o protocolo pensado certinho pro seu filho — líquido, com dose ajustada pra fase escolar.',
+      handle: 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos',
+      tag: 'quiz-lp-kids-5-9'
+    },
+    'familia': {
+      title: 'Kit Família VermeFree',
+      desc: 'Como é pra adultos e crianças juntos, o Kit Família reúne os dois protocolos num só lugar — pra cuidar da rotina da casa inteira de uma vez.',
+      handle: 'kit-familia-vermefree-2-adultos-2-criancas',
+      tag: 'quiz-lp-familia'
+    }
+  };
+
+  function resultKey(){
+    if (state.publico === 'familia') return 'familia';
+    if (state.publico === 'kids'){
+      if (state.faixa === '2-4') return 'kids-2-4';
+      if (state.faixa === '5-9') return 'kids-5-9';
+      return null;
+    }
+    if (state.publico === 'adulto'){
+      if (state.historico === 'nao') return 'adulto-nunca';
+      if (state.historico === 'sim'){
+        if (state.recencia === 'mais3') return 'adulto-mais3';
+        if (state.recencia === 'menos3') return 'adulto-menos3';
+      }
+    }
+    return null;
+  }
+
+  function showStep(name){
+    steps.forEach(function(s){
+      var match = s.getAttribute('data-step') === name;
+      s.hidden = !match;
+      s.classList.toggle('is-active', match);
+    });
+    var dotN = 1;
+    if (name === 'kids-idade' || name === 'adulto-historico') dotN = 2;
+    if (name === 'adulto-recencia' || name === 'email' || name === 'result') dotN = 3;
+    dots.forEach(function(d){ d.classList.toggle('is-on', parseInt(d.getAttribute('data-dot'),10) <= dotN); });
+  }
+
+  function nextStepAfter(field){
+    if (field === 'publico'){
+      if (state.publico === 'familia') return 'email';
+      if (state.publico === 'kids') return 'kids-idade';
+      if (state.publico === 'adulto') return 'adulto-historico';
+    }
+    if (field === 'faixa') return 'email';
+    if (field === 'historico') return state.historico === 'nao' ? 'email' : 'adulto-recencia';
+    if (field === 'recencia') return 'email';
+    return 'publico';
+  }
+
+  form.addEventListener('click', function(e){
+    var ans = e.target.closest('[data-answer]');
+    if (ans){
+      state[ans.getAttribute('data-field')] = ans.getAttribute('data-value');
+      showStep(nextStepAfter(ans.getAttribute('data-field')));
+      return;
+    }
+    var back = e.target.closest('[data-back]');
+    if (back){ showStep(back.getAttribute('data-back')); return; }
+    var restart = e.target.closest('[data-restart]');
+    if (restart){
+      state = { publico:'', faixa:'', historico:'', recencia:'' };
+      showStep('publico');
+      emailInput.value = '';
+      consentInput.checked = false;
+      validate();
+      return;
+    }
+  });
+
+  function validate(){
+    var emailOk = /.+@.+\..+/.test(emailInput.value);
+    submitBtn.disabled = !(emailOk && consentInput.checked);
+  }
+  emailInput.addEventListener('input', validate);
+  consentInput.addEventListener('change', validate);
+
+  submitBtn.addEventListener('click', function(){
+    if (submitBtn.disabled) return;
+    var key = resultKey();
+    var result = RESULTS[key];
+    if (!result) return;
+
+    // opt-in explícito: só chega aqui com checkbox marcado (botão fica disabled até então)
+    document.getElementById('vf-c-email').value = emailInput.value;
+    document.getElementById('vf-c-consent').value = consentInput.checked ? '1' : '0';
+    var tagSet = {};
+    ['quiz-lp-vsl', 'quiz-lp-' + state.publico, result.tag].forEach(function(t){ tagSet[t] = true; });
+    document.getElementById('vf-c-tags').value = Object.keys(tagSet).join(',');
+    document.getElementById('vf-customer-form').submit();
+
+    document.querySelector('[data-result-title]').textContent = result.title;
+    document.querySelector('[data-result-desc]').textContent = result.desc;
+    var dest = 'https://vermefree.com.br/products/' + result.handle + '?utm_source=lp_vsl_quiz&utm_medium=onsite&utm_campaign=quiz_diagnostico_lp';
+    document.querySelector('[data-result-cta]').setAttribute('href', 'https://vermefree.com.br/discount/5OFF?redirect=' + encodeURIComponent(dest.replace('https://vermefree.com.br','')));
+    showStep('result');
+  });
+
+  showStep('publico');
+})();
+</script>
+</body>
+</html>

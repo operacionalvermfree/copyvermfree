@@ -33,6 +33,7 @@ Páginas fora do padrão `landing-<slug>` (sem checkout/variant ID) — mesma re
 | Página | Pasta | Status | Link publicado |
 |---|---|---|---|
 | Linktree (bio Instagram) | `linktree-vermefree/` | em revisão — Site preenchido (`https://vermefree.com.br`); ainda faltam `[LINK CADASTRO CREATOR]`, `[LINK GRUPO VIP]`, `[LINK ATENDIMENTO]` | — |
+| VSL + Quiz de Diagnóstico ("Adulto, Kids ou os dois?") | `landing-descubra-seu-protocolo/` | em construção — quiz 100% funcional (6 combinações testadas), falta gravar e subir o vídeo final da VSL (roteiro pronto em `copies/lp-vsl-quiz-diagnostico.md`) antes de considerar publicada de verdade | https://raw.githack.com/operacionalvermfree/copyvermfree/lp/landing-descubra-seu-protocolo/index.html |
 
 ---
 
