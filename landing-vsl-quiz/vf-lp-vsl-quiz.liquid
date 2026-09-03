@@ -1,0 +1,426 @@
+{%- comment -%}
+  vf-lp-vsl-quiz.liquid
+  Landing page dedicada: VSL (vídeo de vendas) + quiz de diagnóstico (recomendação, não diagnóstico).
+  Complementar ao pop-up global vf-diagnostico-popup.liquid — reaproveita a mesma pergunta
+  inicial (público) e a mesma divisão de idade Kids, e ACRESCENTA a pergunta de recência
+  de uso que o pop-up não tem (necessária pra rotear Adulto recente -> Óleo de Alho).
+  Opt-in de e-mail é explícito (checkbox obrigatório) e usa contact[accepts_marketing] de verdade.
+  Linguagem: recomendação de produto, nunca diagnóstico de saúde (ver CLAUDE.md §4).
+{%- endcomment -%}
+
+<section class="vf-lpq" id="vf-lpq">
+
+  {%- comment -%} ===================== BLOCO VSL ===================== {%- endcomment -%}
+  <div class="vf-lpq__vsl">
+    <div class="vf-lpq__vsl-inner">
+      <p class="vf-lpq__eyebrow">{{ section.settings.eyebrow | default: '🌿 Antes de escolher, entenda' }}</p>
+      <h1 class="vf-lpq__heading">{{ section.settings.heading | default: 'Adulto, Kids, ou os dois? Vamos descobrir juntas.' }}</h1>
+      <p class="vf-lpq__subheading">{{ section.settings.subheading | default: 'Assista aos poucos minutos abaixo e depois responda o quiz rápido — ele te leva direto pro protocolo certo pro seu caso.' }}</p>
+
+      <div class="vf-lpq__player">
+        {%- if section.settings.video_source != blank -%}
+          <video
+            class="vf-lpq__video"
+            controls
+            playsinline
+            preload="metadata"
+            {% if section.settings.video_poster != blank %}poster="{{ section.settings.video_poster | image_url: width: 1200 }}"{% endif %}
+          >
+            <source src="{{ section.settings.video_source }}" type="video/mp4">
+            <track kind="captions" src="{{ 'vf-vsl-legendas.vtt' | asset_url }}" srclang="pt-BR" label="Português" default>
+          </video>
+        {%- else -%}
+          <div class="vf-lpq__player-placeholder">
+            <span class="vf-lpq__player-placeholder-icon">🎬</span>
+            <p><strong>Vídeo em produção.</strong></p>
+            <p>Grave conforme o roteiro da VSL e cole a URL do arquivo final no campo "Vídeo (URL .mp4)" desta seção no editor de tema. As legendas (.vtt) já estão prontas e conectadas.</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <a href="#vf-lpq-quiz" class="vf-lpq__scroll-cue">Responder o quiz agora ↓</a>
+    </div>
+  </div>
+
+  {%- comment -%} ===================== BLOCO QUIZ ===================== {%- endcomment -%}
+  <div class="vf-lpq__quiz" id="vf-lpq-quiz">
+    <div class="vf-lpq__quiz-inner">
+
+      <div class="vf-lpq__quiz-head">
+        <p class="vf-lpq__quiz-dots" aria-hidden="true">
+          <span class="vf-lpq__dot is-on" data-lpq-dot="1"></span>
+          <span class="vf-lpq__dot" data-lpq-dot="2"></span>
+          <span class="vf-lpq__dot" data-lpq-dot="3"></span>
+        </p>
+        <h2 class="vf-lpq__quiz-title">{{ section.settings.quiz_heading | default: 'Qual protocolo faz sentido pro seu caso?' }}</h2>
+        <p class="vf-lpq__quiz-sub">Poucas perguntas — no final você recebe uma recomendação, não um diagnóstico.</p>
+      </div>
+
+      <form id="vf-lpq-form" class="vf-lpq__form">
+
+        {%- comment -%} STEP 1 — público (mesma pergunta/copy do pop-up global, pra não dar 2 diagnósticos diferentes) {%- endcomment -%}
+        <fieldset class="vf-lpq__step is-active" data-lpq-step="publico">
+          <legend class="vf-lpq__legend">Pra quem é o protocolo?</legend>
+          <div class="vf-lpq__opts">
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="publico" data-value="adulto">
+              <span class="vf-lpq__opt-emoji">🧍‍♀️</span>
+              <span class="vf-lpq__opt-txt"><strong>Pra mim / pra nós adultos</strong><span>Quero cuidar do meu corpo</span></span>
+            </button>
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="publico" data-value="kids">
+              <span class="vf-lpq__opt-emoji">🧒</span>
+              <span class="vf-lpq__opt-txt"><strong>Pra meu filho</strong><span>Cuidar da criança de forma natural</span></span>
+            </button>
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="publico" data-value="familia">
+              <span class="vf-lpq__opt-emoji">👨‍👩‍👧‍👦</span>
+              <span class="vf-lpq__opt-txt"><strong>Pra família toda</strong><span>Adultos e crianças juntos</span></span>
+            </button>
+          </div>
+        </fieldset>
+
+        {%- comment -%} STEP 2a — idade da criança (mesma divisão do pop-up) {%- endcomment -%}
+        <fieldset class="vf-lpq__step" data-lpq-step="kids-idade" hidden>
+          <button type="button" class="vf-lpq__back" data-lpq-back="publico">← voltar</button>
+          <legend class="vf-lpq__legend">Qual a idade do seu filho?</legend>
+          <div class="vf-lpq__opts">
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="faixa" data-value="2-4">
+              <span class="vf-lpq__opt-emoji">🧸</span>
+              <span class="vf-lpq__opt-txt"><strong>2 a 4 anos</strong></span>
+            </button>
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="faixa" data-value="5-9">
+              <span class="vf-lpq__opt-emoji">🎒</span>
+              <span class="vf-lpq__opt-txt"><strong>5 a 9 anos</strong></span>
+            </button>
+          </div>
+        </fieldset>
+
+        {%- comment -%} STEP 2b — já fez protocolo antes? (pergunta NOVA, não existe no pop-up) {%- endcomment -%}
+        <fieldset class="vf-lpq__step" data-lpq-step="adulto-historico" hidden>
+          <button type="button" class="vf-lpq__back" data-lpq-back="publico">← voltar</button>
+          <legend class="vf-lpq__legend">Você já fez algum protocolo de desparasitação natural antes?</legend>
+          <div class="vf-lpq__opts">
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="historico" data-value="nao">
+              <span class="vf-lpq__opt-emoji">🌱</span>
+              <span class="vf-lpq__opt-txt"><strong>Não, é minha primeira vez</strong></span>
+            </button>
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="historico" data-value="sim">
+              <span class="vf-lpq__opt-emoji">🔁</span>
+              <span class="vf-lpq__opt-txt"><strong>Sim, já fiz antes</strong></span>
+            </button>
+          </div>
+        </fieldset>
+
+        {%- comment -%} STEP 3b — há quanto tempo? (pergunta NOVA — decide Adulto x Óleo de Alho) {%- endcomment -%}
+        <fieldset class="vf-lpq__step" data-lpq-step="adulto-recencia" hidden>
+          <button type="button" class="vf-lpq__back" data-lpq-back="adulto-historico">← voltar</button>
+          <legend class="vf-lpq__legend">Há quanto tempo foi o seu último protocolo?</legend>
+          <div class="vf-lpq__opts">
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="recencia" data-value="mais3">
+              <span class="vf-lpq__opt-emoji">📅</span>
+              <span class="vf-lpq__opt-txt"><strong>Mais de 3 meses</strong></span>
+            </button>
+            <button type="button" class="vf-lpq__opt" data-lpq-answer data-field="recencia" data-value="menos3">
+              <span class="vf-lpq__opt-emoji">🕐</span>
+              <span class="vf-lpq__opt-txt"><strong>Menos de 3 meses</strong></span>
+            </button>
+          </div>
+        </fieldset>
+
+        {%- comment -%} STEP — captura de e-mail com OPT-IN EXPLÍCITO (obrigatório antes do resultado) {%- endcomment -%}
+        <fieldset class="vf-lpq__step" data-lpq-step="email" hidden>
+          <legend class="vf-lpq__legend">Só mais um passo pra eu te mostrar a recomendação</legend>
+          <p class="vf-lpq__hint">Deixo sua recomendação guardada nesse e-mail também, caso você queira decidir com calma depois.</p>
+          <label class="vf-lpq__email-label" for="vf-lpq-email">Seu melhor e-mail</label>
+          <input type="email" id="vf-lpq-email" class="vf-lpq__email-input" placeholder="seuemail@exemplo.com" required autocomplete="email">
+
+          <label class="vf-lpq__consent">
+            <input type="checkbox" id="vf-lpq-consent" required>
+            <span>Aceito receber e-mails da VermeFree com novidades e cuidado natural pra família. Posso cancelar quando quiser.</span>
+          </label>
+
+          <button type="button" class="vf-lpq__btn vf-lpq__btn--primary" id="vf-lpq-submit-email" disabled>Ver minha recomendação →</button>
+          <p class="vf-lpq__form-mini">Sem opt-in marcado, não conseguimos te enviar nada — por isso ele é obrigatório aqui.</p>
+        </fieldset>
+
+        {%- comment -%} STEP — resultado (recomendação, nunca diagnóstico) {%- endcomment -%}
+        <fieldset class="vf-lpq__step" data-lpq-step="result" hidden>
+          <p class="vf-lpq__eyebrow">✨ Pelo que você contou</p>
+          <h3 class="vf-lpq__result-title" data-lpq-result-title></h3>
+          <p class="vf-lpq__result-desc" data-lpq-result-desc></p>
+          <a href="#" class="vf-lpq__btn vf-lpq__btn--primary vf-lpq__result-cta" data-lpq-result-cta target="_blank" rel="noopener">Ver esse protocolo →</a>
+          <button type="button" class="vf-lpq__btn vf-lpq__btn--secondary" data-lpq-restart>Refazer o quiz</button>
+        </fieldset>
+
+      </form>
+
+      {%- comment -%} Form real do Shopify pra criar/atualizar o customer com consentimento explícito {%- endcomment -%}
+      {%- form 'customer', id: 'vf-lpq-customer-form', class: 'vf-lpq__hidden-form' -%}
+        <input type="hidden" name="contact[email]" id="vf-lpq-customer-email">
+        <input type="hidden" name="contact[accepts_marketing]" id="vf-lpq-customer-consent" value="0">
+        <input type="hidden" name="contact[tags]" id="vf-lpq-customer-tags" value="">
+      {%- endform -%}
+
+    </div>
+  </div>
+
+</section>
+
+{% stylesheet %}
+  .vf-lpq { background: #FDFDF9; color: #1A1A1A; font-family: 'Inter', system-ui, sans-serif; }
+
+  /* ---------- VSL ---------- */
+  .vf-lpq__vsl { padding: 56px 20px 48px; background: linear-gradient(180deg, #F0FDF4 0%, #FDFDF9 100%); }
+  .vf-lpq__vsl-inner { max-width: 780px; margin: 0 auto; text-align: center; }
+  .vf-lpq__eyebrow { font-size: 13px; font-weight: 700; color: #5EBC43; letter-spacing: .02em; margin: 0 0 10px; }
+  .vf-lpq__heading { font-family: 'Caprasimo', Georgia, serif; font-weight: 400; font-size: clamp(26px, 4vw, 42px); line-height: 1.2; color: #16301A; margin: 0 0 14px; }
+  .vf-lpq__subheading { font-size: 16px; line-height: 1.55; color: #4A554A; max-width: 560px; margin: 0 auto 32px; }
+
+  .vf-lpq__player { position: relative; width: 100%; max-width: 720px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 60px rgba(20,50,20,.16); background: #0E1F10; aspect-ratio: 9 / 16; max-height: 78vh; }
+  @media (min-width: 700px) { .vf-lpq__player { aspect-ratio: 16 / 9; max-height: none; } }
+  .vf-lpq__video { width: 100%; height: 100%; display: block; object-fit: cover; background: #0E1F10; }
+  .vf-lpq__player-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 32px; color: #E6F4EA; text-align: center; }
+  .vf-lpq__player-placeholder-icon { font-size: 40px; }
+  .vf-lpq__player-placeholder p { margin: 0; font-size: 13.5px; line-height: 1.5; max-width: 380px; }
+  .vf-lpq__player-placeholder p strong { color: #fff; font-size: 15px; }
+
+  .vf-lpq__scroll-cue { display: inline-block; margin-top: 24px; color: #1B5E20; font-weight: 700; text-decoration: none; font-size: 15px; border-bottom: 2px solid #5EBC43; padding-bottom: 2px; }
+  .vf-lpq__scroll-cue:hover { color: #5EBC43; }
+
+  /* ---------- QUIZ ---------- */
+  .vf-lpq__quiz { padding: 56px 20px 72px; }
+  .vf-lpq__quiz-inner { max-width: 560px; margin: 0 auto; background: #FFFFFF; border: 1px solid #EBEFE6; border-radius: 24px; padding: 36px 28px; box-shadow: 0 10px 40px rgba(20,40,20,.06); }
+  .vf-lpq__quiz-head { text-align: center; margin-bottom: 24px; }
+  .vf-lpq__quiz-dots { display: flex; gap: 6px; justify-content: center; margin: 0 0 16px; }
+  .vf-lpq__dot { width: 7px; height: 7px; border-radius: 999px; background: #DDE4D6; transition: all .25s ease; }
+  .vf-lpq__dot.is-on { background: #1B5E20; width: 20px; }
+  .vf-lpq__quiz-title { font-family: 'Caprasimo', Georgia, serif; font-weight: 400; font-size: 22px; color: #16301A; margin: 0 0 8px; line-height: 1.3; }
+  .vf-lpq__quiz-sub { font-size: 13.5px; color: #7A867A; margin: 0; }
+
+  .vf-lpq__step { border: 0; padding: 0; margin: 0; display: none; }
+  .vf-lpq__step.is-active { display: block; }
+  .vf-lpq__legend { font-family: 'Caprasimo', Georgia, serif; font-weight: 400; font-size: 18px; color: #1A1A1A; margin: 0 0 16px; padding: 0; line-height: 1.35; }
+  .vf-lpq__hint { font-size: 13px; color: #7A867A; margin: -8px 0 16px; font-style: italic; }
+
+  .vf-lpq__back { border: 0; background: transparent; color: #7A867A; font-size: 13px; cursor: pointer; padding: 0 0 14px; }
+  .vf-lpq__back:hover { color: #1B5E20; }
+
+  .vf-lpq__opts { display: flex; flex-direction: column; gap: 10px; }
+  .vf-lpq__opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 14px 16px; border: 1.5px solid #E3E7DD; border-radius: 14px; background: #fff; cursor: pointer; transition: border-color .18s ease, transform .12s ease, box-shadow .18s ease; }
+  .vf-lpq__opt:hover { border-color: #5EBC43; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(94,188,67,.14); }
+  .vf-lpq__opt-emoji { font-size: 24px; flex: 0 0 auto; }
+  .vf-lpq__opt-txt { display: flex; flex-direction: column; gap: 1px; }
+  .vf-lpq__opt-txt strong { font-size: 15px; color: #16301A; font-weight: 700; }
+  .vf-lpq__opt-txt span { font-size: 12.5px; color: #7A867A; }
+
+  .vf-lpq__email-label { display: block; font-size: 13px; font-weight: 600; color: #3D4A3D; margin-bottom: 6px; }
+  .vf-lpq__email-input { width: 100%; padding: 13px 14px; border: 1.5px solid #D8DED0; border-radius: 12px; font-size: 15px; margin-bottom: 16px; box-sizing: border-box; font-family: inherit; }
+  .vf-lpq__email-input:focus { outline: none; border-color: #5EBC43; }
+
+  .vf-lpq__consent { display: flex; align-items: flex-start; gap: 10px; background: #FFF8E1; border: 1px solid #FCD34D; border-radius: 12px; padding: 12px 14px; margin-bottom: 18px; cursor: pointer; }
+  .vf-lpq__consent input { margin-top: 3px; flex: 0 0 auto; width: 17px; height: 17px; accent-color: #1B5E20; cursor: pointer; }
+  .vf-lpq__consent span { font-size: 13px; line-height: 1.45; color: #6B4E02; }
+
+  .vf-lpq__btn { display: block; width: 100%; padding: 14px 20px; border-radius: 999px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; border: 2px solid transparent; text-align: center; text-decoration: none; box-sizing: border-box; }
+  .vf-lpq__btn--primary { background: #5EBC43; color: #fff; box-shadow: 0 4px 0 #1B5E20; }
+  .vf-lpq__btn--primary:hover:not(:disabled) { background: #1B5E20; }
+  .vf-lpq__btn--primary:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  .vf-lpq__btn--secondary { background: transparent; color: #7A867A; border-color: #E3E7DD; margin-top: 10px; }
+  .vf-lpq__btn--secondary:hover { color: #1B5E20; border-color: #5EBC43; }
+
+  .vf-lpq__form-mini { font-size: 11.5px; color: #9AA69A; text-align: center; margin: 10px 0 0; }
+
+  .vf-lpq__result-title { font-family: 'Caprasimo', Georgia, serif; font-weight: 400; font-size: 21px; color: #16301A; margin: 4px 0 10px; }
+  .vf-lpq__result-desc { font-size: 14.5px; line-height: 1.55; color: #3D4A3D; margin: 0 0 22px; }
+
+  .vf-lpq__hidden-form { display: none !important; }
+
+  @media (max-width: 480px) {
+    .vf-lpq__quiz-inner { padding: 28px 20px; border-radius: 20px; }
+  }
+{% endstylesheet %}
+
+<script>
+(function () {
+  var root = document.getElementById('vf-lpq');
+  if (!root) return;
+
+  var state = { publico: '', faixa: '', historico: '', recencia: '' };
+  var history = ['publico'];
+
+  var steps = root.querySelectorAll('[data-lpq-step]');
+  var dots = root.querySelectorAll('[data-lpq-dot]');
+  var emailInput = document.getElementById('vf-lpq-email');
+  var consentInput = document.getElementById('vf-lpq-consent');
+  var submitEmailBtn = document.getElementById('vf-lpq-submit-email');
+
+  var RESULTS = {
+    'adulto-nunca': {
+      title: 'Protocolo Adulto VermeFree',
+      desc: 'Pelo que você contou, o Protocolo Adulto é o que faz mais sentido pra começar: são os 4 frascos que compõem a rotina completa de desparasitação natural, no seu primeiro ciclo.',
+      handle: 'protocolo-desparasitacao-adulto-vermefree',
+      tag: 'quiz-lp-adulto-nunca'
+    },
+    'adulto-mais3': {
+      title: 'Protocolo Adulto VermeFree',
+      desc: 'Como já faz mais de 3 meses do seu último protocolo, esse é um bom momento pra recomeçar o ciclo — a recomendação é repetir a rotina completa de 2 a 4 vezes por ano.',
+      handle: 'protocolo-desparasitacao-adulto-vermefree',
+      tag: 'quiz-lp-adulto-mais3'
+    },
+    'adulto-menos3': {
+      title: 'Óleo de Alho Desodorizado VermeFree',
+      desc: 'Como você fez o protocolo há pouco tempo, faz mais sentido agora apoiar a rotina com o Óleo de Alho — a manutenção mensal pra manter o cuidado entre um ciclo completo e outro.',
+      handle: 'oleo-de-alho-desodorizado-500mg',
+      tag: 'quiz-lp-adulto-menos3'
+    },
+    'kids-2-4': {
+      title: 'VermeFree Kids 2 a 4 anos',
+      desc: 'Pra essa faixa de idade, o VermeFree Kids 2 a 4 anos é o protocolo pensado certinho pro seu filho — líquido, com dose ajustada e fácil de aceitar.',
+      handle: 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos',
+      tag: 'quiz-lp-kids-2-4'
+    },
+    'kids-5-9': {
+      title: 'VermeFree Kids 5 a 9 anos',
+      desc: 'Pra essa faixa de idade, o VermeFree Kids 5 a 9 anos é o protocolo pensado certinho pro seu filho — líquido, com dose ajustada pra fase escolar.',
+      handle: 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos',
+      tag: 'quiz-lp-kids-5-9'
+    },
+    'familia': {
+      title: 'Kit Família VermeFree',
+      desc: 'Como é pra adultos e crianças juntos, o Kit Família reúne os dois protocolos num só lugar — pra cuidar da rotina da casa inteira de uma vez.',
+      handle: 'kit-familia-vermefree-2-adultos-2-criancas',
+      tag: 'quiz-lp-familia'
+    }
+  };
+
+  function resultKey() {
+    if (state.publico === 'familia') return 'familia';
+    if (state.publico === 'kids') {
+      if (state.faixa === '2-4') return 'kids-2-4';
+      if (state.faixa === '5-9') return 'kids-5-9';
+      return null;
+    }
+    if (state.publico === 'adulto') {
+      if (state.historico === 'nao') return 'adulto-nunca';
+      if (state.historico === 'sim') {
+        if (state.recencia === 'mais3') return 'adulto-mais3';
+        if (state.recencia === 'menos3') return 'adulto-menos3';
+      }
+    }
+    return null;
+  }
+
+  function showStep(name) {
+    steps.forEach(function (s) {
+      s.hidden = s.getAttribute('data-lpq-step') !== name;
+      s.classList.toggle('is-active', s.getAttribute('data-lpq-step') === name);
+    });
+    var dotN = 1;
+    if (name === 'kids-idade' || name === 'adulto-historico') dotN = 2;
+    if (name === 'adulto-recencia' || name === 'email' || name === 'result') dotN = 3;
+    dots.forEach(function (d) { d.classList.toggle('is-on', parseInt(d.getAttribute('data-lpq-dot'), 10) <= dotN); });
+  }
+
+  function nextStepAfter(field) {
+    if (field === 'publico') {
+      if (state.publico === 'familia') return 'email';
+      if (state.publico === 'kids') return 'kids-idade';
+      if (state.publico === 'adulto') return 'adulto-historico';
+    }
+    if (field === 'faixa') return 'email';
+    if (field === 'historico') {
+      return state.historico === 'nao' ? 'email' : 'adulto-recencia';
+    }
+    if (field === 'recencia') return 'email';
+    return 'publico';
+  }
+
+  root.addEventListener('click', function (e) {
+    var ans = e.target.closest('[data-lpq-answer]');
+    if (ans) {
+      var field = ans.getAttribute('data-field');
+      var value = ans.getAttribute('data-value');
+      state[field] = value;
+      var next = nextStepAfter(field);
+      history.push(next);
+      showStep(next);
+      return;
+    }
+    var back = e.target.closest('[data-lpq-back]');
+    if (back) {
+      var target = back.getAttribute('data-lpq-back');
+      showStep(target);
+      return;
+    }
+    var restart = e.target.closest('[data-lpq-restart]');
+    if (restart) {
+      state = { publico: '', faixa: '', historico: '', recencia: '' };
+      showStep('publico');
+      if (emailInput) emailInput.value = '';
+      if (consentInput) consentInput.checked = false;
+      validateEmailStep();
+      return;
+    }
+  });
+
+  function validateEmailStep() {
+    var emailOk = emailInput && /.+@.+\..+/.test(emailInput.value);
+    var consentOk = consentInput && consentInput.checked;
+    submitEmailBtn.disabled = !(emailOk && consentOk);
+  }
+  if (emailInput) emailInput.addEventListener('input', validateEmailStep);
+  if (consentInput) consentInput.addEventListener('change', validateEmailStep);
+
+  if (submitEmailBtn) {
+    submitEmailBtn.addEventListener('click', function () {
+      if (submitEmailBtn.disabled) return;
+      var key = resultKey();
+      var result = RESULTS[key];
+      if (!result) return;
+
+      // Opt-in explícito: só chega aqui com checkbox marcado (botão fica disabled até então).
+      var hiddenEmail = document.getElementById('vf-lpq-customer-email');
+      var hiddenConsent = document.getElementById('vf-lpq-customer-consent');
+      var hiddenTags = document.getElementById('vf-lpq-customer-tags');
+      if (hiddenEmail) hiddenEmail.value = emailInput.value;
+      if (hiddenConsent) hiddenConsent.value = consentInput.checked ? '1' : '0';
+      var tagSet = {};
+      ['quiz-lp-vsl', 'quiz-lp-' + state.publico, result.tag].forEach(function (t) { tagSet[t] = true; });
+      if (hiddenTags) hiddenTags.value = Object.keys(tagSet).join(',');
+
+      var customerForm = document.getElementById('vf-lpq-customer-form');
+      if (customerForm) {
+        fetch('/contact', { method: 'POST', body: new FormData(customerForm), headers: { 'Accept': 'text/html' } }).catch(function () {});
+      }
+
+      var titleEl = root.querySelector('[data-lpq-result-title]');
+      var descEl = root.querySelector('[data-lpq-result-desc]');
+      var ctaEl = root.querySelector('[data-lpq-result-cta]');
+      if (titleEl) titleEl.textContent = result.title;
+      if (descEl) descEl.textContent = result.desc;
+      if (ctaEl) {
+        var dest = '/products/' + result.handle + '?utm_source=lp_vsl_quiz&utm_medium=onsite&utm_campaign=quiz_diagnostico_lp';
+        ctaEl.setAttribute('href', '/discount/5OFF?redirect=' + encodeURIComponent(dest));
+      }
+      showStep('result');
+    });
+  }
+
+  showStep('publico');
+})();
+</script>
+
+{% schema %}
+{
+  "name": "LP · VSL + Quiz",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (texto pequeno acima do título)" },
+    { "type": "text", "id": "heading", "label": "Título" },
+    { "type": "textarea", "id": "subheading", "label": "Subtítulo" },
+    { "type": "url", "id": "video_source", "label": "Vídeo (URL .mp4 do arquivo final da VSL)" },
+    { "type": "image_picker", "id": "video_poster", "label": "Imagem de capa do vídeo (poster)" },
+    { "type": "text", "id": "quiz_heading", "label": "Título do quiz" }
+  ],
+  "presets": [
+    { "name": "LP · VSL + Quiz" }
+  ]
+}
+{% endschema %}
