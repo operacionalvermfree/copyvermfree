@@ -5,6 +5,20 @@
 
 ---
 
+## 0. ANTES DE CRIAR OU EDITAR QUALQUER LANDING PAGE
+
+Landing page é tarefa técnica além de copy. Antes de escrever ou tocar em qualquer LP, ler nesta ordem:
+
+1. `PAGINAS.md` (raiz) — mapa de quais LPs já existem, status e slug, pra não duplicar.
+2. `vermefree-lp-superprompt.md` (raiz) — design system e regras técnicas fixas (convenção de pasta, branch de publicação, validação, checkout).
+3. `vermefree-lp-kit/` (raiz) — fluxo de trabalho, fontes de dados reais (loja/variant IDs) e onde está a matéria-prima (Drive).
+
+> Pra abrir o pedido de uma LP nova num chat novo, usar o comando pronto em `vermefree-lp-kit/COMANDO-CRIAR-LP.md`.
+
+Este `CLAUDE.md` continua sendo a fonte de verdade de tom de voz, ICP, regras de claim ANVISA, catálogo, preços e funis — mas não repete as regras técnicas de construção de LP, que vivem nos três arquivos acima.
+
+---
+
 ## 1. A ESSÊNCIA DA VERMEFREE
 
 **O que é:** marca brasileira de **desparasitação natural** por fitoterapia. Protocolos à base de plantas, com critério e transparência — para adultos e crianças.
@@ -107,6 +121,8 @@ Fabricante: **Sintonia Pharma** · Farm. Resp. Graziele Antonini CRF 6177. Todo 
 
 **Frete grátis:** acima de R$399.
 
+**Garantia:** 7 dias.
+
 **Regra de mecânica (importante):** descontos de promoção (ex: 5% Lua Nova) entram no PREÇO do produto, não como cupom — pra empilhar com volume E cupom de influencer sem conflito. (Contexto técnico; o copy só precisa saber que dá pra combinar cupom + desconto.)
 
 **Diretriz de copy sobre desconto:** posicionar sempre como **exceção/oportunidade pontual**, nunca como "sempre tem promoção" (protege margem e percepção de valor).
@@ -172,7 +188,29 @@ Requer opt-in. Template HSM aprovado fora da janela 24h; quando o cliente respon
 
 ## 10. IDENTIDADE VISUAL (referência pra briefar peças)
 
-- **Paleta:** verde natural (folha + escuro) como primária, off-white/bege claro nos fundos, verde-limão de acento. Estética "clean clínico natural / fitoterapia".
+- **Paleta oficial** (referência trazida pelo Gabriel em 03/08):
+
+  **Linha Adulto:**
+  - Verde claro: `#C0DE96`
+  - Verde escuro: `#5E8C43`
+  - Preto: `#1A1A1A`
+  - Branco: `#FFFFFF`
+  - Dourado/bronze (acento premium): `#C9A876`
+  - Verde escuro profundo (gradiente premium): `#1f3d1f` → `#14241a`
+  - Verde claro suave (bloco alternativo): `#E8F5E4`
+
+  **Linha Kids** (paleta própria, vívida/lúdica — não misturar com a linha Adulto):
+  - Verde vivo: `#009933`
+  - Magenta: `#FF00FF`
+  - Laranja: `#FF6600`
+  - Azul royal: `#003399`
+
+  Estética "clean clínico natural / fitoterapia" pra linha Adulto.
+
+- **Referência de imagem — Linha Adulto** (3 renders 3D/CGI trazidos pelo Gabriel em 04/08, pra hero e/ou seção de composição de LP): anatomia interna do corpo (intestino/estômago) em estilo médico-científico premium — (1) macro de tecido intestinal rosado/coral com um verme segmentado azul-acinzentado dentro de uma membrana translúcida + bactérias bacilares + bolhas; (2) vista em túnel do interior do intestino (estilo endoscopia), vermelho escuro, várias lombrigas brancas espalhadas pelas dobras; (3) estômago/esôfago ilustrado com textura celular, brilho dourado/âmbar contornando o órgão sobre fundo escuro quase preto — mais conceitual, sem parasita visível, a mais "vendável" das três pra abertura de página.
+  - **Leitura de cor:** nenhuma das 3 é verde — dominam tons quentes (vermelho/coral/laranja do tecido) com acento frio (azul-acinzentado do parasita) e glow dourado/âmbar sobre fundo escuro na imagem 3. Isso confirma o padrão já visto nas artes reais da marca e no fundo do linktree: **verde é paleta de UI/marca** (botão, texto, selo — hex acima), **essas imagens quentes/glow são conteúdo de seção específica** (hero/composição), não fundo geral de página inteira. O dourado/bronze `#C9A876` já registrado acima é o elo entre as duas — é o mesmo "rim light" da imagem 3.
+  - **Aplicação sugerida (não decidida ainda — aguardando ok pra construir a LP):** um render nesse estilo (glow dourado sobre fundo escuro, como a imagem 3) como imagem de hero ou da seção "prova/composição"; a imagem 2 (túnel com vermes) é mais pesada e cabe melhor numa seção de meio de página (explicação/composição) do que na abertura, pra não abrir a LP com algo alarmista antes de a pessoa entender do que se trata.
+  - As imagens em si não foram salvas no repo (chegaram coladas no chat, sem arquivo local acessível) — se quiser guardar os arquivos de verdade como matéria-prima, subir em `VermeFree/LP-KIT/02_referencias/` no Drive.
 - **Logo:** wordmark "VermeFree" com pequeno verme/onda verde. Versão infantil: "VermeFree kids" com ilustração de crianças.
 - **Selos do rótulo:** "Vegetal 100%" e "Metais Free".
 - **UGC:** vertical 9:16, caseiro autêntico (luz natural, ambiente doméstico real), mulheres/mães, legendas queimadas, sem marca d'água de app.
