@@ -125,17 +125,53 @@ Sobraram **duas** regras incidindo no Óleo de Alho, ambas com `combinesWith.pro
 
 O CLAUDE.md (seção 6) foi atualizado para refletir a nova regra.
 
-### ⚠️ Pendente — a página do bump ainda não bate com o checkout
+### ✅ Página do bump — corrigida em 04/09/2026 (tema "Copy of VermFree Tema Padrão")
 
-A correção acima foi só no motor de descontos do Shopify. A **página do order bump continua com os preços antigos no tema** e agora diverge nos dois cards de ponta:
+Dois snippets foram reescritos no tema de cópia (`snippets/vf-order-bump.liquid` e `snippets/vf-oleo-desconto-aviso.liquid`). A mudança de fundo: **nenhum preço é mais escrito à mão**. Tudo é derivado em Liquid de `bump_product.price` (o preço real do produto na Shopify) mais duas constantes de escada no topo do arquivo:
 
-| Card | Página mostra | Checkout cobra | Situação |
-|---|---|---|---|
-| 1 frasco | R$ 56,95 | **R$ 67,00** | ❌ divergente — o bump que dava esse preço foi desativado |
-| 3 frascos | R$ 170,85 | R$ 170,85 | ✅ bate |
-| 6 frascos | R$ 341,70 | **R$ 321,60** | ⚠️ o cliente paga R$ 20,10 **a menos** que o anunciado |
+```liquid
+{%- assign OLEO_PCT_3 = 15 -%}
+{%- assign OLEO_PCT_6 = 20 -%}
+```
 
-Ações necessárias no tema, antes de rodar tráfego para essa página:
-1. Card "1 frasco": trocar para **R$ 67,00**, remover o "de R$ 67,00" e o selo "Economize R$ 10,05".
-2. Card "6 frascos": atualizar para **R$ 321,60** · R$ 53,60/un · "Economize R$ 80,40". O selo "MELHOR CUSTO" passa a ser verdadeiro.
-3. Fazer os preços virem do motor de descontos do Shopify em vez de valores fixos no tema — enquanto forem hard-coded, qualquer ajuste de regra recria a divergência.
+Se a escada mudar no admin, muda-se só essas duas linhas e a página inteira se reajusta — preço/un, valor cheio riscado, parcela, à vista, "Economize" e o rótulo do botão.
+
+**O que o bump passa a renderizar:**
+
+| Card | Cheio | Parcela | À vista | Por unidade | Economize |
+|---|---|---|---|---|---|
+| 1 frasco | — | 10x R$ 6,70 | R$ 67,00 | R$ 67,00 | — |
+| 3 frascos | R$ 201,00 | 10x R$ 17,09 | **R$ 170,85** | R$ 56,95 | R$ 30,15 |
+| 6 frascos | R$ 402,00 | 10x R$ 32,16 | **R$ 321,60** | R$ 53,60 | R$ 80,40 |
+
+Mudanças de conteúdo, além dos números:
+
+1. **Card "1 frasco"** perdeu o riscado e o selo "Economize" — sem o BxGy, o frasco avulso é preço cheio, e é justamente isso que dá sentido ao pacote de 3.
+2. **Selo "MELHOR CUSTO"** no card de 6 passou a ser verdadeiro (R$ 53,60/un contra R$ 56,95/un do de 3).
+3. **A parcela agora é calculada sobre o preço com desconto**, não sobre o cheio. O desconto por volume é automático e independe da forma de pagamento — a versão antiga exibia "10x R$ 20,15" (= R$ 201,50) para um pedido que a Shopify cobra R$ 170,85, o que subestimava a oferta no parcelado.
+4. **Microcopy** do rodapé: "Desconto aplicado automaticamente no checkout · só nesta página" → "Desconto por volume aplicado automaticamente no checkout". O desconto não é exclusivo dessa página (é regra de loja), então a exclusividade era falsa.
+5. **Faixa de aviso no carrinho** (`vf-oleo-desconto-aviso`) atualizada de 10%/15% para 15%/20%, também via constantes.
+
+> **Premissa a confirmar:** a parcela usa divisão simples por 10 (`preço ÷ 10`, arredondado pra cima no centavo). A versão anterior tinha um acréscimo de ~0,3% embutido nos valores fixos (10x R$ 6,72 para um produto de R$ 67,00), provavelmente juros do gateway. Como essa regra não está documentada em lugar nenhum do tema, não a reproduzi. Se houver juros de parcelamento, basta ajustar a constante `PARCELAS` / a fórmula em um único ponto do arquivo.
+
+### ⚠️ Pendente
+
+**1. Publicar o tema.** As mudanças estão no tema de cópia (`Copy of VermFree Tema Padrão`, não publicado). O tema no ar (`VermFree Tema Padrão`) ainda tem os preços antigos. Revisar no preview e publicar.
+
+**2. Não foi possível renderizar daqui.** A política de rede desta sessão bloqueia `vermefree.com.br`, então o teste foi estático: balanceamento de tags Liquid, ausência de variáveis sem `assign`, e conferência da aritmética em centavos. Vale abrir o preview do tema com um carrinho de teste (protocolo + óleo) antes de publicar.
+
+**3. O cupom OLEO20 recria o problema.** O popup `vf-upsell-oleo-popup.liquid` (site-wide) oferece o Óleo com 15% OFF e manda o cliente para `/discount/OLEO20`. Esse cupom é um **código**, não um desconto automático — por isso não apareceu na varredura inicial:
+
+| | |
+|---|---|
+| Título | Upsell Óleo de Alho 15% OFF (link pós-compra) |
+| Valor | 15% no Óleo de Alho, **sem mínimo de quantidade** |
+| Combina com descontos de produto? | **NÃO** (`productDiscounts: false`) |
+| Vigência | 13/08 → 09/09/2026 |
+
+É exatamente o mesmo padrão do BxGy que foi desativado, e depois da correção ele passa a **custar dinheiro ao cliente**: quem aplica OLEO20 e leva 6 frascos recebe 15% em vez de 20% — perde R$ 13,40 — porque o cupom bloqueia o desconto por volume. E, como não tem mínimo, ele reata o "1 frasco = R$ 56,95" que achatava a escada.
+
+Não mexi nele: desativar um canal de oferta ativo é decisão de negócio, não de correção técnica. Opções, da mais simples à mais completa:
+- **Desativar o OLEO20** e deixar o popup empurrar para o pacote de 3 (que já dá os mesmos 15%, com margem melhor por pedido).
+- **Marcar o cupom como combinável** com descontos de produto — resolve a perda nos 6 frascos, mas empilha com o volume (15% + 20% no mesmo item).
+- **Manter como está** até 09/09, quando ele expira sozinho.

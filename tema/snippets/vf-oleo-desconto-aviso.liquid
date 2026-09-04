@@ -1,0 +1,114 @@
+{%- comment -%}
+  ============================================================
+  vf-oleo-desconto-aviso.liquid — AVISO DE DESCONTO POR VOLUME
+  ============================================================
+  Mostra na página /cart, dentro do resumo, o status do desconto
+  por volume do Óleo de Alho conforme a quantidade no carrinho:
+    1–2 frascos → incentiva chegar a 3
+    3–5 frascos → confirma o 1º degrau, incentiva chegar a 6
+    6+  frascos → confirma o degrau máximo
+
+  Espelha as regras de desconto automático da Shopify:
+    "Óleo de Alho · 3 frascos" e "Óleo de Alho · 6 frascos"
+  (o abatimento real é feito pela Shopify no checkout; aqui é
+   comunicação visual + incentivo na página do carrinho).
+
+  ⚠️ Se a escada mudar no admin da Shopify, mude SÓ as duas
+  constantes OLEO_PCT_3 / OLEO_PCT_6 abaixo — todo o texto e as
+  contas desta faixa se reajustam sozinhos.
+
+  COMO USAR: salvar como snippets/vf-oleo-desconto-aviso.liquid
+  e renderizar dentro do resumo do main-cart.liquid.
+{%- endcomment -%}
+
+{%- comment -%} escada de desconto por volume — espelha os descontos automáticos da Shopify {%- endcomment -%}
+{%- assign OLEO_PCT_3 = 15 -%}
+{%- assign OLEO_PCT_6 = 20 -%}
+
+{%- comment -%} conta quantos frascos do Óleo há no carrinho (por handle) {%- endcomment -%}
+{%- assign oleo_handle = 'oleo-de-alho-desodorizado-500mg' -%}
+{%- assign oleo_qty = 0 -%}
+{%- assign oleo_unit = 6700 -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == oleo_handle -%}
+    {%- assign oleo_qty = oleo_qty | plus: item.quantity -%}
+    {%- assign oleo_unit = item.variant.price -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if oleo_qty > 0 -%}
+  {%- assign full = oleo_unit | times: oleo_qty -%}
+
+  {%- if oleo_qty >= 6 -%}
+    {%- comment -%} degrau máximo {%- endcomment -%}
+    {%- assign saved = full | times: OLEO_PCT_6 | divided_by: 100 -%}
+    <div class="vf-oleo-aviso vf-oleo-aviso--ok">
+      <span class="vf-oleo-aviso__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+      </span>
+      <div class="vf-oleo-aviso__txt">
+        <strong>Desconto máximo ativado: {{ OLEO_PCT_6 }}% OFF no Óleo de Alho</strong>
+        <span>Você economiza {{ saved | money }} no checkout.</span>
+      </div>
+    </div>
+
+  {%- elsif oleo_qty >= 3 -%}
+    {%- comment -%} 1º degrau, empurra pro 6 {%- endcomment -%}
+    {%- assign saved = full | times: OLEO_PCT_3 | divided_by: 100 -%}
+    {%- assign falta = 6 | minus: oleo_qty -%}
+    <div class="vf-oleo-aviso vf-oleo-aviso--ok">
+      <span class="vf-oleo-aviso__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+      </span>
+      <div class="vf-oleo-aviso__txt">
+        <strong>{{ OLEO_PCT_3 }}% OFF ativado no Óleo de Alho</strong>
+        <span>Você já economiza {{ saved | money }}. Adicione mais {{ falta }} e leve <b>{{ OLEO_PCT_6 }}% OFF</b>.</span>
+      </div>
+    </div>
+
+  {%- else -%}
+    {%- comment -%} 1–2 frascos: incentiva chegar a 3 {%- endcomment -%}
+    {%- assign falta = 3 | minus: oleo_qty -%}
+    {%- assign preview3 = oleo_unit | times: 3 | times: OLEO_PCT_3 | divided_by: 100 -%}
+    <div class="vf-oleo-aviso vf-oleo-aviso--nudge">
+      <span class="vf-oleo-aviso__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3z"/></svg>
+      </span>
+      <div class="vf-oleo-aviso__txt">
+        <strong>Falta {{ falta }} pra destravar {{ OLEO_PCT_3 }}% OFF no Óleo de Alho</strong>
+        <span>Levando 3 frascos você economiza {{ preview3 | money }}. E 6 frascos = {{ OLEO_PCT_6 }}% OFF.</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-oleo-aviso {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 11px 13px; border-radius: 10px; margin: 2px 0 2px;
+    font-size: 12.5px; line-height: 1.35;
+  }
+  .vf-oleo-aviso__ic {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff; margin-top: 1px;
+  }
+  .vf-oleo-aviso__ic svg { width: 13px; height: 13px; }
+  .vf-oleo-aviso__txt { display: flex; flex-direction: column; gap: 2px; }
+  .vf-oleo-aviso__txt strong { font-weight: 800; }
+  .vf-oleo-aviso__txt b { font-weight: 900; }
+  /* verde: desconto ativo */
+  .vf-oleo-aviso--ok {
+    background: var(--vf-green-light, #E7F6EC);
+    color: var(--vf-green-dark, #15803D);
+  }
+  .vf-oleo-aviso--ok .vf-oleo-aviso__ic { background: var(--vf-green, #16A34A); }
+  .vf-oleo-aviso--ok .vf-oleo-aviso__txt span { color: #256b3a; }
+  /* laranja: incentivo (ainda não destravou) */
+  .vf-oleo-aviso--nudge {
+    background: #FEF3E7; color: #9A3412;
+    border: 1px dashed #F59E0B;
+  }
+  .vf-oleo-aviso--nudge .vf-oleo-aviso__ic { background: #EA580C; }
+  .vf-oleo-aviso--nudge .vf-oleo-aviso__txt span { color: #B45309; }
+{% endstylesheet %}
