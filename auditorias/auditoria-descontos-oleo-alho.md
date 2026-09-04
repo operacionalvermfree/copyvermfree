@@ -62,7 +62,7 @@ Agravante: o preço R$ 170,85 aparece **já calculado na linha do carrinho** (pr
 ## 4. Riscos adicionais encontrados na varredura
 
 1. **O bump expira em 09/09/2026** (`endsAt: 2026-09-09T03:00Z` = 09/09 00:00 BRT). A partir daí o card "1 frasco" passa a mostrar R$ 56,95 na página enquanto o checkout cobra R$ 67,00 — a mesma divergência, agora no frasco avulso.
-2. **Dois BxGy de brinde agendados** — `Dia D — 1 Óleo de Alho grátis` e `Semana do Cliente — 2 Óleos grátis acima de R$600`. Se também estiverem com `productDiscounts: false`, vão brigar com a escada de volume: quem comprar 3 óleos e ganhar o brinde **perde os 15%** de volume. Conferir antes de ativar.
+2. ~~**Dois BxGy de brinde agendados**~~ — **verificado, sem problema.** `Dia D — 1 Óleo de Alho grátis` (09/09) e `Semana do Cliente — 2 Óleos grátis acima de R$600` (13–19/09) estão ambos com `productDiscounts: true`, ou seja, combinam com a escada de volume. Quem comprar 6 óleos e ganhar o brinde mantém os 20%.
 3. **Estoque negativo** no Óleo de Alho (`inventoryQuantity: -224`) — venda a descoberto liberada. Fora do escopo desta auditoria, mas fica o registro.
 4. **"4 items" no carrinho com 2 linhas** — é a contagem de unidades (3 óleos + 1 protocolo), não de produtos. Não é bug, mas confunde. Sugestão: "4 unidades · 2 produtos".
 
@@ -99,3 +99,43 @@ Cada degrau fica mais barato que o anterior — o selo "MELHOR CUSTO" passa a se
 ## 6. Resumo em uma linha
 
 Três regras de 15% empilhadas no mesmo produto zeraram a escada de volume (1 = 3 = 6 = R$ 56,95/un), e o BxGy do bump — marcado como não-combinável e limitado a 1 unidade — disputa com o desconto de volume no checkout, podendo cobrar R$ 190,95 onde a página prometeu R$ 170,85.
+
+
+---
+
+## 7. Status — alterações aplicadas em 04/09/2026
+
+Executado via Shopify Admin API. Estado verificado após a mudança:
+
+| Regra | Antes | Depois |
+|---|---|---|
+| `Order Bump · Óleo de Alho 15% (com protocolo no carrinho)` | ACTIVE · BxGy 15% em 1 un · `productDiscounts: false` | **DESATIVADO** |
+| `Óleo de Alho · 3 frascos` | ACTIVE · 15% | ACTIVE · 15% *(inalterado — virou o 1º degrau real)* |
+| `Óleo de Alho · 6 frascos - 15%` | ACTIVE · 15% | **`Óleo de Alho · 6 frascos - 20%` · ACTIVE · 20%** |
+
+Sobraram **duas** regras incidindo no Óleo de Alho, ambas com `combinesWith.productDiscounts: true` e apontando para a coleção `Óleo de Alho (desconto volume)`. Não há mais nenhuma regra não-combinável no produto — o conflito de checkout está eliminado na origem.
+
+**Escada agora vigente no checkout:**
+
+| Opção | Desconto | Preço/un | Total | Economia |
+|---|---|---|---|---|
+| 1 frasco | — | R$ 67,00 | R$ 67,00 | — |
+| 3 frascos | 15% | R$ 56,95 | R$ 170,85 | R$ 30,15 |
+| 6 frascos | 20% | R$ 53,60 | R$ 321,60 | R$ 80,40 |
+
+O CLAUDE.md (seção 6) foi atualizado para refletir a nova regra.
+
+### ⚠️ Pendente — a página do bump ainda não bate com o checkout
+
+A correção acima foi só no motor de descontos do Shopify. A **página do order bump continua com os preços antigos no tema** e agora diverge nos dois cards de ponta:
+
+| Card | Página mostra | Checkout cobra | Situação |
+|---|---|---|---|
+| 1 frasco | R$ 56,95 | **R$ 67,00** | ❌ divergente — o bump que dava esse preço foi desativado |
+| 3 frascos | R$ 170,85 | R$ 170,85 | ✅ bate |
+| 6 frascos | R$ 341,70 | **R$ 321,60** | ⚠️ o cliente paga R$ 20,10 **a menos** que o anunciado |
+
+Ações necessárias no tema, antes de rodar tráfego para essa página:
+1. Card "1 frasco": trocar para **R$ 67,00**, remover o "de R$ 67,00" e o selo "Economize R$ 10,05".
+2. Card "6 frascos": atualizar para **R$ 321,60** · R$ 53,60/un · "Economize R$ 80,40". O selo "MELHOR CUSTO" passa a ser verdadeiro.
+3. Fazer os preços virem do motor de descontos do Shopify em vez de valores fixos no tema — enquanto forem hard-coded, qualquer ajuste de regra recria a divergência.
