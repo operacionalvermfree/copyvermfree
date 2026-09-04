@@ -1,0 +1,141 @@
+{%- comment -%}
+  vf-diagnostico-popup.liquid
+  Pop-up de CAPTURA DE E-MAIL (tela unica) — e-mail em troca do cupom 5OFF.
+  Decisao da reuniao de 04/09 (Vitor / Gabriel / Pedro): o quiz de 3 etapas foi
+  removido para eliminar friccao. Agora e so a captura; a visitante segue pra home.
+  NOME DO ARQUIVO MANTIDO de proposito — renomear quebraria o render no layout.
+
+  Gatilho: entrada ~4s, 1x a cada 5 dias (cookie). Nao empilha com o pop-up de oleo.
+  Captura: {% form 'customer' %} (contact[email] + contact[tags]) via AJAX, sem recarregar.
+  Pos-submit: /discount/5OFF?redirect=<home> — aplica o cupom na sessao e cai na home.
+  Linguagem segura (ANVISA): sem diagnostico, sem promessa de cura, sem citar medico.
+{%- endcomment -%}
+
+<div class="vf-diag" id="vf-diag" hidden aria-hidden="true">
+  <div class="vf-diag__overlay" data-diag-close></div>
+  <div class="vf-diag__card" role="dialog" aria-modal="true" aria-labelledby="vf-diag-title">
+    <button type="button" class="vf-diag__x" data-diag-close aria-label="Fechar">&times;</button>
+
+    <p class="vf-diag__eyebrow">🌿 Cuidado natural, feito com calma</p>
+    <h2 class="vf-diag__title" id="vf-diag-title">Ganhe 5% OFF no seu primeiro protocolo</h2>
+    <p class="vf-diag__sub">Deixa seu e-mail e a gente manda o cupom na hora.</p>
+
+    {%- form 'customer', id: 'vf-diag-form', class: 'vf-diag__form' -%}
+      <input type="hidden" name="contact[tags]" value="quiz-diagnostico,popup-email">
+      <div class="vf-diag__form-row">
+        <input type="email" id="vf-diag-email" name="contact[email]" placeholder="seu melhor e-mail" aria-label="Seu melhor e-mail" required autocomplete="email">
+        <button type="submit" class="vf-diag__form-btn">Liberar 5OFF</button>
+      </div>
+      <p class="vf-diag__form-mini">Sem spam. Cuidado natural, no seu tempo. 🌙</p>
+    {%- endform -%}
+
+    <button type="button" class="vf-diag__skip" data-diag-close>Agora não, obrigada</button>
+  </div>
+</div>
+
+{% stylesheet %}
+  .vf-diag { position: fixed; inset: 0; z-index: 9998; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .vf-diag[hidden] { display: none; }
+  .vf-diag__overlay { position: absolute; inset: 0; background: rgba(20, 32, 20, 0.55); backdrop-filter: blur(2px); animation: vf-diag-fade .25s ease; }
+  .vf-diag__card { position: relative; width: 100%; max-width: 440px; max-height: 92vh; overflow-y: auto; background: #FDFDF9; border-radius: 20px; padding: 30px 22px 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.28); animation: vf-diag-pop .3s cubic-bezier(.2,.8,.3,1); }
+  @keyframes vf-diag-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes vf-diag-pop { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
+  .vf-diag__x { position: absolute; top: 10px; right: 12px; border: 0; background: transparent; font-size: 26px; line-height: 1; color: #9AA69A; cursor: pointer; padding: 4px 8px; }
+  .vf-diag__x:hover { color: #444; }
+  .vf-diag__eyebrow { margin: 0 0 6px; font-size: 12.5px; font-weight: 700; color: #5EBC43; text-align: center; }
+  .vf-diag__title { margin: 0 0 8px; font-size: 21px; line-height: 1.25; font-weight: 800; color: #16301A; text-align: center; }
+  .vf-diag__sub { margin: 0 0 18px; font-size: 14px; line-height: 1.45; color: #5B6B5B; text-align: center; }
+  .vf-diag__form { margin: 4px 0 12px; text-align: left; }
+  .vf-diag__form-row { display: flex; gap: 8px; }
+  .vf-diag__form-row input { flex: 1 1 auto; min-width: 0; padding: 12px 14px; border: 1.5px solid #D8DED0; border-radius: 12px; font-size: 16px; }
+  .vf-diag__form-row input:focus { outline: none; border-color: #5EBC43; }
+  .vf-diag__form-btn { flex: 0 0 auto; border: 0; border-radius: 12px; background: #1B5E20; color: #fff; font-weight: 700; font-size: 14px; padding: 0 16px; cursor: pointer; }
+  .vf-diag__form-btn:hover { background: #164a1a; }
+  .vf-diag__form-btn:disabled { opacity: .65; cursor: default; }
+  .vf-diag__form-mini { margin: 8px 0 0; font-size: 11.5px; color: #9AA69A; text-align: center; }
+  .vf-diag__skip { display: block; width: 100%; border: 0; background: transparent; color: #9AA69A; font-size: 12.5px; margin-top: 10px; cursor: pointer; }
+  .vf-diag__skip:hover { color: #5B6B5B; }
+  @media (max-width: 480px) {
+    .vf-diag__card { padding: 26px 16px 16px; border-radius: 18px; }
+    .vf-diag__title { font-size: 19px; }
+    .vf-diag__form-row { flex-direction: column; }
+    .vf-diag__form-btn { padding: 12px; }
+  }
+{% endstylesheet %}
+
+<script>
+(function () {
+  var root = document.getElementById('vf-diag');
+  if (!root) return;
+
+  var COOKIE = 'vf_diag_popup';
+  var DELAY_MS = 4000;
+  var SNOOZE_DAYS = 5;
+  var CONVERTED_DAYS = 30;
+  var DEST = '/?utm_source=popup_email&utm_medium=onsite&utm_campaign=captura';
+
+  function getCookie(name) {
+    var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function setCookie(name, val, days) {
+    var d = new Date(); d.setTime(d.getTime() + days * 864e5);
+    document.cookie = name + '=' + encodeURIComponent(val) + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+  }
+
+  // Nao mostrar em cart/checkout/account, nem se o pop-up de oleo apareceu nesta sessao
+  var path = window.location.pathname;
+  if (/^\/(cart|checkout|account)/.test(path)) return;
+  try { if (sessionStorage.getItem('vf_oleopop_shown')) return; } catch (e) {}
+  if (getCookie(COOKIE)) return;
+
+  var form = document.getElementById('vf-diag-form');
+
+  function openPopup() {
+    root.hidden = false;
+    root.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setCookie(COOKIE, '1', SNOOZE_DAYS);
+  }
+  function closePopup() {
+    root.hidden = true;
+    root.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Fechar: overlay, X e "Agora nao, obrigada"
+  root.addEventListener('click', function (e) {
+    var closeEl = e.target.closest('[data-diag-close]');
+    if (closeEl) { e.preventDefault(); closePopup(); }
+  });
+
+  // ESC fecha
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !root.hidden) closePopup();
+  });
+
+  // Captura de e-mail (AJAX, sem recarregar) + aplicacao automatica do 5OFF na home
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = (form.querySelector('[name="contact[email]"]') || {}).value || '';
+      if (!email) return;
+      var btn = form.querySelector('.vf-diag__form-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+      var data = new FormData(form);
+      fetch(form.action || '/contact', { method: 'POST', body: data, headers: { 'Accept': 'text/html' } })
+        .catch(function () {})
+        .finally(function () {
+          setCookie(COOKIE, 'converted', CONVERTED_DAYS);
+          window.location.href = '/discount/5OFF?redirect=' + encodeURIComponent(DEST);
+        });
+    });
+  }
+
+  // Gatilho: entrada ~4s
+  window.setTimeout(function () {
+    if (getCookie(COOKIE)) return;
+    openPopup();
+  }, DELAY_MS);
+})();
+</script>
