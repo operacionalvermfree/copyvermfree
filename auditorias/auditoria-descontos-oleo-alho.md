@@ -1,0 +1,101 @@
+# Auditoria — Descontos do Óleo de Alho (order bump)
+
+**Data:** 04/09/2026 · **Fonte:** dados reais da loja (Shopify Admin API) + prints da página de bump e do carrinho.
+**Veredito:** a escada de volume do Óleo de Alho **não existe na prática**. 1, 3 e 6 frascos custam exatamente o mesmo por unidade (R$ 56,95). Além disso, há **conflito de regras** que faz o valor do checkout divergir do valor prometido na página.
+
+---
+
+## 1. O que a página promete
+
+| Opção | "de" | Preço exibido | Preço/un | Desconto real |
+|---|---|---|---|---|
+| 1 frasco | R$ 67,00 | R$ 56,95 | **R$ 56,95** | 15% |
+| 3 frascos · "MAIS ESCOLHIDO" | R$ 201,00 | R$ 170,85 | **R$ 56,95** | 15% |
+| 6 frascos · "MELHOR CUSTO" | R$ 402,00 | R$ 341,70 | **R$ 56,95** | 15% |
+
+**Os três níveis têm o mesmo preço unitário.** Comprar 6 não é "melhor custo" que comprar 1 — é o mesmo custo. A página inclusive já entrega isso escrito: o rótulo "R$ 56,95/un" aparece igual no card de 6 e no de 3.
+
+Consequência de copy: os selos **"MELHOR CUSTO"** e **"Economize R$ 60,30"** são promessas que o próprio preço desmente. Quem faz a conta (e o ICP da VermeFree faz — é a mulher que lê rótulo) percebe.
+
+---
+
+## 2. Por que isso acontece — as regras ativas no Shopify
+
+Existem **três** descontos automáticos ativos incidindo sobre o Óleo de Alho (preço cheio R$ 67,00):
+
+| Regra | Tipo | Gatilho | % | Combina com outros descontos de produto? |
+|---|---|---|---|---|
+| `Óleo de Alho · 3 frascos - 15%` | Basic (coleção) | qtd ≥ 3 | **15%** | sim |
+| `Óleo de Alho · 6 frascos - 15%` | Basic (coleção) | qtd ≥ 6 | **15%** | sim |
+| `Order Bump · Óleo de Alho 15% (com protocolo no carrinho)` | **BxGy** | 1 protocolo no carrinho | **15% em 1 única unidade** (`usesPerOrderLimit: 1`) | **NÃO** |
+
+### Erro 1 — o desconto de 3 frascos está com o % errado
+Pelo CLAUDE.md, a regra de volume do Óleo é **3 frascos = 10% · 6 frascos = 15%**.
+No Shopify, a regra de 3 frascos está configurada com **15%** — idêntica à de 6. Por isso a escada some: os dois degraus têm a mesma altura.
+
+### Erro 2 — o bump dá 15% já no 1º frasco
+O BxGy `Order Bump` concede 15% em **uma** unidade de Óleo sempre que houver um protocolo no carrinho. Como o bump só aparece nesse contexto, na prática **o frasco avulso já sai com 15%** — o mesmo desconto máximo da escada.
+
+Resultado combinado dos erros 1 e 2: **1 = 3 = 6 = 15%**. Não há razão econômica nenhuma para o cliente subir de degrau.
+
+---
+
+## 3. Por que o desconto "não vai pro checkout"
+
+O ponto crítico: o BxGy do bump está com **`combinesWith.productDiscounts = false`**.
+
+Isso significa que ele **não convive** com os descontos de volume. Num carrinho com `1 protocolo + 3 óleos`, as duas regras são mutuamente exclusivas — o Shopify aplica **uma só**:
+
+| Cenário | Desconto no óleo | Total dos 3 óleos |
+|---|---|---|
+| Vence a regra de **volume 3+** | 15% sobre 3 un = R$ 30,15 | **R$ 170,85** ← o que a página promete |
+| Vence o **BxGy do bump** | 15% sobre **1 un** = R$ 10,05 | **R$ 190,95** ← R$ 20,10 a mais |
+
+A página de bump exibe R$ 170,85 e afirma *"Desconto aplicado automaticamente no checkout"*. Se o BxGy for o vencedor da disputa, o checkout cobra **R$ 190,95**. É exatamente essa a divergência relatada.
+
+Agravante: o preço R$ 170,85 aparece **já calculado na linha do carrinho** (print 2), sem linha de desconto separada. Isso indica que o número está sendo montado no front-end da página/tema, não vindo do motor de descontos do Shopify. O checkout recalcula do zero e pode chegar em outro valor — o cliente vê o preço subir na última tela, que é o pior lugar possível para uma surpresa de preço.
+
+> **Verificar antes de fechar o diagnóstico:** rodar um checkout de teste real com `1 protocolo + 3 óleos` e conferir qual dos dois descontos o Shopify aplica. O conflito está provado pela configuração; qual regra vence é o que falta medir.
+
+---
+
+## 4. Riscos adicionais encontrados na varredura
+
+1. **O bump expira em 09/09/2026** (`endsAt: 2026-09-09T03:00Z` = 09/09 00:00 BRT). A partir daí o card "1 frasco" passa a mostrar R$ 56,95 na página enquanto o checkout cobra R$ 67,00 — a mesma divergência, agora no frasco avulso.
+2. **Dois BxGy de brinde agendados** — `Dia D — 1 Óleo de Alho grátis` e `Semana do Cliente — 2 Óleos grátis acima de R$600`. Se também estiverem com `productDiscounts: false`, vão brigar com a escada de volume: quem comprar 3 óleos e ganhar o brinde **perde os 15%** de volume. Conferir antes de ativar.
+3. **Estoque negativo** no Óleo de Alho (`inventoryQuantity: -224`) — venda a descoberto liberada. Fora do escopo desta auditoria, mas fica o registro.
+4. **"4 items" no carrinho com 2 linhas** — é a contagem de unidades (3 óleos + 1 protocolo), não de produtos. Não é bug, mas confunde. Sugestão: "4 unidades · 2 produtos".
+
+---
+
+## 5. Correção proposta
+
+### 5.1 Escada que realmente premia volume
+
+| Opção | Desconto | Preço/un | Total | Economia |
+|---|---|---|---|---|
+| 1 frasco | — | R$ 67,00 | R$ 67,00 | — |
+| 3 frascos | **15%** | R$ 56,95 | **R$ 170,85** | R$ 30,15 |
+| 6 frascos | **20%** | R$ 53,60 | **R$ 321,60** | R$ 80,40 |
+
+Cada degrau fica mais barato que o anterior — o selo "MELHOR CUSTO" passa a ser verdade, e o card de 3 (o mais escolhido) mantém exatamente o preço que já está no ar hoje (R$ 170,85), então não há perda percebida para quem já viu a oferta.
+
+### 5.2 Ações no Shopify (ordem de execução)
+
+1. **Pausar/excluir** o BxGy `Order Bump · Óleo de Alho 15%`. É a origem do conflito de checkout **e** do achatamento da escada. Sem ele, o frasco avulso volta a R$ 67 — que é justamente o que torna o pacote de 3 atraente.
+2. **Alterar** `Óleo de Alho · 3 frascos` de 15% → mantém 15% (agora vira o 1º degrau real, já que o avulso volta a preço cheio).
+3. **Alterar** `Óleo de Alho · 6 frascos` de 15% → **20%**, e renomear para `Óleo de Alho · 6 frascos - 20%`.
+4. **Garantir** `combinesWith.productDiscounts = true` nas duas regras de volume (já está) e nos BxGy de brinde agendados.
+5. **Alinhar o CLAUDE.md**: a seção 6 registra "Óleo de Alho: 3 = 10% · 6 = 15%". Atualizar para 3 = 15% · 6 = 20% assim que a mudança subir, para o copy não voltar a divergir da loja.
+
+### 5.3 Ajuste na página do bump
+
+- Fazer os preços virem do motor de descontos do Shopify, não de valor fixo no tema. Enquanto o número for calculado no front, qualquer mudança de regra recria a divergência.
+- Trocar `1 frasco · R$ 56,95` por `1 frasco · R$ 67,00` (sem selo de economia).
+- Se o preço "à vista" for desconto de pagamento (PIX), separar visualmente de desconto de volume. Hoje os dois estão fundidos no mesmo "Economize R$ X", o que torna impossível o cliente entender o que ganhou por quê.
+
+---
+
+## 6. Resumo em uma linha
+
+Três regras de 15% empilhadas no mesmo produto zeraram a escada de volume (1 = 3 = 6 = R$ 56,95/un), e o BxGy do bump — marcado como não-combinável e limitado a 1 unidade — disputa com o desconto de volume no checkout, podendo cobrar R$ 190,95 onde a página prometeu R$ 170,85.
