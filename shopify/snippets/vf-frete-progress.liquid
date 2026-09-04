@@ -1,0 +1,53 @@
+{%- comment -%}
+  vf-frete-progress.liquid — Barra de frete grátis
+
+  Dois estados:
+  · PROMO (sáb 05/09 00:00 → dom 06/09 23:59:59, horário de Brasília):
+    frete grátis SEM MÍNIMO. A barra vira reforço da promo — não existe
+    "falta R$X" quando não há mínimo, então o contador sairia mentindo.
+    A janela abaixo é a MESMA do desconto automático no Shopify
+    "Frete Grátis · Fim de Semana 05-06/09 (sem mínimo)". Se mexer na data
+    de um, mexer no outro — senão a barra e o checkout se contradizem.
+  · FORA DA PROMO: comportamento normal, meta de R$399, mostrando o quanto falta.
+
+  A barra só informa — não tem CTA de adicionar produto.
+{%- endcomment -%}
+
+{%- assign FRETE_META = 39900 -%}
+{%- comment -%} epoch UTC: 2026-09-05T03:00:00Z e 2026-09-07T02:59:59Z {%- endcomment -%}
+{%- assign PROMO_INICIO = 1788577200 -%}
+{%- assign PROMO_FIM = 1788749999 -%}
+{%- assign agora = 'now' | date: '%s' | plus: 0 -%}
+
+{%- if agora >= PROMO_INICIO and agora <= PROMO_FIM -%}
+  <div class="vf-frete vf-frete--ok">
+    <div class="vf-frete__msg"><span class="vf-frete__ic">🚚</span> <strong>Frete grátis liberado</strong> — em qualquer pedido, só neste fim de semana.</div>
+    <div class="vf-frete__track"><span class="vf-frete__fill" style="width:100%"></span></div>
+  </div>
+{%- elsif cart.total_price >= FRETE_META -%}
+  <div class="vf-frete vf-frete--ok">
+    <div class="vf-frete__msg"><span class="vf-frete__ic">🚚</span> Frete grátis garantido — seu cuidado chega sem custo de entrega.</div>
+    <div class="vf-frete__track"><span class="vf-frete__fill" style="width:100%"></span></div>
+  </div>
+{%- else -%}
+  {%- assign falta = FRETE_META | minus: cart.total_price -%}
+  {%- assign pct = cart.total_price | times: 100 | divided_by: FRETE_META -%}
+  {%- if pct < 4 -%}{%- assign pct = 4 -%}{%- endif -%}
+
+  <div class="vf-frete">
+    <div class="vf-frete__msg">Falta <strong>{{ falta | money }}</strong> pra você ganhar <strong>frete grátis</strong> 🌿</div>
+    <div class="vf-frete__track"><span class="vf-frete__fill" style="width:{{ pct }}%"></span></div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-frete{ background:var(--vf-beige,#F5F1E8); border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:9px; }
+  .vf-frete--ok{ background:var(--vf-green-light,#C0DE96); }
+  .vf-frete__msg{ font-size:13px; line-height:1.4; color:var(--vf-text,#1A1A1A); }
+  .vf-frete--ok .vf-frete__msg{ color:var(--vf-green-dark,#1B5E20); font-weight:600; }
+  .vf-frete__msg strong{ font-weight:800; color:var(--vf-green-dark,#1B5E20); }
+  .vf-frete__ic{ margin-right:2px; }
+  .vf-frete__track{ height:8px; border-radius:999px; background:rgba(0,0,0,.09); overflow:hidden; }
+  .vf-frete__fill{ display:block; height:100%; border-radius:999px; background:var(--vf-green,#5EBC43); transition:width .4s ease; }
+  .vf-frete--ok .vf-frete__fill{ background:var(--vf-green-dark,#1B5E20); }
+{% endstylesheet %}
