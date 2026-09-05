@@ -87,14 +87,22 @@
               <p class="vf-kit__desc">{{ block.settings.description }}</p>
             {%- endif -%}
 
+            {%- comment -%}
+              PRECO NO DIA D: o tema NAO recalcula os 10%. O desconto ja vem
+              embutido no preco do produto, entao mostrar product.price e o
+              unico valor que bate com o checkout. Recalcular aqui faria a
+              pagina exibir ~19% off e cobrar 10% — pior erro possivel.
+              A parcela manual (block.settings.installment) e texto fixo e
+              fica desatualizada quando o preco cai, entao no dia ela nao
+              aparece: mostramos o riscado + o a vista real.
+            {%- endcomment -%}
             <div class="vf-kit__price-box">
               {%- if vfkit_frete_promo and product != blank and product.price > 0 -%}
-                {%- assign kit_diad_price = product.price | times: 0.9 | round -%}
-                <span class="vf-kit__price-compare">de {{ product.price | money }}</span>
-                {%- if block.settings.installment != blank -%}
-                  <span class="vf-kit__installment">{{ block.settings.installment }}</span>
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="vf-kit__price-compare">de {{ product.compare_at_price | money }}</span>
                 {%- endif -%}
-                <span class="vf-kit__price">ou {{ kit_diad_price | money }} à vista</span>
+                <span class="vf-kit__installment">{{ product.price | money }}</span>
+                <span class="vf-kit__price">com 10% OFF já aplicado · à vista</span>
               {%- else -%}
                 {%- if block.settings.installment != blank -%}
                   <span class="vf-kit__installment">{{ block.settings.installment }}</span>
@@ -577,7 +585,7 @@
     },
     {
       "type": "header",
-      "content": "Promo Dia D · 10% OFF + frete grátis + brinde (09/09)"
+      "content": "Promo Dia D 09/09 · 10% OFF + frete + brinde"
     },
     {
       "type": "checkbox",
