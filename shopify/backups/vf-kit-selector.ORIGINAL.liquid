@@ -1,0 +1,119 @@
+{%- comment -%}
+  VermeFree — Kit Selector
+  Grid de ate 4 cards de produto, estilo Blessy.
+  Foto em container aspect-ratio 1:1 com fundo bege editorial.
+  Imagem com object-fit: contain pra nunca extrapolar.
+{%- endcomment -%}
+
+{%- comment -%}
+  PROMO TEMPORARIA — Frete gratis sem minimo, so quinta 30/07 e sexta
+  31/07/2026 (mesma janela do desconto agendado no Shopify). Data pega
+  do fuso da loja ('now'), entao liga/desliga sozinho. Tem um checkbox
+  de previa pra testar sem esperar a data chegar.
+{%- endcomment -%}
+{%- assign vfkit_today = 'now' | date: '%Y-%m-%d' -%}
+{%- assign vfkit_frete_promo = false -%}
+{%- if vfkit_today == '2026-07-30' or vfkit_today == '2026-07-31' or section.settings.preview_frete_promo -%}
+  {%- assign vfkit_frete_promo = true -%}
+{%- endif -%}
+
+<section class="vf-kit" aria-labelledby="vf-kit-heading">
+  <div class="vf-kit__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 id="vf-kit-heading" class="vf-kit__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="vf-kit__subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="vf-kit__grid">
+      {%- for block in section.blocks -%}
+        {%- assign product = block.settings.product -%}
+        {%- assign link = '#' -%}
+        {%- if product != blank -%}
+          {%- assign link = product.url -%}
+        {%- elsif block.settings.product_link != blank -%}
+          {%- assign link = block.settings.product_link -%}
+        {%- endif -%}
+
+        <article class="vf-kit__card vf-kit__card--{{ block.settings.badge_style }}{% if vfkit_frete_promo %} vf-kit__card--promo{% endif %}" {{ block.shopify_attributes }}>
+          {%- if vfkit_frete_promo -%}
+            <span class="vf-kit__promo-ribbon">🚚 Frete grátis hoje</span>
+          {%- endif -%}
+          <a href="{{ link }}" class="vf-kit__media-link" aria-label="{{ block.settings.name | escape }}">
+            <div class="vf-kit__media">
+              {%- if block.settings.badge != blank -%}
+                <span class="vf-kit__badge vf-kit__badge--{{ block.settings.badge_style }}">{{ block.settings.badge }}</span>
+              {%- endif -%}
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.name | escape }}"
+                  class="vf-kit__img"
+                  loading="lazy"
+                >
+              {%- elsif product.featured_image != blank -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  class="vf-kit__img"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="vf-kit__img vf-kit__img--placeholder"></div>
+              {%- endif -%}
+            </div>
+          </a>
+
+          <div class="vf-kit__body">
+            {%- if block.settings.name != blank -%}
+              <h3 class="vf-kit__name">{{ block.settings.name }}</h3>
+            {%- endif -%}
+            {%- if block.settings.age_label != blank -%}
+              <p class="vf-kit__age">{{ block.settings.age_label }}</p>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="vf-kit__desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+
+            <div class="vf-kit__price-box">
+              {%- if block.settings.installment != blank -%}
+                <span class="vf-kit__installment">{{ block.settings.installment }}</span>
+              {%- endif -%}
+              <span class="vf-kit__price">ou {{ block.settings.price }} à vista</span>
+            </div>
+
+            <a href="{{ link }}" class="vf-kit__cta{% if vfkit_frete_promo %} vf-kit__cta--promo{% endif %}" aria-label="{{ block.settings.cta_label | escape }}">
+              {%- if vfkit_frete_promo -%}🚚 Garantir frete grátis{%- else -%}{{ block.settings.cta_label }}{%- endif -%}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if vfkit_frete_promo -%}
+      <div class="vf-kit__promo">
+        <span class="vf-kit__promo-badge">{{ section.settings.promo_badge_text }}</span>
+        <h3 class="vf-kit__promo-title">{{ section.settings.promo_title }}</h3>
+        <p class="vf-kit__promo-sub">{{ section.settings.promo_subtitle }}</p>
+        <div class="vf-kit__promo-countdown" data-kit-countdown="2026-08-01T00:00:00-03:00">
+          <div class="vf-kit__promo-unit">
+            <span class="vf-kit__promo-num" data-cd="hours">00</span>
+            <span class="vf-kit__promo-label">horas</span>
+          </div>
+          <span class="vf-kit__promo-sep">:</span>
+          <div class="vf-kit__promo-unit">
+            <span class="vf-kit__promo-num" data-cd="mins">00</span>
+            <span class="vf-kit__promo-label">min</span>
+          </div>
+          <span class="vf-kit__promo-sep">:</span>
+          <div class="vf-kit__promo-unit">
+            <span class="vf-kit__promo-num" data-cd="secs">00</span>
+            <span class="vf-kit__promo-label">seg</span>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>

@@ -215,7 +215,7 @@
       "settings": {
         "heading": "Escolha seu protocolo.",
         "subheading": "3 formulas para cada fase da vida. Mesma seriedade. Mesmo resultado.",
-        "preview_frete_promo": true,
+        "preview_frete_promo": false,
         "promo_badge_text": "🚚 Só este fim de semana",
         "promo_title": "Frete grátis sem mínimo em qualquer protocolo",
         "promo_subtitle": "Escolheu, chegou de graça. Válido pra qualquer valor de compra, em qualquer canto do Brasil — sábado e domingo. Depois desse prazo, volta a ser frete grátis só acima de R$ 399."
