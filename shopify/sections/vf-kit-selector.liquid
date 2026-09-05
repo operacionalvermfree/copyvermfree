@@ -6,14 +6,21 @@
 {%- endcomment -%}
 
 {%- comment -%}
-  PROMO TEMPORARIA — Frete gratis sem minimo, so quinta 30/07 e sexta
-  31/07/2026 (mesma janela do desconto agendado no Shopify). Data pega
-  do fuso da loja ('now'), entao liga/desliga sozinho. Tem um checkbox
-  de previa pra testar sem esperar a data chegar.
+  PROMO — Frete gratis sem minimo, sabado 05/09 e domingo 06/09/2026
+  (mesma janela do desconto automatico agendado no Shopify). Data pega
+  do fuso da loja ('now'), entao liga/desliga sozinho.
+
+  DOIS CONTROLES SEPARADOS de proposito:
+  · preview_frete_promo  -> visual vermelho dos CARDS (borda, selo, botao)
+  · mostrar_bloco_promo  -> o bloco grande abaixo dos cards
+
+  Antes um so ligava os dois, e nao dava pra ter o card vermelho sem o bloco.
+  Na campanha atual quem comunica a promo e a secao "VF Banner Frete Gratis",
+  entao o bloco grande fica DESLIGADO pra nao dizer a mesma coisa duas vezes.
 {%- endcomment -%}
 {%- assign vfkit_today = 'now' | date: '%Y-%m-%d' -%}
 {%- assign vfkit_frete_promo = false -%}
-{%- if vfkit_today == '2026-07-30' or vfkit_today == '2026-07-31' or section.settings.preview_frete_promo -%}
+{%- if vfkit_today == '2026-09-05' or vfkit_today == '2026-09-06' or section.settings.preview_frete_promo -%}
   {%- assign vfkit_frete_promo = true -%}
 {%- endif -%}
 
@@ -38,7 +45,7 @@
 
         <article class="vf-kit__card vf-kit__card--{{ block.settings.badge_style }}{% if vfkit_frete_promo %} vf-kit__card--promo{% endif %}" {{ block.shopify_attributes }}>
           {%- if vfkit_frete_promo -%}
-            <span class="vf-kit__promo-ribbon">🚚 Frete grátis hoje</span>
+            <span class="vf-kit__promo-ribbon">🚚 Frete grátis</span>
           {%- endif -%}
           <a href="{{ link }}" class="vf-kit__media-link" aria-label="{{ block.settings.name | escape }}">
             <div class="vf-kit__media">
@@ -92,12 +99,12 @@
       {%- endfor -%}
     </div>
 
-    {%- if vfkit_frete_promo -%}
+    {%- if vfkit_frete_promo and section.settings.mostrar_bloco_promo -%}
       <div class="vf-kit__promo">
         <span class="vf-kit__promo-badge">{{ section.settings.promo_badge_text }}</span>
         <h3 class="vf-kit__promo-title">{{ section.settings.promo_title }}</h3>
         <p class="vf-kit__promo-sub">{{ section.settings.promo_subtitle }}</p>
-        <div class="vf-kit__promo-countdown" data-kit-countdown="2026-08-01T00:00:00-03:00">
+        <div class="vf-kit__promo-countdown" data-kit-countdown="2026-09-07T00:00:00-03:00">
           <div class="vf-kit__promo-unit">
             <span class="vf-kit__promo-num" data-cd="hours">00</span>
             <span class="vf-kit__promo-label">horas</span>
@@ -506,20 +513,27 @@
     },
     {
       "type": "header",
-      "content": "Promo frete grátis (30-31/07)"
+      "content": "Promo frete grátis (05-06/09)"
     },
     {
       "type": "checkbox",
       "id": "preview_frete_promo",
-      "label": "🔴 PRÉVIA: forçar visual da promo de frete grátis",
-      "info": "Ative só pra testar/ver como fica. Desative depois — nos dias 30 e 31/07 ela liga sozinha, não precisa disso.",
+      "label": "🔴 Modo promo nos cards (borda, selo e botão vermelhos)",
+      "info": "Nos dias 05 e 06/09 liga sozinho. Marque para deixar ligado enquanto este tema de campanha estiver publicado.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_bloco_promo",
+      "label": "Mostrar também o bloco grande abaixo dos cards",
+      "info": "Desligado por padrão. Na campanha atual quem comunica a promo é a seção \"VF Banner Frete Grátis\" — ligar os dois deixa a mesma mensagem duas vezes na home.",
       "default": false
     },
     {
       "type": "text",
       "id": "promo_badge_text",
       "label": "Selo",
-      "default": "🚨 Só até amanhã"
+      "default": "🚚 Só este fim de semana"
     },
     {
       "type": "text",
@@ -531,7 +545,7 @@
       "type": "textarea",
       "id": "promo_subtitle",
       "label": "Subtítulo",
-      "default": "Escolheu, chegou de graça. Válido pra qualquer valor de compra, em qualquer canto do Brasil — só hoje e amanhã. Depois desse prazo, volta a ser frete grátis só acima de R$ 399."
+      "default": "Escolheu, chegou de graça. Válido pra qualquer valor de compra, em qualquer canto do Brasil — sábado e domingo. Depois desse prazo, volta a ser frete grátis só acima de R$ 399."
     }
   ],
   "blocks": [
