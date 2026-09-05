@@ -4,21 +4,25 @@ Banner hero — Dia D VermeFree · quarta 09/09
 ============================================
 Gera as 4 pecas obrigatorias (desktop/mobile, com texto e chapa limpa).
 
-REGRA CENTRAL: nenhum frasco, rotulo ou embalagem e gerado por IA.
-Os produtos entram como FOTO OFICIAL da Shopify, apenas recortada
-(remocao de fundo) e reescalada. O fundo e uma chapa fotografica vazia
-(parede creme + bancada de madeira, sem objetos e sem texto). Toda a
-tipografia e desenhada com fontes reais (Montserrat), nunca "escrita"
-por modelo generativo.
+CONCEITO — adaptado da referencia aprovada (banners "Mother Earth Day"):
+corte diagonal entre bloco de cor e bloco fotografico, faixas anguladas
+paralelas, triades de setas, headline empilhada em 3 linhas com a do meio
+na cor de acao, icone inline e botao pill. Paleta trocada para a do Dia D:
+bloco creme, VERMELHO como cor da acao, verde so nos rotulos dos produtos.
+
+REGRA CENTRAL: a foto do produto entra INTEIRA como bloco, apenas
+reenquadrada e com grade leve de cor. Nao ha recorte de produto, nao ha
+frasco flutuando e nao ha rotulo redesenhado ou gerado por IA. Toda a
+tipografia e todos os elementos graficos sao desenhados por codigo com
+fontes reais (Montserrat).
 
 Entradas esperadas na pasta de trabalho:
-  cut_adulto.png  cut_kids24.png  cut_oleo.png   -> recortes das fotos oficiais
-  plate_d.png     plate_m.png                    -> chapas de fundo vazias
-  fonts/m400.ttf  fonts/m600.ttf                 -> Montserrat Regular/SemiBold
+  hero.jpg                        -> foto oficial do produto (bloco)
+  fonts/m400.ttf  fonts/m600.ttf  -> Montserrat Regular/SemiBold
   Montserrat-ExtraBold via fontconfig do sistema
 """
 import os, math
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 
 RED = (196, 43, 43)        # #C42B2B  vermelho da acao
 DRED = (126, 26, 26)       # #7E1A1A
@@ -158,38 +162,6 @@ def leaf_img(h, color, vein):
     return im.rotate(-24, expand=True, resample=Image.BICUBIC)
 
 
-def bottle_only(path):
-    """Isola so o frasco central do Oleo de Alho (a foto oficial traz
-    alhos e props ao redor). Nada e redesenhado: e recorte puro."""
-    im = Image.open(path).convert('RGBA')
-    a = im.getchannel('A')
-    bb = a.getbbox()
-    th = int((bb[3] - bb[1]) * 0.20)
-    band = a.crop((bb[0], bb[1], bb[2], bb[1] + th))
-    cols = [max(band.getpixel((x, y)) for y in range(band.height)) for x in range(band.width)]
-    xs = [x for x, v in enumerate(cols) if v > 120]
-    c = im.crop((max(0, bb[0] + min(xs) - 6), bb[1], min(im.width, bb[0] + max(xs) + 6), bb[3]))
-    return c.crop(c.getchannel('A').getbbox())
-
-
-def trimmed(path):
-    im = Image.open(path).convert('RGBA')
-    return im.crop(im.getchannel('A').getbbox())
-
-
-def place(base, img, cx, baseline, th, shadow=0.30):
-    """Assenta o produto na bancada com sombra de contato."""
-    w = int(img.width * th / img.height)
-    im = img.resize((w, th), Image.LANCZOS)
-    sw, sh = int(w * 0.94), max(10, int(th * 0.13))
-    m = Image.new('L', (sw, sh), 0)
-    ImageDraw.Draw(m).ellipse((0, 0, sw - 1, sh - 1), fill=int(255 * shadow))
-    m = m.filter(ImageFilter.GaussianBlur(sh * 0.34))
-    base.paste(Image.new('RGB', (sw, sh), (92, 66, 44)), (int(cx - sw / 2), int(baseline - sh * 0.55)), m)
-    base.paste(im, (int(cx - w / 2), int(baseline - th)), im)
-    return (int(cx - w / 2), int(baseline - th), int(cx - w / 2) + w, int(baseline))
-
-
 def pill(base, x, y, txt, fs, padx, pady):
     """Selo de urgencia com relogio desenhado (sem emoji, sem fonte externa)."""
     f = F(XB, fs)
@@ -233,25 +205,6 @@ def cta(base, x, y, txt, fs, w=None, h=None):
     return w, h
 
 
-def badge(base, cx, cy, r):
-    """Selo BRINDE (circulo + presente desenhado) sobre o Oleo de Alho."""
-    ov = Image.new('RGBA', base.size, (0, 0, 0, 0))
-    d = ImageDraw.Draw(ov)
-    d.ellipse((cx - r - int(r * 0.05), cy - r + int(r * 0.06), cx + r + int(r * 0.05), cy + r + int(r * 0.14)), fill=(90, 30, 30, 70))
-    d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=RED + (255,))
-    d.ellipse((cx - int(r * 0.86), cy - int(r * 0.86), cx + int(r * 0.86), cy + int(r * 0.86)), outline=(255, 255, 255, 150), width=max(2, int(r * 0.045)))
-    gw, gh = int(r * 0.62), int(r * 0.46)
-    gx, gy = cx - gw // 2, cy - int(r * 0.46)
-    d.rounded_rectangle((gx, gy, gx + gw, gy + gh), radius=int(r * 0.07), fill=WHITE + (255,))
-    d.line((cx, gy, cx, gy + gh), fill=RED + (255,), width=max(2, int(r * 0.075)))
-    d.line((gx, gy + int(gh * 0.34), gx + gw, gy + int(gh * 0.34)), fill=RED + (255,), width=max(2, int(r * 0.075)))
-    d.ellipse((cx - int(r * 0.30), gy - int(r * 0.19), cx - int(r * 0.02), gy + int(r * 0.05)), outline=WHITE + (255,), width=max(2, int(r * 0.07)))
-    d.ellipse((cx + int(r * 0.02), gy - int(r * 0.19), cx + int(r * 0.30), gy + int(r * 0.05)), outline=WHITE + (255,), width=max(2, int(r * 0.07)))
-    fb, _ = fit(XB, 'BRINDE', int(r * 1.44), int(r * 0.46), ls=int(r * 0.03))
-    dls(d, cx - wls(fb, 'BRINDE', int(r * 0.03)) / 2, cy + int(r * 0.13), 'BRINDE', fb, WHITE, int(r * 0.03))
-    base.paste(ov, (0, 0), ov)
-
-
 def scrim_lr(base, x_full, x_end, alpha=0.88):
     """Veu creme da esquerda para a direita: garante contraste do texto
     sem apagar a foto do lado dos produtos."""
@@ -281,6 +234,78 @@ def scrim_stops(base, stops):
     base.paste(Image.new('RGB', (W, H), CREAM), (0, 0), m.resize((W, H)))
 
 
+
+def cover(img, W, H, fy=.5):
+    """Preenche WxH com a foto sem distorcer (crop central; fy move o corte)."""
+    s = max(W / float(img.width), H / float(img.height))
+    r = img.resize((int(img.width * s + 1), int(img.height * s + 1)), Image.LANCZOS)
+    x = (r.width - W) // 2
+    y = int((r.height - H) * fy)
+    return r.crop((x, y, x + W, y + H))
+
+
+def grade(im):
+    """Grade leve para a foto casar com a paleta creme da peca."""
+    im = ImageEnhance.Color(im).enhance(1.06)
+    im = ImageEnhance.Contrast(im).enhance(1.05)
+    return Image.blend(im, Image.new('RGB', im.size, (255, 246, 235)), 0.07)
+
+
+def maskpoly(size, pts):
+    m = Image.new('L', size, 0)
+    ImageDraw.Draw(m).polygon(pts, fill=255)
+    return m
+
+
+def photo_block(base, path, pts, box, fy=.5):
+    """Cola a foto DENTRO do poligono do bloco. A foto entra inteira,
+    so reenquadrada — nada de recorte de produto, nada de rotulo redesenhado."""
+    x, y, w, h = box
+    ph = grade(cover(Image.open(path).convert('RGB'), w, h, fy))
+    lay = Image.new('RGB', base.size, CREAM)
+    lay.paste(ph, (x, y))
+    m = maskpoly(base.size, pts)
+    base.paste(lay, (0, 0), m)
+    return m
+
+
+def gift(d, cx, cy, r, fg, bg):
+    gw, gh = int(r * 1.15), int(r * .86)
+    gx, gy = cx - gw // 2, cy - int(r * .30)
+    d.rounded_rectangle((gx, gy, gx + gw, gy + gh), radius=int(r * .12), fill=fg)
+    d.line((cx, gy, cx, gy + gh), fill=bg, width=max(2, int(r * .14)))
+    d.line((gx, gy + int(gh * .34), gx + gw, gy + int(gh * .34)), fill=bg, width=max(2, int(r * .14)))
+    d.ellipse((cx - int(r * .56), gy - int(r * .36), cx - int(r * .04), gy + int(r * .10)), outline=fg, width=max(2, int(r * .13)))
+    d.ellipse((cx + int(r * .04), gy - int(r * .36), cx + int(r * .56), gy + int(r * .10)), outline=fg, width=max(2, int(r * .13)))
+
+
+TAG1, TAG2 = 'BRINDE', '1 Óleo de Alho no seu pedido'
+
+
+def tag_w(fs):
+    f1, f2 = F(XB, fs), F(SB, int(fs * .62))
+    tw = max(wls(f1, TAG1, fs * .06), f2.getlength(TAG2))
+    return int(int(fs * .85) * 2 + int(fs * 1.5) + fs * .7 + tw)
+
+
+def tag(base, x, y, fs):
+    """Etiqueta do brinde, colada sobre o bloco fotografico."""
+    f1, f2 = F(XB, fs), F(SB, int(fs * .62))
+    tw = max(wls(f1, TAG1, fs * .06), f2.getlength(TAG2))
+    ic, pad = int(fs * 1.5), int(fs * .85)
+    w, h = int(pad * 2 + ic + fs * .7 + tw), int(fs * 2.9)
+    m = Image.new('L', base.size, 0)
+    ImageDraw.Draw(m).rounded_rectangle((x, y + int(h * .14), x + w, y + h + int(h * .14)), radius=int(h * .22), fill=105)
+    base.paste(Image.new('RGB', base.size, (96, 34, 26)), (0, 0), m.filter(ImageFilter.GaussianBlur(h * .15)))
+    d = ImageDraw.Draw(base)
+    d.rounded_rectangle((x, y, x + w, y + h), radius=int(h * .22), fill=RED)
+    gift(d, x + pad + ic // 2, y + h // 2, int(ic * .52), WHITE, RED)
+    tx = x + pad + ic + int(fs * .7)
+    dls(d, tx, y + int(h * .20), TAG1, f1, WHITE, fs * .06)
+    d.text((tx, y + int(h * .20) + int(fs * 1.16)), TAG2, font=f2, fill=(255, 226, 220))
+    return w, h
+
+
 ADU = trimmed('cut_adulto.png')   # Protocolo Adulto — 4 frascos
 KID = trimmed('cut_kids24.png')   # VermeFree Kids 2 a 4
 OLE = bottle_only('cut_oleo.png')  # Oleo de Alho — o brinde
@@ -288,46 +313,46 @@ OLE = bottle_only('cut_oleo.png')  # Oleo de Alho — o brinde
 # --- Copy aprovada. Checklist ANVISA: sem cura/elimina/erradica/milagre,
 #     sem medico, sem diagnostico, sem comparacao com farmacia, sem cupom. ---
 H1, H2, H3 = 'DIA D', '10% OFF', 'SÓ HOJE'     # headline empilhada em 3 linhas
-SUB = 'JÁ NO PREÇO, SEM CUPOM'                  # o diferencial, no lugar do subtitulo
+SUB = 'JÁ NO PREÇO, SEM CUPOM'                  # o diferencial, no slot do subtitulo
 BODY = 'Frete grátis sem valor mínimo e 1 Óleo de Alho de brinde no seu pedido.'
 MICRO = '+ Manual da Desparasitação em PDF por e-mail.'
 PT = 'QUARTA 09/09 · 24 HORAS'
 CT = 'APROVEITAR O DIA D'
+PHOTO = 'hero.jpg'
 
 
 def desktop(txt=True):
-    """2400x1000 — bloco creme a esquerda com corte diagonal, produtos a direita."""
-    W, H, HZ = 2400, 1000, 772
-    XT, XB_ = 1180, 1420          # x do corte no topo e na base
-    LEAN = XB_ - XT
-    bg = build_bg('plate_d.png', W, H, HZ).convert('RGB')
+    """2400x1000 — bloco creme a esquerda, bloco fotografico a direita,
+    separados pelo corte diagonal."""
+    W, H = 2400, 1000
+    XT, XBt = 1100, 1340          # x do corte no topo e na base
+    LEAN = XBt - XT
+    bg = Image.new('RGB', (W, H), CREAM)
 
-    # faixas anguladas sobre a foto (sob os produtos, para nao lavar o rotulo)
-    vbar(bg, XT + 120, 300, LEAN, RED, .13)
-    vbar(bg, XT + 470, 150, LEAN, CREAM, .30)
-    vbar(bg, XT + 690, 54, LEAN, CREAM, .22)
-    vbar(bg, XT + 880, 210, LEAN, CREAM, .16)
-    vbar(bg, XT + 1090, 40, LEAN, RED, .20)
+    pm = photo_block(bg, PHOTO, [(XT, 0), (W, 0), (W, H), (XBt, H)], (XT - 40, 0, W - XT + 40, H))
 
-    # bloco de cor com aresta diagonal + filete vermelho (assinatura do conceito)
-    poly(bg, [(0, 0), (XT, 0), (XB_, H), (0, H)], CREAM, .94)
-    vbar(bg, XT, 14, LEAN, RED, 1.0)
-    vbar(bg, XT + 42, 7, LEAN, RED, .55)
-    vbar(bg, XT + 68, 4, LEAN, CREAM, .85)
+    # faixas anguladas SOBRE a foto, recortadas pelo bloco (assinatura do conceito)
+    vbar(bg, XT + 180, 300, LEAN, CREAM, .20, clip=pm)
+    vbar(bg, XT + 560, 110, LEAN, CREAM, .34, clip=pm)
+    vbar(bg, XT + 740, 44, LEAN, CREAM, .24, clip=pm)
+    vbar(bg, XT + 1010, 190, LEAN, RED, .14, clip=pm)
 
-    ah = int(H * .300)
-    place(bg, ADU, 1660, 820, ah)
-    place(bg, KID, 1880, 820, int(ah * .63))
-    place(bg, OLE, 1448, 854, int(ah * .84))
-    tris(bg, 1540, 168, 44, 17, CREAM, .85)
-    tris(bg, 2118, 742, 40, 15, CREAM, .75)
+    # bloco de cor + filete vermelho na aresta
+    poly(bg, [(0, 0), (XT, 0), (XBt, H), (0, H)], CREAM, 1.0)
+    vbar(bg, XT, 15, LEAN, RED, 1.0)
+    vbar(bg, XT + 44, 7, LEAN, RED, .55)
+    vbar(bg, XT + 72, 4, LEAN, CREAM, .85)
+
+    tris(bg, 1480, 150, 44, 17, CREAM, .90)
+    tris(bg, 2160, 760, 40, 15, CREAM, .80)
+    tag(bg, 1452, 806, 34)
     if not txt:
         return bg
 
-    X, COL = 400, 760             # coluna dentro da area segura, a esquerda do corte
-    ph, _ = pill(bg, X, 118, PT, 26, 28, 14)
+    X, COL = 390, 690             # coluna a esquerda do corte (termina em 1080 < 1100)
+    p_h, _ = pill(bg, X, 118, PT, 26, 28, 14)
     d = ImageDraw.Draw(bg)
-    y = 118 + ph + 36
+    y = 118 + p_h + 36
     f1, s1 = fit(XB, H1, COL, 80, ls=1)
     dls(d, X, y, H1, f1, INK, 1)
     y += int(s1 * 1.02)
@@ -344,73 +369,68 @@ def desktop(txt=True):
     fsu, _ = fit(XB, SUB, COL, 28, ls=5)
     dls(d, X, y, SUB, fsu, RED, 5)
     y += 48
-    fb = F(SB, 28)
+    fb = F(SB, 27)
     for ln in wrap(fb, BODY, COL):
         d.text((X, y), ln, font=fb, fill=INK)
-        y += 40
-    fm = F(RG, 24)
+        y += 39
+    fm = F(RG, 23)
     for ln in wrap(fm, MICRO, COL):
         d.text((X, y), ln, font=fm, fill=MUTED)
-        y += 33
+        y += 32
     cta(bg, X, y + 22, CT, 30)
-    badge(bg, 1420, 640, 58)
     return bg
 
 
 def mobile(txt=True):
-    """1080x1350 — composicao redesenhada: bloco creme no topo com aresta
-    diagonal, produtos no meio sobre a bancada, bloco inferior para apoio+CTA."""
-    W, H, HZ = 1080, 1350, 846
-    bg = build_bg('plate_m.png', W, H, HZ).convert('RGB')
-    vbar(bg, -40, 150, 260, CREAM, .26, 600, 1120)
-    vbar(bg, 240, 60, 260, RED, .16, 600, 1120)
-    vbar(bg, 700, 190, 260, CREAM, .22, 600, 1120)
-    vbar(bg, 980, 44, 260, CREAM, .30, 600, 1120)
+    """1080x1350 — composicao redesenhada em tres faixas diagonais:
+    bloco creme (texto) / bloco fotografico / bloco creme (apoio + CTA)."""
+    W, H = 1080, 1350
+    bg = Image.new('RGB', (W, H), CREAM)
+    band = [(0, 640), (W, 570), (W, 990), (0, 1060)]
+    bm = photo_block(bg, PHOTO, band, (0, 565, W, 500))
 
-    poly(bg, [(0, 0), (W, 0), (W, 648), (0, 742)], CREAM, .94)
-    poly(bg, [(0, 742), (W, 648), (W, 662), (0, 756)], RED, 1.0)
-    poly(bg, [(0, 776), (W, 682), (W, 689), (0, 783)], RED, .55)
-    poly(bg, [(0, 1068), (W, 1016), (W, H), (0, H)], CREAM, .93)
-    poly(bg, [(0, 1068), (W, 1016), (W, 1028), (0, 1080)], RED, 1.0)
+    vbar(bg, -40, 150, 260, CREAM, .24, 570, 1060, clip=bm)
+    vbar(bg, 320, 54, 260, CREAM, .32, 570, 1060, clip=bm)
+    vbar(bg, 760, 200, 260, RED, .14, 570, 1060, clip=bm)
 
-    ah = int(H * .245)
-    place(bg, ADU, 536, 1010, ah)
-    place(bg, KID, 858, 1010, int(ah * .60))
-    place(bg, OLE, 206, 1032, int(ah * .79))
-    tris(bg, 742, 792, 38, 14, CREAM, .85)
+    poly(bg, [(0, 640), (W, 570), (W, 584), (0, 654)], RED, 1.0)
+    poly(bg, [(0, 674), (W, 604), (W, 611), (0, 681)], RED, .55)
+    poly(bg, [(0, 1060), (W, 990), (W, 1004), (0, 1074)], RED, 1.0)
+
+    tris(bg, 64, 700, 36, 13, CREAM, .90)
+    tag(bg, int((W - tag_w(30)) / 2), 872, 30)
     if not txt:
         return bg
 
     COL = 940
     fp = F(XB, 25)
     pe = wls(fp, PT, 2.75) + int(25 * 1.12) + int(25 * .52) + 56
-    ph, _ = pill(bg, int((W - pe) / 2), 70, PT, 25, 28, 13)
+    p_h, _ = pill(bg, int((W - pe) / 2), 58, PT, 25, 28, 13)
     d = ImageDraw.Draw(bg)
-    y = 70 + ph + 34
-    f1, s1 = fit(XB, H1, COL, 72, ls=1)
+    y = 58 + p_h + 30
+    f1, s1 = fit(XB, H1, COL, 68, ls=1)
     dls(d, (W - wls(f1, H1, 1)) / 2, y, H1, f1, INK, 1)
     y += int(s1 * 1.02)
-    f2, s2 = fit(XB, H2, COL, 178, ls=-3)
+    f2, s2 = fit(XB, H2, COL, 170, ls=-3)
     dls(d, (W - wls(f2, H2, -3)) / 2, y, H2, f2, RED, -3)
     y += int(s2 * 1.00)
-    f3, s3 = fit(XB, H3, COL - 120, 72, ls=1)
+    f3, s3 = fit(XB, H3, COL - 120, 68, ls=1)
     lf = leaf_img(int(s3 * .86), RED, CREAM)
     sx = (W - (wls(f3, H3, 1) + s3 * .26 + lf.width)) / 2.
     ex = dls(d, sx, y, H3, f3, INK, 1)
     bg.paste(lf, (int(ex + s3 * .26), int(y + s3 * .10)), lf)
-    y += int(s3 * 1.34)
+    y += int(s3 * 1.30)
     fsu, _ = fit(XB, SUB, COL, 26, ls=5)
     dls(d, (W - wls(fsu, SUB, 5)) / 2, y, SUB, fsu, RED, 5)
-    badge(bg, 176, 786, 55)
 
-    y = 1088
-    fb = F(SB, 28)
+    y = 1104
+    fb = F(SB, 27)
     for ln in wrap(fb, BODY, 880):
         d.text(((W - fb.getlength(ln)) / 2, y), ln, font=fb, fill=INK)
-        y += 40
+        y += 39
     f = F(XB, 31)
     cw = int(wls(f, CT, 31 * .07)) + int(31 * 2.9) + int(31 * .80)
-    cta(bg, int((W - cw) / 2), y + 18, CT, 31)
+    cta(bg, int((W - cw) / 2), y + 16, CT, 31)
     return bg
 
 

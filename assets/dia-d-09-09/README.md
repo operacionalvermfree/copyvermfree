@@ -16,27 +16,28 @@ O slot do subtítulo da referência (`SAVE OUR PLANET`) recebe **`JÁ NO PREÇO,
 
 | Peça | Peso | Link |
 |---|---|---|
-| **Desktop 2400×1000** (com texto) | 149 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/b5b9560b-ac5c-4624-a50b-406199c5df62.webp |
-| **Mobile 1080×1350** (com texto) | 109 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/8d244f1c-783a-49e2-b686-f639cc018eb5.webp |
-| **Chapa limpa desktop 2400×1000** | 98 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/59cb5d2a-a2e6-4d25-932d-44766cde5c37.webp |
-| **Chapa limpa mobile 1080×1350** | 68 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/b976c9bd-0bf4-4b0d-b97e-b6895c5462df.webp |
+| **Desktop 2400×1000** (com texto) | 136 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/14e6c128-77e4-4171-bba8-0df17203eee0.webp |
+| **Mobile 1080×1350** (com texto) | 97 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/3ce57fa1-f875-4c5f-aeab-281bb59d8c81.webp |
+| **Chapa limpa desktop 2400×1000** | 89 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/3df09af2-46cd-475c-a66a-bde7c29593dd.webp |
+| **Chapa limpa mobile 1080×1350** | 59 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/a78d5b73-2bfb-413f-9646-820354b91f1d.webp |
 
 Teto de peso: desktop < 300 KB, mobile < 150 KB. Todas passam com folga.
 
 Os PNGs de backup são gerados pelo `build_banner.py` junto com os WebP; publico assim que o conceito estiver aprovado, para não deixar link de versão antiga circulando.
 
-## Fotos de produto usadas (oficiais, da CDN da Shopify)
+## Foto usada
 
-| Peça na arte | Arquivo original |
-|---|---|
-| Protocolo Adulto (4 frascos) — produto principal | `produto-card-1-adulto_901f4e4f-…png` |
-| VermeFree Kids 2 a 4 anos — segundo produto | `produto-card-2-kids-2a4.png` |
-| Óleo de Alho 500mg — **o brinde, na frente, com selo** | `01-PRINCIPAL-oleo-alho.png` |
+Foto oficial enviada pelo cliente: **`1-IMG_1319.jpg`** (5184×3456), a mesma no desktop e no mobile para manter a leitura consistente entre as duas peças.
 
-Não usados: `produto-card-3-kids-5a9.png` e `produto-card-4-kit-familia-crop.png`.
+Escolhida por medição, não por preferência: é horizontal (1.50), o produto ocupa 43% do quadro e se estende por toda a largura, e é a de maior presença de verde de rótulo entre as horizontais — o perfil de um line-up de produtos, que é o que assenta num bloco largo.
 
-### Nenhum frasco ou rótulo foi gerado por IA
-As fotos oficiais entraram **só recortadas** (remoção de fundo) e reescaladas — pixel de rótulo é pixel da foto original. A IA gerou apenas a **chapa de fundo vazia** (parede creme + bancada de madeira clara, luz natural, folhagem nas bordas), sem nenhum objeto, produto, pessoa ou texto. Toda a tipografia e todos os elementos gráficos (corte diagonal, faixas, setas, folha, selo, pill, botão) são desenhados por código com fontes reais (Montserrat ExtraBold / SemiBold / Regular).
+**A foto entra inteira, como bloco.** Só é reenquadrada (crop central para preencher o polígono) e recebe uma grade leve de cor para casar com o creme da peça. Não há recorte de produto, não há frasco flutuando, não há borda de segmentação — que foi o problema das versões anteriores.
+
+### Nada de produto foi gerado ou redesenhado por IA
+Nenhum frasco, rótulo ou embalagem é gerado, recriado ou retocado. Nesta versão não há sequer chapa de fundo gerada por IA: o fundo é bloco de cor chapado e o resto é a fotografia real. Toda a tipografia e todos os elementos gráficos (corte diagonal, faixas, setas, folha, etiqueta, pill, botão) são desenhados por código com fontes reais (Montserrat ExtraBold / SemiBold / Regular).
+
+### O brinde
+O Óleo de Alho aparece na foto do line-up e ganha presença própria com uma **etiqueta vermelha sólida** sobre o bloco fotográfico: ícone de presente + `BRINDE` + `1 Óleo de Alho no seu pedido`. Resolve o "mostre o frasco" sem precisar recortar nada.
 
 ## Texto da arte
 
@@ -52,9 +53,9 @@ Sem cupom, sem código, sem botão "copiar", sem preço riscado, sem "de/por".
 
 ## Especificação técnica verificada
 
-- Desktop 2400×1000 (12:5). Coluna de texto em x 400–1160, sempre à esquerda do corte diagonal (que começa em x=1180 no topo). Produto mais à direita termina em x=1996, dentro da área segura de 1600 px. Faixas e setas decorativas ficam fora dela, nas laterais cortáveis.
-- Mobile 1080×1350 (4:5) — composição redesenhada, não é crop: headline a 178 px contra 172 px no desktop, produto proporcionalmente menor.
-- Contraste medido (WCAG, cor do texto vs fundo real): `10% OFF` e subtítulo em vermelho **5,29:1** · texto em tinta **14,25:1** · branco no vermelho do botão **5,63:1**.
+- Desktop 2400×1000 (12:5). Coluna de texto em x 390–1080, sempre à esquerda do corte diagonal (que começa em x=1100 no topo). Etiqueta do brinde termina em x=1895, dentro da área segura de 1600 px. Faixas e setas decorativas ficam fora dela, nas laterais cortáveis.
+- Mobile 1080×1350 (4:5) — composição redesenhada em três faixas diagonais, não é crop: headline a 170 px contra 160 px no desktop.
+- Contraste medido (WCAG): `10% OFF` e subtítulo em vermelho **5,34:1** · texto em tinta **14,38:1** · branco no vermelho do botão **5,63:1**. O texto agora assenta em bloco creme chapado, não sobre foto — por isso os números melhoraram.
 - Tipografia toda auto-ajustada (`fit()`): mudar a copy não estoura a coluna.
 - Chapas limpas saem com os blocos, faixas e produtos, **sem nenhuma tipografia** — para o tema escrever por cima e ainda ter contraste.
 
@@ -64,4 +65,4 @@ Sem cupom, sem código, sem botão "copiar", sem preço riscado, sem "de/por".
 
 ## Como regerar
 
-`build_banner.py` reconstrói as 4 peças de forma determinística a partir dos recortes dos produtos, das chapas de fundo e do Montserrat.
+`build_banner.py` reconstrói as 4 peças de forma determinística a partir de `hero.jpg` e do Montserrat. Trocar a foto é trocar esse arquivo.
