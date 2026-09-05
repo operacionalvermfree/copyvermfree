@@ -1,44 +1,46 @@
 # -*- coding: utf-8 -*-
 """
-Banner hero — Dia D VermeFree · quarta 09/09
-============================================
+Banner hero — Dia D VermeFree · quarta 09/09  ·  versão cinematográfica
+======================================================================
 Gera as 4 pecas obrigatorias (desktop/mobile, com texto e chapa limpa).
 
-CONCEITO — adaptado da referencia aprovada (poster "GO STRONG · Serious Mass"):
-produto flutuando e inclinado como heroi, fitas de marca envolvendo o produto
-(umas por tras, outras por cima, que e o que cria a ilusao de embrulho),
-ambiente com ceu em degrade e colina, assinatura manuscrita ao fundo, badge
-de spec em caixa solida e botao pill no rodape.
+METODO. As versoes anteriores desenhavam a cena a mao em codigo, e o teto
+disso e "amador". Aqui a cena e GERADA por modelo generativo (pedestal de
+ardosia, luz-chave dramatica, nevoa volumetrica, profundidade de campo),
+sempre VAZIA — sem produto, sem pessoas, sem texto. O produto e a foto
+real do cliente com fundo removido, composta na cena com o tratamento
+que faz um objeto parecer que esta mesmo ali:
 
-Paleta trocada para a do Dia D: fitas e badges em VERMELHO #C42B2B em vez do
-verde-limao da referencia. O verde da marca fica no rotulo do produto e na
-colina — o contraste vermelho x verde e o que o briefing pede.
+  relight     gradiente direcional casando com a luz-chave da chapa
+  rim light   luz quente na borda do lado iluminado
+  sombra      projetada para o lado oposto a luz, achatada e borrada
+  contato     sombra curta e escura na base, que "prega" o objeto no chao
+  reflexo     copia espelhada com fade, no tampo polido
 
-REGRA CENTRAL: o produto e a foto oficial do cliente apenas com o fundo
-removido e reescalada. Nenhum frasco, rotulo ou embalagem e gerado,
-recriado ou retocado. Nao ha fundo gerado por IA: ceu, colina, fitas,
-badges e tipografia sao todos desenhados por codigo.
+A luz de cada chapa foi medida antes: no desktop vem da DIREITA, no
+mobile da ESQUERDA. O parametro `fr` (from_right) propaga isso para
+relight, rim e direcao da sombra.
+
+REGRA CENTRAL: nenhum frasco, rotulo ou embalagem e gerado, recriado ou
+retocado. Relight e sombras sao operacoes fotometricas sobre os pixels
+originais — brilho, matiz e mascara — nunca redesenho.
 
 Entradas esperadas na pasta de trabalho:
-  hero_cut.png                    -> foto oficial com fundo removido (RGBA)
-  fonts/m400.ttf  fonts/m600.ttf  -> Montserrat Regular/SemiBold
-  fonts/caveat.ttf                -> Caveat Bold (assinatura manuscrita)
+  hero_cut.png              -> foto oficial com fundo removido (RGBA)
+  cine_d.png / cine_m.png   -> chapas de cena geradas, vazias
+  fonts/m600.ttf            -> Montserrat SemiBold
   Montserrat-ExtraBold via fontconfig do sistema
 """
-import os, math
-from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
+import os
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance, ImageChops
 
-RED = (196, 43, 43)        # #C42B2B  cor da acao
-DRED = (150, 30, 30)       # borda das fitas
-CREAM = (253, 248, 243)    # #FDF8F3
-INK = (38, 34, 30)
-GRN = (92, 130, 68)        # verde folha (colina, assinatura)
-GRND = (58, 88, 44)        # verde escuro (colina da frente)
-SKY_T = (216, 231, 222)    # topo do ceu
-SKY_B = (253, 248, 243)    # horizonte
+RED = (198, 46, 46)
+CREAM = (247, 242, 235)
+WARM = (255, 214, 150)     # temperatura da luz-chave
+DIM = (176, 168, 156)
 
 XB = '/usr/share/fonts/truetype/higgsfield/Montserrat-ExtraBold.ttf'
-SB, RG, SC = 'fonts/m600.ttf', 'fonts/m400.ttf', 'fonts/caveat.ttf'
+SB = 'fonts/m600.ttf'
 
 
 def F(p, s):
@@ -56,248 +58,196 @@ def dls(d, x, y, s, f, fill, ls=0):
     return x
 
 
-def fit(p, s, maxw, start, ls=0, mn=8):
-    """Reduz o corpo ate caber. Impede qualquer estouro de coluna."""
+def fit(p, s, maxw, start, ls=0):
+    """Reduz o corpo ate caber. Impede estouro de coluna."""
     z = start
-    while z > mn:
+    while z > 8:
         f = F(p, z)
         if wls(f, s, ls) <= maxw:
             return f, z
         z -= 2
-    return F(p, mn), mn
+    return F(p, 8), 8
 
 
-def sky(W, H):
-    """Degrade vertical do ceu."""
-    g = Image.new('RGB', (1, H))
-    for y in range(H):
-        t = (y / float(H)) ** 0.85
-        g.putpixel((0, y), tuple(int(SKY_T[k] + (SKY_B[k] - SKY_T[k]) * t) for k in range(3)))
-    return g.resize((W, H)).convert('RGBA')
+def cover(img, W, H):
+    s = max(W / float(img.width), H / float(img.height))
+    r = img.resize((int(img.width * s + 1), int(img.height * s + 1)), Image.LANCZOS)
+    x, y = (r.width - W) // 2, (r.height - H) // 2
+    return r.crop((x, y, x + W, y + H))
 
 
-def hills(base, y0):
-    """Duas colinas sobrepostas na base, feitas de elipses."""
+def grade(im):
+    return ImageEnhance.Color(ImageEnhance.Contrast(im).enhance(1.12)).enhance(1.10)
+
+
+def vignette(base, amt):
+    """Fecha os cantos para concentrar a atencao no produto."""
     W, H = base.size
-    for bbox, col in (((-int(W * .25), y0, int(W * 1.3), y0 + int(H * 1.5)), GRN),
-                      ((-int(W * .45), y0 + int(H * .075), int(W * .88), y0 + int(H * 1.6)), GRND)):
-        l = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-        ImageDraw.Draw(l).ellipse(bbox, fill=col + (255,))
-        base.alpha_composite(l.filter(ImageFilter.GaussianBlur(1.2)))
+    m = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(m).ellipse((-int(W * .28), -int(H * .34), int(W * 1.28), int(H * 1.34)), fill=255)
+    m = m.filter(ImageFilter.GaussianBlur(min(W, H) * .14)).point(lambda v: int(255 - (255 - v) * amt))
+    base.paste(Image.new('RGB', (W, H), (0, 0, 0)), (0, 0), ImageChops.invert(m))
 
 
-def script(base, cx, cy, txt, size, alpha, ang):
-    """Assinatura manuscrita ao fundo (Caveat), girada."""
-    f = F(SC, size)
-    s = Image.new('RGBA', (int(f.getlength(txt) + size * .6), int(size * 1.7)), (0, 0, 0, 0))
-    ImageDraw.Draw(s).text((size * .3, 0), txt, font=f, fill=GRN + (alpha,))
-    r = s.rotate(ang, expand=True, resample=Image.BICUBIC)
-    base.alpha_composite(r, (int(cx - r.width / 2), int(cy - r.height / 2)))
+def glow(base, cx, cy, r):
+    """Halo suave atras do produto, para separa-lo do fundo escuro."""
+    W, H = base.size
+    m = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(m).ellipse((cx - r, cy - int(r * .78), cx + r, cy + int(r * .78)), fill=74)
+    base.paste(Image.new('RGB', (W, H), (150, 160, 110)), (0, 0), m.filter(ImageFilter.GaussianBlur(r * .55)))
 
 
-def tape(base, cx, cy, L, T, ang, txt, fs, withtext=True):
-    """Uma fita: banda com texto repetido, girada e composta."""
-    s = Image.new('RGBA', (L, T), (0, 0, 0, 0))
-    d = ImageDraw.Draw(s)
-    d.rectangle((0, 0, L, T), fill=RED + (240,))
-    e = max(2, int(T * .11))
-    d.rectangle((0, 0, L, e), fill=DRED + (240,))
-    d.rectangle((0, T - e, L, T), fill=DRED + (240,))
-    if withtext:
-        f = F(XB, fs)
-        ls = fs * .17
-        unit = wls(f, txt, ls) + fs * 1.5
-        x = -unit
-        while x < L:
-            dls(d, x, (T - fs * 1.32) / 2, txt, f, (255, 241, 237, 255), ls)
-            x += unit
-    r = s.rotate(ang, expand=True, resample=Image.BICUBIC)
-    base.alpha_composite(r, (int(cx - r.width / 2), int(cy - r.height / 2)))
+def place(base, hero, cx, by, ht, fr):
+    """Assenta o produto na cena. `fr` = luz vem da direita."""
+    w = int(hero.width * ht / hero.height)
+    p = hero.resize((w, ht), Image.LANCZOS)
 
+    # --- relight: gradiente na direcao da luz-chave ---
+    g = Image.new('L', (w, 1))
+    for x in range(w):
+        t = x / float(max(1, w - 1))
+        if not fr:
+            t = 1 - t
+        g.putpixel((x, 0), int(255 * (t ** 1.35)))
+    g = g.resize((w, ht))
+    rgb = p.convert('RGB')
+    o = Image.composite(ImageEnhance.Brightness(rgb).enhance(1.38),
+                        ImageEnhance.Brightness(rgb).enhance(.68), g)
+    o = Image.composite(Image.blend(o, Image.new('RGB', (w, ht), WARM), .12), o,
+                        g.point(lambda v: int(v * .85)))
+    o = o.convert('RGBA')
+    o.putalpha(p.getchannel('A'))
 
-def ramp_h(size, x0, x1):
-    W, H = size
-    m = Image.new('L', (W, 1), 0)
-    px = m.load()
-    for x in range(W):
-        px[x, 0] = 0 if x <= x0 else (255 if x >= x1 else int(255 * (x - x0) / float(x1 - x0)))
-    return m.resize((W, H))
+    # --- rim light: borda quente do lado iluminado ---
+    a = o.getchannel('A')
+    edge = ImageChops.subtract(a, ImageChops.offset(a, -9 if fr else 9, 3)).filter(ImageFilter.GaussianBlur(2.4))
+    lay = Image.new('RGBA', o.size, WARM + (0,))
+    lay.putalpha(edge.point(lambda v: int(v * 235 / 255)))
+    o = Image.alpha_composite(o, lay)
 
+    a = o.getchannel('A')
+    W, H = base.size
 
-def ramp_v(size, y0, y1, y2, y3):
-    W, H = size
-    m = Image.new('L', (1, H), 0)
-    px = m.load()
-    for y in range(H):
-        if y <= y0 or y >= y3:
-            v = 0.0
-        elif y < y1:
-            v = (y - y0) / float(y1 - y0)
-        elif y <= y2:
-            v = 1.0
-        else:
-            v = (y3 - y) / float(y3 - y2)
-        px[0, y] = int(255 * v)
-    return m.resize((W, H))
+    # --- sombra projetada, para o lado oposto a luz ---
+    sq = a.resize((int(w * 1.35), max(10, int(ht * .30))), Image.LANCZOS)
+    dx = int(-w * .46) if fr else int(w * .46)
+    l = Image.new('L', (W, H), 0)
+    l.paste(sq, (int(cx - sq.width / 2 + dx), int(by - sq.height * .60)))
+    base.paste(Image.new('RGB', (W, H), (0, 0, 0)), (0, 0),
+               l.filter(ImageFilter.GaussianBlur(40)).point(lambda v: int(v * .60)))
 
+    # --- sombra de contato: curta e escura, prega o objeto no chao ---
+    ct = a.resize((int(w * .94), max(8, int(ht * .055))), Image.LANCZOS)
+    l2 = Image.new('L', (W, H), 0)
+    l2.paste(ct, (int(cx - ct.width / 2), int(by - ct.height * .55)))
+    base.paste(Image.new('RGB', (W, H), (0, 0, 0)), (0, 0),
+               l2.filter(ImageFilter.GaussianBlur(9)).point(lambda v: int(v * .88)))
 
-def tapes(base, specs, txt, mask):
-    """Desenha um grupo de fitas e mascara para elas nao invadirem o texto.
-    Sem isso as fitas atravessam a headline e matam a legibilidade."""
-    lay = Image.new('RGBA', base.size, (0, 0, 0, 0))
-    for cx, cy, L, T, a, fs in specs:
-        tape(lay, cx, cy, L, T, a, TTXT, fs, txt)
-    if mask is not None:
-        lay.putalpha(ImageChops.multiply(lay.getchannel('A'), mask))
-    base.alpha_composite(lay)
+    # --- reflexo no tampo polido ---
+    rf = o.transpose(Image.FLIP_TOP_BOTTOM)
+    mm = Image.new('L', (1, ht))
+    for y in range(ht):
+        mm.putpixel((0, y), int(255 * .30 * max(0., 1 - (y / float(ht)) * 2.8)))
+    rf.putalpha(ImageChops.multiply(rf.getchannel('A'), mm.resize((w, ht))))
+    base.alpha_composite(rf.filter(ImageFilter.GaussianBlur(5)), (int(cx - w / 2), int(by)))
 
-
-def product(base, img, cx, cy, h, ang):
-    """Produto inclinado com sombra projetada."""
-    w = int(img.width * h / img.height)
-    p = img.resize((w, h), Image.LANCZOS).rotate(ang, expand=True, resample=Image.BICUBIC)
-    sh = Image.new('RGBA', base.size, (0, 0, 0, 0))
-    col = Image.new('RGBA', p.size, (64, 54, 40, 255))
-    col.putalpha(p.getchannel('A').point(lambda v: int(v * .40)))
-    sh.alpha_composite(col, (int(cx - p.width / 2 + 20), int(cy - p.height / 2 + 38)))
-    base.alpha_composite(sh.filter(ImageFilter.GaussianBlur(28)))
-    base.alpha_composite(p, (int(cx - p.width / 2), int(cy - p.height / 2)))
-    return (int(cx - p.width / 2), int(cy - p.height / 2), int(cx + p.width / 2), int(cy + p.height / 2))
-
-
-def gift(d, cx, cy, r, fg, bg):
-    gw, gh = int(r * 1.15), int(r * .86)
-    gx, gy = cx - gw // 2, cy - int(r * .30)
-    d.rectangle((gx, gy, gx + gw, gy + gh), fill=fg)
-    d.line((cx, gy, cx, gy + gh), fill=bg, width=max(2, int(r * .16)))
-    d.line((gx, gy + int(gh * .34), gx + gw, gy + int(gh * .34)), fill=bg, width=max(2, int(r * .16)))
-    d.ellipse((cx - int(r * .56), gy - int(r * .36), cx - int(r * .04), gy + int(r * .10)), outline=fg, width=max(2, int(r * .14)))
-    d.ellipse((cx + int(r * .04), gy - int(r * .36), cx + int(r * .56), gy + int(r * .10)), outline=fg, width=max(2, int(r * .14)))
-
-
-def badge_w(l1, l2, fs, ic=False):
-    f1, f2 = F(XB, fs), F(XB, int(fs * .40))
-    pad = int(fs * .44)
-    iw = int(fs * 1.25) if ic else 0
-    return int(max(wls(f1, l1, fs * .01), wls(f2, l2, fs * .10))) + pad * 2 + iw + (int(fs * .35) if ic else 0)
-
-
-def badge(base, x, y, l1, l2, fs, ic=False):
-    """Caixa solida de spec, no espirito do 'GAINER 2.73KG' da referencia."""
-    f1, f2 = F(XB, fs), F(XB, int(fs * .40))
-    pad = int(fs * .44)
-    iw = int(fs * 1.25) if ic else 0
-    w = badge_w(l1, l2, fs, ic)
-    h = int(fs * 1.60) + pad * 2
-    ov = Image.new('RGBA', base.size, (0, 0, 0, 0))
-    d = ImageDraw.Draw(ov)
-    d.rectangle((x, y, x + w, y + h), fill=RED + (255,))
-    tx = x + pad
-    if ic:
-        gift(d, x + pad + iw // 2, y + h // 2, int(iw * .46), CREAM + (255,), RED + (255,))
-        tx = x + pad + iw + int(fs * .35)
-    dls(d, tx, y + pad - int(fs * .10), l1, f1, CREAM + (255,), fs * .01)
-    dls(d, tx, y + pad + int(fs * 1.02), l2, f2, (255, 214, 206, 255), fs * .10)
-    base.alpha_composite(ov)
-    return w, h
+    base.alpha_composite(o, (int(cx - w / 2), int(by - ht)))
 
 
 def cta(base, x, y, txt, fs):
     f = F(XB, fs)
-    ls = fs * .07
+    ls = fs * .08
     tw = wls(f, txt, ls)
-    ar = int(fs * .80)
-    h = int(fs * 2.45)
-    w = int(tw) + int(fs * 2.9) + ar
+    ar = int(fs * .78)
+    h = int(fs * 2.5)
+    w = int(tw) + int(fs * 3.0) + ar
     ov = Image.new('RGBA', base.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(ov)
     d.rounded_rectangle((x, y, x + w, y + h), radius=h // 2, fill=RED + (255,))
-    tx = x + int((w - tw - ar - fs * .45) / 2)
-    ex = dls(d, tx, y + int((h - fs * 1.30) / 2), txt, f, CREAM + (255,), ls)
+    ex = dls(d, x + int((w - tw - ar - fs * .5) / 2), y + int((h - fs * 1.3) / 2), txt, f, CREAM + (255,), ls)
     cy = y + h // 2
-    ax = ex + int(fs * .52)
-    lw, s = max(3, int(fs * .11)), int(fs * .23)
+    ax = ex + int(fs * .55)
+    lw, s = max(3, int(fs * .11)), int(fs * .22)
     d.line((ax, cy - s, ax + s, cy), fill=CREAM + (255,), width=lw)
     d.line((ax, cy + s, ax + s, cy), fill=CREAM + (255,), width=lw)
     base.alpha_composite(ov)
     return w, h
 
 
+EYEBROW = 'VERMEFREE  ·  DIA D'
+H1 = '10% OFF'
+H2 = 'SÓ HOJE · QUARTA 09/09'
+BULLETS = ['Já no preço, sem cupom.',
+           'Frete grátis sem valor mínimo.',
+           '1 Óleo de Alho de brinde no pedido.']
+CT = 'APROVEITAR O DIA D'
+
 HERO = Image.open('hero_cut.png').convert('RGBA')
 HERO = HERO.crop(HERO.getchannel('A').getbbox())
 
-TTXT = 'DIA D · 10% OFF · SÓ HOJE'      # texto repetido nas fitas
-H1, H2 = '10% OFF', 'SÓ HOJE'
-SUB = 'JÁ NO PREÇO, SEM CUPOM'
-CT = 'APROVEITAR O DIA D'
-
 
 def desktop(txt=True):
+    """2400x1000 — luz da DIREITA, produto no pedestal, texto no negro a esquerda."""
     W, H = 2400, 1000
-    bg = sky(W, H)
-    hills(bg, int(H * .78))
-    if txt:
-        script(bg, 430, 180, 'Dia D', 430, 58, -7)
-    mk = ramp_h((W, H), 1150, 1340)        # fitas so a partir da coluna do produto
-    tapes(bg, [(1560, 250, 2600, 88, -19, 30), (1620, 690, 2600, 84, 9, 29),
-               (1480, 110, 2600, 80, 23, 28)], txt, mk)     # atras do produto
-    product(bg, HERO, 1700, 480, 760, -14)
-    tapes(bg, [(1700, 780, 2600, 82, -8, 28), (1880, 370, 2600, 74, 4, 26)], txt, mk)  # na frente
+    bg = grade(cover(Image.open('cine_d.png').convert('RGB'), W, H)).convert('RGBA')
+    glow(bg, 1800, 430, 300)
+    place(bg, HERO, 1800, 655, 560, fr=True)
+    vignette(bg, .62)
     if not txt:
         return bg.convert('RGB')
-    X, COL = 420, 880
+    X, COL = 400, 800
     d = ImageDraw.Draw(bg)
-    f1, s1 = fit(XB, H1, COL, 200, ls=-3)
-    dls(d, X, 175, H1, f1, RED, -3)
-    y = 175 + int(s1 * 1.00)
-    f2, s2 = fit(XB, H2, 620, 112, ls=1)
-    dls(d, X, y, H2, f2, INK, 1)
-    y += int(s2 * 1.22)
-    fs, _ = fit(XB, SUB, COL, 29, ls=5)
-    dls(d, X, y, SUB, fs, RED, 5)
-    y += 64
-    w1, h1 = badge(bg, X, y, 'FRETE GRÁTIS', 'SEM VALOR MÍNIMO', 34)
-    badge(bg, X + w1 + 26, y, 'BRINDE', '1 ÓLEO DE ALHO', 34, ic=True)
-    cta(bg, X, y + h1 + 40, CT, 31)
+    fe, _ = fit(XB, EYEBROW, COL, 24, 9)
+    dls(d, X, 232, EYEBROW, fe, DIM + (255,), 9)
+    f1, s1 = fit(XB, H1, COL, 212, -4)
+    dls(d, X, 288, H1, f1, CREAM + (255,), -4)
+    y = 288 + int(s1 * 1.02)
+    f2, _ = fit(XB, H2, COL, 30, 6)
+    dls(d, X, y, H2, f2, RED + (255,), 6)
+    y += 62
+    d.line((X, y, X + 96, y), fill=RED + (255,), width=5)
+    y += 40
+    fb = F(SB, 27)
+    for t in BULLETS:
+        d.ellipse((X, y + 11, X + 10, y + 21), fill=RED + (255,))
+        d.text((X + 31, y), t, font=fb, fill=CREAM + (255,))
+        y += 44
+    cta(bg, X, y + 32, CT, 29)
     return bg.convert('RGB')
 
 
 def mobile(txt=True):
+    """1080x1350 — luz da ESQUERDA, produto baixo e centrado, texto acima."""
     W, H = 1080, 1350
-    bg = sky(W, H)
-    hills(bg, int(H * .83))
-    if txt:
-        script(bg, 560, 60, 'Dia D', 300, 52, -7)
-        script(bg, 540, 1250, 'Dia D', 250, 40, -5)
-    mk = ramp_v((W, H), 430, 545, 1130, 1205)   # fitas so na faixa do produto
-    tapes(bg, [(540, 560, 1600, 74, -20, 25), (540, 950, 1600, 72, 11, 25),
-               (540, 720, 1600, 66, -4, 23)], txt, mk)
-    product(bg, HERO, 580, 800, 650, -14)
-    tapes(bg, [(540, 1020, 1600, 70, -9, 24), (540, 630, 1600, 62, 6, 22)], txt, mk)
+    bg = grade(cover(Image.open('cine_m.png').convert('RGB'), W, H)).convert('RGBA')
+    glow(bg, 540, 690, 270)
+    place(bg, HERO, 540, 918, 530, fr=False)
+    vignette(bg, .58)
     if not txt:
         return bg.convert('RGB')
     d = ImageDraw.Draw(bg)
-    f1, s1 = fit(XB, H1, 900, 168, ls=-3)
-    dls(d, (W - wls(f1, H1, -3)) / 2, 88, H1, f1, RED, -3)
-    y = 88 + int(s1 * 1.00)
-    f2, s2 = fit(XB, H2, 600, 104, ls=1)
-    dls(d, (W - wls(f2, H2, 1)) / 2, y, H2, f2, INK, 1)
-    y += int(s2 * 1.20)
-    fs, _ = fit(XB, SUB, 880, 25, ls=5)
-    dls(d, (W - wls(fs, SUB, 5)) / 2, y, SUB, fs, RED, 5)
-    badge(bg, 44, 600, 'FRETE GRÁTIS', 'SEM VALOR MÍNIMO', 27)
-    bw = badge_w('BRINDE', '1 ÓLEO DE ALHO', 27, True)
-    badge(bg, W - 44 - bw, 880, 'BRINDE', '1 ÓLEO DE ALHO', 27, ic=True)
-    f = F(XB, 32)
-    cw = int(wls(f, CT, 32 * .07)) + int(32 * 2.9) + int(32 * .80)
-    cta(bg, int((W - cw) / 2), 1216, CT, 32)
+    fe, _ = fit(XB, EYEBROW, 900, 22, 8)
+    dls(d, (W - wls(fe, EYEBROW, 8)) / 2, 108, EYEBROW, fe, DIM + (255,), 8)
+    f1, s1 = fit(XB, H1, 900, 190, -4)
+    dls(d, (W - wls(f1, H1, -4)) / 2, 158, H1, f1, CREAM + (255,), -4)
+    y = 158 + int(s1 * 1.02)
+    f2, _ = fit(XB, H2, 900, 27, 5)
+    dls(d, (W - wls(f2, H2, 5)) / 2, y, H2, f2, RED + (255,), 5)
+    fb = F(SB, 25)
+    yy = 1010
+    for t in BULLETS:
+        d.text(((W - fb.getlength(t)) / 2, yy), t, font=fb, fill=CREAM + (255,))
+        yy += 38
+    f = F(XB, 30)
+    cw = int(wls(f, CT, 2.4)) + 90 + 23
+    cta(bg, int((W - cw) / 2), yy + 26, CT, 30)
     return bg.convert('RGB')
 
 
 def save(img, name, target_kb):
     img.save(name + '.png', optimize=True)
-    q = 92
-    while q >= 40:
+    q = 90
+    while q >= 38:
         img.save(name + '.webp', 'WEBP', quality=q, method=6)
         if os.path.getsize(name + '.webp') / 1024.0 <= target_kb:
             break
