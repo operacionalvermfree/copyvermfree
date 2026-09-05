@@ -1,122 +1,28 @@
 {%- comment -%}
-  vf-promo-pdp-fix.liquid — Correções da promo de frete grátis na PDP.
+  vf-promo-pdp-fix.liquid — Contador da promo na PDP.
 
-  POR QUE ISTO EXISTE: as correções abaixo pertencem ao
-  sections/vf-pdp-main.liquid, que tem 88 KB. A API de tema grava arquivo
-  inteiro, e transcrever 88 KB à mão arrisca corromper a página de produto.
-  A versão corrigida do arquivo está no repositório — quando ela for colada
-  pelo editor de código, ESTE SNIPPET VIRA INÓCUO: os mapas abaixo só agem
-  sobre os textos antigos, então deixam de casar e nada acontece; e o CSS
-  repete regras que o arquivo novo já traz. Pode apagar depois, sem pressa.
+  POR QUE ISTO EXISTE: o script que anima [data-countdown] mora na tarja de
+  anúncio, no topo do <body>, e roda enquanto a página ainda está sendo lida.
+  A PDP ainda não existe no DOM nesse momento, então ele nunca acha o elemento
+  e o contador fica travado em "--:--:--". Aqui o contador da PDP é assumido
+  por conta própria, depois do DOM pronto.
 
-  O QUE CORRIGE:
+  Era um snippet maior: também corrigia a barra de kits, a tarja "FRETE GRÁTIS
+  HOJE", a linha "só hoje e amanhã", o visual vermelho dos cards e a parcela
+  que divergia em 1 centavo. Tudo isso agora está no próprio
+  sections/vf-pdp-main.liquid, então saiu daqui — só o contador continua
+  precisando de ponte, porque o problema é ordem de execução, não conteúdo.
 
-  1. CONTADOR TRAVADO EM "--:--:--". O script que anima [data-countdown] mora
-     na tarja de anúncio, no topo do <body>, e roda enquanto a página ainda
-     está sendo lida — a PDP ainda não existe no DOM, então ele nunca acha
-     esse elemento. Aqui o contador da PDP é assumido por conta própria, com
-     a data certa da promo, depois do DOM pronto.
-
-  2. BARRA DE KITS PROMETENDO FRETE COMO CONQUISTA. A mensagem mudava por
-     quantidade e chegava a dizer "Leve 2 e ganhe frete grátis" com o frete
-     já gratuito pra qualquer pedido. O frete passa a aparecer garantido em
-     todas as faixas; só o desconto por quantidade varia. O de/para abaixo é
-     literal: nenhuma condição de desconto é inventada, só a parte de frete
-     é reescrita.
-
-  3. "HOJE" numa promo de dois dias, e "só hoje e amanhã" — que fica errado
-     no domingo.
-
-  4. SELETOR DE KITS SEM O VISUAL DA PROMO nos protocolos (adulto e kids). O
-     arquivo do tema só põe a classe --promo no caminho genérico (usado pelo
-     Kit Família); o caminho dos protocolos ficou de fora e os cards seguiam
-     verdes. Aqui o mesmo vermelho é aplicado por CSS, sem JS e sem piscar,
-     usando :has() a partir do data-frete-promo que a caixa de preço já
-     expõe. E o selo "FRETE GRÁTIS" entra também no card de 1 Kit: na promo
-     o frete é grátis em qualquer quantidade, e o selo só em 2 e 3 Kits faz
-     o card de 1 Kit parecer de fora.
-
-  5. PARCELA DIVERGINDO EM 1 CENTAVO. O card do kit e a caixa de preço
-     calculavam a parcela por caminhos diferentes (110,51 no card, 110,52 na
-     caixa). A caixa passa a copiar o valor já renderizado no card
-     selecionado: uma fonte de verdade só, impossível divergir.
+  Quando a promo acabar: PROMO_ON = false desliga o snippet inteiro.
 {%- endcomment -%}
 
 {%- assign PROMO_ON = true -%}
 {%- assign PROMO_FIM = '2026-09-07T00:00:00-03:00' -%}
 
 {%- if PROMO_ON -%}
-<style>
-  /* ---- 4. visual vermelho da promo no seletor de kits ----
-     Vale para os dois caminhos do vf-pdp-main. O gatilho é o
-     data-frete-promo="true" que a caixa de preço já imprime, então isto
-     acende e apaga junto com a promo, sem duplicar a regra de data. */
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-card {
-    border-color: #F3B9BF;
-  }
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-card:hover {
-    border-color: #E11D2E;
-  }
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-card.is-active {
-    border-color: #E11D2E;
-    box-shadow: 0 0 0 1px #E11D2E, 0 8px 20px rgba(225, 29, 46, 0.18);
-  }
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-card.is-active .vf-pdp__kit-radio {
-    border-color: #E11D2E;
-  }
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-card.is-active .vf-pdp__kit-radio::after {
-    background: #E11D2E;
-  }
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-installment-value,
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-discount {
-    color: #E11D2E;
-  }
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-cash-value {
-    color: #C11524;
-  }
-  /* o selo padrão é âmbar; dentro do card vermelho ele briga com a borda */
-  .vf-pdp:has([data-frete-promo="true"]) .vf-pdp__kit-badge--2 {
-    background: #E11D2E;
-    color: #fff;
-  }
-  /* a tarja da promo sobe 12px acima do card e encostava no card de cima */
-  .vf-pdp__kits-grid:has(.vf-pdp__kit-promo-ribbon) { gap: 24px; }
-</style>
-
 <script>
 (function () {
   var FIM = '{{ PROMO_FIM }}';
-
-  /* de/para literal: chave = texto que o vf-pdp-main gera hoje */
-  var TEXTOS = {
-    '🎉 Vantagem máxima: 10% OFF + frete grátis desbloqueados':
-      '🚚 Frete grátis garantido · 10% OFF aplicado — vantagem máxima',
-    '🎉 5% OFF + frete grátis · volte pra 3 Kits e ganhe 10% OFF':
-      '🚚 Frete grátis garantido · 5% OFF — leve 3 Kits e ganhe 10% OFF',
-    '🚚 Frete grátis garantido — volte pra 3 Kits e ganhe 10% OFF':
-      '🚚 Frete grátis garantido · leve 3 Kits e ganhe 10% OFF',
-    'Leve 2 e ganhe 5% OFF · leve 3 e ganhe 10% OFF':
-      '🚚 Frete grátis garantido · leve 2 e ganhe 5% OFF, leve 3 e ganhe 10% OFF',
-    'Leve 2 e ganhe frete grátis · leve 3 e ganhe 10% OFF':
-      '🚚 Frete grátis garantido · leve 3 e ganhe 10% OFF',
-    '🚚 Frete grátis HOJE, sem valor mínimo!':
-      '🚚 Frete grátis, sem valor mínimo',
-    '🚚 FRETE GRÁTIS HOJE':
-      '🚚 SÓ NESTE FIM DE SEMANA'
-  };
-
-  function fixar(el) {
-    if (!el) return;
-    var novo = TEXTOS[el.textContent.trim()];
-    if (novo && el.textContent !== novo) el.textContent = novo;
-  }
-
-  function vigiar(el) {
-    if (!el) return;
-    fixar(el);
-    new MutationObserver(function () { fixar(el); })
-      .observe(el, { childList: true, characterData: true, subtree: true });
-  }
 
   function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -126,102 +32,13 @@
   }
 
   pronto(function () {
-    var promoAtiva = !!document.querySelector('.vf-pdp [data-frete-promo="true"]');
-
-    /* 1 + 2 — textos que o proprio JS da secao reescreve a cada troca de kit */
-    vigiar(document.getElementById('vf-pdp-kitbar-msg'));
-    vigiar(document.getElementById('vf-pdp-volume-badge-text'));
-
-    /* 3 — tarja "HOJE" numa promo de dois dias */
-    Array.prototype.forEach.call(
-      document.querySelectorAll('.vf-pdp__kit-promo-ribbon'), vigiar
-    );
-
-    /* 3 — linha curta de frete abaixo dos selos */
-    var mini = document.querySelector('.vf-pdp__frete-mini-text');
-    if (mini && mini.lastChild && mini.lastChild.nodeType === 3) {
-      if (mini.lastChild.nodeValue.indexOf('só hoje e amanhã') !== -1) {
-        mini.lastChild.nodeValue = ' nesse pedido — só neste fim de semana.';
-      }
-    }
-
-    /* 4 — selo "Frete grátis" tambem no card sem selo (1 Kit).
-       O CSS acima ja pinta a borda; falta o selo, que o arquivo do tema so
-       coloca em 2 e 3 Kits. Idempotente: se o card ja tem o selo 2, sai. */
-    if (promoAtiva) {
-      Array.prototype.forEach.call(
-        document.querySelectorAll('.vf-pdp__kit-card'),
-        function (card) {
-          /* fallback pra navegador sem :has() — o CSS do proprio tema ja
-             estiliza .vf-pdp__kit-card--promo */
-          card.classList.add('vf-pdp__kit-card--promo');
-          if (card.querySelector('.vf-pdp__kit-badge--2')) return;
-          var selo = document.createElement('span');
-          selo.className = 'vf-pdp__kit-badge vf-pdp__kit-badge--2';
-          selo.textContent = 'Frete grátis';
-          var linha = card.querySelector('.vf-pdp__kit-badges');
-          if (linha) {
-            linha.appendChild(selo);
-          } else {
-            linha = document.createElement('div');
-            linha.className = 'vf-pdp__kit-badges';
-            linha.appendChild(selo);
-            card.insertBefore(linha, card.firstChild);
-          }
-        }
-      );
-    }
-
-    /* 5 — parcela: a caixa de preco copia o card selecionado */
-    var caixaParcela = document.getElementById('vf-pdp-installment');
-    var caixaSticky = document.getElementById('vf-pdp-sticky-price');
-
-    function sincronizarParcela() {
-      var card = document.querySelector('.vf-pdp__kit-card.is-active [data-installment]');
-      if (!card) return;
-      var valor = card.textContent.trim();
-      if (!valor) return;
-
-      /* so mexe em parcela de 10x; se a PDP estiver no modo "3x sem juros",
-         o numero vem de outro lugar e nao e comparavel */
-      if (caixaParcela && caixaParcela.textContent.trim().indexOf('10x de ') === 0) {
-        var certo = '10x de ' + valor;
-        if (caixaParcela.textContent.trim() !== certo) caixaParcela.textContent = certo;
-      }
-      if (caixaSticky) {
-        var forte = caixaSticky.querySelector('strong');
-        if (forte && forte.textContent.trim().indexOf('10x ') === 0) {
-          var certoSticky = '10x ' + valor;
-          if (forte.textContent.trim() !== certoSticky) forte.textContent = certoSticky;
-        }
-      }
-    }
-
-    if (caixaParcela || caixaSticky) {
-      sincronizarParcela();
-      /* a secao reescreve esses nos a cada troca de kit; reagimos depois dela */
-      var alvos = [caixaParcela, caixaSticky].filter(Boolean);
-      var obs = new MutationObserver(function () { sincronizarParcela(); });
-      alvos.forEach(function (el) {
-        obs.observe(el, { childList: true, characterData: true, subtree: true });
-      });
-      var grade = document.getElementById('vf-pdp-kits-grid');
-      if (grade) grade.addEventListener('click', function () { setTimeout(sincronizarParcela, 0); });
-    }
-
-    /* 1 — chamada de frete: data certa e contador rodando de fato */
     var bloco = document.querySelector('.vf-pdp__frete-promo');
     if (!bloco) return;
 
-    var linha = bloco.querySelector('.vf-pdp__frete-promo-copy span');
     var alvoEl = bloco.querySelector('[data-countdown]');
     if (!alvoEl) return;
 
-    if (linha && linha.firstChild && linha.firstChild.nodeType === 3) {
-      linha.firstChild.nodeValue = 'Sábado e domingo, pra todo o Brasil, sem valor mínimo. Acaba em ';
-    }
-
-    /* tira do controle do script da tarja (que roda cedo demais e nao pega isto) */
+    /* tira do controle do script da tarja, que roda cedo demais e nao pega isto */
     alvoEl.removeAttribute('data-countdown');
 
     var alvo = new Date(FIM).getTime();
