@@ -1,0 +1,119 @@
+{%- comment -%}
+  vf-cart-recomendados.liquid — Faixa "Combina com o seu cuidado" no carrinho
+  Mostra até 3 produtos que AINDA NÃO estão no carrinho, em ordem curada
+  (Kit Família → Kids 2-4 → Kids 5-9 → Adulto → Óleo). Add direto via
+  /cart/add.js → reload (padrão do tema). Copy ANVISA-safe.
+  Renderizado por main-cart.liquid, abaixo do carrinho (largura total).
+{%- endcomment -%}
+
+{%- assign C1 = 'kit-familia-vermefree-2-adultos-2-criancas' -%}
+{%- assign C2 = 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos' -%}
+{%- assign C3 = 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' -%}
+{%- assign C4 = 'protocolo-desparasitacao-adulto-vermefree' -%}
+{%- assign C5 = 'oleo-de-alho-desodorizado-500mg' -%}
+{%- assign candidatos = C1 | append: ',' | append: C2 | append: ',' | append: C3 | append: ',' | append: C4 | append: ',' | append: C5 | split: ',' -%}
+
+{%- comment -%} handles já no carrinho (com vírgula delimitadora nas 2 pontas p/ match exato) {%- endcomment -%}
+{%- assign in_cart = ',' -%}
+{%- for item in cart.items -%}
+  {%- assign in_cart = in_cart | append: item.product.handle | append: ',' -%}
+{%- endfor -%}
+
+{%- assign shown = 0 -%}
+{%- assign to_show = '' -%}
+{%- for h in candidatos -%}
+  {%- assign needle = ',' | append: h | append: ',' -%}
+  {%- unless in_cart contains needle -%}
+    {%- if shown < 3 -%}
+      {%- assign to_show = to_show | append: h | append: ',' -%}
+      {%- assign shown = shown | plus: 1 -%}
+    {%- endif -%}
+  {%- endunless -%}
+{%- endfor -%}
+{%- assign showlist = to_show | split: ',' -%}
+
+{%- comment -%} carrinho ja tem protocolo? (habilita mostrar 15% no 2o protocolo) {%- endcomment -%}
+{%- assign crec_has_proto = false -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == C2 or item.product.handle == C3 or item.product.handle == C4 -%}
+    {%- assign crec_has_proto = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if showlist.size > 0 -%}
+  <section class="vf-crec">
+    <h3 class="vf-crec__title">Combina com o seu cuidado 🌿</h3>
+    <div class="vf-crec__grid" data-vf-crec>
+      {%- for h in showlist -%}
+        {%- assign p = all_products[h] -%}
+        {%- if p != blank -%}
+          {%- assign v = p.selected_or_first_available_variant -%}
+          {%- assign crec_is_proto = false -%}
+          {%- if h == C2 or h == C3 or h == C4 -%}{%- assign crec_is_proto = true -%}{%- endif -%}
+          {%- assign crec_promo = false -%}
+          {%- if crec_is_proto and crec_has_proto -%}{%- assign crec_promo = true -%}{%- endif -%}
+          <article class="vf-crec__card{% if crec_promo %} vf-crec__card--promo{% endif %}">
+            <a href="{{ p.url }}" class="vf-crec__img" tabindex="-1" aria-label="{{ p.title | escape }}">
+              {%- if p.featured_image -%}
+                <img src="{{ p.featured_image | image_url: width: 200 }}" alt="{{ p.title | escape }}" width="88" height="88" loading="lazy">
+              {%- endif -%}
+            </a>
+            <a href="{{ p.url }}" class="vf-crec__name">{{ p.title }}</a>
+            {%- if crec_promo -%}
+              {%- assign crec_off = p.price | times: 0.85 | round -%}
+              <span class="vf-crec__price"><s class="vf-crec__price-old">{{ p.price | money }}</s> {{ crec_off | money }}</span>
+              <span class="vf-crec__tag">-15% no 2º protocolo</span>
+            {%- else -%}
+              <span class="vf-crec__price">{{ p.price | money }}</span>
+            {%- endif -%}
+            <button type="button" class="vf-crec__add" data-vf-crec-add data-variant="{{ v.id }}"{% unless v.available %} disabled{% endunless %}>
+              {%- if v.available -%}Adicionar{%- else -%}Indisponível{%- endif -%}
+            </button>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var wrap = document.querySelector('[data-vf-crec]');
+      if (!wrap) return;
+      wrap.querySelectorAll('[data-vf-crec-add]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (btn.disabled) return;
+          var id = parseInt(btn.getAttribute('data-variant'), 10);
+          if (!id) return;
+          var old = btn.textContent;
+          btn.disabled = true; btn.textContent = 'Adicionando…';
+          fetch('{{ routes.cart_add_url }}.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ items: [{ id: id, quantity: 1 }] })
+          }).then(function () { window.location.reload(); })
+            .catch(function () { btn.disabled = false; btn.textContent = old; });
+        });
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-crec { margin: 28px 0 4px; padding: 22px 20px; background: var(--vf-surface, #fff); border: 1px solid var(--vf-border, #E3E3DD); border-radius: 14px; }
+  .vf-crec__title { font-family: var(--font-heading, inherit); font-size: 20px; text-align: center; margin: 0 0 18px; color: var(--vf-text, #1A1A1A); }
+  .vf-crec__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 720px; margin: 0 auto; }
+  .vf-crec__card { border: 1px solid var(--vf-border, #E3E3DD); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; background: var(--vf-bg, #FAF8F2); }
+  .vf-crec__img { width: 88px; height: 88px; background: var(--vf-beige, #F5F1E8); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .vf-crec__img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+  .vf-crec__name { font-family: var(--font-heading, inherit); font-size: 13.5px; color: var(--vf-text, #1A1A1A); line-height: 1.25; }
+  .vf-crec__name:hover { color: var(--vf-green-dark, #1B5E20); }
+  .vf-crec__price { font-weight: 800; color: var(--vf-green-dark, #1B5E20); font-size: 15px; }
+  .vf-crec__add { margin-top: auto; width: 100%; border: 0; cursor: pointer; background: var(--vf-green, #5EBC43); color: #08210f; font-weight: 800; font-size: 12.5px; padding: 10px 12px; border-radius: 8px; transition: background .15s, color .15s; }
+  .vf-crec__add:hover { background: var(--vf-green-dark, #1B5E20); color: #fff; }
+  .vf-crec__add:disabled { opacity: .55; cursor: default; }
+  .vf-crec__price-old { color: var(--vf-muted, #999); font-weight: 600; font-size: 12.5px; margin-right: 4px; }
+  .vf-crec__tag { display: inline-block; background: #E11D2E; color: #fff; font-weight: 800; font-size: 10.5px; padding: 3px 8px; border-radius: 999px; }
+  .vf-crec__card--promo { border-color: #E11D2E; box-shadow: 0 0 0 2px rgba(225,29,46,0.12); }
+  .vf-crec__card--promo .vf-crec__price { color: #E11D2E; }
+{% endstylesheet %}
+

@@ -1,0 +1,122 @@
+{%- comment -%}
+  vf-pdp-cross-familia.liquid — Cross-sell de Família na PDP (eixo Família)
+  Com base no produto atual, oferece os complementares da casa COM add-to-cart:
+    Adulto  → Kids 2-4 + Kids 5-9   ("E as crianças?")
+    Kids    → Adulto + Kit Família  ("E você, que cuida de todos?")
+    Kit Fam → Óleo de Alho          ("Complete com a manutenção")
+  Padrão de add igual ao resto do tema: /cart/add.js → vai pro carrinho.
+  Copy ANVISA-safe (sem cura/elimina/parasita, sem médico).
+{%- endcomment -%}
+
+{%- assign H_ADULTO = 'protocolo-desparasitacao-adulto-vermefree' -%}
+{%- assign H_KIDS24 = 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos' -%}
+{%- assign H_KIDS59 = 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' -%}
+{%- assign H_OLEO   = 'oleo-de-alho-desodorizado-500mg' -%}
+{%- assign H_KITFAM = 'kit-familia-vermefree-2-adultos-2-criancas' -%}
+
+{%- assign cur = product.handle -%}
+{%- assign offer_handles = '' -%}
+{%- assign xheading = section.settings.heading -%}
+
+{%- if cur == H_ADULTO -%}
+  {%- assign offer_handles = H_KIDS24 | append: ',' | append: H_KIDS59 -%}
+  {%- if xheading == blank -%}{%- assign xheading = 'E as crianças? Cuide da família toda 🏠' -%}{%- endif -%}
+{%- elsif cur == H_KIDS24 or cur == H_KIDS59 -%}
+  {%- assign offer_handles = H_ADULTO | append: ',' | append: H_KITFAM -%}
+  {%- if xheading == blank -%}{%- assign xheading = 'E você, que cuida de todos? 🌿' -%}{%- endif -%}
+{%- elsif cur == H_KITFAM -%}
+  {%- assign offer_handles = H_OLEO -%}
+  {%- if xheading == blank -%}{%- assign xheading = 'Complete com a manutenção do mês 🌿' -%}{%- endif -%}
+{%- endif -%}
+
+{%- assign offers = offer_handles | split: ',' -%}
+
+{%- if offers.size > 0 -%}
+<section class="vf-xfam">
+  <div class="vf-container">
+    <h2 class="vf-xfam__title">{{ xheading }}</h2>
+    {%- if section.settings.subheading != blank -%}
+      <p class="vf-xfam__sub">{{ section.settings.subheading }}</p>
+    {%- else -%}
+      <p class="vf-xfam__sub">A desparasitação natural funciona melhor quando é rotina da família toda — todo mundo no mesmo ciclo.</p>
+    {%- endif -%}
+
+    <div class="vf-xfam__grid" data-vf-xfam>
+      {%- for h in offers -%}
+        {%- assign h = h | strip -%}
+        {%- assign p = all_products[h] -%}
+        {%- if p != blank and p.handle != cur -%}
+          {%- assign v = p.selected_or_first_available_variant -%}
+          <article class="vf-xfam__card">
+            <a href="{{ p.url }}" class="vf-xfam__img" tabindex="-1" aria-label="{{ p.title | escape }}">
+              {%- if p.featured_image -%}
+                <img src="{{ p.featured_image | image_url: width: 240 }}" alt="{{ p.title | escape }}" width="120" height="120" loading="lazy">
+              {%- endif -%}
+            </a>
+            <div class="vf-xfam__body">
+              <a href="{{ p.url }}" class="vf-xfam__name">{{ p.title }}</a>
+              <span class="vf-xfam__price">{{ p.price | money }}</span>
+            </div>
+            <button type="button" class="vf-xfam__add" data-vf-xfam-add data-variant="{{ v.id }}"{% unless v.available %} disabled{% endunless %}>
+              {%- if v.available -%}Adicionar ao meu cuidado{%- else -%}Indisponível{%- endif -%}
+            </button>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function(){
+    var wrap = document.querySelector('[data-vf-xfam]');
+    if(!wrap) return;
+    wrap.querySelectorAll('[data-vf-xfam-add]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(btn.disabled) return;
+        var id = parseInt(btn.getAttribute('data-variant'), 10);
+        if(!id) return;
+        var old = btn.textContent;
+        btn.disabled = true; btn.textContent = 'Adicionando…';
+        fetch('{{ routes.cart_add_url }}.js', {
+          method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({ items:[{ id: id, quantity: 1 }] })
+        }).then(function(){ window.location.href = '{{ routes.cart_url }}'; })
+          .catch(function(){ btn.disabled = false; btn.textContent = old; });
+      });
+    });
+  })();
+</script>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-xfam{ padding:36px 0; background:var(--vf-bg,#FAF8F2); }
+  .vf-xfam__title{ font-family:var(--font-heading,inherit); font-size:clamp(22px,3vw,30px); text-align:center; margin:0 0 6px; color:var(--vf-text,#1A1A1A); }
+  .vf-xfam__sub{ text-align:center; color:var(--vf-muted,#666); margin:0 auto 22px; font-size:14px; max-width:52ch; line-height:1.5; }
+  .vf-xfam__grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; max-width:760px; margin:18px auto 0; }
+  .vf-xfam__card{ background:var(--vf-surface,#fff); border:1px solid var(--vf-border,#E3E3DD); border-radius:14px; padding:16px; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
+  .vf-xfam__img{ width:110px; height:110px; background:var(--vf-beige,#F5F1E8); border-radius:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .vf-xfam__img img{ width:100%; height:100%; object-fit:contain; padding:8px; }
+  .vf-xfam__body{ display:flex; flex-direction:column; gap:3px; }
+  .vf-xfam__name{ font-family:var(--font-heading,inherit); font-size:15px; color:var(--vf-text,#1A1A1A); line-height:1.25; }
+  .vf-xfam__name:hover{ color:var(--vf-green-dark,#1B5E20); }
+  .vf-xfam__price{ font-weight:800; color:var(--vf-green-dark,#1B5E20); font-size:16px; }
+  .vf-xfam__add{ margin-top:auto; width:100%; border:0; cursor:pointer; background:var(--vf-green,#5EBC43); color:#08210f; font-weight:800; font-size:13.5px; padding:11px 14px; border-radius:9px; transition:background .15s, color .15s; }
+  .vf-xfam__add:hover{ background:var(--vf-green-dark,#1B5E20); color:#fff; }
+  .vf-xfam__add:disabled{ opacity:.55; cursor:default; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF Cross-sell Família",
+  "tag": "section",
+  "class": "section vf-xfam-section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título (opcional — usa padrão por produto se vazio)" },
+    { "type": "text", "id": "subheading", "label": "Subtítulo (opcional)" }
+  ],
+  "enabled_on": { "templates": ["product"] },
+  "presets": [ { "name": "VF Cross-sell Família" } ]
+}
+{% endschema %}
+

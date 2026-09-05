@@ -1,0 +1,439 @@
+{%- comment -%}
+  ============================================================
+  vf-order-bump.liquid  —  ORDER BUMP Óleo de Alho Desodorizado
+  ============================================================
+  Order bump condicional: aparece SÓ quando o carrinho tem
+  protocolo adulto OU kit família. Oferta opcional de +R$67.
+
+  COMO USAR:
+  - Salve este arquivo como snippet:  snippets/vf-order-bump.liquid
+  - Ele é renderizado por main-cart.liquid (página /cart).
+
+  ⚙️ CONFIGURAÇÃO (EDITE AS 2 LINHAS ABAIXO):
+  1. BUMP_VARIANT_ID  = o Variant ID do Óleo de Alho (número, ex: 45678901234567)
+  2. GATILHOS (TRIGGER_HANDLES) = handles dos produtos que ativam o bump
+     (protocolo adulto e kit família). Veja o handle na URL do produto:
+     vermefree.com.br/products/AQUI-É-O-HANDLE
+{%- endcomment -%}
+
+{%- comment -%} ===== 1. CONFIG (JÁ PREENCHIDO — VermeFree) ===== {%- endcomment -%}
+{%- comment -%} ATENÇÃO: é o VARIANT ID (48968692891867), não o Product ID (9400206262491) {%- endcomment -%}
+{%- assign BUMP_VARIANT_ID = 48968692891867 -%}
+{%- assign TRIGGER_HANDLES = 'protocolo-desparasitacao-adulto-vermefree,antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos,antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos,kit-familia-vermefree-2-adultos-2-criancas' -%}
+
+{%- comment -%} ===== 2. Detecta se o carrinho tem um produto-gatilho ===== {%- endcomment -%}
+{%- assign bump_should_show = false -%}
+{%- assign bump_already_in_cart = false -%}
+{%- assign triggers = TRIGGER_HANDLES | split: ',' -%}
+
+{%- for item in cart.items -%}
+  {%- for h in triggers -%}
+    {%- assign h = h | strip -%}
+    {%- if item.product.handle == h -%}
+      {%- assign bump_should_show = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if item.variant.id == BUMP_VARIANT_ID -%}
+    {%- assign bump_already_in_cart = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%}
+  Não mostra se o gatilho não está no carrinho,
+  nem se o Óleo já foi adicionado.
+{%- endcomment -%}
+{%- if bump_should_show and bump_already_in_cart == false and BUMP_VARIANT_ID != 00000000000000 -%}
+
+  <div class="vf-bump" data-vf-bump>
+    <div class="vf-bump__flag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+      COMPLETE SEU PROTOCOLO · OFERTA DO CARRINHO
+    </div>
+
+    <div class="vf-bump__head">
+      <span class="vf-bump__img" aria-hidden="true">
+        {%- comment -%} Imagem do produto do bump (pega do variant) {%- endcomment -%}
+        {%- assign bump_product = all_products['oleo-de-alho-desodorizado-500mg'] -%}
+        {%- if bump_product.featured_image -%}
+          <img src="{{ bump_product.featured_image | image_url: width: 160 }}" alt="Óleo de Alho Desodorizado" width="80" height="80" loading="lazy">
+        {%- endif -%}
+      </span>
+
+      <span class="vf-bump__copy">
+        <span class="vf-bump__title">Mantenha a leveza depois do protocolo com o <strong>Óleo de Alho</strong></span>
+        <span class="vf-bump__desc">O Óleo de Alho é o passo de manutenção do mês — ajuda a manter a rotina de bem-estar do intestino entre um ciclo e outro. Muita gente mantém ele na rotina depois de fazer o protocolo.</span>
+        <span class="vf-bump__social">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          <strong>8 em cada 10 clientes</strong> adicionam essa oferta ao pedido.
+        </span>
+      </span>
+    </div>
+
+    <p class="vf-bump__dose">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Cada frasco = <strong>30 dias</strong> de manutenção da sua rotina de bem-estar.
+    </p>
+
+    {%- comment -%} Seletor 1/3/6 de frascos do Óleo de Alho. "1 frasco" pré-selecionado; o cliente pode subir pra 3 ou 6 frascos (todos 15% OFF). {%- endcomment -%}
+    <div class="vf-bump__options" role="radiogroup" aria-label="Quantidade de Óleo de Alho">
+
+      <label class="vf-bump__opt vf-bump__opt--max">
+        <input type="radio" name="vf-bump-qty" value="6" data-vf-bump-opt data-qty="6">
+        <span class="vf-bump__opt-tag vf-bump__opt-tag--max">MELHOR CUSTO</span>
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">6 frascos</span>
+            <span class="vf-bump__opt-sub">180 dias · R$ 56,95/un</span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-full">de R$ 402,00</span>
+            <span class="vf-bump__opt-installment">10x R$ 40,30</span>
+            <span class="vf-bump__opt-cash">ou R$ 341,70 à vista</span>
+            <span class="vf-bump__opt-save">Economize R$ 60,30</span>
+          </span>
+        </span>
+      </label>
+
+      <label class="vf-bump__opt vf-bump__opt--best">
+        <input type="radio" name="vf-bump-qty" value="3" data-vf-bump-opt data-qty="3" checked>
+        <span class="vf-bump__opt-tag">MAIS ESCOLHIDO</span>
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">3 frascos</span>
+            <span class="vf-bump__opt-sub">90 dias · R$ 56,95/un</span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-full">de R$ 201,00</span>
+            <span class="vf-bump__opt-installment">10x R$ 20,15</span>
+            <span class="vf-bump__opt-cash">ou R$ 170,85 à vista</span>
+            <span class="vf-bump__opt-save">Economize R$ 30,15</span>
+          </span>
+        </span>
+      </label>
+
+      <label class="vf-bump__opt">
+        <input type="radio" name="vf-bump-qty" value="1" data-vf-bump-opt data-qty="1">
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">1 frasco</span>
+            <span class="vf-bump__opt-sub">30 dias de proteção</span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-full">de R$ 67,00</span>
+            <span class="vf-bump__opt-installment">10x R$ 6,72</span>
+            <span class="vf-bump__opt-cash">ou R$ 56,95 à vista</span>
+            <span class="vf-bump__opt-save">Economize R$ 10,05</span>
+          </span>
+        </span>
+      </label>
+
+    </div>
+
+    <button type="button" class="vf-bump__cta" data-vf-bump-cta>
+      <span data-vf-bump-cta-label>Adicionar 3 frascos ao pedido — R$ 170,85</span>
+    </button>
+    <p class="vf-bump__micro">Desconto aplicado automaticamente no checkout · só nesta página</p>
+
+    <div class="vf-bump__spinner" data-vf-bump-spinner hidden>Adicionando…</div>
+  </div>
+
+  {%- comment -%} ===== JS: seleciona opção (1/3/6) e adiciona a quantidade escolhida ===== {%- endcomment -%}
+  <script>
+    (function () {
+      var wrap = document.querySelector('[data-vf-bump]');
+      if (!wrap) return;
+      var opts    = wrap.querySelectorAll('[data-vf-bump-opt]');
+      var cta     = wrap.querySelector('[data-vf-bump-cta]');
+      var ctaLbl  = wrap.querySelector('[data-vf-bump-cta-label]');
+      var spinner = wrap.querySelector('[data-vf-bump-spinner]');
+      var VARIANT_ID = {{ BUMP_VARIANT_ID }};
+      var busy = false;
+      var chosenQty = 3;
+
+      // rótulos do CTA por quantidade
+      var CTA = {
+        '1': 'Adicionar Óleo de Alho — R$ 56,95 (15% OFF)',
+        '3': 'Adicionar 3 frascos ao pedido — R$ 170,85',
+        '6': 'Adicionar 6 frascos ao pedido — R$ 341,70'
+      };
+
+      opts.forEach(function (o) {
+        o.addEventListener('change', function () {
+          chosenQty = parseInt(o.getAttribute('data-qty'), 10);
+          ctaLbl.textContent = CTA[String(chosenQty)] || 'Adicionar ao pedido';
+        });
+      });
+
+      cta.addEventListener('click', function () {
+        if (busy || !chosenQty) return;
+        busy = true;
+        wrap.classList.add('is-busy');
+        if (spinner) spinner.hidden = false;
+        fetch('{{ routes.cart_add_url }}.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ items: [{ id: VARIANT_ID, quantity: chosenQty }] })
+        }).then(function () { window.location.reload(); })
+          .catch(function () { window.location.reload(); });
+      });
+    })();
+  </script>
+
+{%- endif -%}
+
+{%- comment -%} CSS no nível raiz (stylesheet não pode ficar dentro de {% if %}) {%- endcomment -%}
+{% stylesheet %}
+    .vf-bump {
+      position: relative;
+      border: 2px dashed var(--vf-green, #16A34A);
+      background: linear-gradient(135deg, #F1FBF3 0%, #FFFFFF 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 4px 0 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(22,163,74,.10);
+    }
+    .vf-bump__flag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #C2410C;
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      animation: vf-bump-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes vf-bump-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(194,65,12,.45); }
+      50% { box-shadow: 0 0 0 7px rgba(194,65,12,0); }
+    }
+    .vf-bump__flag svg { width: 12px; height: 12px; }
+
+    /* Cabeçalho: imagem + copy */
+    .vf-bump__head {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      align-items: start;
+      gap: 12px;
+    }
+    @media (max-width: 480px) { .vf-bump__head { grid-template-columns: 56px 1fr; gap: 10px; } }
+    .vf-bump__img {
+      width: 72px; height: 72px; border-radius: 10px; background: var(--vf-beige, #F5F1E8);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    @media (max-width: 480px) { .vf-bump__img { width: 56px; height: 56px; } }
+    .vf-bump__img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .vf-bump__copy { display: flex; flex-direction: column; gap: 5px; }
+    .vf-bump__title { font-size: 15px; line-height: 1.3; color: var(--vf-text, #1A1A1A); font-weight: 700; }
+    .vf-bump__title strong { color: var(--vf-green-dark, #15803D); font-weight: 900; }
+    .vf-bump__desc { font-size: 12px; color: var(--vf-muted, #555); line-height: 1.45; }
+    .vf-bump__desc strong { color: #1A1A1A; font-weight: 700; }
+    .vf-bump__social {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--vf-green-dark, #15803D); line-height: 1.3;
+      background: var(--vf-green-light, #E7F6EC); padding: 5px 9px; border-radius: 7px;
+      width: fit-content;
+    }
+    .vf-bump__social svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .vf-bump__social strong { font-weight: 900; }
+
+    /* Linha "cada frasco = 30 dias" */
+    .vf-bump__dose {
+      display: flex; align-items: center; gap: 7px;
+      margin: 14px 0 12px; font-size: 12.5px; color: #1A1A1A; line-height: 1.35;
+    }
+    .vf-bump__dose svg { width: 16px; height: 16px; color: var(--vf-green-dark, #15803D); flex-shrink: 0; }
+    .vf-bump__dose strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
+
+    /* ==================== Opções de tempo — empilhadas, layout em linha (radio · info · preço) ==================== */
+    .vf-bump__options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .vf-bump__opt {
+      position: relative;
+      display: block;
+      cursor: pointer;
+    }
+    .vf-bump__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+
+    .vf-bump__opt-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid var(--vf-border, #E3E3DD);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease, transform .1s ease;
+    }
+    @media (hover: hover) {
+      .vf-bump__opt:hover .vf-bump__opt-inner {
+        border-color: var(--vf-green, #16A34A);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(22,163,74,.12);
+      }
+    }
+
+    .vf-bump__opt-radio {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--vf-border, #D8D8D2);
+      background: #fff;
+      display: inline-flex; align-items: center; justify-content: center; color: #fff;
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    }
+    .vf-bump__opt-radio svg { width: 13px; height: 13px; opacity: 0; transform: scale(.5); transition: opacity .15s ease, transform .15s ease; }
+
+    .vf-bump__opt-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .vf-bump__opt-dur {
+      font-size: clamp(14px, 3.6vw, 16px);
+      font-weight: 800;
+      color: #1A1A1A;
+      line-height: 1.25;
+    }
+    .vf-bump__opt-sub {
+      font-size: 11.5px;
+      color: var(--vf-muted, #888);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .vf-bump__opt-priceblock {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1px;
+      text-align: right;
+    }
+    /* valor cheio — bem discreto, só pra ancorar o desconto */
+    .vf-bump__opt-full {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--vf-muted, #999);
+      text-decoration: line-through;
+      line-height: 1.2;
+    }
+    /* parcela — a estrela do bloco de preço */
+    .vf-bump__opt-installment {
+      font-family: var(--font-heading, inherit);
+      font-size: clamp(18px, 5vw, 22px);
+      font-weight: 900;
+      color: var(--vf-green-dark, #15803D);
+      line-height: 1.15;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .vf-bump__opt-cash {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--vf-muted, #888);
+      line-height: 1.25;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+    .vf-bump__opt-save {
+      margin-top: 3px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1px;
+      color: #C2410C;
+      background: #FEF0E7;
+      padding: 2px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* estado selecionado */
+    .vf-bump__opt input:checked + .vf-bump__opt-tag + .vf-bump__opt-inner,
+    .vf-bump__opt input:checked + .vf-bump__opt-inner {
+      border-color: var(--vf-green, #16A34A);
+      background: var(--vf-green-light, #F0FDF4);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+    }
+    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-radio {
+      background: var(--vf-green, #16A34A);
+      border-color: var(--vf-green, #16A34A);
+      transform: scale(1.06);
+    }
+    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-radio svg { opacity: 1; transform: scale(1); }
+    .vf-bump__opt input:focus-visible + .vf-bump__opt-tag + .vf-bump__opt-inner,
+    .vf-bump__opt input:focus-visible + .vf-bump__opt-inner {
+      outline: 2px solid var(--vf-green-dark, #15803D);
+      outline-offset: 2px;
+    }
+
+    /* Card "MAIS ESCOLHIDO" — destaque visual mesmo sem estar selecionado */
+    .vf-bump__opt--best .vf-bump__opt-inner {
+      border-color: #A7E3B8;
+      background: #F6FEF8;
+    }
+    .vf-bump__opt--best .vf-bump__opt-installment { color: #0F7A32; }
+
+    .vf-bump__opt-tag {
+      position: absolute;
+      top: -9px;
+      left: 16px;
+      z-index: 2;
+      white-space: nowrap;
+      background: var(--vf-green, #16A34A);
+      color: #fff;
+      font-size: 9.5px;
+      font-weight: 900;
+      letter-spacing: .4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(22,163,74,.35);
+    }
+    .vf-bump__opt-tag--max { background: #C2410C; box-shadow: 0 2px 6px rgba(194,65,12,.35); }
+
+    @media (max-width: 360px) {
+      .vf-bump__opt-inner { padding: 10px 12px; gap: 8px; }
+      .vf-bump__opt-radio { width: 20px; height: 20px; }
+      .vf-bump__opt-sub { font-size: 10.5px; }
+    }
+
+    /* CTA */
+    .vf-bump__cta {
+      width: 100%; margin-top: 14px; border: 0; cursor: pointer;
+      background: var(--vf-green, #16A34A); color: #fff;
+      font-family: var(--font-heading, inherit); font-size: 15px; font-weight: 800;
+      padding: 14px 16px; border-radius: 10px;
+      transition: background .15s, opacity .15s, transform .05s;
+    }
+    .vf-bump__cta:not(:disabled):hover { background: var(--vf-green-dark, #15803D); }
+    .vf-bump__cta:not(:disabled):active { transform: translateY(1px); }
+    .vf-bump__cta:disabled { background: #C7CDC9; cursor: default; }
+    .vf-bump__micro { margin: 8px 0 0; text-align: center; font-size: 11px; color: var(--vf-muted, #888); }
+
+    .vf-bump.is-busy { opacity: .55; pointer-events: none; }
+    .vf-bump__spinner {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.7); font-size: 13px; font-weight: 700; color: var(--vf-green-dark, #15803D);
+    }
+    /* garante que o atributo hidden esconde de fato o spinner (display vence hidden) */
+    .vf-bump__spinner[hidden] { display: none !important; }
+{% endstylesheet %}
+
