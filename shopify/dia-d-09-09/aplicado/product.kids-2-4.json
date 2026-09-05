@@ -114,7 +114,7 @@
       "type": "vf-pdp-volta-kids",
       "settings": {
         "eyebrow": "O QUE VOLTA PRO SEU FILHO",
-        "heading": "A criança que você lembra, com o corpinho mais leve.",
+        "heading": "A criança que você lembra. De volta em 30 dias.",
         "subheading": "Quando o corpinho dela para de gastar energia mantendo o que não devia, sobra disposição pra ser criança.",
         "card_1_title": "Energia pra correr",
         "card_1_text": "Aquela vontade infinita de brincar volta. Sem aquele cansaço que parece desproporcional pra idade.",
@@ -214,7 +214,7 @@
             "photo_filename": "vf-prescritor-giovanna-eller.jpg",
             "name": "Dra. Giovanna Eller",
             "credential": "CRM-ES 20.998",
-            "specialty": "Nutróloga · saúde intestinal",
+            "specialty": "Nutróloga · saúde intestinal e emagrecimento",
             "instagram_handle": "@dra.giovannaeller",
             "instagram_url": "https://www.instagram.com/dra.giovannaeller/"
           }
@@ -225,7 +225,7 @@
             "photo_filename": "vf-prescritor-robson-araujo.jpg",
             "name": "Dr. Robson Araújo",
             "credential": "CRM-MG 93.787",
-            "specialty": "Saúde integrativa",
+            "specialty": "Emagrecimento e saúde integrativa",
             "instagram_handle": "@drrobson_araujo",
             "instagram_url": "https://www.instagram.com/drrobson_araujo/"
           }
@@ -274,7 +274,7 @@
       "type": "vf-comparativo",
       "settings": {
         "heading": "Por que somos diferentes.",
-        "subheading": "<p>Um protocolo fitoterápico completo, com <strong>5 ativos vegetais em sinergia</strong>, formulado em padrão farmacêutico pra apoiar a rotina de desparasitação da família.</p>",
+        "subheading": "<p>A maioria dos antiparasitarios de farmacia age contra <strong>ate 14 tipos</strong> de parasitas. A VermeFree foi formulada pra agir em <strong>mais de 100</strong>.</p>",
         "header_bg": "#1a1a1a",
         "accent_color": "#5ebc43"
       }
@@ -603,74 +603,16 @@
         "text_color": "#ffffff"
       }
     },
-    "beneficios-objecoes": {
-      "type": "vf-pdp-benefits",
+    "vf_diad_faixa": {
+      "type": "vf-diad-faixa",
       "settings": {
-        "eyebrow": "BENEFÍCIOS & DÚVIDAS",
-        "heading": "Por que as mães escolhem o VermeFree Kids",
-        "subheading": "Cuidado natural, com critério — e resposta pra dúvida que toda mãe tem antes de comprar."
-      },
-      "blocks": {
-        "c1": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/hf_20260830_021044_fbaa5146-cd5b-4000-9433-d84a53443133.png?v=1788056191",
-            "badge": "Vegetal 100%",
-            "title": "Natural, sem química pesada",
-            "text": "Fitoterápico que a criança aceita bem.",
-            "accent": "green",
-            "featured": false
-          }
-        },
-        "c2": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/hf_20260830_021044_8aa13767-c210-487b-889d-3dae355c8a8e.png?v=1788056191",
-            "badge": "Feito com critério",
-            "title": "Dose certa por idade",
-            "text": "Cada idade tem a sua dose — na medida certa.",
-            "accent": "green",
-            "featured": false
-          }
-        },
-        "c3": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/hf_20260830_021420_70523994-5375-4a33-804f-5d4ef4bc077f.png?v=1788056191",
-            "badge": "A dúvida nº1 das mães",
-            "title": "E depois do protocolo?",
-            "text": "É rotina: 1 a 4x por ano, na lua nova. 🌙",
-            "accent": "amber",
-            "featured": true
-          }
-        },
-        "c4": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/hf_20260830_021044_368a0d8b-1efd-4970-856b-e354a7ac99f0.png?v=1788056191",
-            "badge": "Simples na rotina",
-            "title": "Diluiu, deu, pronto",
-            "text": "Diluída em água, 3x ao dia, por 30 dias.",
-            "accent": "green",
-            "featured": false
-          }
-        }
-      },
-      "block_order": [
-        "c1",
-        "c2",
-        "c3",
-        "c4"
-      ]
-    },
-    "vf_cross_familia": {
-      "type": "vf-pdp-cross-familia",
-      "settings": {}
+        "preview_frete_promo": true
+      }
     }
   },
   "order": [
     "main",
-    "beneficios-objecoes",
+    "vf_diad_faixa",
     "estatistica",
     "volta-kids",
     "ingredientes-detalhe",
@@ -681,7 +623,6 @@
     "personagens",
     "stats",
     "faq",
-    "vf_cross_familia",
     "cta-final"
   ]
 }
