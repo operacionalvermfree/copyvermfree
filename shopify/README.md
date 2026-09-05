@@ -141,3 +141,60 @@ só voltar o campo para `false` no cupom 5OFF.
 
 Os automáticos de volume (10/15/20% Kits) e o do Óleo já estavam com
 `shippingDiscounts: true`.
+
+
+---
+
+# Blocos da promo — adaptados do tema "Semana do Cliente"
+
+Os blocos foram copiados do padrão que já existe no tema **Semana do Cliente**
+(gid 164610474203) e adaptados para a promo de frete grátis. Não foram
+inventados do zero.
+
+| Origem (Semana do Cliente) | Adaptado aqui (Gap Frete Gratis) |
+|---|---|
+| `sections/vf-semana-cliente-aviso.liquid` | `sections/vf-frete-gratis-aviso.liquid` |
+| `sections/vf-semana-cliente-banner.liquid` | `sections/vf-frete-gratis-banner.liquid` |
+
+Ligados no `layout/theme.liquid` exatamente como lá — dentro do `<main>`,
+antes do `content_for_layout`:
+
+```liquid
+{%- if template.name == 'index' -%}{% section 'vf-frete-gratis-banner' %}{%- endif -%}
+{%- if template.name == 'product' -%}{% section 'vf-frete-gratis-aviso' %}{%- endif -%}
+```
+
+## O que mudou na adaptação
+
+Na Semana do Cliente o miolo dos dois blocos é o **cupom pra copiar**, porque
+o desconto só entra se a pessoa digitar `SEMANA7`. Aqui não existe código: o
+frete grátis é desconto automático da loja. Então o botão de copiar saiu e o
+lugar dele virou o destaque **"SEM CUPOM"** — que é o argumento mais forte,
+porque tira a fricção em vez de criar.
+
+Mesmo mecanismo de acender/apagar do tema de campanha: date-gate
+(05–06/09/2026) **mais** o checkbox "Forçar exibição" ligado por padrão. Quem
+controla a vitrine é publicar/despublicar o tema.
+
+## Arquivos descartados (apagar no admin)
+
+Antes de ver o padrão do Semana do Cliente eu tinha inventado blocos próprios.
+Foram esvaziados (viraram só um comentário) porque a API bloqueia apagar
+arquivo de tema. **Apagar no admin** — Temas > Editar código > Excluir:
+
+- `snippets/vf-promo-frete.liquid`
+- `snippets/vf-promo-frete-pdp.liquid`
+- `sections/vf-promo-frete-bloco.liquid`
+
+`snippets/product-card.liquid` e `sections/vf-cta-final.liquid` foram
+revertidos ao original — conferido byte a byte contra os mesmos arquivos no
+tema Semana do Cliente.
+
+## Ainda no arquivo de 85 KB
+
+O selo "FRETE GRÁTIS" dentro do seletor de kits, a barra âmbar "frete grátis
+ativo" no box de preço e a caixa acima do botão de comprar vivem no
+`sections/vf-pdp-main.liquid` (85 KB) e no `sections/vf-kit-selector.liquid`.
+No tema Semana do Cliente esses dois arquivos foram editados direto
+(vf-pdp-main 87.612 B vs 85.368 B aqui; vf-kit-selector 23.069 B vs 19.389 B).
+Fazer o mesmo aqui exige reescrever os arquivos inteiros pela API — pendente.

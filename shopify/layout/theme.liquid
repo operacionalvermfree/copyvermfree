@@ -121,26 +121,14 @@
     {% section 'vf-announcement-bar' %}
     {% section 'header' %}
 
-    {%- comment -%}
-      Promo frete gratis: faixa nas telas onde a pessoa decide comprar.
-      Fica fora do <main> de proposito, logo abaixo do header, como tarja.
-      Quem liga/desliga tudo e o PROMO_ON dentro de vf-promo-frete.
-    {%- endcomment -%}
-    {%- assign vf_tpl = template.name -%}
-    {%- if vf_tpl == 'index' or vf_tpl == 'product' or vf_tpl == 'collection' or vf_tpl == 'cart' -%}
-      {% render 'vf-promo-frete', variante: 'faixa' %}
-    {%- endif -%}
-
     <main id="main" role="main" tabindex="-1">
+      {%- comment -%} Frete gratis sem minimo: banner na home e aviso nas PDPs (date-gated dentro das secoes: 05-06/09) {%- endcomment -%}
+      {%- if template.name == 'index' -%}{% section 'vf-frete-gratis-banner' %}{%- endif -%}
+      {%- if template.name == 'product' -%}{% section 'vf-frete-gratis-aviso' %}{%- endif -%}
       {{ content_for_layout }}
     </main>
 
     {% section 'footer' %}
-
-    {%- comment -%} Encaixa a caixa da promo acima do botao de comprar na PDP {%- endcomment -%}
-    {%- if vf_tpl == 'product' -%}
-      {% render 'vf-promo-frete-pdp' %}
-    {%- endif -%}
 
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
   </body>

@@ -1,0 +1,129 @@
+{%- comment -%}
+  vf-frete-gratis-banner — Banner de campanha na HOME
+  Adaptado de vf-semana-cliente-banner (tema Semana do Cliente).
+
+  Diferença da Semana do Cliente: lá o miolo do bloco era o cupom pra copiar,
+  porque o desconto só entrava se a pessoa digitasse o código. Aqui o frete
+  grátis é desconto automático da loja — não existe código. O lugar do cupom
+  virou o destaque "SEM CUPOM", que é justamente o argumento mais forte:
+  menos fricção, nada pra lembrar de digitar.
+
+  Date-gated: 05/09 a 06/09/2026. Preview ligado por padrão, como no tema de
+  campanha — quem acende/apaga a vitrine é a publicação do tema.
+
+  ⚠️ A data de fim aqui precisa bater com a do desconto automático
+  "Frete Grátis · Fim de Semana 05-06/09 (sem mínimo)" no Shopify. Se uma
+  mudar e a outra não, o banner promete o que o checkout não cumpre.
+{%- endcomment -%}
+
+{%- assign fg_today = 'now' | date: '%Y-%m-%d' -%}
+{%- assign fg_active = false -%}
+{%- if fg_today >= '2026-09-05' and fg_today <= '2026-09-06' -%}
+  {%- assign fg_active = true -%}
+{%- endif -%}
+{%- if section.settings.preview -%}
+  {%- assign fg_active = true -%}
+{%- endif -%}
+
+{%- assign fg_end = section.settings.promo_end | default: '2026-09-06T23:59:59-03:00' -%}
+
+{%- if fg_active -%}
+  <section class="vf-fg-banner" style="--fg-bg:{{ section.settings.bg_color | default: '#1B5E20' }};--fg-accent:{{ section.settings.accent_color | default: '#A8D84A' }};">
+    <div class="vf-fg-banner__inner">
+      <span class="vf-fg-banner__eyebrow">🚚 FRETE GRÁTIS SEM MÍNIMO</span>
+      <h2 class="vf-fg-banner__title">{{ section.settings.heading | default: 'Frete grátis, sem valor mínimo.' }}</h2>
+      <p class="vf-fg-banner__sub">{{ section.settings.subheading | default: 'Não precisa juntar pedido nem digitar cupom. O frete zera sozinho no checkout, pra todo o Brasil.' }}</p>
+
+      <div class="vf-fg-banner__destaque">
+        <span class="vf-fg-banner__destaque-label">No checkout</span>
+        <span class="vf-fg-banner__destaque-selo"><strong>SEM CUPOM</strong></span>
+        <span class="vf-fg-banner__destaque-off">= frete R$ 0,00</span>
+      </div>
+
+      <ul class="vf-fg-banner__perks">
+        <li>🚚 <strong>Frete grátis</strong> pra todo o Brasil, em qualquer pedido — sem valor mínimo</li>
+        <li>🌿 Soma com o <strong>desconto por quantidade</strong> <span class="vf-fg-banner__perk-note">(3 protocolos = 10% · 5 = 15% · 8 = 20%)</span></li>
+      </ul>
+
+      {%- if fg_end != blank -%}
+        <div class="vf-fg-banner__timer">
+          Termina em <strong class="vf-fg-banner__countdown" data-fg-countdown="{{ fg_end }}">--h --m --s</strong>
+        </div>
+      {%- endif -%}
+
+      <a class="vf-fg-banner__cta" href="{{ section.settings.cta_link | default: '#vf-kit-heading' }}">
+        {{ section.settings.cta_label | default: 'Escolher meu protocolo' }}
+      </a>
+    </div>
+  </section>
+
+  <script>
+  (function() {
+    function pad(n){ return String(n).padStart(2,'0'); }
+    document.querySelectorAll('.vf-fg-banner [data-fg-countdown]').forEach(function(el){
+      var target = new Date(el.getAttribute('data-fg-countdown')).getTime();
+      if (isNaN(target)) { el.style.display = 'none'; return; }
+      function tick(){
+        var diff = target - Date.now();
+        if (diff <= 0){ el.textContent = '00h 00m 00s'; return; }
+        var d = Math.floor(diff/86400000);
+        var h = Math.floor((diff%86400000)/3600000);
+        var m = Math.floor((diff%3600000)/60000);
+        var s = Math.floor((diff%60000)/1000);
+        el.textContent = d > 0 ? (d+'d '+pad(h)+'h '+pad(m)+'m') : (pad(h)+'h '+pad(m)+'m '+pad(s)+'s');
+      }
+      tick(); setInterval(tick, 1000);
+    });
+  })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-fg-banner { background: var(--fg-bg, #1B5E20); color: #fff; padding: 34px 20px; text-align: center; font-family: 'Inter', system-ui, sans-serif; }
+  .vf-fg-banner__inner { max-width: 720px; margin: 0 auto; }
+  .vf-fg-banner__eyebrow { display: inline-block; font-weight: 800; letter-spacing: .14em; font-size: 13px; background: rgba(255,255,255,.14); padding: 6px 14px; border-radius: 999px; }
+  .vf-fg-banner__title { font-size: 30px; line-height: 1.15; margin: 14px 0 6px; font-weight: 800; }
+  .vf-fg-banner__sub { font-size: 16px; opacity: .92; margin: 0 auto 18px; max-width: 560px; }
+  .vf-fg-banner__destaque { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; background: rgba(0,0,0,.18); border: 1px dashed rgba(255,255,255,.5); border-radius: 14px; padding: 12px 18px; }
+  .vf-fg-banner__destaque-label { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; opacity: .8; }
+  .vf-fg-banner__destaque-selo { display: inline-flex; align-items: center; background: var(--fg-accent, #A8D84A); color: #14301A; border-radius: 10px; padding: 8px 16px; font-size: 22px; font-weight: 800; letter-spacing: .06em; }
+  .vf-fg-banner__destaque-off { font-size: 16px; font-weight: 700; }
+  .vf-fg-banner__perks { list-style: none; margin: 18px auto 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 15.5px; max-width: 600px; }
+  .vf-fg-banner__perks li { background: rgba(255,255,255,.08); border-radius: 10px; padding: 10px 14px; }
+  .vf-fg-banner__perk-note { display: block; font-size: 12.5px; opacity: .8; font-weight: 400; margin-top: 2px; }
+  .vf-fg-banner__timer { margin-top: 18px; font-size: 15px; }
+  .vf-fg-banner__countdown { display: inline-block; background: rgba(255,255,255,.16); padding: 4px 12px; border-radius: 8px; font-variant-numeric: tabular-nums; letter-spacing: .5px; margin-left: 4px; }
+  .vf-fg-banner__cta { display: inline-block; margin-top: 20px; background: #fff; color: var(--fg-bg, #1B5E20); font-weight: 800; font-size: 16px; text-decoration: none; padding: 14px 34px; border-radius: 999px; transition: transform .15s ease, box-shadow .15s ease; }
+  .vf-fg-banner__cta:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,.22); }
+  @media (max-width: 540px) {
+    .vf-fg-banner { padding: 26px 16px; }
+    .vf-fg-banner__title { font-size: 23px; }
+    .vf-fg-banner__sub { font-size: 14.5px; }
+    .vf-fg-banner__destaque-selo { font-size: 19px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF Banner Frete Grátis",
+  "tag": "section",
+  "class": "vf-fg-banner-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "preview",
+      "label": "🚚 Forçar exibição (ligado — publicação agendada por app)",
+      "info": "Ligado por padrão neste tema de campanha. A vitrine acende/apaga publicando/despublicando o tema pelo app.",
+      "default": true
+    },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Frete grátis, sem valor mínimo." },
+    { "type": "text", "id": "subheading", "label": "Subtítulo", "default": "Não precisa juntar pedido nem digitar cupom. O frete zera sozinho no checkout, pra todo o Brasil." },
+    { "type": "text", "id": "promo_end", "label": "Fim da promo (contador)", "info": "Formato 2026-09-06T23:59:59-03:00. Precisa bater com a data de fim do desconto em Descontos. Em branco, some o contador.", "default": "2026-09-06T23:59:59-03:00" },
+    { "type": "text", "id": "cta_label", "label": "Texto do botão", "default": "Escolher meu protocolo" },
+    { "type": "text", "id": "cta_link", "label": "Link do botão", "default": "#vf-kit-heading" },
+    { "type": "color", "id": "bg_color", "label": "Cor de fundo", "default": "#1B5E20" },
+    { "type": "color", "id": "accent_color", "label": "Cor de destaque", "default": "#A8D84A" }
+  ],
+  "presets": [ { "name": "VF Banner Frete Grátis" } ]
+}
+{% endschema %}

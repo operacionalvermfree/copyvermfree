@@ -28,9 +28,6 @@
     {%- if section.settings.subheading != blank -%}
       <p class="vf-cta__sub">{{ section.settings.subheading }}</p>
     {%- endif -%}
-    {%- if section.settings.mostrar_promo_frete -%}
-      <div class="vf-cta__promo">{% render 'vf-promo-frete', variante: 'beneficios' %}</div>
-    {%- endif -%}
     {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
       <a
         href="{{ section.settings.button_link }}"
@@ -101,12 +98,6 @@
     opacity: 0.95;
   }
 
-  .vf-cta__promo {
-    width: 100%;
-    max-width: 560px;
-  }
-  .vf-cta__promo:empty { display: none; }
-
   .vf-cta__btn {
     display: inline-flex;
     align-items: center;
@@ -145,13 +136,6 @@
       "id": "subheading",
       "label": "Subtitulo",
       "default": "Frete pra todo Brasil. Parcelado em ate 3x sem juros."
-    },
-    {
-      "type": "checkbox",
-      "id": "mostrar_promo_frete",
-      "label": "Mostrar benefícios da promo de frete grátis",
-      "info": "Puxa os textos do snippet vf-promo-frete. Se a promo estiver desligada lá, some daqui também.",
-      "default": true
     },
     {
       "type": "text",

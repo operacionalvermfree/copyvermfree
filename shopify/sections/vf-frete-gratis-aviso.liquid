@@ -1,0 +1,62 @@
+{%- comment -%}
+  vf-frete-gratis-aviso — Aviso slim no topo das páginas de PRODUTO
+  Adaptado de vf-semana-cliente-aviso (tema Semana do Cliente).
+
+  Diferença da Semana do Cliente: lá o desconto dependia de digitar o cupom,
+  então o aviso existia pra ensinar o código. Aqui NÃO há cupom — o frete
+  grátis é desconto automático da loja e zera sozinho no checkout. Por isso
+  o botão de copiar código saiu, e o argumento vira "não precisa de cupom".
+
+  Date-gated: 05/09 a 06/09/2026. Preview ligado por padrão, como no tema de
+  campanha — quem acende/apaga a vitrine é a publicação do tema.
+{%- endcomment -%}
+
+{%- assign fg_today = 'now' | date: '%Y-%m-%d' -%}
+{%- assign fg_active = false -%}
+{%- if fg_today >= '2026-09-05' and fg_today <= '2026-09-06' -%}
+  {%- assign fg_active = true -%}
+{%- endif -%}
+{%- if section.settings.preview -%}
+  {%- assign fg_active = true -%}
+{%- endif -%}
+
+{%- if fg_active -%}
+  <div class="vf-fg-aviso">
+    <div class="vf-fg-aviso__inner">
+      <span class="vf-fg-aviso__tag">🚚 FRETE GRÁTIS</span>
+      <span class="vf-fg-aviso__msg">
+        <strong>Frete grátis sem valor mínimo</strong> pra todo o Brasil, em qualquer pedido ·
+        <span class="vf-fg-aviso__semcupom">sem cupom</span>
+        o frete zera sozinho no checkout
+      </span>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-fg-aviso { background: #EAF4DF; border-bottom: 1px solid #CDE3B4; }
+  .vf-fg-aviso__inner { max-width: 1100px; margin: 0 auto; padding: 11px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; font-family: 'Inter', system-ui, sans-serif; color: #1B5E20; font-size: 14px; line-height: 1.4; text-align: center; }
+  .vf-fg-aviso__tag { font-weight: 800; letter-spacing: .06em; font-size: 12.5px; background: #1B5E20; color: #fff; padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
+  .vf-fg-aviso__msg { color: #2A3A28; }
+  .vf-fg-aviso__msg strong { color: #1B5E20; }
+  .vf-fg-aviso__semcupom { display: inline-flex; align-items: center; background: #A8D84A; color: #14301A; border-radius: 8px; padding: 3px 10px; font-weight: 800; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; vertical-align: middle; margin: 0 2px; }
+  @media (max-width: 540px) { .vf-fg-aviso__inner { font-size: 12.5px; padding: 9px 12px; gap: 8px; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF Aviso Frete Grátis",
+  "tag": "section",
+  "class": "vf-fg-aviso-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "preview",
+      "label": "🚚 Forçar exibição (ligado — publicação agendada por app)",
+      "info": "Ligado por padrão neste tema de campanha. A vitrine acende/apaga publicando/despublicando o tema pelo app.",
+      "default": true
+    }
+  ],
+  "presets": [ { "name": "VF Aviso Frete Grátis" } ]
+}
+{% endschema %}

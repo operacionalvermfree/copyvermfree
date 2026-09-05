@@ -29,7 +29,6 @@
         {%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
         <span class="vf-product-card__badge">-{{ discount_pct }}%</span>
       {%- endif -%}
-      <span class="vf-product-card__frete">{% render 'vf-promo-frete', variante: 'selo' %}</span>
     </div>
   </a>
 
@@ -48,8 +47,6 @@
       {%- endif -%}
       <span class="vf-product-card__current">{{ product.price | money }}</span>
     </div>
-
-    {% render 'vf-promo-frete', variante: 'linha' %}
 
     <a href="{{ product.url }}" class="vf-button vf-button--primary vf-button--sm vf-product-card__cta">
       Ver produto
@@ -108,12 +105,6 @@
     font-weight: 700;
     border-radius: 999px;
   }
-  .vf-product-card__frete {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-  }
-  .vf-product-card__frete:empty { display: none; }
   .vf-product-card__body {
     padding: 20px;
     display: flex;
