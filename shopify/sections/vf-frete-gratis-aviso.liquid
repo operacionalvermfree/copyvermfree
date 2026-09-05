@@ -2,10 +2,17 @@
   vf-frete-gratis-aviso — Aviso slim no topo das páginas de PRODUTO
   Adaptado de vf-semana-cliente-aviso (tema Semana do Cliente).
 
-  Diferença da Semana do Cliente: lá o desconto dependia de digitar o cupom,
-  então o aviso existia pra ensinar o código. Aqui NÃO há cupom — o frete
-  grátis é desconto automático da loja e zera sozinho no checkout. Por isso
-  o botão de copiar código saiu, e o argumento vira "não precisa de cupom".
+  Diferença da Semana do Cliente: lá o aviso existia pra ensinar o código do
+  cupom. Aqui não há código — então ele passa a destacar o que a promo dá:
+  o FRETE GRÁTIS e o MANUAL DA DESPARASITAÇÃO. "Sem cupom" fica como nota.
+
+  O manual é e-book por automação de e-mail — a copy diz "no seu e-mail",
+  não algo que vai dentro da caixa.
+
+  COR: fundo rosado claro com tarja vermelha, na mesma família do banner da
+  home (#E11D2E). Não é vermelho cheio de propósito: a tarja de anúncio logo
+  acima já fica vermelha durante a promo, e duas barras vermelhas empilhadas
+  pesam demais em cima da foto do produto.
 
   Date-gated: 05/09 a 06/09/2026. Preview ligado por padrão, como no tema de
   campanha — quem acende/apaga a vitrine é a publicação do tema.
@@ -23,24 +30,30 @@
 {%- if fg_active -%}
   <div class="vf-fg-aviso">
     <div class="vf-fg-aviso__inner">
-      <span class="vf-fg-aviso__tag">🚚 FRETE GRÁTIS</span>
+      <span class="vf-fg-aviso__tag">{{ section.settings.tag | default: '🚚 SÓ ESTE FIM DE SEMANA' }}</span>
       <span class="vf-fg-aviso__msg">
-        <strong>Frete grátis sem valor mínimo</strong> pra todo o Brasil, em qualquer pedido ·
-        <span class="vf-fg-aviso__semcupom">sem cupom</span>
-        o frete zera sozinho no checkout
+        <strong>{{ section.settings.destaque1 | default: 'O frete é por nossa conta' }}</strong>
+        {{ section.settings.texto1 | default: 'em qualquer pedido, sem valor mínimo' }}
+        <span class="vf-fg-aviso__sep">·</span>
+        e o <strong>{{ section.settings.destaque2 | default: 'Manual da Desparasitação' }}</strong>
+        {{ section.settings.texto2 | default: 'chega no seu e-mail depois da compra' }}
+        <span class="vf-fg-aviso__nota">{{ section.settings.nota | default: 'sem cupom pra digitar' }}</span>
       </span>
     </div>
   </div>
 {%- endif -%}
 
 {% stylesheet %}
-  .vf-fg-aviso { background: #EAF4DF; border-bottom: 1px solid #CDE3B4; }
-  .vf-fg-aviso__inner { max-width: 1100px; margin: 0 auto; padding: 11px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; font-family: 'Inter', system-ui, sans-serif; color: #1B5E20; font-size: 14px; line-height: 1.4; text-align: center; }
-  .vf-fg-aviso__tag { font-weight: 800; letter-spacing: .06em; font-size: 12.5px; background: #1B5E20; color: #fff; padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
-  .vf-fg-aviso__msg { color: #2A3A28; }
-  .vf-fg-aviso__msg strong { color: #1B5E20; }
-  .vf-fg-aviso__semcupom { display: inline-flex; align-items: center; background: #A8D84A; color: #14301A; border-radius: 8px; padding: 3px 10px; font-weight: 800; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; vertical-align: middle; margin: 0 2px; }
-  @media (max-width: 540px) { .vf-fg-aviso__inner { font-size: 12.5px; padding: 9px 12px; gap: 8px; } }
+  .vf-fg-aviso { background: #FDEDEE; border-bottom: 1px solid #F6CDD0; }
+  .vf-fg-aviso__inner { max-width: 1100px; margin: 0 auto; padding: 11px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.45; text-align: center; color: #4A2226; }
+  .vf-fg-aviso__tag { font-weight: 800; letter-spacing: .06em; font-size: 12px; background: #E11D2E; color: #fff; padding: 5px 12px; border-radius: 999px; white-space: nowrap; text-transform: uppercase; }
+  .vf-fg-aviso__msg strong { color: #C1121F; font-weight: 800; }
+  .vf-fg-aviso__sep { opacity: .45; margin: 0 2px; }
+  .vf-fg-aviso__nota { display: inline-block; margin-left: 6px; font-size: 12px; color: #8A5257; border: 1px dashed #E7AFB4; border-radius: 7px; padding: 2px 8px; white-space: nowrap; }
+  @media (max-width: 540px) {
+    .vf-fg-aviso__inner { font-size: 12.5px; padding: 9px 12px; gap: 8px; }
+    .vf-fg-aviso__nota { display: block; margin: 5px auto 0; width: fit-content; }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -55,7 +68,14 @@
       "label": "🚚 Forçar exibição (ligado — publicação agendada por app)",
       "info": "Ligado por padrão neste tema de campanha. A vitrine acende/apaga publicando/despublicando o tema pelo app.",
       "default": true
-    }
+    },
+    { "type": "text", "id": "tag", "label": "Etiqueta", "default": "🚚 SÓ ESTE FIM DE SEMANA" },
+    { "type": "header", "content": "O que a promo dá" },
+    { "type": "text", "id": "destaque1", "label": "Item 1 — destaque", "default": "O frete é por nossa conta" },
+    { "type": "text", "id": "texto1", "label": "Item 1 — complemento", "default": "em qualquer pedido, sem valor mínimo" },
+    { "type": "text", "id": "destaque2", "label": "Item 2 — destaque", "default": "Manual da Desparasitação" },
+    { "type": "text", "id": "texto2", "label": "Item 2 — complemento", "default": "chega no seu e-mail depois da compra" },
+    { "type": "text", "id": "nota", "label": "Nota final", "info": "O 'sem cupom' fica aqui, como nota — não como manchete.", "default": "sem cupom pra digitar" }
   ],
   "presets": [ { "name": "VF Aviso Frete Grátis" } ]
 }
