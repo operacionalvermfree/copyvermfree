@@ -17,7 +17,7 @@ Entradas esperadas na pasta de trabalho:
   fonts/m400.ttf  fonts/m600.ttf                 -> Montserrat Regular/SemiBold
   Montserrat-ExtraBold via fontconfig do sistema
 """
-import os
+import os, math
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 RED = (196, 43, 43)        # #C42B2B  vermelho da acao
@@ -100,6 +100,62 @@ def build_bg(path, W, H, horizon_px, wash=0.30):
     bg.paste(wall, (0, 0))
     bg.paste(wood, (0, horizon_px))
     return Image.blend(bg, Image.new('RGB', (W, H), CREAM), wash), hf
+
+
+# ---------------------------------------------------------------- conceito
+# Linguagem grafica adaptada da referencia aprovada (Mother Earth Day):
+# corte diagonal entre bloco de cor e foto, faixas anguladas paralelas,
+# triades de setas, headline empilhada em 3 linhas com a do meio na cor de
+# acao, icone inline e botao pill. Paleta trocada para a identidade do
+# Dia D: fundo claro/creme, VERMELHO como cor da acao, verde so nos rotulos.
+
+def poly(base, pts, color, alpha, blur=0):
+    """Preenche um poligono com cor solida em opacidade controlada."""
+    m = Image.new('L', base.size, 0)
+    ImageDraw.Draw(m).polygon(pts, fill=int(255 * alpha))
+    if blur:
+        m = m.filter(ImageFilter.GaussianBlur(blur))
+    base.paste(Image.new('RGB', base.size, color), (0, 0), m)
+
+
+def vbar(base, xt, w, lean, color, alpha, y0=None, y1=None, blur=0):
+    """Faixa vertical inclinada — a 'barra diagonal' da referencia.
+    xt = x no topo, lean = deslocamento horizontal ate a base."""
+    H = base.height
+    y0 = 0 if y0 is None else y0
+    y1 = H if y1 is None else y1
+    f0, f1 = y0 / float(H), y1 / float(H)
+    poly(base, [(xt + lean * f0, y0), (xt + w + lean * f0, y0),
+                (xt + w + lean * f1, y1), (xt + lean * f1, y1)], color, alpha, blur)
+
+
+def tris(base, x, y, s, gap, color, alpha, n=3, lean=.30):
+    """Triade de setas (>>>) — o acento de ritmo da referencia."""
+    m = Image.new('L', base.size, 0)
+    d = ImageDraw.Draw(m)
+    w = s * .60
+    for i in range(n):
+        ox = x + i * (w + gap)
+        d.polygon([(ox + s * lean, y), (ox + w + s * lean, y + s / 2.),
+                   (ox + s * lean, y + s), (ox + s * lean + w * .42, y + s / 2.)],
+                  fill=int(255 * alpha))
+    base.paste(Image.new('RGB', base.size, color), (0, 0), m)
+
+
+def leaf_img(h, color, vein):
+    """Folha inline ao lado da headline — equivalente ao pinheiro da
+    referencia, mas coerente com fitoterapia. Desenhada, nunca gerada."""
+    W = max(6, int(h * .60))
+    im = Image.new('RGBA', (W, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    n = 44
+    pts = [(W / 2. + (W / 2.) * math.sin(math.pi * (i / float(n))) ** .85, (i / float(n)) * h)
+           for i in range(n + 1)]
+    pts += [(W / 2. - (W / 2.) * math.sin(math.pi * (i / float(n))) ** .85, (i / float(n)) * h)
+            for i in range(n, -1, -1)]
+    d.polygon(pts, fill=color + (255,))
+    d.line((W / 2., h * .06, W / 2., h * .94), fill=vein + (210,), width=max(2, int(h * .045)))
+    return im.rotate(-24, expand=True, resample=Image.BICUBIC)
 
 
 def bottle_only(path):
@@ -225,89 +281,136 @@ def scrim_stops(base, stops):
     base.paste(Image.new('RGB', (W, H), CREAM), (0, 0), m.resize((W, H)))
 
 
-ADU = trimmed('cut_adulto.png')
-KID = trimmed('cut_kids24.png')
-OLE = bottle_only('cut_oleo.png')
+ADU = trimmed('cut_adulto.png')   # Protocolo Adulto — 4 frascos
+KID = trimmed('cut_kids24.png')   # VermeFree Kids 2 a 4
+OLE = bottle_only('cut_oleo.png')  # Oleo de Alho — o brinde
 
-# --- Copy aprovada (checklist ANVISA: sem cura/elimina/erradica/milagre,
-#     sem medico, sem diagnostico, sem comparacao com farmacia) ---
-HEAD1 = '10% OFF'
-HEAD2a = 'em todo o site. '
-HEAD2b = 'So hoje.'.replace('So', 'Só')
-SUP = ('Já no preço, sem cupom. Frete grátis sem valor mínimo '
-       'e 1 Óleo de Alho de brinde no seu pedido.')
-MICRO = '+ Manual da Desparasitação em PDF, por e-mail, para quem comprar.'
-PILLTXT = 'SÓ HOJE · QUARTA 09/09'
-CTATXT = 'Aproveitar o Dia D'
+# --- Copy aprovada. Checklist ANVISA: sem cura/elimina/erradica/milagre,
+#     sem medico, sem diagnostico, sem comparacao com farmacia, sem cupom. ---
+H1, H2, H3 = 'DIA D', '10% OFF', 'SÓ HOJE'     # headline empilhada em 3 linhas
+SUB = 'JÁ NO PREÇO, SEM CUPOM'                  # o diferencial, no lugar do subtitulo
+BODY = 'Frete grátis sem valor mínimo e 1 Óleo de Alho de brinde no seu pedido.'
+MICRO = '+ Manual da Desparasitação em PDF por e-mail.'
+PT = 'QUARTA 09/09 · 24 HORAS'
+CT = 'APROVEITAR O DIA D'
 
 
-def desktop(with_text=True):
+def desktop(txt=True):
+    """2400x1000 — bloco creme a esquerda com corte diagonal, produtos a direita."""
     W, H, HZ = 2400, 1000, 772
-    bg, hf = build_bg('plate_d.png', W, H, HZ)
-    bg = bg.convert('RGB')
-    scrim_lr(bg, 980, 1600, 0.88)          # tambem na chapa limpa: o tema escreve por cima
-    ah = int(H * 0.335)
-    place(bg, ADU, 1585, 820, ah)          # Protocolo Adulto (4 frascos)
-    place(bg, KID, 1865, 820, int(ah * 0.63))   # VermeFree Kids 2 a 4
-    place(bg, OLE, 1345, 852, int(ah * 0.80))   # Oleo de Alho — o brinde, na frente
-    if not with_text:
+    XT, XB_ = 1180, 1420          # x do corte no topo e na base
+    LEAN = XB_ - XT
+    bg = build_bg('plate_d.png', W, H, HZ).convert('RGB')
+
+    # faixas anguladas sobre a foto (sob os produtos, para nao lavar o rotulo)
+    vbar(bg, XT + 120, 300, LEAN, RED, .13)
+    vbar(bg, XT + 470, 150, LEAN, CREAM, .30)
+    vbar(bg, XT + 690, 54, LEAN, CREAM, .22)
+    vbar(bg, XT + 880, 210, LEAN, CREAM, .16)
+    vbar(bg, XT + 1090, 40, LEAN, RED, .20)
+
+    # bloco de cor com aresta diagonal + filete vermelho (assinatura do conceito)
+    poly(bg, [(0, 0), (XT, 0), (XB_, H), (0, H)], CREAM, .94)
+    vbar(bg, XT, 14, LEAN, RED, 1.0)
+    vbar(bg, XT + 42, 7, LEAN, RED, .55)
+    vbar(bg, XT + 68, 4, LEAN, CREAM, .85)
+
+    ah = int(H * .300)
+    place(bg, ADU, 1660, 820, ah)
+    place(bg, KID, 1880, 820, int(ah * .63))
+    place(bg, OLE, 1448, 854, int(ah * .84))
+    tris(bg, 1540, 168, 44, 17, CREAM, .85)
+    tris(bg, 2118, 742, 40, 15, CREAM, .75)
+    if not txt:
         return bg
-    X, COL = 400, 790                      # coluna dentro da area segura (400..2000)
-    ph, _ = pill(bg, X, 180, PILLTXT, 27, 30, 15)
+
+    X, COL = 400, 760             # coluna dentro da area segura, a esquerda do corte
+    ph, _ = pill(bg, X, 118, PT, 26, 28, 14)
     d = ImageDraw.Draw(bg)
-    f1, s1 = fit(XB, HEAD1, COL, 196, ls=-2)
-    y = 180 + ph + 34
-    dls(d, X, y, HEAD1, f1, RED, -2)
-    y += int(s1 * 1.16)
-    f2, s2 = fit(XB, HEAD2a + HEAD2b, COL, 62, ls=-1)
-    dls(d, dls(d, X, y, HEAD2a, f2, INK, -1), y, HEAD2b, f2, RED, -1)
-    y += int(s2 * 1.62)
-    fs = F(SB, 30)
-    for ln in wrap(fs, SUP, COL):
-        d.text((X, y), ln, font=fs, fill=INK)
-        y += 42
-    y += 6
-    fm = F(RG, 25)
+    y = 118 + ph + 36
+    f1, s1 = fit(XB, H1, COL, 80, ls=1)
+    dls(d, X, y, H1, f1, INK, 1)
+    y += int(s1 * 1.02)
+    f2, s2 = fit(XB, H2, COL, 172, ls=-3)      # a linha de acao, em vermelho
+    dls(d, X, y, H2, f2, RED, -3)
+    y += int(s2 * 1.00)
+    f3, s3 = fit(XB, H3, COL - 110, 80, ls=1)
+    ex = dls(d, X, y, H3, f3, INK, 1)
+    lf = leaf_img(int(s3 * .86), RED, CREAM)
+    bg.paste(lf, (int(ex + s3 * .26), int(y + s3 * .10)), lf)
+    y += int(s3 * 1.24)
+    tris(bg, X, y, 26, 10, RED, .95)
+    y += 40
+    fsu, _ = fit(XB, SUB, COL, 28, ls=5)
+    dls(d, X, y, SUB, fsu, RED, 5)
+    y += 48
+    fb = F(SB, 28)
+    for ln in wrap(fb, BODY, COL):
+        d.text((X, y), ln, font=fb, fill=INK)
+        y += 40
+    fm = F(RG, 24)
     for ln in wrap(fm, MICRO, COL):
         d.text((X, y), ln, font=fm, fill=MUTED)
-        y += 34
-    cta(bg, X, y + 26, CTATXT, 32)
-    badge(bg, 1296, 596, 58)
+        y += 33
+    cta(bg, X, y + 22, CT, 30)
+    badge(bg, 1420, 640, 58)
     return bg
 
 
-def mobile(with_text=True):
+def mobile(txt=True):
+    """1080x1350 — composicao redesenhada: bloco creme no topo com aresta
+    diagonal, produtos no meio sobre a bancada, bloco inferior para apoio+CTA."""
     W, H, HZ = 1080, 1350, 846
-    bg, hf = build_bg('plate_m.png', W, H, HZ)
-    bg = bg.convert('RGB')
-    scrim_stops(bg, [(0, 0.70), (430, 0.70), (610, 0.0), (830, 0.0), (920, 0.62), (1350, 0.62)])
-    ah = int(H * 0.255)
-    place(bg, ADU, 530, 900, ah)
-    place(bg, KID, 835, 900, int(ah * 0.60))
-    place(bg, OLE, 213, 928, int(ah * 0.78))
-    if not with_text:
+    bg = build_bg('plate_m.png', W, H, HZ).convert('RGB')
+    vbar(bg, -40, 150, 260, CREAM, .26, 600, 1120)
+    vbar(bg, 240, 60, 260, RED, .16, 600, 1120)
+    vbar(bg, 700, 190, 260, CREAM, .22, 600, 1120)
+    vbar(bg, 980, 44, 260, CREAM, .30, 600, 1120)
+
+    poly(bg, [(0, 0), (W, 0), (W, 648), (0, 742)], CREAM, .94)
+    poly(bg, [(0, 742), (W, 648), (W, 662), (0, 756)], RED, 1.0)
+    poly(bg, [(0, 776), (W, 682), (W, 689), (0, 783)], RED, .55)
+    poly(bg, [(0, 1068), (W, 1016), (W, H), (0, H)], CREAM, .93)
+    poly(bg, [(0, 1068), (W, 1016), (W, 1028), (0, 1080)], RED, 1.0)
+
+    ah = int(H * .245)
+    place(bg, ADU, 536, 1010, ah)
+    place(bg, KID, 858, 1010, int(ah * .60))
+    place(bg, OLE, 206, 1032, int(ah * .79))
+    tris(bg, 742, 792, 38, 14, CREAM, .85)
+    if not txt:
         return bg
+
     COL = 940
-    fp = F(XB, 26)
-    pw_est = wls(fp, PILLTXT, 2.6) + int(26 * 1.15) + int(26 * 0.55) + 60
-    ph, _ = pill(bg, int((W - pw_est) / 2), 88, PILLTXT, 26, 30, 14)
+    fp = F(XB, 25)
+    pe = wls(fp, PT, 2.75) + int(25 * 1.12) + int(25 * .52) + 56
+    ph, _ = pill(bg, int((W - pe) / 2), 70, PT, 25, 28, 13)
     d = ImageDraw.Draw(bg)
-    f1, s1 = fit(XB, HEAD1, COL, 210, ls=-2)
-    y = 88 + ph + 30
-    dls(d, (W - wls(f1, HEAD1, -2)) / 2, y, HEAD1, f1, RED, -2)
-    y += int(s1 * 1.14)
-    f2, s2 = fit(XB, HEAD2a + HEAD2b, COL, 54, ls=-1)
-    x2 = (W - wls(f2, HEAD2a + HEAD2b, -1)) / 2
-    dls(d, dls(d, x2, y, HEAD2a, f2, INK, -1), y, HEAD2b, f2, RED, -1)
-    badge(bg, 170, 700, 58)
-    y = 985
-    fs = F(SB, 31)
-    for ln in wrap(fs, SUP, 900):
-        d.text(((W - fs.getlength(ln)) / 2, y), ln, font=fs, fill=INK)
-        y += 44
-    f = F(XB, 34)
-    cwid = int(wls(f, CTATXT, 34 * 0.02)) + int(34 * 3.0) + int(34 * 0.85)
-    cta(bg, int((W - cwid) / 2), y + 22, CTATXT, 34)
+    y = 70 + ph + 34
+    f1, s1 = fit(XB, H1, COL, 72, ls=1)
+    dls(d, (W - wls(f1, H1, 1)) / 2, y, H1, f1, INK, 1)
+    y += int(s1 * 1.02)
+    f2, s2 = fit(XB, H2, COL, 178, ls=-3)
+    dls(d, (W - wls(f2, H2, -3)) / 2, y, H2, f2, RED, -3)
+    y += int(s2 * 1.00)
+    f3, s3 = fit(XB, H3, COL - 120, 72, ls=1)
+    lf = leaf_img(int(s3 * .86), RED, CREAM)
+    sx = (W - (wls(f3, H3, 1) + s3 * .26 + lf.width)) / 2.
+    ex = dls(d, sx, y, H3, f3, INK, 1)
+    bg.paste(lf, (int(ex + s3 * .26), int(y + s3 * .10)), lf)
+    y += int(s3 * 1.34)
+    fsu, _ = fit(XB, SUB, COL, 26, ls=5)
+    dls(d, (W - wls(fsu, SUB, 5)) / 2, y, SUB, fsu, RED, 5)
+    badge(bg, 176, 786, 55)
+
+    y = 1088
+    fb = F(SB, 28)
+    for ln in wrap(fb, BODY, 880):
+        d.text(((W - fb.getlength(ln)) / 2, y), ln, font=fb, fill=INK)
+        y += 40
+    f = F(XB, 31)
+    cw = int(wls(f, CT, 31 * .07)) + int(31 * 2.9) + int(31 * .80)
+    cta(bg, int((W - cw) / 2), y + 18, CT, 31)
     return bg
 
 
