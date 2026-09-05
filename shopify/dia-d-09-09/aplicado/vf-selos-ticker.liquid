@@ -25,31 +25,54 @@
   {%- assign ticker_frete_promo = true -%}
 {%- endif -%}
 
+{%- comment -%}
+  Os 4 cards da oferta viram uma lista pra serem intercalados com os selos
+  da marca no marquee (1 card de oferta a cada poucos selos), em vez de
+  aparecerem todos juntos num bloco vermelho so.
+{%- endcomment -%}
+{%- assign vf_promos = '' | split: '|||' -%}
+{%- if ticker_frete_promo -%}
+  {%- capture vf_promo_cards -%}
+    <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
+      <span class="vf-ticker__icon" aria-hidden="true">🚨</span>
+      <span class="vf-ticker__text">DIA D · 10% OFF EM TUDO, JÁ NO PREÇO — acaba em <strong class="vf-ann-countdown" data-countdown="2026-09-10T00:00:00-03:00">--:--:--</strong></span>
+    </div>
+    |||
+    <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
+      <span class="vf-ticker__icon" aria-hidden="true">🚚</span>
+      <span class="vf-ticker__text">FRETE GRÁTIS SEM VALOR MÍNIMO</span>
+    </div>
+    |||
+    <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
+      <span class="vf-ticker__icon" aria-hidden="true">🎁</span>
+      <span class="vf-ticker__text">1 ÓLEO DE ALHO DE BRINDE NO PEDIDO</span>
+    </div>
+    |||
+    <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
+      <span class="vf-ticker__icon" aria-hidden="true">📩</span>
+      <span class="vf-ticker__text">MANUAL DA DESPARASITAÇÃO EM PDF POR E-MAIL</span>
+    </div>
+  {%- endcapture -%}
+  {%- assign vf_promos = vf_promo_cards | split: '|||' -%}
+{%- endif -%}
+
 <section class="vf-ticker{% if ticker_frete_promo %} vf-ticker--promo{% endif %}" aria-label="Selos e diferenciais da marca">
   <div class="vf-ticker__track" style="--vf-ticker-duration: {{ section.settings.duration | default: 30 }}s;">
 
     {%- comment -%} Duplicamos os blocos 2x pro loop ficar contínuo {%- endcomment -%}
     {%- for repeat in (1..2) -%}
       <div class="vf-ticker__group" aria-hidden="{%- if repeat == 2 -%}true{%- else -%}false{%- endif -%}">
-        {%- if ticker_frete_promo -%}
-          <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
-            <span class="vf-ticker__icon" aria-hidden="true">🚨</span>
-            <span class="vf-ticker__text">DIA D · 10% OFF EM TUDO, JÁ NO PREÇO — acaba em <strong class="vf-ann-countdown" data-countdown="2026-09-10T00:00:00-03:00">--:--:--</strong></span>
-          </div>
-          <div class="vf-ticker__item vf-ticker__item--promo">
-            <span class="vf-ticker__icon" aria-hidden="true">🚚</span>
-            <span class="vf-ticker__text">FRETE GRÁTIS SEM VALOR MÍNIMO</span>
-          </div>
-          <div class="vf-ticker__item vf-ticker__item--promo">
-            <span class="vf-ticker__icon" aria-hidden="true">🎁</span>
-            <span class="vf-ticker__text">1 ÓLEO DE ALHO DE BRINDE NO PEDIDO</span>
-          </div>
-          <div class="vf-ticker__item vf-ticker__item--promo">
-            <span class="vf-ticker__icon" aria-hidden="true">📩</span>
-            <span class="vf-ticker__text">MANUAL DA DESPARASITAÇÃO EM PDF POR E-MAIL</span>
-          </div>
-        {%- endif -%}
+        {%- assign vf_promo_used = 0 -%}
         {%- for block in section.blocks -%}
+          {%- comment -%}
+            Intercala: distribui os cards da oferta entre os selos em vez de
+            empilhar todos no comeco. vf_slot marca as posicoes espalhadas.
+          {%- endcomment -%}
+          {%- assign vf_slot = forloop.index0 | times: vf_promos.size | modulo: section.blocks.size -%}
+          {%- if vf_slot < vf_promos.size and vf_promo_used < vf_promos.size -%}
+            {{ vf_promos[vf_promo_used] }}
+            {%- assign vf_promo_used = vf_promo_used | plus: 1 -%}
+          {%- endif -%}
           <div class="vf-ticker__item" {{ block.shopify_attributes }}>
             <span class="vf-ticker__icon" aria-hidden="true">
               {%- case block.settings.icon -%}
@@ -76,11 +99,38 @@
             <span class="vf-ticker__text">{{ block.settings.text }}</span>
           </div>
         {%- endfor -%}
+        {%- comment -%} Se houver menos selos que cards de oferta, o que sobrou vai no fim {%- endcomment -%}
+        {%- if vf_promo_used < vf_promos.size -%}
+          {%- for vf_promo_left in vf_promos offset: vf_promo_used -%}
+            {{ vf_promo_left }}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
     {%- endfor -%}
 
   </div>
 </section>
+
+{%- comment -%}
+  Quando o prazo do Dia D chega a zero, os cards da oferta somem do marquee
+  (todos, nao so o que carrega o contador). Nunca fica negativo.
+{%- endcomment -%}
+{%- if ticker_frete_promo -%}
+  <script>
+    (function () {
+      var end = new Date('2026-09-10T00:00:00-03:00').getTime();
+      function hidePromos() {
+        var cards = document.querySelectorAll('.vf-ticker__item--promo');
+        for (var i = 0; i < cards.length; i++) { cards[i].hidden = true; }
+      }
+      function tick() {
+        if (Date.now() >= end) { hidePromos(); return; }
+        setTimeout(tick, 1000);
+      }
+      tick();
+    })();
+  </script>
+{%- endif -%}
 
 {% stylesheet %}
   .vf-ticker {
@@ -166,6 +216,10 @@
   @keyframes vf-ticker-promo-pulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 46, 0.35); }
     50% { box-shadow: 0 0 0 6px rgba(225, 29, 46, 0); }
+  }
+  /* display:inline-flex acima venceria o atributo hidden; forcamos a saida */
+  .vf-ticker__item[hidden] {
+    display: none !important;
   }
   .vf-ticker__item--promo .vf-ann-countdown {
     display: inline-block;
