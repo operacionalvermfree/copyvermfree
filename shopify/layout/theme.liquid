@@ -130,6 +130,9 @@
 
     {% section 'footer' %}
 
+    {%- comment -%} Correcoes da promo na PDP — o snippet explica por que existe {%- endcomment -%}
+    {%- if template.name == 'product' -%}{% render 'vf-promo-pdp-fix' %}{%- endif -%}
+
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
   </body>
 </html>

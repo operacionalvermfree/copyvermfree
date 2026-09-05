@@ -1,0 +1,114 @@
+{%- comment -%}
+  vf-promo-pdp-fix.liquid — Correções da promo de frete grátis na PDP.
+
+  POR QUE ISTO EXISTE: as três correções abaixo pertencem ao
+  sections/vf-pdp-main.liquid, que tem 87 KB. A API de tema grava arquivo
+  inteiro, e transcrever 87 KB à mão arrisca corromper a página de produto.
+  A versão corrigida do arquivo está no repositório — quando ela for colada
+  pelo editor de código, ESTE SNIPPET VIRA INÓCUO: os mapas abaixo só agem
+  sobre os textos antigos, então deixam de casar e nada acontece. Pode apagar
+  depois, sem pressa.
+
+  O QUE CORRIGE:
+
+  1. CONTADOR TRAVADO EM "--:--:--". O script que anima [data-countdown] mora
+     na tarja de anúncio, no topo do <body>, e roda enquanto a página ainda
+     está sendo lida — a PDP ainda não existe no DOM, então ele nunca acha
+     esse elemento. Aqui o contador da PDP é assumido por conta própria, com
+     a data certa da promo, depois do DOM pronto.
+
+  2. BARRA DE KITS PROMETENDO FRETE COMO CONQUISTA. A mensagem mudava por
+     quantidade e chegava a dizer "Leve 2 e ganhe frete grátis" com o frete
+     já gratuito pra qualquer pedido. O frete passa a aparecer garantido em
+     todas as faixas; só o desconto por quantidade varia. O de/para abaixo é
+     literal: nenhuma condição de desconto é inventada, só a parte de frete
+     é reescrita.
+
+  3. "HOJE" numa promo de dois dias, e "só hoje e amanhã" — que fica errado
+     no domingo.
+{%- endcomment -%}
+
+{%- assign PROMO_ON = true -%}
+{%- assign PROMO_FIM = '2026-09-07T00:00:00-03:00' -%}
+
+{%- if PROMO_ON -%}
+<script>
+(function () {
+  var FIM = '{{ PROMO_FIM }}';
+
+  /* de/para literal: chave = texto que o vf-pdp-main gera hoje */
+  var TEXTOS = {
+    '🎉 Vantagem máxima: 10% OFF + frete grátis desbloqueados':
+      '🚚 Frete grátis garantido · 10% OFF aplicado — vantagem máxima',
+    '🎉 5% OFF + frete grátis · volte pra 3 Kits e ganhe 10% OFF':
+      '🚚 Frete grátis garantido · 5% OFF — leve 3 Kits e ganhe 10% OFF',
+    '🚚 Frete grátis garantido — volte pra 3 Kits e ganhe 10% OFF':
+      '🚚 Frete grátis garantido · leve 3 Kits e ganhe 10% OFF',
+    'Leve 2 e ganhe 5% OFF · leve 3 e ganhe 10% OFF':
+      '🚚 Frete grátis garantido · leve 2 e ganhe 5% OFF, leve 3 e ganhe 10% OFF',
+    'Leve 2 e ganhe frete grátis · leve 3 e ganhe 10% OFF':
+      '🚚 Frete grátis garantido · leve 3 e ganhe 10% OFF',
+    '🚚 Frete grátis HOJE, sem valor mínimo!':
+      '🚚 Frete grátis, sem valor mínimo'
+  };
+
+  function fixar(el) {
+    if (!el) return;
+    var novo = TEXTOS[el.textContent.trim()];
+    if (novo && el.textContent !== novo) el.textContent = novo;
+  }
+
+  function vigiar(el) {
+    if (!el) return;
+    fixar(el);
+    new MutationObserver(function () { fixar(el); })
+      .observe(el, { childList: true, characterData: true, subtree: true });
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function pronto(fn) {
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+
+  pronto(function () {
+    /* 1 + 2 — textos que o proprio JS da secao reescreve a cada troca de kit */
+    vigiar(document.getElementById('vf-pdp-kitbar-msg'));
+    vigiar(document.getElementById('vf-pdp-volume-badge-text'));
+
+    /* 3 — chamada de frete: data certa e contador rodando de fato */
+    var bloco = document.querySelector('.vf-pdp__frete-promo');
+    if (!bloco) return;
+
+    var linha = bloco.querySelector('.vf-pdp__frete-promo-copy span');
+    var alvoEl = bloco.querySelector('[data-countdown]');
+    if (!alvoEl) return;
+
+    if (linha && linha.firstChild && linha.firstChild.nodeType === 3) {
+      linha.firstChild.nodeValue = 'Sábado e domingo, pra todo o Brasil, sem valor mínimo. Acaba em ';
+    }
+
+    /* tira do controle do script da tarja (que roda cedo demais e nao pega isto) */
+    alvoEl.removeAttribute('data-countdown');
+
+    var alvo = new Date(FIM).getTime();
+    if (isNaN(alvo)) { alvoEl.textContent = ''; return; }
+
+    function tick() {
+      var d = alvo - Date.now();
+      if (d <= 0) { bloco.hidden = true; return; }
+      var dias = Math.floor(d / 86400000);
+      var h = Math.floor((d % 86400000) / 3600000);
+      var m = Math.floor((d % 3600000) / 60000);
+      var s = Math.floor((d % 60000) / 1000);
+      alvoEl.textContent = dias > 0
+        ? dias + 'd ' + pad(h) + 'h ' + pad(m) + 'm'
+        : pad(h) + ':' + pad(m) + ':' + pad(s);
+    }
+    tick();
+    setInterval(tick, 1000);
+  });
+})();
+</script>
+{%- endif -%}
