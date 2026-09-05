@@ -643,11 +643,11 @@
   },
   "order": [
     "main",
-    "vf_fg_banner",
     "beneficios-objecoes",
     "estatistica",
     "volta-pra-voce",
     "ingredientes-detalhe",
+    "vf_fg_banner",
     "vf_prescritores_pdp",
     "como-tomar",
     "comparativo",
