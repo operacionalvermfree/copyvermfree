@@ -1,0 +1,91 @@
+{%- comment -%}
+  vf-kit-kids-promo: so o CSS do visual Dia D 09/09 da pagina de protocolos kids.
+  Fica em snippet separado pra manter a secao dentro do limite de upload da API.
+  Renderizado sempre; o CSS so tem efeito quando a secao ganha a classe --promo.
+{%- endcomment -%}
+{% stylesheet %}
+  /* ==================== DIA D 09/09 - 10% OFF + frete + brinde ==================== */
+  .vf-kit-kids--promo {
+    background: linear-gradient(180deg, #FFF1F1 0%, #FAFAFA 100%);
+  }
+  .vf-kit-kids__eyebrow--promo {
+    color: #E11D2E;
+    font-weight: 800;
+  }
+  .vf-kit-kids__card--promo {
+    overflow: visible;
+    position: relative;
+    border: 2px solid #E11D2E;
+  }
+  .vf-kit-kids__card--promo:hover {
+    box-shadow: 0 16px 40px rgba(225, 29, 46, 0.18);
+  }
+  .vf-kit-kids__card--promo .vf-kit-kids__media {
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    overflow: hidden;
+  }
+  .vf-kit-kids__promo-ribbon {
+    position: absolute;
+    top: -13px;
+    left: 16px;
+    background: #E11D2E;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 999px;
+    box-shadow: 0 3px 10px rgba(225, 29, 46, 0.4);
+    z-index: 3;
+    white-space: nowrap;
+    animation: vf-kit-kids-ribbon 1.4s ease-in-out infinite;
+  }
+  @keyframes vf-kit-kids-ribbon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  .vf-kit-kids__card--promo .vf-kit-kids__price-box {
+    background: #FFF1F1;
+    border-color: #FFD4D4;
+  }
+  .vf-kit-kids__card--promo .vf-kit-kids__installment { color: #E11D2E; }
+  .vf-kit-kids__card--promo .vf-kit-kids__price { color: #C11524; font-weight: 700; }
+  .vf-kit-kids__price-compare {
+    display: block;
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 2px;
+  }
+  .vf-kit-kids__cta--promo {
+    background: #E11D2E;
+    box-shadow: 0 2px 0 #8E1220;
+    position: relative;
+    overflow: hidden;
+  }
+  .vf-kit-kids__cta--promo:hover {
+    background: #C11524;
+    box-shadow: 0 1px 0 #8E1220;
+  }
+  .vf-kit-kids__cta--promo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: vf-kit-kids-shimmer 2.4s ease-in-out infinite;
+  }
+  @keyframes vf-kit-kids-shimmer {
+    0% { left: -60%; }
+    50% { left: 130%; }
+    100% { left: 130%; }
+  }
+
+  @media (max-width: 750px) {
+    .vf-kit-kids__promo-ribbon { font-size: 10px; padding: 5px 11px; left: 12px; }
+  }
+{% endstylesheet %}

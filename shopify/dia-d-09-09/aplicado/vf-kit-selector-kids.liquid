@@ -1,0 +1,297 @@
+{%- comment -%}
+  VermeFree — Kit Selector Kids
+  Versao da pagina /pages/protocolos-kids
+  Grid 2 cards (Kids 2-4 + Kids 5-9) com hero acima
+  Reaproveita estrutura visual da vf-kit-selector mas em layout 2 colunas
+{%- endcomment -%}
+
+{%- comment -%}
+  PROMO TEMPORARIA - DIA D 09/09/2026 (quarta), 00h00 as 23h59.
+  Oferta: 10% OFF ja embutido no preco (SEM CUPOM), frete gratis sem valor
+  minimo, 1 Oleo de Alho de brinde e Manual da Desparasitacao em PDF.
+  A previa so liga ANTES ou NO dia da acao - depois de 09/09 a promo nunca
+  mais aparece, mesmo que o checkbox fique ligado por esquecimento.
+{%- endcomment -%}
+{%- assign kids_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
+{%- assign kids_promo = false -%}
+{%- if kids_today == 20260909 -%}
+  {%- assign kids_promo = true -%}
+{%- elsif section.settings.preview_frete_promo and kids_today < 20260909 -%}
+  {%- assign kids_promo = true -%}
+{%- endif -%}
+
+{%- render 'vf-kit-kids-css' -%}
+{%- render 'vf-kit-kids-promo' -%}
+<section class="vf-kit-kids{% if kids_promo %} vf-kit-kids--promo{% endif %}" aria-labelledby="vf-kit-kids-heading">
+  <div class="vf-kit-kids__container">
+
+    {%- if kids_promo and section.settings.promo_eyebrow != blank -%}
+      <p class="vf-kit-kids__eyebrow vf-kit-kids__eyebrow--promo">{{ section.settings.promo_eyebrow }}</p>
+    {%- elsif section.settings.eyebrow != blank -%}
+      <p class="vf-kit-kids__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 id="vf-kit-kids-heading" class="vf-kit-kids__heading">{{ section.settings.heading }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="vf-kit-kids__subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="vf-kit-kids__grid">
+      {%- for block in section.blocks -%}
+        {%- assign product = block.settings.product -%}
+        {%- assign link = '#' -%}
+        {%- if product != blank -%}
+          {%- assign link = product.url -%}
+        {%- elsif block.settings.product_link != blank -%}
+          {%- assign link = block.settings.product_link -%}
+        {%- endif -%}
+
+        <article class="vf-kit-kids__card{% if kids_promo %} vf-kit-kids__card--promo{% endif %}" {{ block.shopify_attributes }}>
+          {%- if kids_promo -%}
+            <span class="vf-kit-kids__promo-ribbon">🔥 10% OFF + FRETE GRÁTIS</span>
+          {%- endif -%}
+          <a href="{{ link }}" class="vf-kit-kids__media-link" aria-label="{{ block.settings.name | escape }}">
+            <div class="vf-kit-kids__media">
+              {%- if block.settings.badge != blank -%}
+                <span class="vf-kit-kids__badge">{{ block.settings.badge }}</span>
+              {%- endif -%}
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.name | escape }}"
+                  class="vf-kit-kids__img"
+                  loading="lazy"
+                >
+              {%- elsif product.featured_image != blank -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  class="vf-kit-kids__img"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="vf-kit-kids__img vf-kit-kids__img--placeholder"></div>
+              {%- endif -%}
+            </div>
+          </a>
+
+          <div class="vf-kit-kids__body">
+            {%- if block.settings.name != blank -%}
+              <h2 class="vf-kit-kids__name">{{ block.settings.name }}</h2>
+            {%- endif -%}
+            {%- if block.settings.age_label != blank -%}
+              <p class="vf-kit-kids__age">{{ block.settings.age_label }}</p>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="vf-kit-kids__desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.bullets != blank -%}
+              <ul class="vf-kit-kids__bullets">
+                {%- assign bullets = block.settings.bullets | split: '|' -%}
+                {%- for b in bullets -%}
+                  <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-11"/></svg>
+                    {{ b | strip }}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            {%- comment -%}
+              PRECO NO DIA D: o tema NAO recalcula os 10%. O desconto ja vem
+              embutido no preco do produto, entao mostrar product.price e o
+              unico valor que bate com o checkout. A parcela escrita a mao
+              (block.settings.installment) e texto fixo e ficaria desatualizada
+              quando o preco cai, entao no dia ela nao aparece.
+            {%- endcomment -%}
+            <div class="vf-kit-kids__price-box">
+              {%- if kids_promo and product != blank and product.price > 0 -%}
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="vf-kit-kids__price-compare">de {{ product.compare_at_price | money }}</span>
+                {%- endif -%}
+                <span class="vf-kit-kids__installment">{{ product.price | money }}</span>
+                <span class="vf-kit-kids__price">com 10% OFF já aplicado · à vista</span>
+              {%- else -%}
+                {%- if block.settings.installment != blank -%}
+                  <span class="vf-kit-kids__installment">{{ block.settings.installment }}</span>
+                {%- endif -%}
+                <span class="vf-kit-kids__price">ou {{ block.settings.price }} à vista</span>
+              {%- endif -%}
+            </div>
+
+            <a href="{{ link }}" class="vf-kit-kids__cta{% if kids_promo %} vf-kit-kids__cta--promo{% endif %}" aria-label="{{ block.settings.cta_label | escape }}">
+              {%- if kids_promo -%}🔥 Quero com 10% OFF{%- else -%}{{ block.settings.cta_label }}{%- endif -%}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if kids_promo -%}
+      {%- comment -%}
+        Mesmo painel da home e das PDPs. Mora em snippets/vf-diad-banner.liquid.
+      {%- endcomment -%}
+      {%- render 'vf-diad-banner',
+          badge: section.settings.promo_badge_text,
+          title: section.settings.promo_title,
+          subtitle: section.settings.promo_subtitle -%}
+    {%- endif -%}
+
+    {%- if section.settings.help_text != blank -%}
+      <div class="vf-kit-kids__help-box">
+        <p class="vf-kit-kids__help">{{ section.settings.help_text }}</p>
+        {%- if section.settings.whatsapp_url != blank -%}
+          <a href="{{ section.settings.whatsapp_url }}" class="vf-kit-kids__wa-btn" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="18" height="18">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            {{ section.settings.whatsapp_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "VF Kit Selector Kids",
+  "tag": "section",
+  "class": "vf-kit-kids-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow (texto pequeno acima do título)",
+      "default": "Protocolos Kids VermeFree"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titulo",
+      "default": "Escolha o protocolo pela idade do seu filho"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtitulo",
+      "default": "Cada faixa etária pede uma dose e uma fórmula específica. Por isso desenvolvemos 2 protocolos Kids — gentis, sem efeitos que derrubam, e ajustados pra cada fase."
+    },
+    {
+      "type": "header",
+      "content": "Promo Dia D 09/09"
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_frete_promo",
+      "label": "🔴 PRÉVIA: forçar visual do Dia D (09/09)",
+      "info": "Ative só pra testar/ver como fica. Desative depois — no dia 09/09 ela liga sozinha, não precisa disso.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "promo_eyebrow",
+      "label": "Eyebrow no Dia D",
+      "default": "🚨 Dia D · só hoje, 09/09"
+    },
+    {
+      "type": "text",
+      "id": "promo_badge_text",
+      "label": "Selo do painel",
+      "default": "🚨 Dia D · só hoje, 09/09"
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "label": "Título do painel",
+      "default": "10% OFF em tudo, frete grátis e óleo de alho de brinde"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_subtitle",
+      "label": "Texto do painel",
+      "default": "Hoje o preço já sai com 10% OFF — sem cupom, sem digitar nada. Frete grátis pra qualquer valor de compra, em qualquer canto do Brasil (fora do Dia D, só acima de R$ 399). E o Manual da Desparasitação chega em PDF no seu e-mail depois da compra."
+    },
+    {
+      "type": "richtext",
+      "id": "help_text",
+      "label": "Texto de ajuda (rodapé da seção)",
+      "default": "<p>Em dúvida sobre qual protocolo é o ideal pro seu filho? Fale com a gente que orientamos.</p>"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Texto do botão WhatsApp",
+      "default": "Falar no WhatsApp"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "URL do WhatsApp (ex: https://wa.me/5531315750779)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "kit",
+      "name": "Kit Kids",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Foto do produto" },
+        { "type": "text", "id": "badge", "label": "Badge", "default": "Kids" },
+        { "type": "text", "id": "name", "label": "Nome", "default": "Protocolo Kids" },
+        { "type": "text", "id": "age_label", "label": "Faixa etaria", "default": "2 a 4 anos" },
+        { "type": "textarea", "id": "description", "label": "Descricao curta", "default": "Fórmula gentil pros pequenos, sem efeitos que derrubam." },
+        { "type": "textarea", "id": "bullets", "label": "Bullets (separados por |)", "default": "Dose ajustada pra idade|Enzima natural facilita a aceitação|Sem sabor amargo|Protocolo completo de 30 dias" },
+        { "type": "text", "id": "price", "label": "Preco", "default": "R$ 270" },
+        { "type": "text", "id": "installment", "label": "Parcela", "default": "3x de R$ 90 sem juros" },
+        { "type": "product", "id": "product", "label": "Produto (opcional)" },
+        { "type": "url", "id": "product_link", "label": "Link manual (se nao tiver produto)" },
+        { "type": "text", "id": "cta_label", "label": "Texto do botao", "default": "Quero esse" }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "VF Kit Selector Kids",
+      "blocks": [
+        {
+          "type": "kit",
+          "settings": {
+            "badge": "Kids 2-4",
+            "name": "Protocolo Kids",
+            "age_label": "2 a 4 anos",
+            "description": "Fórmula gentil pros pequenos, com enzima natural pra facilitar a aceitação.",
+            "bullets": "Dose ajustada pra idade|Enzima natural facilita a aceitação|Sem sabor amargo|Protocolo completo de 30 dias",
+            "price": "R$ 270",
+            "installment": "3x de R$ 90 sem juros",
+            "cta_label": "Quero esse"
+          }
+        },
+        {
+          "type": "kit",
+          "settings": {
+            "badge": "Kids 5-9",
+            "name": "Protocolo Kids",
+            "age_label": "5 a 9 anos",
+            "description": "Dose ajustada pra criança em idade escolar — protocolo completo de 30 dias.",
+            "bullets": "Dosagem específica por idade (5-6, 7-8, 9)|Apoio ao rendimento escolar|Cápsulas pequenas, fácil de tomar|Sem efeitos que derrubam",
+            "price": "R$ 389",
+            "installment": "3x de R$ 129,67 sem juros",
+            "cta_label": "Quero esse"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}

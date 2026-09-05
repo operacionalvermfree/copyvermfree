@@ -1,0 +1,66 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "vf-kit-selector-kids",
+      "blocks": {
+        "kids-2-4": {
+          "type": "kit",
+          "settings": {
+            "image": "shopify://shop_images/produto-card-2-kids-2a4.png",
+            "badge": "Kids 2-4",
+            "name": "Protocolo Kids",
+            "age_label": "2 a 4 anos",
+            "description": "Fórmula gentil pros pequenos, com enzima natural pra facilitar a aceitação.",
+            "bullets": "Dose ajustada pra idade|Enzima natural facilita a aceitação|Sem sabor amargo|Protocolo completo de 30 dias",
+            "price": "R$ 270",
+            "installment": "10x de R$ 31,85",
+            "product": "antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos",
+            "product_link": "shopify://products/antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos",
+            "cta_label": "Quero esse"
+          }
+        },
+        "kids-5-9": {
+          "type": "kit",
+          "settings": {
+            "image": "shopify://shop_images/produto-card-3-kids-5a9-v2.png",
+            "badge": "Kids 5-9",
+            "name": "Protocolo Kids",
+            "age_label": "5 a 9 anos",
+            "description": "Dose ajustada pra criança em idade escolar — protocolo completo de 30 dias.",
+            "bullets": "Dosagem específica por idade (5-6, 7-8, 9)|Apoio ao rendimento escolar|Cápsulas pequenas, fácil de tomar|Sem efeitos que derrubam",
+            "price": "R$ 389",
+            "installment": "10x de R$ 40,14",
+            "product": "antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos",
+            "product_link": "/products/3-kit-vermefree-kids-5-9",
+            "cta_label": "Quero esse"
+          }
+        }
+      },
+      "block_order": [
+        "kids-2-4",
+        "kids-5-9"
+      ],
+      "settings": {
+        "preview_frete_promo": true,
+        "eyebrow": "Protocolos Kids VermeFree",
+        "heading": "Escolha o protocolo pela idade do seu filho",
+        "subheading": "Cada faixa etária pede uma dose e uma fórmula específica. Por isso desenvolvemos 2 protocolos Kids — gentis, sem efeitos que derrubam, e ajustados pra cada fase.",
+        "help_text": "<p>Em dúvida sobre qual protocolo é o ideal pro seu filho? Fale com a gente que orientamos.</p>",
+        "whatsapp_label": "Falar no WhatsApp",
+        "whatsapp_url": "https://api.whatsapp.com/send/?phone=553131573845&text=Ol%C3%A1,%20preciso%20de%20ajuda!&type=phone_number&app_absent=0"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
