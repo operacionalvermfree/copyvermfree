@@ -309,7 +309,16 @@
                     {%- elsif t_qty == 2 -%}
                       {%- assign t_badge2 = 'Frete grátis' -%}
                     {%- endif -%}
-                    <div class="vf-pdp__kit-card{% if forloop.first %} is-active{% endif %}" data-qty="{{ t_qty }}" data-discount="{{ t_disc }}" role="radio" aria-checked="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="0">
+                    {%- comment -%}
+                      Na promo o frete e gratis em QUALQUER quantidade, entao o selo
+                      vale tambem no card de 1 Kit. Sem isto so 2 e 3 Kits levam o selo
+                      e o card de 1 Kit parece fora da promo — o mesmo engano que ja
+                      foi corrigido na barra de kits.
+                    {%- endcomment -%}
+                    {%- if pdp_frete_promo -%}
+                      {%- assign t_badge2 = 'Frete grátis' -%}
+                    {%- endif -%}
+                    <div class="vf-pdp__kit-card{% if forloop.first %} is-active{% endif %}{% if pdp_frete_promo %} vf-pdp__kit-card--promo{% endif %}" data-qty="{{ t_qty }}" data-discount="{{ t_disc }}" role="radio" aria-checked="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="0">
                       {%- if t_badge1 != blank or t_badge2 != blank -%}
                         <div class="vf-pdp__kit-badges">
                           {%- if t_badge1 != blank -%}<span class="vf-pdp__kit-badge vf-pdp__kit-badge--1">{{ t_badge1 }}</span>{%- endif -%}
@@ -938,6 +947,8 @@
     flex-direction: column;
     gap: 12px;
   }
+  /* a tarja da promo sobe 12px acima do card e encostava no card de cima */
+  .vf-pdp__kits-grid:has(.vf-pdp__kit-promo-ribbon) { gap: 24px; }
 
   .vf-pdp__kit-card {
     position: relative;
@@ -1091,6 +1102,11 @@
     color: #E11D2E;
   }
   .vf-pdp__kit-card--promo .vf-pdp__kit-cash-value { color: #C11524; }
+  /* o selo padrao e ambar; dentro do card vermelho ele briga com a borda */
+  .vf-pdp__kit-card--promo .vf-pdp__kit-badge--2 {
+    background: #E11D2E;
+    color: #fff;
+  }
 
   .vf-pdp__kit-promo-ribbon {
     position: absolute;
