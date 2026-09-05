@@ -1,0 +1,241 @@
+{%- comment -%}
+  vf-upsell-oleo-popup.liquid — POP-UP Upsell Óleo de Alho (15% OFF)
+  Site-wide: renderizado no layout/theme.liquid logo após <body>.
+  Aparece 1x por sessão, assim que o carrinho passa a ter um protocolo
+  (Adulto, Kids 2-4, Kids 5-9 ou Kit Família) — detecta isso comparando
+  o estado do carrinho a cada carregamento de página via sessionStorage,
+  então funciona não importa por qual caminho o protocolo foi
+  adicionado (form da PDP, order bumps, etc.).
+  O CTA adiciona o Óleo direto ao carrinho e aplica o cupom OLEO20 (15% OFF)
+  via /discount/OLEO20, levando ao carrinho — não empilha com cupons de
+  influencer nem com o desconto por volume do óleo.
+{%- endcomment -%}
+
+<div class="vf-oleopop" data-vf-oleopop hidden aria-hidden="true">
+  <div class="vf-oleopop__overlay" data-vf-oleopop-close></div>
+  <div class="vf-oleopop__card" role="dialog" aria-modal="true" aria-labelledby="vf-oleopop-title">
+    <button type="button" class="vf-oleopop__x" data-vf-oleopop-close aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <div class="vf-oleopop__img">
+      {%- assign oleo_product = all_products['oleo-de-alho-desodorizado-500mg'] -%}
+      {%- if oleo_product.featured_image -%}
+        <img src="{{ oleo_product.featured_image | image_url: width: 240 }}" alt="Óleo de Alho Desodorizado" width="120" height="120" loading="lazy">
+      {%- endif -%}
+    </div>
+
+    <h2 class="vf-oleopop__headline" id="vf-oleopop-title">Que tal manter a leveza no dia a dia? 🌿</h2>
+    <p class="vf-oleopop__text">O Óleo de Alho é o passo de manutenção depois do protocolo — ajuda a manter a rotina de bem-estar do seu intestino. Só agora, com 15% OFF.</p>
+
+    <div class="vf-oleopop__price">
+      <span class="vf-oleopop__price-full">de R$ 67,00</span>
+      <span class="vf-oleopop__price-off">R$ 56,95</span>
+    </div>
+
+    <button type="button" class="vf-oleopop__cta" data-vf-oleopop-add>
+      Adicionar com 15% OFF
+    </button>
+    <button type="button" class="vf-oleopop__decline" data-vf-oleopop-close>Agora não, obrigada</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var PROTOCOL_HANDLES = [
+      'protocolo-desparasitacao-adulto-vermefree',
+      'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos',
+      'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos',
+      'kit-familia-vermefree-2-adultos-2-criancas'
+    ];
+    var OLEO_HANDLE = 'oleo-de-alho-desodorizado-500mg';
+    var OLEO_VARIANT_ID = 48968692891867;
+    var SHOWN_KEY = 'vf_oleopop_shown';
+    var HAD_PROTOCOL_KEY = 'vf_cart_had_protocol';
+
+    var modal = document.querySelector('[data-vf-oleopop]');
+    if (!modal) return;
+
+    function openModal() {
+      modal.hidden = false;
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      var x = modal.querySelector('.vf-oleopop__x');
+      if (x) { try { x.focus(); } catch (e) {} }
+    }
+    function closeModal() {
+      modal.hidden = true;
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    modal.querySelectorAll('[data-vf-oleopop-close]').forEach(function (el) {
+      el.addEventListener('click', closeModal);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+
+    var addBtn = modal.querySelector('[data-vf-oleopop-add]');
+    if (addBtn) {
+      addBtn.addEventListener('click', function () {
+        addBtn.disabled = true;
+        addBtn.textContent = 'Adicionando…';
+        fetch('{{ routes.cart_add_url }}.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ items: [{ id: OLEO_VARIANT_ID, quantity: 1 }] })
+        }).then(function () {
+          window.location.href = '/discount/OLEO20?redirect=/cart';
+        }).catch(function () {
+          window.location.href = '/discount/OLEO20?redirect=/cart';
+        });
+      });
+    }
+
+    fetch('/cart.js', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.json(); })
+      .then(function (cart) {
+        var hasProtocol = cart.items.some(function (i) {
+          return PROTOCOL_HANDLES.indexOf(i.handle) !== -1;
+        });
+        var hasOleo = cart.items.some(function (i) { return i.handle === OLEO_HANDLE; });
+        var alreadyShown = sessionStorage.getItem(SHOWN_KEY) === '1';
+        var hadProtocolBefore = sessionStorage.getItem(HAD_PROTOCOL_KEY) === '1';
+
+        if (hasProtocol && !hadProtocolBefore && !hasOleo && !alreadyShown) {
+          openModal();
+          sessionStorage.setItem(SHOWN_KEY, '1');
+        }
+        sessionStorage.setItem(HAD_PROTOCOL_KEY, hasProtocol ? '1' : '0');
+      })
+      .catch(function () {});
+  })();
+</script>
+
+{% stylesheet %}
+  .vf-oleopop[hidden] { display: none !important; }
+  .vf-oleopop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .vf-oleopop__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 30, 20, 0.55);
+    backdrop-filter: blur(2px);
+  }
+  .vf-oleopop__card {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 24px 24px;
+    max-width: 360px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    animation: vf-oleopop-in .25s ease-out;
+  }
+  @keyframes vf-oleopop-in {
+    from { opacity: 0; transform: translateY(12px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .vf-oleopop__x {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 30px; height: 30px;
+    border: 0;
+    background: var(--vf-bg, #F5F5F5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--vf-muted, #777);
+    cursor: pointer;
+  }
+  .vf-oleopop__x:hover { background: var(--vf-border, #E3E3DD); color: #1A1A1A; }
+  .vf-oleopop__x svg { width: 15px; height: 15px; }
+
+  .vf-oleopop__img {
+    width: 96px; height: 96px;
+    border-radius: 14px;
+    background: var(--vf-beige, #F5F1E8);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .vf-oleopop__img img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+
+  .vf-oleopop__headline {
+    font-family: var(--font-heading, inherit);
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--vf-green-dark, #15803D);
+    line-height: 1.3;
+    margin: 4px 0 0;
+  }
+  .vf-oleopop__text {
+    font-size: 13px;
+    color: var(--vf-muted, #555);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .vf-oleopop__price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 4px 0 2px;
+  }
+  .vf-oleopop__price-full {
+    font-size: 13px;
+    color: var(--vf-muted, #999);
+    text-decoration: line-through;
+  }
+  .vf-oleopop__price-off {
+    font-family: var(--font-heading, inherit);
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--vf-green-dark, #15803D);
+  }
+
+  .vf-oleopop__cta {
+    width: 100%;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--vf-green, #16A34A);
+    color: #fff;
+    font-family: var(--font-heading, inherit);
+    font-weight: 800;
+    font-size: 14.5px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-top: 6px;
+    transition: background .15s ease;
+  }
+  .vf-oleopop__cta:hover { background: var(--vf-green-dark, #15803D); }
+  .vf-oleopop__cta:disabled { opacity: .6; cursor: default; }
+
+  .vf-oleopop__decline {
+    background: transparent;
+    border: 0;
+    color: var(--vf-muted, #888);
+    font-size: 12.5px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .vf-oleopop__decline:hover { color: #1A1A1A; }
+{% endstylesheet %}
+

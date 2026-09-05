@@ -1,0 +1,565 @@
+{%- comment -%}
+  main-cart.liquid
+  Página de carrinho com items + resumo lateral.
+{%- endcomment -%}
+
+<section class="vf-cart">
+  <div class="vf-container">
+    <header class="vf-cart__header">
+      <h1>Seu carrinho</h1>
+      {%- if cart.item_count > 0 -%}
+        <p class="vf-cart__count">{{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}</p>
+      {%- endif -%}
+    </header>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="vf-cart__empty">
+        <div class="vf-cart__empty-icon" aria-hidden="true">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <h2>Seu carrinho está vazio</h2>
+        <p>Adicione um protocolo e comece sua jornada com o corpo limpo de dentro pra fora.</p>
+        <a href="{{ routes.root_url }}" class="vf-button vf-button--primary vf-button--lg">
+          Ver protocolos
+        </a>
+      </div>
+    {%- else -%}
+      <form action="{{ routes.cart_url }}" method="post" class="vf-cart__form" data-vf-cart-form novalidate>
+        <div class="vf-cart__layout">
+
+          {%- comment -%} Lista de items {%- endcomment -%}
+          <div class="vf-cart__items">
+            {%- for item in cart.items -%}
+              <article class="vf-cart-item" data-cart-item data-key="{{ item.key }}">
+                <a href="{{ item.url }}" class="vf-cart-item__image">
+                  {%- if item.image -%}
+                    <img
+                      src="{{ item.image | image_url: width: 200 }}"
+                      alt="{{ item.image.alt | escape | default: item.title }}"
+                      width="200"
+                      height="200"
+                      loading="lazy">
+                  {%- endif -%}
+                </a>
+
+                <div class="vf-cart-item__body">
+                  <a href="{{ item.url }}" class="vf-cart-item__title">{{ item.product.title }}</a>
+                  {%- if item.variant.title != 'Default Title' and item.product.has_only_default_variant == false -%}
+                    <span class="vf-cart-item__variant">{{ item.variant.title }}</span>
+                  {%- endif -%}
+                  <div class="vf-cart-item__price-mobile">{{ item.final_line_price | money }}</div>
+                </div>
+
+                <div class="vf-cart-item__qty">
+                  <div class="vf-cart-item__qty-control">
+                    <button
+                      type="button"
+                      class="vf-cart-item__qty-btn"
+                      data-cart-qty-decrease
+                      data-key="{{ item.key }}"
+                      aria-label="Diminuir quantidade">
+                      {% render 'icon-minus' %}
+                    </button>
+                    <input
+                      type="number"
+                      name="updates[]"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      max="99"
+                      class="vf-cart-item__qty-input"
+                      data-cart-qty-input
+                      data-key="{{ item.key }}"
+                      aria-label="Quantidade">
+                    <button
+                      type="button"
+                      class="vf-cart-item__qty-btn"
+                      data-cart-qty-increase
+                      data-key="{{ item.key }}"
+                      aria-label="Aumentar quantidade">
+                      {% render 'icon-plus' %}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="vf-cart-item__price">{{ item.final_line_price | money }}</div>
+
+                <a href="{{ item.url_to_remove }}" class="vf-cart-item__remove" data-cart-remove data-key="{{ item.key }}" aria-label="Remover {{ item.product.title }} do carrinho">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </a>
+              </article>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Resumo {%- endcomment -%}
+          <aside class="vf-cart__summary">
+            <h2 class="vf-cart__summary-title">Resumo</h2>
+
+            <div class="vf-cart__summary-row">
+              <span>Subtotal</span>
+              <strong>{{ cart.total_price | money }}</strong>
+            </div>
+
+            {%- render 'vf-frete-progress' -%}
+
+            {%- comment -%} Aviso de desconto por volume dos protocolos (3=10%, 5=15%, 8=20%) {%- endcomment -%}
+            {%- render 'vf-kits-desconto-aviso' -%}
+
+            <div class="vf-cart__summary-row vf-cart__summary-row--total">
+              <span>Total</span>
+              <strong>{{ cart.total_price | money }}</strong>
+            </div>
+
+            {%- comment -%} BÔNUS específico de promos com brinde (06/06 Manual). Desativado para BRASIL9 que é só desconto. {%- endcomment -%}
+            {%- assign vf_promo_has_bonus = false -%}
+            {%- if vf_promo_has_bonus and vf_promo_active and cart.item_count > 0 -%}
+              <div class="vf-cart-bonus">
+                <div class="vf-cart-bonus__head">
+                  <span class="vf-cart-bonus__check" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+                  </span>
+                  <div class="vf-cart-bonus__copy">
+                    <p class="vf-cart-bonus__title">🎁 Você ganhou: <strong>Manual de Suplementação</strong></p>
+                    <p class="vf-cart-bonus__sub">Enviado pelo WhatsApp em até 6h após confirmação do pedido</p>
+                  </div>
+                </div>
+                <div class="vf-cart-bonus__pill">SÓ HOJE</div>
+              </div>
+            {%- endif -%}
+
+            {%- comment -%} Order bump único e mutuamente exclusivo, casado com o conteúdo do carrinho {%- endcomment -%}
+            {%- assign cart_has_oleo = false -%}
+            {%- assign cart_has_adult = false -%}
+            {%- assign cart_protocol_qty = 0 -%}
+            {%- assign cart_has_kids24 = false -%}
+            {%- assign cart_has_kids59 = false -%}
+            {%- for item in cart.items -%}
+              {%- if item.product.handle == 'oleo-de-alho-desodorizado-500mg' -%}{%- assign cart_has_oleo = true -%}{%- endif -%}
+              {%- if item.product.handle == 'protocolo-desparasitacao-adulto-vermefree' or item.product.handle == 'kit-familia-vermefree-2-adultos-2-criancas' -%}{%- assign cart_has_adult = true -%}{%- endif -%}
+              {%- if item.product.handle == 'protocolo-desparasitacao-adulto-vermefree' or item.product.handle == 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos' or item.product.handle == 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' -%}{%- assign cart_protocol_qty = cart_protocol_qty | plus: item.quantity -%}{%- endif -%}
+              {%- if item.product.handle == 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos' -%}{%- assign cart_has_kids24 = true -%}{%- endif -%}
+              {%- if item.product.handle == 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' -%}{%- assign cart_has_kids59 = true -%}{%- endif -%}
+            {%- endfor -%}
+            {%- assign render_bump2 = false -%}
+            {%- if cart_has_kids24 and cart_has_kids59 == false -%}{%- assign render_bump2 = true -%}{%- endif -%}
+            {%- if cart_has_kids59 and cart_has_kids24 == false -%}{%- assign render_bump2 = true -%}{%- endif -%}
+            {%- if cart_protocol_qty > 0 and cart_protocol_qty < 2 -%}{%- assign render_bump2 = true -%}{%- endif -%}
+            {%- comment -%} Óleo aparece quando o protocolo já está "completo": adulto/família no carrinho, OU os dois protocolos kids juntos. Aí a próxima oferta natural é a manutenção (Óleo de Alho). {%- endcomment -%}
+            {%- assign cart_has_kids_both = false -%}
+            {%- if cart_has_kids24 and cart_has_kids59 -%}{%- assign cart_has_kids_both = true -%}{%- endif -%}
+            {%- assign show_oleo_bump = false -%}
+            {%- if cart_has_oleo == false and cart_has_adult -%}{%- assign show_oleo_bump = true -%}{%- endif -%}
+            {%- if cart_has_oleo == false and cart_has_kids_both -%}{%- assign show_oleo_bump = true -%}{%- endif -%}
+            {%- if show_oleo_bump -%}
+              {% render 'vf-order-bump' %}
+            {%- elsif render_bump2 -%}
+              {% render 'vf-order-bump-2protocolo' %}
+            {%- endif -%}
+
+            <button type="submit" name="checkout" class="vf-button vf-button--primary vf-button--lg vf-button--full">
+              Finalizar compra
+            </button>
+
+            <p class="vf-cart__summary-micro">
+              Pagamento 100% seguro · Frete pra todo Brasil
+            </p>
+
+            <a href="{{ routes.root_url }}" class="vf-cart__continue">
+              ← Continuar comprando
+            </a>
+          </aside>
+        </div>
+      </form>
+
+      {%- comment -%} Quiz interceptor antes do checkout {%- endcomment -%}
+      {%- render 'vf-cart-quiz' -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .vf-cart {
+    padding: 48px 0 80px;
+    background: var(--vf-bg);
+    min-height: 60vh;
+  }
+  .vf-cart__header {
+    margin-bottom: 32px;
+  }
+  .vf-cart__header h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 4vw, 48px);
+  }
+  .vf-cart__count {
+    margin: 8px 0 0;
+    color: var(--vf-muted);
+    font-size: 14px;
+  }
+  .vf-cart__empty {
+    text-align: center;
+    padding: 64px 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .vf-cart__empty-icon {
+    color: var(--vf-green);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+  .vf-cart__empty h2 {
+    margin: 0 0 12px;
+    font-family: var(--font-heading);
+    font-size: 28px;
+  }
+  .vf-cart__empty p {
+    color: var(--vf-muted);
+    margin: 0 0 28px;
+  }
+
+  .vf-cart__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  @media (min-width: 990px) {
+    .vf-cart__layout {
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      align-items: start;
+    }
+  }
+
+  /* Items */
+  .vf-cart__items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .vf-cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    grid-template-areas:
+      "image body remove"
+      "image qty price";
+    gap: 14px 16px;
+    background: var(--vf-surface);
+    padding: 16px;
+    border-radius: var(--card-radius);
+    border: 1px solid var(--vf-border);
+    align-items: center;
+  }
+  @media (min-width: 750px) {
+    .vf-cart-item {
+      grid-template-columns: 100px 1fr 140px 110px auto;
+      grid-template-areas: "image body qty price remove";
+    }
+  }
+  .vf-cart-item__image {
+    grid-area: image;
+    width: 80px;
+    height: 80px;
+    background: var(--vf-beige);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (min-width: 750px) {
+    .vf-cart-item__image { width: 100px; height: 100px; }
+  }
+  .vf-cart-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+  }
+  .vf-cart-item__body {
+    grid-area: body;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .vf-cart-item__title {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    color: var(--vf-text);
+    line-height: 1.2;
+  }
+  .vf-cart-item__title:hover { color: var(--vf-green-dark); }
+  .vf-cart-item__variant {
+    font-size: 13px;
+    color: var(--vf-muted);
+  }
+  .vf-cart-item__price-mobile {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    margin-top: 4px;
+  }
+  @media (min-width: 750px) {
+    .vf-cart-item__price-mobile { display: none; }
+  }
+
+  .vf-cart-item__qty {
+    grid-area: qty;
+  }
+  .vf-cart-item__qty-control {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid var(--vf-border);
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+  }
+  .vf-cart-item__qty-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition);
+  }
+  .vf-cart-item__qty-btn:hover { background: var(--vf-bg); }
+  .vf-cart-item__qty-btn svg { width: 14px; height: 14px; }
+  .vf-cart-item__qty-input {
+    width: 44px;
+    height: 36px;
+    text-align: center;
+    border: 0;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    -moz-appearance: textfield;
+  }
+  .vf-cart-item__qty-input::-webkit-outer-spin-button,
+  .vf-cart-item__qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .vf-cart-item__price {
+    grid-area: price;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    text-align: right;
+    display: none;
+  }
+  @media (min-width: 750px) {
+    .vf-cart-item__price { display: block; }
+  }
+  .vf-cart-item__remove {
+    grid-area: remove;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vf-muted);
+    border-radius: 50%;
+    transition: background var(--transition), color var(--transition);
+  }
+  .vf-cart-item__remove:hover {
+    background: #FDECEC;
+    color: var(--vf-danger);
+  }
+
+  /* Summary */
+  .vf-cart__summary {
+    background: var(--vf-surface);
+    border-radius: var(--card-radius);
+    border: 1px solid var(--vf-border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 100px;
+  }
+  .vf-cart__summary-title {
+    margin: 0 0 4px;
+    font-family: var(--font-heading);
+    font-size: 22px;
+  }
+  .vf-cart__summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+  }
+  .vf-cart__summary-row--total {
+    padding-top: 14px;
+    border-top: 1px solid var(--vf-border);
+    font-size: 18px;
+  }
+  .vf-cart__summary-row--total strong {
+    font-family: var(--font-heading);
+    font-size: 22px;
+  }
+  .vf-cart__summary-info {
+    padding: 10px 14px;
+    background: var(--vf-beige);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--vf-text);
+  }
+  .vf-cart__summary-info--success {
+    background: var(--vf-green-light);
+    color: var(--vf-green-dark);
+    font-weight: 600;
+  }
+  .vf-cart__summary-micro {
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--vf-muted);
+  }
+  .vf-cart__continue {
+    margin-top: 4px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--vf-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .vf-cart__continue:hover { color: var(--vf-green-dark); }
+
+  /* ===== BÔNUS PROMO 06/06 ===== */
+  .vf-cart-bonus {
+    position: relative;
+    background: linear-gradient(135deg, #FFF8E1 0%, #FFFBEB 100%);
+    border: 2px dashed #FACC15;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 4px 0 14px;
+    overflow: hidden;
+    animation: vf-cart-bonus-flash 2.4s ease-in-out infinite;
+  }
+  @keyframes vf-cart-bonus-flash {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(250, 204, 21, 0); }
+  }
+  .vf-cart-bonus__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .vf-cart-bonus__check {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #16A34A;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .vf-cart-bonus__check svg { width: 14px; height: 14px; }
+  .vf-cart-bonus__copy {
+    flex: 1;
+    min-width: 0;
+  }
+  .vf-cart-bonus__title {
+    margin: 0 0 3px;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #1A1A1A;
+    font-weight: 600;
+  }
+  .vf-cart-bonus__title strong {
+    color: #6B1212;
+    font-weight: 800;
+  }
+  .vf-cart-bonus__sub {
+    margin: 0;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.4;
+  }
+  .vf-cart-bonus__pill {
+    display: inline-block;
+    background: #DC2626;
+    color: #FACC15;
+    font-weight: 900;
+    font-size: 10.5px;
+    letter-spacing: 0.8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-top: 10px;
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    var qtyDecrButtons = document.querySelectorAll('[data-cart-qty-decrease]');
+    var qtyIncrButtons = document.querySelectorAll('[data-cart-qty-increase]');
+    var qtyInputs = document.querySelectorAll('[data-cart-qty-input]');
+    var removeLinks = document.querySelectorAll('[data-cart-remove]');
+
+    function updateLine(key, quantity) {
+      fetch('{{ routes.cart_change_url }}.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: quantity })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function () { window.location.reload(); })
+        .catch(function () { window.location.reload(); });
+    }
+
+    qtyDecrButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.dataset.key;
+        var input = document.querySelector('[data-cart-qty-input][data-key="' + key + '"]');
+        var val = parseInt(input.value, 10) - 1;
+        if (val < 0) val = 0;
+        updateLine(key, val);
+      });
+    });
+    qtyIncrButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var key = btn.dataset.key;
+        var input = document.querySelector('[data-cart-qty-input][data-key="' + key + '"]');
+        var val = parseInt(input.value, 10) + 1;
+        updateLine(key, val);
+      });
+    });
+    qtyInputs.forEach(function (input) {
+      input.addEventListener('change', function () {
+        var val = parseInt(input.value, 10);
+        if (isNaN(val) || val < 0) val = 0;
+        updateLine(input.dataset.key, val);
+      });
+    });
+    removeLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        updateLine(link.dataset.key, 0);
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Carrinho",
+  "tag": "section",
+  "class": "section section--main-cart",
+  "settings": [],
+  "enabled_on": {
+    "templates": ["cart"]
+  }
+}
+{% endschema %}
+

@@ -1,0 +1,290 @@
+{%- comment -%}
+  vf-selos-ticker — Marquee horizontal infinito com selos da marca.
+  CSS-only (sem JS). Loop suave: duplica o conteúdo via Liquid e anima translateX.
+  Configurável: velocidade, número de selos, cores via Theme Editor.
+{%- endcomment -%}
+
+{%- comment -%}
+  PROMO TEMPORARIA — Frete gratis sem minimo, so quinta 30/07 e sexta
+  31/07/2026. Data pega do fuso da loja ('now'), liga/desliga sozinho.
+{%- endcomment -%}
+{%- assign ticker_today = 'now' | date: '%Y-%m-%d' -%}
+{%- assign ticker_frete_promo = false -%}
+{%- if ticker_today == '2026-07-30' or ticker_today == '2026-07-31' or section.settings.preview_frete_promo -%}
+  {%- assign ticker_frete_promo = true -%}
+{%- endif -%}
+
+<section class="vf-ticker{% if ticker_frete_promo %} vf-ticker--promo{% endif %}" aria-label="Selos e diferenciais da marca">
+  <div class="vf-ticker__track" style="--vf-ticker-duration: {{ section.settings.duration | default: 30 }}s;">
+
+    {%- comment -%} Duplicamos os blocos 2x pro loop ficar contínuo {%- endcomment -%}
+    {%- for repeat in (1..2) -%}
+      <div class="vf-ticker__group" aria-hidden="{%- if repeat == 2 -%}true{%- else -%}false{%- endif -%}">
+        {%- if ticker_frete_promo -%}
+          <div class="vf-ticker__item vf-ticker__item--promo">
+            <span class="vf-ticker__icon" aria-hidden="true">🚚</span>
+            <span class="vf-ticker__text">FRETE GRÁTIS SEM MÍNIMO — acaba em <strong class="vf-ann-countdown" data-countdown="2026-08-01T00:00:00-03:00">--:--:--</strong></span>
+          </div>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          <div class="vf-ticker__item" {{ block.shopify_attributes }}>
+            <span class="vf-ticker__icon" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'leaf' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19C5 10 11 5 20 5c0 9-6 14-15 14z"/><path d="M5 19l9-9"/></svg>
+                {%- when 'shield' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3 8-8 9-5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+                {%- when 'flask' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7 14h10"/></svg>
+                {%- when 'globe' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+                {%- when 'heart' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C6 16 3 13 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4-3 7-9 12z"/></svg>
+                {%- when 'check' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+                {%- when 'star' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
+                {%- when 'bottle' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v3l2 3v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9z"/><path d="M8 12h8"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>
+              {%- endcase -%}
+            </span>
+            <span class="vf-ticker__text">{{ block.settings.text }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% stylesheet %}
+  .vf-ticker {
+    background: #FFFFFF;
+    padding: 18px 0;
+    overflow: hidden;
+    position: relative;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+  }
+
+  /* Máscaras nas laterais pra fade-out elegante */
+  .vf-ticker::before,
+  .vf-ticker::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .vf-ticker::before {
+    left: 0;
+    background: linear-gradient(to right, #FFFFFF, rgba(255,255,255,0));
+  }
+  .vf-ticker::after {
+    right: 0;
+    background: linear-gradient(to left, #FFFFFF, rgba(255,255,255,0));
+  }
+
+  .vf-ticker__track {
+    display: flex;
+    width: max-content;
+    animation: vf-ticker-scroll var(--vf-ticker-duration, 30s) linear infinite;
+  }
+
+  .vf-ticker__group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .vf-ticker__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    margin: 0 12px;
+    background: #ECFFE5;
+    color: #009933;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+  }
+
+  /* ==================== Ticker em promo — frete gratis (vermelho) ==================== */
+  .vf-ticker--promo {
+    background: #FFF1F1;
+    border-top-color: #FFD4D4;
+    border-bottom-color: #FFD4D4;
+  }
+  .vf-ticker--promo::before {
+    background: linear-gradient(to right, #FFF1F1, rgba(255,241,241,0));
+  }
+  .vf-ticker--promo::after {
+    background: linear-gradient(to left, #FFF1F1, rgba(255,241,241,0));
+  }
+  .vf-ticker--promo .vf-ticker__item {
+    background: #FFE1E1;
+    color: #C11524;
+  }
+  .vf-ticker__item--promo {
+    background: #E11D2E !important;
+    color: #ffffff !important;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    animation: vf-ticker-promo-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes vf-ticker-promo-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 46, 0.35); }
+    50% { box-shadow: 0 0 0 6px rgba(225, 29, 46, 0); }
+  }
+  .vf-ticker__item--promo .vf-ann-countdown {
+    display: inline-block;
+    background: rgba(255,255,255,0.25);
+    padding: 1px 8px;
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
+    margin-left: 2px;
+  }
+
+  .vf-ticker__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .vf-ticker__icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .vf-ticker__text {
+    line-height: 1;
+  }
+
+  @keyframes vf-ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Pausa no hover (desktop) */
+  @media (hover: hover) {
+    .vf-ticker:hover .vf-ticker__track {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Acessibilidade: respeita reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .vf-ticker__track {
+      animation: none;
+      transform: translateX(0);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .vf-ticker__group:nth-child(2) {
+      display: none;
+    }
+  }
+
+  /* Mobile: padding e fonte um pouco menores */
+  @media (max-width: 749px) {
+    .vf-ticker {
+      padding: 14px 0;
+    }
+    .vf-ticker__item {
+      padding: 6px 14px;
+      font-size: 13px;
+      margin: 0 8px;
+    }
+    .vf-ticker__icon svg {
+      width: 16px;
+      height: 16px;
+    }
+    .vf-ticker::before,
+    .vf-ticker::after {
+      width: 30px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF Selos Ticker",
+  "tag": "section",
+  "class": "section-vf-ticker",
+  "settings": [
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "Duração da animação (segundos)",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "s"
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_frete_promo",
+      "label": "🔴 PRÉVIA: forçar visual da promo de frete grátis (30-31/07)",
+      "info": "Ative só pra testar/ver como fica. Desative depois — nos dias 30 e 31/07 ela liga sozinha, não precisa disso.",
+      "default": false
+    },
+    {
+      "type": "paragraph",
+      "content": "Cada bloco é um selo. Recomendado: 5-8 selos pra um loop equilibrado."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "selo",
+      "name": "Selo",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone",
+          "options": [
+            { "value": "leaf", "label": "Folha" },
+            { "value": "shield", "label": "Escudo" },
+            { "value": "flask", "label": "Laboratório" },
+            { "value": "globe", "label": "Brasil/Globo" },
+            { "value": "heart", "label": "Coração (cruelty free)" },
+            { "value": "check", "label": "Check (aprovado)" },
+            { "value": "star", "label": "Estrela" },
+            { "value": "bottle", "label": "Frasco" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Selo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VF Selos Ticker",
+      "blocks": [
+        { "type": "selo", "settings": { "icon": "leaf", "text": "Vegetal 100%" } },
+        { "type": "selo", "settings": { "icon": "shield", "text": "Metais Free" } },
+        { "type": "selo", "settings": { "icon": "check", "text": "+100 tipos de parasitas" } },
+        { "type": "selo", "settings": { "icon": "flask", "text": "Padrão Farmacêutico" } },
+        { "type": "selo", "settings": { "icon": "globe", "text": "Manipulado no Brasil" } },
+        { "type": "selo", "settings": { "icon": "heart", "text": "Cruelty Free" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

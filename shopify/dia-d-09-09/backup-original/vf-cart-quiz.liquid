@@ -1,0 +1,550 @@
+{%- comment -%}
+  vf-cart-quiz — Modal interceptor antes do checkout
+  Coleta 4 respostas (sintomas, histórico, contraindicações, ciência)
+  Anexa respostas em cart attributes e libera o checkout
+{%- endcomment -%}
+
+<div class="vf-quiz" id="vf-quiz" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="vf-quiz-title">
+  <div class="vf-quiz__backdrop" data-vf-quiz-close></div>
+
+  <div class="vf-quiz__panel" role="document">
+    <button type="button" class="vf-quiz__close" data-vf-quiz-close aria-label="Fechar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <header class="vf-quiz__header">
+      <div class="vf-quiz__progress" aria-hidden="true">
+        <span class="vf-quiz__progress-bar" id="vf-quiz-progress-bar" style="width: 33%;"></span>
+      </div>
+      <p class="vf-quiz__step-counter">Passo <span id="vf-quiz-step-current">1</span> de 3</p>
+      <h2 id="vf-quiz-title" class="vf-quiz__title">Antes de finalizar, conta pra gente</h2>
+    </header>
+
+    <div class="vf-quiz__body">
+
+      {%- comment -%} STEP 1 — Sintomas (multi) {%- endcomment -%}
+      <fieldset class="vf-quiz__step is-active" data-step="1">
+        <legend class="vf-quiz__legend">Quais desses sinais você tem percebido em você ou no seu filho?</legend>
+        <p class="vf-quiz__hint">Marque todos que se aplicam (sem julgamento — isso fica entre nós).</p>
+        <div class="vf-quiz__options vf-quiz__options--grid">
+          {%- assign sintomas = 'Cansaço sem motivo aparente|Sono agitado / bruxismo|Coceira no ânus ou nariz|Dor de barriga ou inchaço frequente|Falta de apetite ou apetite descontrolado|Irritabilidade / mudança de humor|Manchas na pele / queda de cabelo|Nenhum sintoma específico, é prevenção' | split: '|' -%}
+          {%- for s in sintomas -%}
+            <label class="vf-quiz__option vf-quiz__option--check">
+              <input type="checkbox" name="sintomas" value="{{ s | escape }}" data-vf-quiz-input>
+              <span class="vf-quiz__option-box"></span>
+              <span class="vf-quiz__option-label">{{ s }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      {%- comment -%} STEP 2 — Histórico {%- endcomment -%}
+      <fieldset class="vf-quiz__step" data-step="2">
+        <legend class="vf-quiz__legend">Você já realizou algum protocolo de desparasitação natural antes?</legend>
+        <div class="vf-quiz__options">
+          {%- assign historico = 'Sim, já fiz no passado|Não, é minha primeira vez|Estou em outro protocolo / tratamento atualmente' | split: '|' -%}
+          {%- for h in historico -%}
+            <label class="vf-quiz__option vf-quiz__option--radio">
+              <input type="radio" name="historico" value="{{ h | escape }}" data-vf-quiz-input>
+              <span class="vf-quiz__option-box vf-quiz__option-box--radio"></span>
+              <span class="vf-quiz__option-label">{{ h }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      {%- comment -%} STEP 3 — Contraindicações {%- endcomment -%}
+      <fieldset class="vf-quiz__step" data-step="3">
+        <legend class="vf-quiz__legend">Antes de continuar, confirme:</legend>
+        <p class="vf-quiz__hint">Pra te recomendar o protocolo com segurança.</p>
+        <div class="vf-quiz__options">
+          <label class="vf-quiz__option vf-quiz__option--radio">
+            <input type="radio" name="contraindicacoes" value="Confirmo que NÃO estou grávida, amamentando, nem em uso de medicamento controlado" data-vf-quiz-input>
+            <span class="vf-quiz__option-box vf-quiz__option-box--radio"></span>
+            <span class="vf-quiz__option-label">Confirmo que <strong>NÃO</strong> estou grávida, amamentando, nem em uso de medicamento controlado</span>
+          </label>
+          <label class="vf-quiz__option vf-quiz__option--radio">
+            <input type="radio" name="contraindicacoes" value="Estou em uma dessas condições — vou consultar meu médico antes" data-vf-quiz-input>
+            <span class="vf-quiz__option-box vf-quiz__option-box--radio"></span>
+            <span class="vf-quiz__option-label">Estou em uma dessas condições — vou consultar meu médico antes</span>
+          </label>
+        </div>
+      </fieldset>
+
+    </div>
+
+    <footer class="vf-quiz__footer">
+      <button type="button" class="vf-quiz__btn vf-quiz__btn--secondary" id="vf-quiz-back" disabled>
+        ← Voltar
+      </button>
+      <button type="button" class="vf-quiz__btn vf-quiz__btn--primary" id="vf-quiz-next" disabled>
+        Próximo →
+      </button>
+    </footer>
+
+  </div>
+</div>
+
+<style>
+  .vf-quiz {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .vf-quiz[hidden] { display: none; }
+
+  .vf-quiz__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: vf-quiz-fade-in 0.3s ease;
+  }
+
+  .vf-quiz__panel {
+    position: relative;
+    background: #FFFFFF;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    animation: vf-quiz-slide-up 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  .vf-quiz__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    color: #777;
+    z-index: 2;
+    transition: background 0.2s ease;
+  }
+  .vf-quiz__close:hover { background: #F5F5F5; color: #1A1A1A; }
+
+  .vf-quiz__header {
+    padding: 32px 32px 24px;
+    border-bottom: 1px solid #F0F0F0;
+  }
+  .vf-quiz__progress {
+    width: 100%;
+    height: 4px;
+    background: #E8E8E8;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .vf-quiz__progress-bar {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #5EBC43 0%, #1B5E20 100%);
+    transition: width 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+  .vf-quiz__step-counter {
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .vf-quiz__title {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(22px, 3vw, 28px);
+    color: #1B5E20;
+    margin: 0 0 8px;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+  .vf-quiz__sub {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .vf-quiz__body {
+    padding: 24px 32px;
+    flex: 1;
+  }
+
+  .vf-quiz__step { display: none; border: none; padding: 0; margin: 0; }
+  .vf-quiz__step.is-active { display: block; }
+
+  .vf-quiz__legend {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: 19px;
+    color: #1A1A1A;
+    margin: 0 0 8px;
+    padding: 0;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .vf-quiz__hint {
+    font-size: 13px;
+    color: #777;
+    margin: 0 0 16px;
+    font-style: italic;
+  }
+
+  .vf-quiz__options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .vf-quiz__options--grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (max-width: 540px) {
+    .vf-quiz__options--grid { grid-template-columns: 1fr; }
+  }
+
+  .vf-quiz__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1.5px solid #E8E8E8;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #FFFFFF;
+  }
+  .vf-quiz__option:hover { border-color: #C0DE96; background: #FAFEF5; }
+  .vf-quiz__option input { position: absolute; opacity: 0; pointer-events: none; }
+  .vf-quiz__option:has(input:checked) {
+    border-color: #5EBC43;
+    background: #F0FDF4;
+  }
+
+  .vf-quiz__option-box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #BBB;
+    border-radius: 6px;
+    margin-top: 1px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  .vf-quiz__option-box--radio { border-radius: 50%; }
+  .vf-quiz__option:has(input:checked) .vf-quiz__option-box {
+    border-color: #5EBC43;
+    background: #5EBC43;
+  }
+  .vf-quiz__option:has(input:checked) .vf-quiz__option-box::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%) rotate(45deg);
+    width: 6px;
+    height: 11px;
+    border: solid #FFFFFF;
+    border-width: 0 2.5px 2.5px 0;
+  }
+  .vf-quiz__option:has(input:checked) .vf-quiz__option-box--radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: none;
+  }
+
+  .vf-quiz__option-label {
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: #1A1A1A;
+    flex: 1;
+  }
+  .vf-quiz__option-label strong { color: #1B5E20; }
+
+  .vf-quiz__option--consent {
+    background: #FFF8E1;
+    border-color: #FCD34D;
+  }
+  .vf-quiz__option--consent:has(input:checked) {
+    background: #FFF8E1;
+    border-color: #1B5E20;
+  }
+
+  .vf-quiz__info {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: #FEF3C7;
+    border-left: 3px solid #D97706;
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #92400E;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .vf-quiz__info svg { flex-shrink: 0; margin-top: 1px; }
+
+  .vf-quiz__footer {
+    padding: 20px 32px 28px;
+    border-top: 1px solid #F0F0F0;
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    background: #FAFAFA;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .vf-quiz__btn {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .vf-quiz__btn--primary {
+    background: #5EBC43;
+    color: #FFFFFF;
+    box-shadow: 0 2px 0 #1B5E20;
+  }
+  .vf-quiz__btn--primary:hover:not(:disabled) {
+    background: #1B5E20;
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 #1B5E20;
+  }
+  .vf-quiz__btn--secondary {
+    background: transparent;
+    color: #555;
+    border-color: #E0E0E0;
+  }
+  .vf-quiz__btn--secondary:hover:not(:disabled) {
+    background: #F5F5F5;
+    color: #1A1A1A;
+  }
+  .vf-quiz__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  @keyframes vf-quiz-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes vf-quiz-slide-up {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 540px) {
+    .vf-quiz {
+      padding: 0;
+      align-items: stretch;
+      justify-content: stretch;
+    }
+    .vf-quiz__panel {
+      max-width: 100%;
+      width: 100%;
+      max-height: 100dvh;
+      height: 100dvh;
+      border-radius: 0;
+      animation: vf-quiz-slide-mobile 0.35s ease;
+      padding-top: env(safe-area-inset-top, 0);
+    }
+    @keyframes vf-quiz-slide-mobile {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .vf-quiz__header {
+      padding: 20px 20px 16px;
+      padding-top: calc(20px + env(safe-area-inset-top, 0px));
+    }
+    .vf-quiz__body { padding: 18px 20px; }
+    .vf-quiz__footer {
+      padding: 14px 20px 20px;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+    .vf-quiz__title { font-size: 22px; }
+    .vf-quiz__close {
+      top: calc(12px + env(safe-area-inset-top, 0px));
+      right: 12px;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  var quiz = document.getElementById('vf-quiz');
+  if (!quiz) return;
+
+  var TOTAL_STEPS = 3;
+  var currentStep = 1;
+  var answers = { sintomas: [], historico: '', contraindicacoes: '' };
+  var isSubmitting = false;
+
+  var bar = document.getElementById('vf-quiz-progress-bar');
+  var counter = document.getElementById('vf-quiz-step-current');
+  var btnBack = document.getElementById('vf-quiz-back');
+  var btnNext = document.getElementById('vf-quiz-next');
+
+  function openQuiz() {
+    quiz.hidden = false;
+    quiz.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeQuiz() {
+    quiz.hidden = true;
+    quiz.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function goToStep(n) {
+    if (n < 1 || n > TOTAL_STEPS) return;
+    currentStep = n;
+    quiz.querySelectorAll('.vf-quiz__step').forEach(function(s) {
+      s.classList.toggle('is-active', parseInt(s.dataset.step, 10) === n);
+    });
+    counter.textContent = n;
+    bar.style.width = (n / TOTAL_STEPS * 100) + '%';
+    btnBack.disabled = (n === 1);
+    // Botão "Próximo" só no step 1 (multi-seleção). Steps 2 e 3 avançam sozinhos ao selecionar.
+    btnNext.style.display = (n === 1) ? '' : 'none';
+    validateStep();
+  }
+
+  function validateStep() {
+    var valid = false;
+    if (currentStep === 1) {
+      // Sintomas — pelo menos 1 marcado
+      var checked = quiz.querySelectorAll('[name="sintomas"]:checked');
+      valid = checked.length > 0;
+    } else if (currentStep === 2) {
+      valid = !!quiz.querySelector('[name="historico"]:checked');
+    } else if (currentStep === 3) {
+      valid = !!quiz.querySelector('[name="contraindicacoes"]:checked');
+    }
+    btnNext.disabled = !valid;
+  }
+
+  // Captura respostas
+  quiz.addEventListener('change', function(e) {
+    if (!e.target.matches('[data-vf-quiz-input]')) return;
+    var name = e.target.name;
+    if (name === 'sintomas') {
+      answers.sintomas = Array.from(quiz.querySelectorAll('[name="sintomas"]:checked')).map(function(i) { return i.value; });
+    } else {
+      answers[name] = e.target.checked ? e.target.value : '';
+    }
+    validateStep();
+
+    // Auto-avanço no step 2 (histórico) — escolha única, pula sozinho após ver a seleção
+    if (currentStep === 2 && name === 'historico') {
+      setTimeout(function() {
+        if (currentStep === 2) goToStep(3);
+      }, 350);
+    }
+
+    // Auto-submit no step 3 (última pergunta) — pequeno delay pra usuário ver a seleção
+    if (currentStep === 3 && name === 'contraindicacoes' && !isSubmitting) {
+      isSubmitting = true;
+      // reexibe o botão só pra mostrar o feedback "Enviando..." (estava oculto no step 3)
+      btnNext.style.display = '';
+      btnNext.textContent = 'Enviando...';
+      btnNext.disabled = true;
+      setTimeout(submitAnswersAndCheckout, 350);
+    }
+  });
+
+  btnNext.addEventListener('click', function() {
+    if (currentStep < TOTAL_STEPS) goToStep(currentStep + 1);
+  });
+  btnBack.addEventListener('click', function() {
+    if (currentStep > 1) goToStep(currentStep - 1);
+  });
+  quiz.querySelectorAll('[data-vf-quiz-close]').forEach(function(el) {
+    el.addEventListener('click', closeQuiz);
+  });
+
+  // ESC fecha
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !quiz.hidden) closeQuiz();
+  });
+
+  function submitAnswersAndCheckout() {
+    // Salva respostas em cart.note (texto único) em vez de attributes
+    // Motivo: ETL externo mapeia attributes pras colunas UTM por ORDEM, contaminando o tracking
+    // Cart.note é texto livre, aparece no admin Shopify mas não é mapeado pelo ETL
+    var sintomas = answers.sintomas.join('; ') || '(nenhum)';
+    var noteLines = [
+      '--- Quiz Pré-Checkout VermeFree ---',
+      'Sintomas: ' + sintomas,
+      'Histórico: ' + answers.historico,
+      'Contraindicações: ' + answers.contraindicacoes,
+      'Respondido em: ' + new Date().toISOString()
+    ];
+    var noteText = noteLines.join('\n');
+
+    fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ note: noteText })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      // Submete o form original do checkout
+      var originalForm = document.querySelector('form[data-vf-cart-form], form[action*="/cart"]');
+      if (originalForm) {
+        var hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'checkout';
+        hidden.value = '1';
+        originalForm.appendChild(hidden);
+        originalForm.submit();
+      } else {
+        // Fallback: navega direto pro checkout
+        window.location.href = '/checkout';
+      }
+    })
+    .catch(function(err) {
+      console.error('Erro ao salvar respostas:', err);
+      isSubmitting = false;
+      btnNext.disabled = false;
+      btnNext.textContent = 'Próximo →';
+      alert('Não foi possível salvar suas respostas. Tente novamente.');
+    });
+  }
+
+  // Interceptor do botão "Finalizar compra"
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button[name="checkout"]');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openQuiz();
+  }, true);
+})();
+</script>
+

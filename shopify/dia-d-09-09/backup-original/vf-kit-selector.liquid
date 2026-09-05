@@ -1,0 +1,645 @@
+{%- comment -%}
+  VermeFree — Kit Selector
+  Grid de ate 4 cards de produto, estilo Blessy.
+  Foto em container aspect-ratio 1:1 com fundo bege editorial.
+  Imagem com object-fit: contain pra nunca extrapolar.
+{%- endcomment -%}
+
+{%- comment -%}
+  PROMO TEMPORARIA — Dia D: 10% off + frete gratis sem minimo, so sexta
+  07/08 e sábado 08/08/2026 (mesma janela do desconto agendado no Shopify).
+  Data pega do fuso da loja ('now'), entao liga/desliga sozinho. Tem um
+  checkbox de previa pra testar sem esperar a data chegar.
+{%- endcomment -%}
+{%- assign vfkit_today = 'now' | date: '%Y-%m-%d' -%}
+{%- assign vfkit_frete_promo = false -%}
+{%- if vfkit_today == '2026-08-07' or vfkit_today == '2026-08-08' or section.settings.preview_frete_promo -%}
+  {%- assign vfkit_frete_promo = true -%}
+{%- endif -%}
+
+<section class="vf-kit" aria-labelledby="vf-kit-heading">
+  <div class="vf-kit__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 id="vf-kit-heading" class="vf-kit__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="vf-kit__subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="vf-kit__grid">
+      {%- for block in section.blocks -%}
+        {%- assign product = block.settings.product -%}
+        {%- assign link = '#' -%}
+        {%- if product != blank -%}
+          {%- assign link = product.url -%}
+        {%- elsif block.settings.product_link != blank -%}
+          {%- assign link = block.settings.product_link -%}
+        {%- endif -%}
+
+        <article class="vf-kit__card vf-kit__card--{{ block.settings.badge_style }}{% if vfkit_frete_promo %} vf-kit__card--promo{% endif %}" {{ block.shopify_attributes }}>
+          {%- if vfkit_frete_promo -%}
+            <span class="vf-kit__promo-ribbon">🔥 10% OFF + frete grátis</span>
+          {%- endif -%}
+          <a href="{{ link }}" class="vf-kit__media-link" aria-label="{{ block.settings.name | escape }}">
+            <div class="vf-kit__media">
+              {%- if block.settings.badge != blank -%}
+                <span class="vf-kit__badge vf-kit__badge--{{ block.settings.badge_style }}">{{ block.settings.badge }}</span>
+              {%- endif -%}
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.name | escape }}"
+                  class="vf-kit__img"
+                  loading="lazy"
+                >
+              {%- elsif product.featured_image != blank -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 800 }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  class="vf-kit__img"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="vf-kit__img vf-kit__img--placeholder"></div>
+              {%- endif -%}
+            </div>
+          </a>
+
+          <div class="vf-kit__body">
+            {%- if block.settings.name != blank -%}
+              <h3 class="vf-kit__name">{{ block.settings.name }}</h3>
+            {%- endif -%}
+            {%- if block.settings.age_label != blank -%}
+              <p class="vf-kit__age">{{ block.settings.age_label }}</p>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="vf-kit__desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+
+            <div class="vf-kit__price-box">
+              {%- if vfkit_frete_promo and product != blank and product.price > 0 -%}
+                {%- assign kit_diad_price = product.price | times: 0.9 | round -%}
+                <span class="vf-kit__price-compare">de {{ product.price | money }}</span>
+                {%- if block.settings.installment != blank -%}
+                  <span class="vf-kit__installment">{{ block.settings.installment }}</span>
+                {%- endif -%}
+                <span class="vf-kit__price">ou {{ kit_diad_price | money }} à vista</span>
+              {%- else -%}
+                {%- if block.settings.installment != blank -%}
+                  <span class="vf-kit__installment">{{ block.settings.installment }}</span>
+                {%- endif -%}
+                <span class="vf-kit__price">ou {{ block.settings.price }} à vista</span>
+              {%- endif -%}
+            </div>
+
+            <a href="{{ link }}" class="vf-kit__cta{% if vfkit_frete_promo %} vf-kit__cta--promo{% endif %}" aria-label="{{ block.settings.cta_label | escape }}">
+              {%- if vfkit_frete_promo -%}🔥 Garantir 10% OFF + frete{%- else -%}{{ block.settings.cta_label }}{%- endif -%}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    {%- if vfkit_frete_promo -%}
+      <div class="vf-kit__promo">
+        <span class="vf-kit__promo-badge">{{ section.settings.promo_badge_text }}</span>
+        <h3 class="vf-kit__promo-title">{{ section.settings.promo_title }}</h3>
+        <p class="vf-kit__promo-sub">{{ section.settings.promo_subtitle }}</p>
+        <div class="vf-kit__promo-countdown" data-kit-countdown="2026-08-09T00:00:00-03:00">
+          <div class="vf-kit__promo-unit">
+            <span class="vf-kit__promo-num" data-cd="hours">00</span>
+            <span class="vf-kit__promo-label">horas</span>
+          </div>
+          <span class="vf-kit__promo-sep">:</span>
+          <div class="vf-kit__promo-unit">
+            <span class="vf-kit__promo-num" data-cd="mins">00</span>
+            <span class="vf-kit__promo-label">min</span>
+          </div>
+          <span class="vf-kit__promo-sep">:</span>
+          <div class="vf-kit__promo-unit">
+            <span class="vf-kit__promo-num" data-cd="secs">00</span>
+            <span class="vf-kit__promo-label">seg</span>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .vf-kit {
+    padding: clamp(48px, 7vw, 80px) 0;
+    background: #fafafa;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .vf-kit__container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .vf-kit__heading {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    color: var(--vf-green-dark, #1B5E20);
+    text-align: center;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.01em;
+  }
+
+  .vf-kit__subheading {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #1A1A1A;
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto 48px auto;
+    font-weight: 500;
+  }
+
+  .vf-kit__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  .vf-kit__card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .vf-kit__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+
+  .vf-kit__media-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  .vf-kit__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #F5EDE0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .vf-kit__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .vf-kit__img--placeholder {
+    width: 60%;
+    height: 60%;
+    background: linear-gradient(135deg, #c0de96, #5ebc43);
+    border-radius: 12px;
+  }
+
+  .vf-kit__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 999px;
+    z-index: 2;
+  }
+  .vf-kit__badge--best { background: #5ebc43; color: #ffffff; }
+  .vf-kit__badge--kids { background: #C0DE96; color: #1a1a1a; }
+  .vf-kit__badge--family { background: #FBBF24; color: #1a1a1a; }
+  .vf-kit__badge--default { background: #1a1a1a; color: #ffffff; }
+
+  .vf-kit__body {
+    padding: 20px 18px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .vf-kit__name {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.2;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .vf-kit__age {
+    font-size: 12px;
+    color: #777;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .vf-kit__desc {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #555;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .vf-kit__price-box {
+    background: #F0FDF4;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid #DCFCE7;
+  }
+  .vf-kit__installment {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: 22px;
+    color: var(--vf-green-dark, #1B5E20);
+    line-height: 1.15;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+  .vf-kit__price {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #6B6B6B;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+
+  .vf-kit__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #5ebc43;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .vf-kit__cta:hover {
+    background: #009933;
+  }
+  .vf-kit__cta span { transition: transform 0.2s ease; }
+  .vf-kit__cta:hover span { transform: translateX(4px); }
+
+  /* ==================== Card em promo — frete gratis (vermelho) ==================== */
+  .vf-kit__card--promo {
+    overflow: visible;
+    position: relative;
+    border: 2px solid #E11D2E;
+  }
+  .vf-kit__promo-ribbon {
+    position: absolute;
+    top: -12px;
+    left: 14px;
+    background: #E11D2E;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    box-shadow: 0 3px 10px rgba(225, 29, 46, 0.4);
+    z-index: 3;
+    animation: vf-kit-ribbon-bounce 1.4s ease-in-out infinite;
+    white-space: nowrap;
+  }
+  @keyframes vf-kit-ribbon-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  .vf-kit__card--promo .vf-kit__price-box {
+    background: #FFF1F1;
+    border-color: #FFD4D4;
+  }
+  .vf-kit__card--promo .vf-kit__installment { color: #E11D2E; }
+  .vf-kit__card--promo .vf-kit__price { color: #C11524; font-weight: 700; }
+  .vf-kit__price-compare {
+    display: block;
+    font-size: 12px;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 2px;
+  }
+  .vf-kit__cta--promo {
+    background: #E11D2E;
+    position: relative;
+    overflow: hidden;
+  }
+  .vf-kit__cta--promo:hover { background: #C11524; }
+  .vf-kit__cta--promo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: vf-cta-shimmer 2.4s ease-in-out infinite;
+  }
+  @keyframes vf-cta-shimmer {
+    0% { left: -60%; }
+    50% { left: 130%; }
+    100% { left: 130%; }
+  }
+
+  @media (max-width: 989px) {
+    .vf-kit__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+  @media (max-width: 540px) {
+    .vf-kit__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .vf-kit__container { padding: 0 16px; }
+    .vf-kit__name { font-size: 17px; }
+    .vf-kit__age { font-size: 12px; }
+    .vf-kit__benefit-list li { font-size: 12.5px; }
+    .vf-kit__price-row { gap: 4px; flex-direction: column; align-items: flex-start; }
+    .vf-kit__cta { padding: 12px 16px; font-size: 13px; }
+    .vf-kit__body { padding: 16px 14px; gap: 10px; }
+    .vf-kit__badge { font-size: 9px; padding: 4px 8px; }
+  }
+
+  /* ==================== PROMO — frete gratis sem minimo ==================== */
+  .vf-kit__promo {
+    margin: 40px auto 0;
+    max-width: 720px;
+    background: linear-gradient(135deg, #E11D2E 0%, #C11524 100%);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    color: #ffffff;
+    animation: vf-kit-promo-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes vf-kit-promo-pulse {
+    0%, 100% { box-shadow: 0 8px 24px rgba(225, 29, 46, 0.25); }
+    50% { box-shadow: 0 8px 32px rgba(225, 29, 46, 0.45); }
+  }
+  .vf-kit__promo-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .vf-kit__promo-title {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(22px, 3.2vw, 32px);
+    line-height: 1.2;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .vf-kit__promo-sub {
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.92);
+    max-width: 520px;
+    margin: 0 auto 24px;
+    font-weight: 500;
+  }
+  .vf-kit__promo-countdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .vf-kit__promo-unit {
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 12px;
+    padding: 10px 16px;
+    min-width: 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .vf-kit__promo-num {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(24px, 3.6vw, 34px);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .vf-kit__promo-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.85);
+  }
+  .vf-kit__promo-sep {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(22px, 3.2vw, 30px);
+    opacity: 0.7;
+    padding-bottom: 16px;
+  }
+
+  @media (max-width: 540px) {
+    .vf-kit__promo { padding: 26px 18px; margin-top: 28px; }
+    .vf-kit__promo-unit { min-width: 58px; padding: 8px 10px; }
+  }
+{% endstylesheet %}
+
+<script>
+(function() {
+  var wrap = document.querySelector('[data-kit-countdown]');
+  if (!wrap) return;
+  var target = new Date(wrap.dataset.kitCountdown).getTime();
+  var elH = wrap.querySelector('[data-cd="hours"]');
+  var elM = wrap.querySelector('[data-cd="mins"]');
+  var elS = wrap.querySelector('[data-cd="secs"]');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      if (elH) elH.textContent = '00';
+      if (elM) elM.textContent = '00';
+      if (elS) elS.textContent = '00';
+      return;
+    }
+    var h = Math.floor(diff / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    if (elH) elH.textContent = pad(h);
+    if (elM) elM.textContent = pad(m);
+    if (elS) elS.textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "VF Kit Selector",
+  "tag": "section",
+  "class": "vf-kit-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titulo",
+      "default": "Escolha seu protocolo."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtitulo",
+      "default": "4 formulas para cada fase da vida. Mesma seriedade. Mesmo resultado."
+    },
+    {
+      "type": "header",
+      "content": "Promo Dia D · 10% OFF + frete grátis (07-08/08)"
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_frete_promo",
+      "label": "🔴 PRÉVIA: forçar visual da promo Dia D",
+      "info": "Ative só pra testar/ver como fica. Desative depois — nos dias 07 e 08/08 ela liga sozinha, não precisa disso.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "promo_badge_text",
+      "label": "Selo",
+      "default": "🚨 Dia D · só 07 e 08/08"
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "label": "Título",
+      "default": "10% OFF + frete grátis sem mínimo em qualquer protocolo"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_subtitle",
+      "label": "Subtítulo",
+      "default": "Escolheu, chegou de graça e ainda mais barato. 10% off automático + frete grátis pra qualquer valor de compra, em qualquer canto do Brasil — só dias 07 e 08/08. Depois desse prazo, volta ao preço normal e frete grátis só acima de R$ 399."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "kit",
+      "name": "Kit",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Foto do produto" },
+        { "type": "text", "id": "badge", "label": "Badge" },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Cor do badge",
+          "options": [
+            { "value": "best", "label": "Verde (+ Vendido)" },
+            { "value": "kids", "label": "Verde claro (Kids)" },
+            { "value": "family", "label": "Amarelo (Familia)" },
+            { "value": "default", "label": "Preto" }
+          ],
+          "default": "default"
+        },
+        { "type": "text", "id": "name", "label": "Nome" },
+        { "type": "text", "id": "age_label", "label": "Faixa etaria" },
+        { "type": "textarea", "id": "description", "label": "Descricao (2 linhas max)" },
+        { "type": "text", "id": "price", "label": "Preco", "default": "R$ 337" },
+        { "type": "text", "id": "installment", "label": "Parcela", "default": "10x de R$ 40,93" },
+        { "type": "product", "id": "product", "label": "Produto (opcional)" },
+        { "type": "url", "id": "product_link", "label": "Link manual (se nao tiver produto)" },
+        { "type": "text", "id": "cta_label", "label": "Texto do botao", "default": "Quero esse" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "VF Kit Selector",
+      "blocks": [
+        {
+          "type": "kit",
+          "settings": {
+            "badge": "+ Vendido",
+            "badge_style": "best",
+            "name": "Protocolo Adulto",
+            "age_label": "10 anos +",
+            "description": "Combate +100 tipos de parasitas. A formula completa pro adulto.",
+            "price": "R$ 347",
+            "installment": "10x de R$ 40,93",
+            "cta_label": "Quero esse"
+          }
+        },
+        {
+          "type": "kit",
+          "settings": {
+            "badge": "Kids",
+            "badge_style": "kids",
+            "name": "Protocolo Kids",
+            "age_label": "2 a 4 anos",
+            "description": "Formula gentil pros pequenos, sem efeitos que derrubam.",
+            "price": "R$ 270",
+            "installment": "10x de R$ 31,85",
+            "cta_label": "Pro meu pequeno"
+          }
+        },
+        {
+          "type": "kit",
+          "settings": {
+            "badge": "Kids",
+            "badge_style": "kids",
+            "name": "Protocolo Kids",
+            "age_label": "5 a 9 anos",
+            "description": "Dose ajustada pra crianca em idade escolar.",
+            "price": "R$ 389",
+            "installment": "10x de R$ 45,89",
+            "cta_label": "Pro meu filho"
+          }
+        },
+        {
+          "type": "kit",
+          "settings": {
+            "badge": "Familia",
+            "badge_style": "family",
+            "name": "Kit Familia",
+            "age_label": "Todos juntos",
+            "description": "Os 3 protocolos com 15% off e frete gratis.",
+            "price": "R$ 1.150",
+            "installment": "10x de R$ 135,65",
+            "cta_label": "Montar meu kit"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

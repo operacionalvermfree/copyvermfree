@@ -1,0 +1,91 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "brand_primary": "#5EBC43",
+    "brand_accent": "#1b5e20",
+    "brand_light": "#C0DE96",
+    "bg_default": "#FAFAFA",
+    "text_default": "#1A1A1A",
+    "surface": "#FFFFFF",
+    "heading_font_picker_setting": "caprasimo_n4",
+    "body_font_picker_setting": "inter_n4",
+    "container_max_width": 1280,
+    "section_padding": 80,
+    "button_radius": 10,
+    "button_padding": 12,
+    "card_radius": 16,
+    "card_shadow": true,
+    "favicon": "shopify://shop_images/favicon-v1-verde-sobre-branco.png",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "shopify://shop_images/logo-shopify-medium.png",
+          "logo_height": 60,
+          "menu": "main-menu",
+          "color_scheme": "light"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "bg_color": "#1a1a1a",
+          "text_color": "#ffffff",
+          "show_badges": true,
+          "instagram_url": "https://www.instagram.com/vermefree/",
+          "tiktok_url": "",
+          "whatsapp_url": "https://api.whatsapp.com/send/?phone=553131575079&text=Ol%C3%A1,%20preciso%20de%20ajuda!&type=phone_number&app_absent=0",
+          "cnpj": "VermeFree - CNPJ 37.560.104/0001-60"
+        }
+      },
+      "vf-announcement-bar": {
+        "type": "vf-announcement-bar",
+        "settings": {
+          "show": true,
+          "preview_promo": true,
+          "bg_color": "#1b5e20",
+          "text_color": "#ffffff",
+          "interval": 5
+        }
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "15539626159989124859": {
+        "type": "shopify://apps/maxbundle/blocks/app-embed/469560a3-d600-4f5e-a767-2a4cdaceacca",
+        "disabled": true,
+        "settings": {}
+      },
+      "9752555012629308362": {
+        "type": "shopify://apps/parkour-facebook-pixel/blocks/threasury_pixel/f23b2ffe-4c53-446e-ad3a-7976ffbee5c2",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  },
+  "presets": {
+    "Default": {
+      "brand_primary": "#5EBC43",
+      "brand_accent": "#009933",
+      "brand_light": "#C0DE96",
+      "bg_default": "#FAFAFA",
+      "text_default": "#1A1A1A",
+      "surface": "#FFFFFF",
+      "container_max_width": 1280,
+      "section_padding": 80,
+      "button_radius": 10,
+      "button_padding": 12,
+      "card_radius": 16,
+      "card_shadow": true
+    }
+  }
+}
+

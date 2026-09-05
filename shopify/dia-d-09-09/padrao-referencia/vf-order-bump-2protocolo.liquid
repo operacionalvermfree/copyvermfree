@@ -1,0 +1,402 @@
+{%- comment -%}
+  vf-order-bump-2protocolo.liquid — ORDER BUMP 2º Protocolo (15% OFF)
+  Aparece na página do carrinho quando o Protocolo Adulto está no
+  carrinho e o cliente ainda não tem um 2º protocolo. Deixa escolher
+  entre outro Adulto, Kids 2-4 ou Kids 5-9 — nunca Kit Família.
+  O desconto de 15% é aplicado automaticamente no checkout pelo
+  desconto automático "Order Bump · 2º Protocolo 15% OFF (com
+  protocolo no carrinho)" — empilha com descontos de produto (ex.:
+  ação Dia D) conforme combinesWith configurado.
+{%- endcomment -%}
+
+{%- assign ADULTO_HANDLE = 'protocolo-desparasitacao-adulto-vermefree' -%}
+{%- assign KIDS24_HANDLE = 'antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos' -%}
+{%- assign KIDS59_HANDLE = 'antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' -%}
+{%- assign ADULTO_VARIANT_ID = 48772143415515 -%}
+{%- assign KIDS24_VARIANT_ID = 48772145250523 -%}
+{%- assign KIDS59_VARIANT_ID = 48772147085531 -%}
+
+{%- assign cart_has_adulto = false -%}
+{%- assign protocol_qty = 0 -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == ADULTO_HANDLE -%}
+    {%- assign cart_has_adulto = true -%}
+    {%- assign protocol_qty = protocol_qty | plus: item.quantity -%}
+  {%- elsif item.product.handle == KIDS24_HANDLE or item.product.handle == KIDS59_HANDLE -%}
+    {%- assign protocol_qty = protocol_qty | plus: item.quantity -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Dinamica Kids-irmaos: se tem uma faixa Kids no carrinho, oferece SO a outra faixa {%- endcomment -%}
+{%- assign cart_has_kids24 = false -%}
+{%- assign cart_has_kids59 = false -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == KIDS24_HANDLE -%}{%- assign cart_has_kids24 = true -%}{%- endif -%}
+  {%- if item.product.handle == KIDS59_HANDLE -%}{%- assign cart_has_kids59 = true -%}{%- endif -%}
+{%- endfor -%}
+{%- assign bump2_kids_sibling = false -%}
+{%- if cart_has_kids24 and cart_has_kids59 == false -%}
+  {%- assign bump2_kids_sibling = true -%}
+  {%- assign sib_variant = KIDS59_VARIANT_ID -%}
+  {%- assign sib_label = 'Kids 5 a 9 anos' -%}
+  {%- assign sib_price = 33065 -%}
+  {%- assign sib_full = 'de R$ 389,00' -%}
+  {%- assign sib_price_txt = 'R$ 330,65' -%}
+{%- elsif cart_has_kids59 and cart_has_kids24 == false -%}
+  {%- assign bump2_kids_sibling = true -%}
+  {%- assign sib_variant = KIDS24_VARIANT_ID -%}
+  {%- assign sib_label = 'Kids 2 a 4 anos' -%}
+  {%- assign sib_price = 22950 -%}
+  {%- assign sib_full = 'de R$ 270,00' -%}
+  {%- assign sib_price_txt = 'R$ 229,50' -%}
+{%- endif -%}
+
+{%- assign show_bump2 = false -%}
+{%- if bump2_kids_sibling -%}{%- assign show_bump2 = true -%}{%- endif -%}
+{%- if protocol_qty > 0 and protocol_qty < 2 -%}{%- assign show_bump2 = true -%}{%- endif -%}
+{%- if show_bump2 -%}
+  {%- assign adulto_product = all_products[ADULTO_HANDLE] -%}
+  {%- assign kids24_product = all_products[KIDS24_HANDLE] -%}
+  {%- assign kids59_product = all_products[KIDS59_HANDLE] -%}
+
+  <div class="vf-bump2{% if bump2_kids_sibling %} vf-bump2--red{% endif %}" data-vf-bump2>
+    <div class="vf-bump2__head">
+      {%- if bump2_kids_sibling -%}
+        <span class="vf-bump2__title">Tem criança de outra idade? Leve com 15% OFF 🌿</span>
+        {%- unless cart_has_adulto -%}
+        <span class="vf-bump2__desc">Cada idade tem a sua dose. Adicione o <strong>{{ sib_label }}</strong> pra criança — ou aproveite e leve também o <strong>protocolo adulto</strong> pra você — e cuide de todos na mesma lua nova, com 15% OFF.</span>
+        {%- else -%}
+        <span class="vf-bump2__desc">Cada idade tem a sua dose. Adicione o <strong>{{ sib_label }}</strong> e cuide de todos na mesma lua nova — a desparasitação natural funciona na constância.</span>
+        {%- endunless -%}
+      {%- else -%}
+        <span class="vf-bump2__title">Leve um 2º protocolo com 15% OFF 🌿</span>
+        <span class="vf-bump2__desc">Garanta o protocolo de outra pessoa da família — ou já adiante seu próximo ciclo. A desparasitação natural funciona na constância, e assim você não perde o ritmo.</span>
+      {%- endif -%}
+    </div>
+
+    <div class="vf-bump2__options" role="radiogroup" aria-label="Escolha o 2º protocolo">
+      {%- if bump2_kids_sibling -%}
+      <label class="vf-bump2__opt">
+        <input type="radio" name="vf-bump2-choice" value="sibling" data-vf-bump2-opt data-variant-id="{{ sib_variant }}" data-label="{{ sib_label }}" data-price="{{ sib_price }}" checked>
+        <span class="vf-bump2__opt-inner">
+          <span class="vf-bump2__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump2__opt-main">
+            <span class="vf-bump2__opt-dur">{{ sib_label }}</span>
+            <span class="vf-bump2__opt-sub">desparasitação natural infantil</span>
+          </span>
+          <span class="vf-bump2__opt-priceblock">
+            <span class="vf-bump2__opt-full">{{ sib_full }}</span>
+            <span class="vf-bump2__opt-price">{{ sib_price_txt }}</span>
+          </span>
+        </span>
+      </label>
+      {%- unless cart_has_adulto -%}
+      <label class="vf-bump2__opt">
+        <input type="radio" name="vf-bump2-choice" value="adulto" data-vf-bump2-opt data-variant-id="{{ ADULTO_VARIANT_ID }}" data-label="Protocolo Adulto" data-price="29495">
+        <span class="vf-bump2__opt-inner">
+          <span class="vf-bump2__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump2__opt-main">
+            <span class="vf-bump2__opt-dur">Protocolo Adulto</span>
+            <span class="vf-bump2__opt-sub">pra você ou outro adulto da família</span>
+          </span>
+          <span class="vf-bump2__opt-priceblock">
+            <span class="vf-bump2__opt-full">de R$ 347,00</span>
+            <span class="vf-bump2__opt-price">R$ 294,95</span>
+          </span>
+        </span>
+      </label>
+      {%- endunless -%}
+      {%- else -%}
+      <label class="vf-bump2__opt">
+        <input type="radio" name="vf-bump2-choice" value="adulto" data-vf-bump2-opt data-variant-id="{{ ADULTO_VARIANT_ID }}" data-label="Protocolo Adulto" data-price="29495" checked>
+        <span class="vf-bump2__opt-inner">
+          <span class="vf-bump2__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump2__opt-main">
+            <span class="vf-bump2__opt-dur">Outro Protocolo Adulto</span>
+            <span class="vf-bump2__opt-sub">pra outra pessoa da família</span>
+          </span>
+          <span class="vf-bump2__opt-priceblock">
+            <span class="vf-bump2__opt-full">de R$ 347,00</span>
+            <span class="vf-bump2__opt-price">R$ 294,95</span>
+          </span>
+        </span>
+      </label>
+
+      <label class="vf-bump2__opt">
+        <input type="radio" name="vf-bump2-choice" value="kids24" data-vf-bump2-opt data-variant-id="{{ KIDS24_VARIANT_ID }}" data-label="Kids 2-4 anos" data-price="22950">
+        <span class="vf-bump2__opt-inner">
+          <span class="vf-bump2__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump2__opt-main">
+            <span class="vf-bump2__opt-dur">Kids 2 a 4 anos</span>
+            <span class="vf-bump2__opt-sub">desparasitação natural infantil</span>
+          </span>
+          <span class="vf-bump2__opt-priceblock">
+            <span class="vf-bump2__opt-full">de R$ 270,00</span>
+            <span class="vf-bump2__opt-price">R$ 229,50</span>
+          </span>
+        </span>
+      </label>
+
+      <label class="vf-bump2__opt">
+        <input type="radio" name="vf-bump2-choice" value="kids59" data-vf-bump2-opt data-variant-id="{{ KIDS59_VARIANT_ID }}" data-label="Kids 5-9 anos" data-price="33065">
+        <span class="vf-bump2__opt-inner">
+          <span class="vf-bump2__opt-radio" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+          </span>
+          <span class="vf-bump2__opt-main">
+            <span class="vf-bump2__opt-dur">Kids 5 a 9 anos</span>
+            <span class="vf-bump2__opt-sub">desparasitação natural infantil</span>
+          </span>
+          <span class="vf-bump2__opt-priceblock">
+            <span class="vf-bump2__opt-full">de R$ 389,00</span>
+            <span class="vf-bump2__opt-price">R$ 330,65</span>
+          </span>
+        </span>
+      </label>
+      {%- endif -%}
+    </div>
+
+    <label class="vf-bump2__checkbox">
+      <input type="checkbox" data-vf-bump2-confirm>
+      <span class="vf-bump2__checkbox-box" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+      </span>
+      <span>Sim, quero adicionar com 15% OFF</span>
+    </label>
+
+    <button type="button" class="vf-bump2__cta" data-vf-bump2-cta disabled>
+      <span data-vf-bump2-cta-label>Marque a caixa acima pra adicionar</span>
+    </button>
+
+    <div class="vf-bump2__spinner" data-vf-bump2-spinner hidden>Adicionando…</div>
+  </div>
+
+  <script>
+    (function () {
+      var wrap = document.querySelector('[data-vf-bump2]');
+      if (!wrap) return;
+      var opts    = wrap.querySelectorAll('[data-vf-bump2-opt]');
+      var confirm = wrap.querySelector('[data-vf-bump2-confirm]');
+      var cta     = wrap.querySelector('[data-vf-bump2-cta]');
+      var ctaLbl  = wrap.querySelector('[data-vf-bump2-cta-label]');
+      var spinner = wrap.querySelector('[data-vf-bump2-spinner]');
+      var busy = false;
+
+      function formatBRL(cents) {
+        return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',');
+      }
+
+      function selectedOpt() {
+        var checked = wrap.querySelector('[data-vf-bump2-opt]:checked');
+        return checked;
+      }
+
+      function updateCta() {
+        var opt = selectedOpt();
+        if (!opt) return;
+        if (confirm.checked) {
+          cta.disabled = false;
+          ctaLbl.textContent = 'Adicionar ' + opt.dataset.label + ' — ' + formatBRL(parseInt(opt.dataset.price, 10));
+        } else {
+          cta.disabled = true;
+          ctaLbl.textContent = 'Marque a caixa acima pra adicionar';
+        }
+      }
+
+      opts.forEach(function (o) {
+        o.addEventListener('change', updateCta);
+      });
+      confirm.addEventListener('change', updateCta);
+
+      cta.addEventListener('click', function () {
+        if (busy || cta.disabled) return;
+        var opt = selectedOpt();
+        if (!opt) return;
+        busy = true;
+        wrap.classList.add('is-busy');
+        if (spinner) spinner.hidden = false;
+        fetch('{{ routes.cart_add_url }}.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ items: [{ id: parseInt(opt.dataset.variantId, 10), quantity: 1 }] })
+        }).then(function () { window.location.reload(); })
+          .catch(function () { window.location.reload(); });
+      });
+
+      updateCta();
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-bump2 {
+    border: 1px solid var(--vf-border, #E3E3DD);
+    background: var(--vf-green-light, #E7F6EC);
+    border-radius: 12px;
+    padding: 14px;
+    margin: 2px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .vf-bump2.is-busy { opacity: .6; pointer-events: none; }
+
+  .vf-bump2__head { display: flex; flex-direction: column; gap: 4px; }
+  .vf-bump2__title {
+    font-family: var(--font-heading, inherit);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--vf-green-dark, #15803D);
+    line-height: 1.3;
+  }
+  .vf-bump2__desc { font-size: 12px; color: var(--vf-muted, #555); line-height: 1.45; }
+
+  .vf-bump2__options { display: flex; flex-direction: column; gap: 8px; }
+  .vf-bump2__opt { position: relative; display: block; cursor: pointer; }
+  .vf-bump2__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+
+  .vf-bump2__opt-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--vf-border, #E3E3DD);
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .vf-bump2__opt-radio {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--vf-border, #D8D8D2);
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .vf-bump2__opt-radio svg { width: 11px; height: 11px; opacity: 0; }
+  .vf-bump2__opt-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .vf-bump2__opt-dur { font-size: 13.5px; font-weight: 700; color: #1A1A1A; line-height: 1.25; }
+  .vf-bump2__opt-sub { font-size: 11px; color: var(--vf-muted, #888); font-weight: 600; line-height: 1.3; }
+  .vf-bump2__opt-priceblock {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    text-align: right;
+  }
+  .vf-bump2__opt-full {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--vf-muted, #999);
+    text-decoration: line-through;
+    line-height: 1.2;
+  }
+  .vf-bump2__opt-price {
+    font-family: var(--font-heading, inherit);
+    font-size: 15.5px;
+    font-weight: 900;
+    color: var(--vf-green-dark, #15803D);
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .vf-bump2__opt input:checked + .vf-bump2__opt-inner {
+    border-color: var(--vf-green, #16A34A);
+    background: #F0FDF4;
+    box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+  }
+  .vf-bump2__opt input:checked + .vf-bump2__opt-inner .vf-bump2__opt-radio {
+    background: var(--vf-green, #16A34A);
+    border-color: var(--vf-green, #16A34A);
+  }
+  .vf-bump2__opt input:checked + .vf-bump2__opt-inner .vf-bump2__opt-radio svg { opacity: 1; }
+  .vf-bump2__opt input:focus-visible + .vf-bump2__opt-inner {
+    outline: 2px solid var(--vf-green-dark, #15803D);
+    outline-offset: 2px;
+  }
+
+  .vf-bump2__checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1A1A1A;
+  }
+  .vf-bump2__checkbox input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .vf-bump2__checkbox-box {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--vf-border, #D8D8D2);
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .vf-bump2__checkbox-box svg { width: 12px; height: 12px; opacity: 0; }
+  .vf-bump2__checkbox input:checked + .vf-bump2__checkbox-box {
+    background: var(--vf-green, #16A34A);
+    border-color: var(--vf-green, #16A34A);
+  }
+  .vf-bump2__checkbox input:checked + .vf-bump2__checkbox-box svg { opacity: 1; }
+  .vf-bump2__checkbox input:focus-visible + .vf-bump2__checkbox-box {
+    outline: 2px solid var(--vf-green-dark, #15803D);
+    outline-offset: 2px;
+  }
+
+  .vf-bump2__cta {
+    width: 100%; border: 0; cursor: pointer;
+    background: var(--vf-green, #16A34A); color: #fff;
+    font-family: var(--font-heading, inherit); font-size: 13.5px; font-weight: 800;
+    padding: 12px 14px; border-radius: 10px;
+    transition: background .15s, opacity .15s;
+  }
+  .vf-bump2__cta:not(:disabled):hover { background: var(--vf-green-dark, #15803D); }
+  .vf-bump2__cta:disabled { background: #B7C4BC; cursor: default; }
+
+  .vf-bump2__spinner {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--vf-green-dark, #15803D);
+  }
+  /* ===== Variante vermelha (bump Kids-irmãos) ===== */
+  .vf-bump2--red {
+    background: #FDECEC;
+    border-color: #F5C2C2;
+    animation: vf-bump2-red-pulse 1.9s ease-in-out infinite;
+  }
+  @keyframes vf-bump2-red-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(225,29,46,.28); }
+    50% { box-shadow: 0 0 0 7px rgba(225,29,46,0); }
+  }
+  .vf-bump2--red .vf-bump2__title { color: #C11524; }
+  .vf-bump2--red .vf-bump2__opt-price { color: #C11524; }
+  .vf-bump2--red .vf-bump2__opt input:checked + .vf-bump2__opt-inner {
+    border-color: #E11D2E;
+    background: #FEF2F2;
+    box-shadow: 0 0 0 3px rgba(225,29,46,.15);
+  }
+  .vf-bump2--red .vf-bump2__opt input:checked + .vf-bump2__opt-inner .vf-bump2__opt-radio {
+    background: #E11D2E;
+    border-color: #E11D2E;
+  }
+  .vf-bump2--red .vf-bump2__checkbox input:checked + .vf-bump2__checkbox-box {
+    background: #E11D2E;
+    border-color: #E11D2E;
+  }
+  .vf-bump2--red .vf-bump2__cta { background: #E11D2E; }
+  .vf-bump2--red .vf-bump2__cta:not(:disabled):hover { background: #C11524; }
+  .vf-bump2--red .vf-bump2__spinner { color: #C11524; }
+{% endstylesheet %}
+

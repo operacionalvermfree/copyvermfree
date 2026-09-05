@@ -1,0 +1,414 @@
+{%- comment -%}
+  vf-pdp-faq — Accordion expandido com 8 perguntas críticas
+  Layout: split desktop (intro sticky esquerda + perguntas direita) | empilhado mobile
+  Compliance: sem promessa, menção lua nova, sem citação a Sintonia/William
+{%- endcomment -%}
+
+<section class="vf-pdp-faq" aria-label="Perguntas frequentes">
+  <div class="vf-pdp-faq__container">
+    <header class="vf-pdp-faq__intro">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="vf-pdp-faq__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="vf-pdp-faq__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="vf-pdp-faq__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.support_text != blank -%}
+        <div class="vf-pdp-faq__support">
+          <span class="vf-pdp-faq__support-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+          </span>
+          <div>
+            <strong>{{ section.settings.support_label }}</strong>
+            <p>{{ section.settings.support_text }}</p>
+          </div>
+        </div>
+      {%- endif -%}
+    </header>
+
+    <div class="vf-pdp-faq__column">
+      <div class="vf-pdp-faq__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'question' -%}
+            <details class="vf-pdp-faq__item" {{ block.shopify_attributes }}>
+              <summary class="vf-pdp-faq__q">
+                <span class="vf-pdp-faq__q-text">{{ block.settings.question }}</span>
+                <span class="vf-pdp-faq__caret" aria-hidden="true"></span>
+              </summary>
+              <div class="vf-pdp-faq__a">
+                {{ block.settings.answer }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.cta_url != blank -%}
+        <div class="vf-pdp-faq__cta">
+          <p class="vf-pdp-faq__cta-text">{{ section.settings.cta_text }}</p>
+          <a class="vf-pdp-faq__cta-btn" href="{{ section.settings.cta_url }}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            {{ section.settings.cta_label }}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .vf-pdp-faq {
+    background: #FFFFFF;
+    padding: 64px 0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .vf-pdp-faq__container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .vf-pdp-faq__intro {
+    max-width: 480px;
+  }
+  .vf-pdp-faq__eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #5EBC43;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .vf-pdp-faq__heading {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(28px, 3.6vw, 40px);
+    line-height: 1.1;
+    color: #1B5E20;
+    margin: 0 0 14px;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+  }
+  .vf-pdp-faq__sub {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin: 0 0 24px;
+  }
+
+  .vf-pdp-faq__support {
+    background: #F5EDE0;
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .vf-pdp-faq__support-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1B5E20;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .vf-pdp-faq__support-icon svg { width: 20px; height: 20px; }
+  .vf-pdp-faq__support strong {
+    display: block;
+    font-family: 'Caprasimo', Georgia, serif;
+    font-weight: 400;
+    color: #1B5E20;
+    font-size: 16px;
+    margin-bottom: 4px;
+    letter-spacing: -0.005em;
+  }
+  .vf-pdp-faq__support p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #1A1A1A;
+  }
+
+  /* Coluna da direita (lista + cta) */
+  .vf-pdp-faq__column {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* CTA Fale conosco */
+  .vf-pdp-faq__cta {
+    background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 28px 26px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+  .vf-pdp-faq__cta-text {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height: 1.25;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -0.005em;
+    font-weight: 400;
+  }
+  .vf-pdp-faq__cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+  }
+  .vf-pdp-faq__cta-btn:hover {
+    background: #20BD5A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+  }
+  .vf-pdp-faq__cta-btn svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  /* Lista de perguntas */
+  .vf-pdp-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .vf-pdp-faq__item {
+    background: #FAFAFA;
+    border: 1px solid #ECECEC;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .vf-pdp-faq__item[open] {
+    background: #FFFFFF;
+    border-color: #C0DE96;
+    box-shadow: 0 4px 14px rgba(27, 94, 32, 0.06);
+  }
+  .vf-pdp-faq__q {
+    list-style: none;
+    padding: 20px 22px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #1A1A1A;
+    line-height: 1.4;
+  }
+  .vf-pdp-faq__q::-webkit-details-marker { display: none; }
+  .vf-pdp-faq__item[open] .vf-pdp-faq__q-text {
+    color: #1B5E20;
+  }
+
+  .vf-pdp-faq__caret {
+    position: relative;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E8F3DA;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .vf-pdp-faq__caret::before,
+  .vf-pdp-faq__caret::after {
+    content: '';
+    position: absolute;
+    background: #1B5E20;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s ease;
+  }
+  .vf-pdp-faq__caret::before { width: 12px; height: 2px; }
+  .vf-pdp-faq__caret::after { width: 2px; height: 12px; }
+  .vf-pdp-faq__item[open] .vf-pdp-faq__caret {
+    background: #1B5E20;
+    transform: rotate(45deg);
+  }
+  .vf-pdp-faq__item[open] .vf-pdp-faq__caret::before,
+  .vf-pdp-faq__item[open] .vf-pdp-faq__caret::after {
+    background: #fff;
+  }
+
+  .vf-pdp-faq__a {
+    padding: 0 22px 22px;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #1A1A1A;
+  }
+  .vf-pdp-faq__a p { margin: 0 0 10px; }
+  .vf-pdp-faq__a p:last-child { margin-bottom: 0; }
+  .vf-pdp-faq__a strong { color: #1B5E20; font-weight: 600; }
+  .vf-pdp-faq__a a {
+    color: #1B5E20;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+  }
+  .vf-pdp-faq__a a:hover { color: #5EBC43; }
+
+  /* Desktop: split layout (intro sticky + lista) */
+  @media (min-width: 990px) {
+    .vf-pdp-faq { padding: 96px 0; }
+    .vf-pdp-faq__container {
+      grid-template-columns: 0.85fr 1fr;
+      gap: 64px;
+    }
+    .vf-pdp-faq__intro {
+      position: sticky;
+      top: 100px;
+      align-self: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF PDP FAQ",
+  "tag": "section",
+  "class": "vf-pdp-faq-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "ANTES DE COMPRAR"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Toda dúvida que você tem, outras pessoas também tiveram."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Antes de pedir, leia essas 8 perguntas. Se ainda restar dúvida, manda mensagem no WhatsApp — a gente responde rápido."
+    },
+    {
+      "type": "header",
+      "content": "Bloco de suporte (lateral)"
+    },
+    {
+      "type": "text",
+      "id": "support_label",
+      "label": "Título do bloco de suporte",
+      "default": "Sem robô, sem chatbot."
+    },
+    {
+      "type": "textarea",
+      "id": "support_text",
+      "label": "Texto do suporte",
+      "default": "Pessoa de verdade respondendo do outro lado. WhatsApp e e-mail, resposta em até 4h úteis."
+    },
+    {
+      "type": "header",
+      "content": "Botão Fale Conosco (rodapé do FAQ)"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "Texto acima do botão",
+      "default": "Ainda tem dúvidas? Fale conosco clicando no botão abaixo."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texto do botão",
+      "default": "Falar no WhatsApp"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Link do WhatsApp"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Pergunta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pergunta",
+          "default": "Quando começo a notar mudança?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Resposta",
+          "default": "<p>A maioria nota mudanças sutis a partir da 2ª semana — disposição, sono, digestão. Cada corpo tem seu ritmo.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "VF PDP FAQ",
+      "blocks": [
+        { "type": "question", "settings": { "question": "Quando devo iniciar o protocolo?", "answer": "<p>Sempre na <strong>Lua Nova</strong>. No protocolo adulto, a preparação hepática começa 15 dias antes da Lua Nova. No infantil, o protocolo já começa direto na Lua Nova — a preparação é feita todo dia, junto com a desparasitação.</p>" } },
+        { "type": "question", "settings": { "question": "O que é a Fase 1?", "answer": "<p>É a <strong>preparação hepática</strong>. Ela deixa o fígado pronto pra fase seguinte. No protocolo adulto, dura 15 dias, usa só a Silimarina, e acontece antes da Lua Nova.</p>" } },
+        { "type": "question", "settings": { "question": "O que é a Fase 2?", "answer": "<p>É a <strong>desparasitação em si</strong> — sempre começa na Lua Nova. No protocolo adulto dura 15 dias, com a Tintura, o Óleo de Orégano e a Ornitina agindo juntos.</p>" } },
+        { "type": "question", "settings": { "question": "Por que o protocolo infantil é diferente do adulto?", "answer": "<p>Porque a criança recebe a fórmula de preparação hepática <strong>todos os dias</strong>, junto com a de desparasitação — não precisa de uma fase separada antes de começar, como no protocolo adulto.</p>" } },
+        { "type": "question", "settings": { "question": "Preciso dar as duas tinturas pro meu filho?", "answer": "<p>Sim. As duas fazem parte do protocolo Kids — a de <strong>preparação hepática</strong> e a de <strong>desparasitação</strong> trabalham em conjunto.</p>" } },
+        { "type": "question", "settings": { "question": "Como administro as duas tinturas?", "answer": "<p>Primeiro a de preparação hepática. Espera <strong>15 minutos</strong> e dá a de desparasitação. As duas, 3 vezes ao dia.</p>" } },
+        { "type": "question", "settings": { "question": "Posso dar as duas juntas, no mesmo momento?", "answer": "<p>Pode, sim — se a rotina da casa dificultar esperar os 15 minutos entre uma e outra. O efeito continua o mesmo.</p>" } },
+        { "type": "question", "settings": { "question": "Posso diluir as tinturas?", "answer": "<p>Pode, e recomendamos. Dilui na quantidade indicada pra idade, em água ou suco.</p>" } },
+        { "type": "question", "settings": { "question": "Posso misturar a tintura no suco?", "answer": "<p>Sim. Ajuda bastante na aceitação, principalmente com os pequenos.</p>" } },
+        { "type": "question", "settings": { "question": "Por que é recomendado diluir a tintura?", "answer": "<p>As tinturas são à base de álcool. Diluir facilita a administração e deixa o sabor mais suave — melhora bastante a aceitação da criança.</p>" } },
+        { "type": "question", "settings": { "question": "A dosagem da tabela vale pra cada tintura ou pra soma das duas?", "answer": "<p>Vale pra <strong>cada uma</strong>. Se a tabela indica 3ml pra idade do seu filho, são 3ml da hepática <strong>e</strong> 3ml da desparasitação — não é 3ml dividido entre as duas.</p>" } },
+        { "type": "question", "settings": { "question": "Posso dividir a dose diária em mais vezes?", "answer": "<p>Pode, desde que mantenha o total do dia. O importante é não ultrapassar a dose diária recomendada pra idade.</p>" } },
+        { "type": "question", "settings": { "question": "Quanto tempo dura o protocolo?", "answer": "<p><strong>30 dias</strong>, tanto no adulto quanto no infantil.</p>" } },
+        { "type": "question", "settings": { "question": "O protocolo é individual?", "answer": "<p>Sim — cada kit é montado pra uma pessoa. Se mais de uma pessoa da casa for fazer, cada uma precisa do seu próprio kit.</p>" } },
+        { "type": "question", "settings": { "question": "Toda a família precisa fazer o protocolo junto?", "answer": "<p>Não precisa, mas todos podem se beneficiar se fizerem ao mesmo tempo — por isso existe o <strong>Kit Família</strong>, sincronizado na mesma Lua Nova.</p>" } },
+        { "type": "question", "settings": { "question": "O protocolo pode causar alguma reação?", "answer": "<p>Pode. Sintomas leves como náusea, vômito ou diarreia podem acontecer, e geralmente passam rápido. Se persistir ou incomodar muito, fala com a gente ou com seu médico.</p>" } },
+        { "type": "question", "settings": { "question": "Posso repetir o protocolo depois?", "answer": "<p>Pode — de <strong>1 a 4 vezes por ano</strong>, sempre com um intervalo mínimo de 3 meses entre um ciclo e outro.</p>" } },
+        { "type": "question", "settings": { "question": "Qual a idade mínima do Kit Kids?", "answer": "<p>Acima de <strong>2 anos</strong>.</p>" } },
+        { "type": "question", "settings": { "question": "Posso usar grávida ou amamentando?", "answer": "<p><strong>Não.</strong> Não é indicado pra gestantes nem lactantes.</p>" } },
+        { "type": "question", "settings": { "question": "Qual a validade dos kits?", "answer": "<p><strong>Kit Kids:</strong> 6 meses. <strong>Kit Adulto:</strong> 1 ano.</p>" } }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}
+

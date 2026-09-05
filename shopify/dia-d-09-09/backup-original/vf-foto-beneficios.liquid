@@ -1,0 +1,434 @@
+{%- comment -%}
+  vf-foto-beneficios — Foto central + 4 cards de benefício ao redor (2 esquerda, 2 direita).
+  Layout DTC clássico, identidade VermeFree (paleta verde + Caprasimo).
+  Mobile: stack vertical (headline → foto → 4 cards empilhados).
+{%- endcomment -%}
+
+<section class="vf-fb" aria-labelledby="vf-fb-heading-{{ section.id }}">
+  <div class="vf-fb__inner">
+
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="vf-fb__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    <h2 class="vf-fb__heading" id="vf-fb-heading-{{ section.id }}">
+      {{ section.settings.heading }}
+      {%- if section.settings.heading_emoji != blank -%}
+        <span class="vf-fb__heading-emoji" aria-hidden="true">{{ section.settings.heading_emoji }}</span>
+      {%- endif -%}
+    </h2>
+
+    {%- if section.settings.credential != blank -%}
+      <div class="vf-fb__credential">{{ section.settings.credential }}</div>
+    {%- endif -%}
+
+    <div class="vf-fb__grid">
+
+      {%- comment -%} Coluna esquerda: blocks 1 e 2 {%- endcomment -%}
+      <div class="vf-fb__col vf-fb__col--left">
+        {%- for block in section.blocks -%}
+          {%- if forloop.index > 2 -%}{%- continue -%}{%- endif -%}
+          <article class="vf-fb__card vf-fb__card--left" {{ block.shopify_attributes }}>
+            <div class="vf-fb__icon vf-fb__icon--{{ block.settings.icon }}" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'spark' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/></svg>
+                {%- when 'leaf' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 26C6 14 14 6 26 6c0 12-8 20-20 20z"/><path d="M6 26L18 14"/></svg>
+                {%- when 'moon' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M26 18A10 10 0 1 1 14 6a8 8 0 0 0 12 12z"/></svg>
+                {%- when 'sparkle' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4v6M16 22v6M4 16h6M22 16h6M8 8l4 4M20 20l4 4M24 8l-4 4M8 24l4-4"/></svg>
+                {%- when 'drop' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c-4 6-8 11-8 16a8 8 0 0 0 16 0c0-5-4-10-8-16z"/></svg>
+                {%- when 'shield' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l10 4v8c0 6-4 10-10 12-6-2-10-6-10-12V8z"/><path d="M12 16l3 3 5-6"/></svg>
+                {%- when 'heart' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28C8 22 4 18 4 12a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 6-4 10-12 16z"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 26C6 14 14 6 26 6c0 12-8 20-20 20z"/></svg>
+              {%- endcase -%}
+            </div>
+            <div class="vf-fb__card-body">
+              <h3 class="vf-fb__card-title">{{ block.settings.title }}</h3>
+              <p class="vf-fb__card-desc">{{ block.settings.description }}</p>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Centro: foto {%- endcomment -%}
+      <div class="vf-fb__photo">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 900 }}"
+            alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+            width="{{ section.settings.image.width | default: 900 }}"
+            height="{{ section.settings.image.height | default: 1400 }}"
+            loading="lazy"
+            class="vf-fb__photo-img">
+        {%- else -%}
+          <div class="vf-fb__photo-placeholder" role="img" aria-label="Foto do protocolo VermeFree">
+            <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+              <rect x="30" y="20" width="40" height="100" rx="6"/>
+              <rect x="36" y="50" width="28" height="40" rx="2" fill="rgba(255,255,255,0.4)"/>
+            </svg>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Coluna direita: blocks 3 e 4 {%- endcomment -%}
+      <div class="vf-fb__col vf-fb__col--right">
+        {%- for block in section.blocks -%}
+          {%- if forloop.index < 3 or forloop.index > 4 -%}{%- continue -%}{%- endif -%}
+          <article class="vf-fb__card vf-fb__card--right" {{ block.shopify_attributes }}>
+            <div class="vf-fb__icon vf-fb__icon--{{ block.settings.icon }}" aria-hidden="true">
+              {%- case block.settings.icon -%}
+                {%- when 'spark' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/></svg>
+                {%- when 'leaf' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 26C6 14 14 6 26 6c0 12-8 20-20 20z"/><path d="M6 26L18 14"/></svg>
+                {%- when 'moon' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M26 18A10 10 0 1 1 14 6a8 8 0 0 0 12 12z"/></svg>
+                {%- when 'sparkle' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4v6M16 22v6M4 16h6M22 16h6M8 8l4 4M20 20l4 4M24 8l-4 4M8 24l4-4"/></svg>
+                {%- when 'drop' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c-4 6-8 11-8 16a8 8 0 0 0 16 0c0-5-4-10-8-16z"/></svg>
+                {%- when 'shield' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l10 4v8c0 6-4 10-10 12-6-2-10-6-10-12V8z"/><path d="M12 16l3 3 5-6"/></svg>
+                {%- when 'heart' -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28C8 22 4 18 4 12a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 6-4 10-12 16z"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 26C6 14 14 6 26 6c0 12-8 20-20 20z"/></svg>
+              {%- endcase -%}
+            </div>
+            <div class="vf-fb__card-body">
+              <h3 class="vf-fb__card-title">{{ block.settings.title }}</h3>
+              <p class="vf-fb__card-desc">{{ block.settings.description }}</p>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .vf-fb {
+    background: #E8F3DA;
+    padding: 64px 16px;
+  }
+
+  .vf-fb__inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .vf-fb__eyebrow {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--vf-green-dark, #009933);
+    background: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin: 0 0 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .vf-fb__heading {
+    font-family: 'Caprasimo', 'Capriola', Georgia, serif;
+    font-size: clamp(26px, 4vw, 40px);
+    color: var(--vf-green-dark, #1B5E20);
+    line-height: 1.15;
+    margin: 0 0 14px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .vf-fb__heading-emoji {
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: -2px;
+  }
+
+  .vf-fb__credential {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #1A1A1A;
+    margin: 0 auto 40px;
+    max-width: 640px;
+    line-height: 1.55;
+    font-weight: 500;
+  }
+  .vf-fb__credential strong {
+    color: var(--vf-green-dark, #009933);
+    font-weight: 700;
+  }
+  .vf-fb__credential p {
+    margin: 0;
+  }
+
+  /* Grid mobile: 1 coluna (foto vai pro topo via order) */
+  .vf-fb__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .vf-fb__col {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .vf-fb__card {
+    display: flex;
+    gap: 14px;
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .vf-fb__icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: #ECFFE5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vf-green-dark, #009933);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .vf-fb__icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Cores diferentes por ícone pra dar variedade visual (sobre fundo verde quase branco) */
+  .vf-fb__icon--spark { background: #FEF3C7; color: #B45309; }
+  .vf-fb__icon--leaf { background: #ECFFE5; color: #009933; }
+  .vf-fb__icon--moon { background: #E0E7FF; color: #4338CA; }
+  .vf-fb__icon--sparkle { background: #FCE7F3; color: #BE185D; }
+  .vf-fb__icon--drop { background: #DBEAFE; color: #1D4ED8; }
+  .vf-fb__icon--shield { background: #ECFFE5; color: #009933; }
+  .vf-fb__icon--heart { background: #FFE4E6; color: #BE123C; }
+
+  .vf-fb__card-body {
+    flex: 1;
+  }
+
+  .vf-fb__card-title {
+    font-family: 'Caprasimo', 'Capriola', Georgia, serif;
+    font-size: 20px;
+    color: var(--vf-green-dark, #009933);
+    margin: 0 0 8px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+  }
+
+  .vf-fb__card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #1A1A1A;
+    line-height: 1.55;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .vf-fb__photo {
+    width: 100%;
+    max-width: 360px;
+    margin: 8px auto;
+    aspect-ratio: 9 / 12;
+    background: var(--vf-beige, #F5EDE0);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .vf-fb__photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .vf-fb__photo-placeholder {
+    color: var(--vf-green, #5EBC43);
+    opacity: 0.4;
+    padding: 40px;
+  }
+  .vf-fb__photo-placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Tablet: foto centro + 4 cards lado a lado em volta */
+  @media (min-width: 750px) and (max-width: 989px) {
+    .vf-fb__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .vf-fb__photo {
+      grid-column: 1 / -1;
+      order: -1;
+      aspect-ratio: 16 / 10;
+      max-width: 480px;
+    }
+  }
+
+  /* Desktop: 3 colunas (esq | foto | dir) */
+  @media (min-width: 990px) {
+    .vf-fb {
+      padding: 80px 24px;
+    }
+    .vf-fb__grid {
+      grid-template-columns: 1fr 360px 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .vf-fb__col {
+      gap: 32px;
+    }
+    .vf-fb__col--left .vf-fb__card {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .vf-fb__col--left .vf-fb__card-body {
+      text-align: right;
+    }
+    .vf-fb__photo {
+      max-width: 100%;
+      aspect-ratio: 9 / 14;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vf-fb__card:hover .vf-fb__icon {
+      transform: scale(1.08);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF Foto + Benefícios",
+  "tag": "section",
+  "class": "section-vf-fb",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Selo superior (opcional)",
+      "default": "Protocolo fitoterápico"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Headline",
+      "default": "Finalmente, um corpo leve sem parasitas te roubando."
+    },
+    {
+      "type": "text",
+      "id": "heading_emoji",
+      "label": "Emoji ao lado da headline (opcional)",
+      "default": "🌿"
+    },
+    {
+      "type": "richtext",
+      "id": "credential",
+      "label": "Linha de credibilidade",
+      "default": "<p><strong>+5 ativos vegetais</strong> em sinergia, formulados em padrão farmacêutico no Brasil.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Foto central"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefício",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícone",
+          "options": [
+            { "value": "leaf", "label": "Folha (verde)" },
+            { "value": "spark", "label": "Energia (amarelo)" },
+            { "value": "moon", "label": "Sono (azul)" },
+            { "value": "sparkle", "label": "Brilho/Pele (rosa)" },
+            { "value": "drop", "label": "Gota (azul)" },
+            { "value": "shield", "label": "Escudo (verde)" },
+            { "value": "heart", "label": "Coração (vermelho)" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Benefício"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descrição",
+          "default": "Descrição curta do benefício em 2-3 linhas."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VF Foto + Benefícios",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "spark",
+            "title": "Energia que volta",
+            "description": "Parasita rouba nutriente. Sem ele competindo, o corpo absorve o que come e a disposição volta."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "leaf",
+            "title": "Intestino mais leve",
+            "description": "Inchaço, gases e desconforto que pareciam normais começam a fazer falta."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "moon",
+            "title": "Sono que pega",
+            "description": "Ranger de dente e acordar de madrugada têm gatilho parasitário pouco falado."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "sparkle",
+            "title": "Pele e cabelo respiram",
+            "description": "Quando o intestino limpa, a pele clareia e o cabelo para de cair sem motivo."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

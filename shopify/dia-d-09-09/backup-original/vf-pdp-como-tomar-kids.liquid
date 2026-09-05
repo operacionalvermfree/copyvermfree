@@ -1,0 +1,604 @@
+{%- comment -%}
+  vf-pdp-como-tomar-kids — Como tomar Kids 2-12 baseado na BULA OFICIAL
+  Fase única (30 dias) · 2 tinturas + dosagem por idade
+  Compliance: dosagem exata da bula real, sem inventar
+{%- endcomment -%}
+
+<section id="como-tomar" class="vf-kids-como-tomar" aria-label="Como dar para a criança">
+  <div class="vf-kids-como-tomar__container">
+
+    <header class="vf-kids-como-tomar__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="vf-kids-como-tomar__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="vf-kids-como-tomar__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="vf-kids-como-tomar__sub">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- comment -%} Ilustração do ciclo {%- endcomment -%}
+    {%- if section.settings.cycle_image_filename != blank -%}
+      <div class="vf-kids-como-tomar__visual">
+        <img
+          src="{{ section.settings.cycle_image_filename | asset_url }}"
+          alt="Ciclo de 30 dias VermeFree Kids"
+          loading="lazy"
+          width="1800"
+          height="1200">
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 2 PASSOS: Suporte 15-20min antes / Antiparasitária depois {%- endcomment -%}
+    <div class="vf-kids-como-tomar__steps">
+      <article class="vf-kids-como-tomar__step">
+        <div class="vf-kids-como-tomar__step-head">
+          <span class="vf-kids-como-tomar__step-num">1</span>
+          <div>
+            <span class="vf-kids-como-tomar__step-label">PRIMEIRO</span>
+            <h3 class="vf-kids-como-tomar__step-title">Tintura de Preparação Hepática</h3>
+            <span class="vf-kids-como-tomar__step-when">15 minutos antes da de desparasitação</span>
+          </div>
+        </div>
+        <p class="vf-kids-como-tomar__step-text">
+          Diluir a dose da idade (veja a tabela abaixo) em <strong>água ou suco</strong> e oferecer 3 vezes ao dia, sempre 15 minutos antes da tintura de desparasitação.
+        </p>
+      </article>
+
+      <div class="vf-kids-como-tomar__arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+
+      <article class="vf-kids-como-tomar__step vf-kids-como-tomar__step--main">
+        <div class="vf-kids-como-tomar__step-head">
+          <span class="vf-kids-como-tomar__step-num">2</span>
+          <div>
+            <span class="vf-kids-como-tomar__step-label">DEPOIS</span>
+            <h3 class="vf-kids-como-tomar__step-title">Tintura de Desparasitação</h3>
+            <span class="vf-kids-como-tomar__step-when">3 vezes ao dia por 30 dias</span>
+          </div>
+        </div>
+        <p class="vf-kids-como-tomar__step-text">
+          Diluir a <strong>mesma dose</strong> da idade (a dosagem vale por tintura) em água ou suco e dar à criança 3 vezes ao dia, 15 minutos depois da hepática.
+        </p>
+      </article>
+    </div>
+
+    <p class="vf-kids-como-tomar__note-duas">
+      💡 São <strong>duas tinturas diferentes</strong> — Preparação Hepática e Desparasitação — e a dose da tabela vale pra <strong>cada uma</strong> delas, não pra soma das duas. O protocolo já começa direto na Lua Nova, sem preparação separada como no adulto.
+    </p>
+
+    {%- comment -%} BLOCO DE DOSAGEM POR IDADE {%- endcomment -%}
+    <div class="vf-kids-dose">
+      <h3 class="vf-kids-dose__title">{{ section.settings.dosage_title }}</h3>
+      <p class="vf-kids-dose__sub">{{ section.settings.dosage_sub }}</p>
+
+      <div class="vf-kids-dose__grid">
+        <div class="vf-kids-dose__card">
+          <span class="vf-kids-dose__age-value">2 a 3 anos</span>
+          <span class="vf-kids-dose__ml">2 ml</span>
+          <span class="vf-kids-dose__freq">3× ao dia</span>
+        </div>
+        <div class="vf-kids-dose__card">
+          <span class="vf-kids-dose__age-value">3 a 4 anos</span>
+          <span class="vf-kids-dose__ml">2,5 ml</span>
+          <span class="vf-kids-dose__freq">3× ao dia</span>
+        </div>
+        <div class="vf-kids-dose__card">
+          <span class="vf-kids-dose__age-value">4 a 6 anos</span>
+          <span class="vf-kids-dose__ml">3 ml</span>
+          <span class="vf-kids-dose__freq">3× ao dia</span>
+        </div>
+        <div class="vf-kids-dose__card">
+          <span class="vf-kids-dose__age-value">6 a 10 anos</span>
+          <span class="vf-kids-dose__ml">4 ml</span>
+          <span class="vf-kids-dose__freq">3× ao dia</span>
+        </div>
+        <div class="vf-kids-dose__card">
+          <span class="vf-kids-dose__age-value">10 a 12 anos</span>
+          <span class="vf-kids-dose__ml">5 ml</span>
+          <span class="vf-kids-dose__freq">3× ao dia</span>
+        </div>
+      </div>
+
+      <p class="vf-kids-dose__note">{{ section.settings.dosage_note }}</p>
+    </div>
+
+    {%- if section.settings.tip != blank -%}
+      <div class="vf-kids-como-tomar__tip">
+        <span class="vf-kids-como-tomar__tip-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11H1l8-8 8 8h-4v6H9z" transform="rotate(180 12 12)"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Criança não aceita 2 doses?</strong>
+          <p>{{ section.settings.tip }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.enzima_text != blank -%}
+      <div class="vf-kids-como-tomar__enzima">
+        <span class="vf-kids-como-tomar__enzima-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v6"/>
+            <path d="M12 22a8 8 0 0 0 8-8c0-4-2-6-4-7-2 0-2 2-4 2s-2-2-4-2c-2 1-4 3-4 7a8 8 0 0 0 8 8z"/>
+          </svg>
+        </span>
+        <div>
+          <strong>{{ section.settings.enzima_title }}</strong>
+          <p>{{ section.settings.enzima_text }}</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.warning != blank -%}
+      <div class="vf-kids-como-tomar__warning">
+        <span class="vf-kids-como-tomar__warning-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        <p>{{ section.settings.warning }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .vf-kids-como-tomar {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FFF8E1 100%);
+    padding: 72px 0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .vf-kids-como-tomar__container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .vf-kids-como-tomar__header {
+    text-align: center;
+    margin-bottom: 40px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .vf-kids-como-tomar__eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FCD34D;
+    background: #1B5E20;
+    padding: 5px 14px;
+    border-radius: 999px;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+  .vf-kids-como-tomar__heading {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.1;
+    color: #1B5E20;
+    margin: 0 0 14px;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+  }
+  .vf-kids-como-tomar__sub {
+    font-size: 16px;
+    line-height: 1.55;
+    color: #555;
+    margin: 0;
+  }
+
+  .vf-kids-como-tomar__visual {
+    margin: 0 auto 40px;
+    max-width: 920px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #FFF8E1;
+    border: 1px solid rgba(252, 211, 77, 0.3);
+  }
+  .vf-kids-como-tomar__visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 2 PASSOS */
+  .vf-kids-como-tomar__steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .vf-kids-como-tomar__step {
+    background: #FFFFFF;
+    border: 2px solid #FCD34D;
+    border-radius: 24px;
+    padding: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .vf-kids-como-tomar__step:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(252, 211, 77, 0.2);
+  }
+  .vf-kids-como-tomar__step--main {
+    border-color: #1B5E20;
+    background: #E8F3DA;
+  }
+  .vf-kids-como-tomar__step-head {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .vf-kids-como-tomar__step-num {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: #FCD34D;
+    color: #1B5E20;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 400;
+  }
+  .vf-kids-como-tomar__step--main .vf-kids-como-tomar__step-num {
+    background: #1B5E20;
+    color: #fff;
+  }
+  .vf-kids-como-tomar__step-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #5EBC43;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+  .vf-kids-como-tomar__step-title {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: 20px;
+    color: #1B5E20;
+    margin: 0 0 4px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    font-weight: 400;
+  }
+  .vf-kids-como-tomar__step-when {
+    display: block;
+    font-size: 13px;
+    color: #777;
+    font-weight: 600;
+  }
+  .vf-kids-como-tomar__step-text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #1A1A1A;
+  }
+  .vf-kids-como-tomar__step-text strong { color: #1B5E20; }
+
+  .vf-kids-como-tomar__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1B5E20;
+    transform: rotate(90deg);
+    margin: -4px 0;
+  }
+  .vf-kids-como-tomar__arrow svg { width: 28px; height: 28px; }
+
+  /* TABELA DE DOSAGEM POR IDADE */
+  .vf-kids-como-tomar__dosage {
+    background: #FFFFFF;
+    border: 2px solid #1B5E20;
+    border-radius: 24px;
+    padding: 32px 24px;
+    margin-bottom: 32px;
+  }
+  /* NOVO BLOCO DE DOSAGEM */
+  .vf-kids-dose__title {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(22px, 2.8vw, 28px);
+    color: #1B5E20;
+    text-align: center;
+    margin: 0 0 6px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .vf-kids-dose__sub {
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin: 0 0 28px;
+  }
+  .vf-kids-dose__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .vf-kids-dose__card {
+    background: linear-gradient(135deg, #FCD34D 0%, #FBBF24 100%);
+    border-radius: 16px;
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+  }
+  .vf-kids-dose__age-value {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(16px, 2.1vw, 20px);
+    color: #1B5E20;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .vf-kids-dose__ml {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(32px, 4.4vw, 42px);
+    color: #1B5E20;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    margin-top: 4px;
+  }
+  .vf-kids-dose__freq {
+    font-size: 12.5px;
+    color: #1B5E20;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .vf-kids-dose__note {
+    text-align: center;
+    margin: 16px 0 0;
+    font-size: 13px;
+    color: #777;
+    font-style: italic;
+  }
+  .vf-kids-como-tomar__note-duas {
+    max-width: 760px;
+    margin: 24px auto 0;
+    background: #E8F3DA;
+    border: 1px dashed rgba(27, 94, 32, 0.3);
+    border-radius: 14px;
+    padding: 14px 20px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #1B5E20;
+    text-align: center;
+  }
+  .vf-kids-como-tomar__note-duas strong { color: #1B5E20; }
+
+  @media (min-width: 640px) {
+    .vf-kids-dose__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 990px) {
+    .vf-kids-dose__grid { grid-template-columns: repeat(5, 1fr); }
+  }
+  .vf-kids-como-tomar__enzima {
+    margin-top: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: linear-gradient(135deg, #FFF8E1 0%, #FCD34D 120%);
+    border: 1px dashed #FBBF24;
+    border-radius: 16px;
+    padding: 18px 22px;
+  }
+  .vf-kids-como-tomar__enzima-icon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    background: #1B5E20;
+    color: #FCD34D;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .vf-kids-como-tomar__enzima-icon svg { width: 20px; height: 20px; }
+  .vf-kids-como-tomar__enzima strong {
+    display: block;
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: 16px;
+    color: #1B5E20;
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+  .vf-kids-como-tomar__enzima p {
+    margin: 0;
+    font-size: 14.5px;
+    color: #333;
+    line-height: 1.5;
+  }
+  /* TIP + WARNING */
+  .vf-kids-como-tomar__tip {
+    background: #DBEAFE;
+    border-left: 4px solid #2563EB;
+    border-radius: 0 14px 14px 0;
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .vf-kids-como-tomar__tip-icon {
+    flex-shrink: 0;
+    color: #2563EB;
+    width: 24px;
+    height: 24px;
+  }
+  .vf-kids-como-tomar__tip-icon svg { width: 100%; height: 100%; }
+  .vf-kids-como-tomar__tip strong {
+    display: block;
+    color: #1E40AF;
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+  .vf-kids-como-tomar__tip p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #1E40AF;
+  }
+
+  .vf-kids-como-tomar__warning {
+    background: #FEF3C7;
+    border-left: 4px solid #D97706;
+    border-radius: 0 14px 14px 0;
+    padding: 14px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .vf-kids-como-tomar__warning-icon {
+    flex-shrink: 0;
+    color: #D97706;
+    width: 22px;
+    height: 22px;
+  }
+  .vf-kids-como-tomar__warning-icon svg { width: 100%; height: 100%; }
+  .vf-kids-como-tomar__warning p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #92400E;
+  }
+
+  @media (min-width: 750px) {
+    .vf-kids-como-tomar { padding: 96px 0; }
+    .vf-kids-como-tomar__steps {
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
+    }
+    .vf-kids-como-tomar__arrow {
+      transform: rotate(0);
+      margin: 0;
+    }
+    .vf-kids-como-tomar__dosage-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 990px) {
+    .vf-kids-como-tomar__dosage-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .vf-kids-como-tomar__dose-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      padding: 22px 14px;
+    }
+    .vf-kids-como-tomar__dose-freq {
+      min-width: auto;
+      text-align: center;
+    }
+    .vf-kids-como-tomar__dose-amount {
+      font-size: 30px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF Kids Como Tomar",
+  "tag": "section",
+  "class": "vf-kids-como-tomar-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "COMO DAR PRA CRIANÇA"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Simples e seguro. Por 30 dias."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Duas fórmulas em sequência. Dosagem por idade direto da bula. Você recebe o cronograma personalizado por e-mail no dia da compra."
+    },
+    {
+      "type": "text",
+      "id": "cycle_image_filename",
+      "label": "Imagem do ciclo em assets/",
+      "default": "lp-kids-ciclo-30-dias.jpg"
+    },
+    {
+      "type": "header",
+      "content": "Tabela de Dosagem"
+    },
+    {
+      "type": "text",
+      "id": "dosage_title",
+      "label": "Título da tabela",
+      "default": "Dosagem por idade"
+    },
+    {
+      "type": "text",
+      "id": "dosage_sub",
+      "label": "Subtítulo da tabela",
+      "default": "A mesma dose vale para cada uma das duas tinturas, sempre 3 vezes ao dia"
+    },
+    {
+      "type": "text",
+      "id": "dosage_note",
+      "label": "Nota abaixo da tabela",
+      "default": "Pode ser diluído em água ou suco — o que a criança aceitar melhor."
+    },
+    {
+      "type": "header",
+      "content": "Avisos"
+    },
+    {
+      "type": "textarea",
+      "id": "tip",
+      "label": "Dica",
+      "default": "Sem problema — você pode dar as duas fórmulas juntas no mesmo momento. O efeito continua o mesmo."
+    },
+    {
+      "type": "text",
+      "id": "enzima_title",
+      "label": "Título do card enzima",
+      "default": "Sabor que a criança aceita"
+    },
+    {
+      "type": "textarea",
+      "id": "enzima_text",
+      "label": "Texto do card enzima",
+      "default": "Adicionamos uma enzima natural que adocica suavemente a tintura — sem açúcar, sem adoçante químico. Diluído em 50ml de água, fica bem leve no paladar da criança."
+    },
+    {
+      "type": "textarea",
+      "id": "warning",
+      "label": "Aviso",
+      "default": "Contraindicado para crianças com sensibilidade ao álcool. Em caso de dúvidas, consulte seu pediatra antes de começar."
+    }
+  ],
+  "presets": [
+    { "name": "VF Kids Como Tomar" }
+  ]
+}
+{% endschema %}
+

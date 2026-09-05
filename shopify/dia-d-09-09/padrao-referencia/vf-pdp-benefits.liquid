@@ -1,0 +1,112 @@
+{%- comment -%}
+  vf-pdp-benefits.liquid
+  Bloco de beneficio + quebra de objecao pra PDP (estilo galeria Blessy, adaptado VermeFree).
+  Layout OVERLAY: foto real/UGC do produto + texto (selo, titulo, frase) como camada de design em CSS.
+  Linguagem ANVISA-safe. Editavel: cada card e um bloco (imagem URL, selo, titulo, texto, cor, destaque).
+{%- endcomment -%}
+
+{%- comment -%} So renderiza nos 4 protocolos (protege product.json compartilhado com o Oleo) {%- endcomment -%}
+{%- assign vf_benef_protocols = 'protocolo-desparasitacao-adulto-vermefree,antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos,antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos,kit-familia-vermefree-2-adultos-2-criancas' | split: ',' -%}
+{%- if vf_benef_protocols contains product.handle -%}
+<section class="vf-benef" aria-label="{{ section.settings.heading | escape }}">
+  <div class="vf-benef__wrap">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="vf-benef__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="vf-benef__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="vf-benef__sub">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="vf-benef__grid">
+      {%- for block in section.blocks -%}
+        <article class="vf-benef__card vf-benef__card--{{ block.settings.accent }}{% if block.settings.featured %} is-featured{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image_url != blank -%}
+            <img class="vf-benef__img" src="{{ block.settings.image_url }}" alt="{{ block.settings.title | escape }}" loading="lazy">
+          {%- else -%}
+            <div class="vf-benef__img vf-benef__img--ph"></div>
+          {%- endif -%}
+          <div class="vf-benef__scrim"></div>
+          {%- if block.settings.badge != blank -%}
+            <span class="vf-benef__badge">{{ block.settings.badge }}</span>
+          {%- endif -%}
+          <div class="vf-benef__body">
+            {%- if block.settings.title != blank -%}<h3 class="vf-benef__title">{{ block.settings.title }}</h3>{%- endif -%}
+            {%- if block.settings.text != blank -%}<p class="vf-benef__text">{{ block.settings.text }}</p>{%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-benef { padding: 34px 16px; background: #FDFDF9; }
+  .vf-benef__wrap { max-width: 1080px; margin: 0 auto; }
+  .vf-benef__eyebrow { margin: 0 0 6px; text-align: center; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #5EBC43; }
+  .vf-benef__heading { margin: 0 0 8px; text-align: center; font-size: 25px; line-height: 1.2; font-weight: 800; color: #16301A; }
+  .vf-benef__sub { margin: 0 auto 24px; max-width: 620px; text-align: center; font-size: 14.5px; line-height: 1.5; color: #5B6B5B; }
+  .vf-benef__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .vf-benef__card { position: relative; aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; background: #E4F0DC; box-shadow: 0 8px 22px rgba(22,48,26,.10); isolation: isolate; }
+  .vf-benef__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .vf-benef__img--ph { background: repeating-linear-gradient(45deg, #EAF0E4, #EAF0E4 12px, #E0E8D8 12px, #E0E8D8 24px); }
+  .vf-benef__scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,22,10,.82) 0%, rgba(10,22,10,.42) 34%, rgba(10,22,10,0) 60%); z-index: 1; }
+  .vf-benef__badge { position: absolute; top: 12px; left: 12px; z-index: 2; background: #1B5E20; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .02em; padding: 5px 11px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,.28); max-width: calc(100% - 24px); }
+  .vf-benef__card--amber .vf-benef__badge { background: #E8920F; }
+  .vf-benef__card--red .vf-benef__badge { background: #E11D2E; }
+  .vf-benef__body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 14px 14px 15px; display: flex; flex-direction: column; gap: 4px; }
+  .vf-benef__title { margin: 0; font-size: 17px; line-height: 1.22; font-weight: 800; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.35); }
+  .vf-benef__text { margin: 0; font-size: 12.5px; line-height: 1.4; color: rgba(255,255,255,.92); text-shadow: 0 1px 5px rgba(0,0,0,.35); }
+  .vf-benef__card.is-featured { box-shadow: 0 0 0 3px #5EBC43, 0 10px 26px rgba(94,188,67,.28); }
+  .vf-benef__card--amber.is-featured { box-shadow: 0 0 0 3px #E8920F, 0 10px 26px rgba(232,146,15,.30); }
+  @media (max-width: 900px) { .vf-benef__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) {
+    .vf-benef { padding: 26px 12px; }
+    .vf-benef__heading { font-size: 21px; }
+    .vf-benef__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .vf-benef__title { font-size: 15px; }
+    .vf-benef__text { font-size: 11.5px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "VF · Benefícios",
+  "tag": "section",
+  "class": "vf-benef-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "BENEFÍCIOS & DÚVIDAS" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Por que as mães escolhem o VermeFree Kids" },
+    { "type": "textarea", "id": "subheading", "label": "Subtítulo", "default": "Cuidado natural, com critério — e resposta pra dúvida que toda mãe tem antes de comprar." }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "text", "id": "image_url", "label": "URL da imagem", "info": "Cole a URL de uma imagem (Shopify)" },
+        { "type": "text", "id": "badge", "label": "Selo (badge)" },
+        { "type": "text", "id": "title", "label": "Título (sobre a foto)" },
+        { "type": "textarea", "id": "text", "label": "Texto (sobre a foto)" },
+        { "type": "select", "id": "accent", "label": "Cor do selo", "options": [ { "value": "green", "label": "Verde" }, { "value": "amber", "label": "Âmbar" }, { "value": "red", "label": "Vermelho" } ], "default": "green" },
+        { "type": "checkbox", "id": "featured", "label": "Destacar card", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VF · Benefícios",
+      "blocks": [
+        { "type": "card", "settings": { "badge": "Vegetal 100%", "title": "Natural, sem química pesada", "text": "Fitoterápico que a criança aceita bem.", "accent": "green" } },
+        { "type": "card", "settings": { "badge": "Feito com critério", "title": "Dose certa por idade", "text": "Padrão farmacêutico · Metais Free.", "accent": "green" } },
+        { "type": "card", "settings": { "badge": "A dúvida nº1 das mães", "title": "E depois do protocolo?", "text": "É rotina: 1 a 4x por ano, na lua nova. 🌙", "accent": "amber", "featured": true } },
+        { "type": "card", "settings": { "badge": "Simples na rotina", "title": "Diluiu, deu, pronto", "text": "3x ao dia, por 30 dias.", "accent": "green" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,68 @@
+{%- comment -%}
+  vf-bump-protocolo.liquid — Bump do 2º protocolo (eixo Constância / Família)
+  Aparece quando há 1 protocolo adulto no carrinho. Oferece adicionar um 2º
+  protocolo com 12% OFF via cupom PROTOCOLO12 (Compre-e-Leve), aplicado por
+  link de desconto (/discount/PROTOCOLO12) — compatível com o volume automático.
+  Reutiliza as classes .vf-bump do vf-order-bump (estilo já carregado no root).
+{%- endcomment -%}
+
+{%- assign PROT_HANDLE = 'protocolo-desparasitacao-adulto-vermefree' -%}
+{%- assign prot = all_products[PROT_HANDLE] -%}
+{%- assign PROT_VARIANT_ID = prot.selected_or_first_available_variant.id -%}
+
+{%- assign prot_count = 0 -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == PROT_HANDLE -%}
+    {%- assign prot_count = prot_count | plus: item.quantity -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if prot_count == 1 and PROT_VARIANT_ID -%}
+  <div class="vf-bump vf-bump--prot" data-vf-pbump>
+    <div class="vf-bump__flag vf-bump__flag--prot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
+      JÁ GARANTE O PRÓXIMO CICLO · 12% OFF
+    </div>
+
+    <div class="vf-bump__head">
+      <span class="vf-bump__img" aria-hidden="true">
+        {%- if prot.featured_image -%}
+          <img src="{{ prot.featured_image | image_url: width: 160 }}" alt="Protocolo de Desparasitação Natural VermeFree" width="80" height="80" loading="lazy">
+        {%- endif -%}
+      </span>
+      <span class="vf-bump__copy">
+        <span class="vf-bump__title">Leve um 2º protocolo com <strong>12% OFF</strong></span>
+        <span class="vf-bump__desc">O protocolo é rotina de 2 a 4x por ano. Levando um segundo agora, você já adianta seu próximo ciclo — ou cuida de outra pessoa da família, no mesmo ritmo. A constância é o que faz a diferença.</span>
+      </span>
+    </div>
+
+    <button type="button" class="vf-bump__cta" data-vf-pbump-cta>
+      Adicionar 2º protocolo com 12% OFF
+    </button>
+    <p class="vf-bump__micro">Desconto de 12% aplicado no checkout · só nesta página</p>
+  </div>
+
+  <script>
+    (function(){
+      var b = document.querySelector('[data-vf-pbump-cta]');
+      if(!b) return;
+      b.addEventListener('click', function(){
+        b.disabled = true; b.textContent = 'Adicionando…';
+        fetch('{{ routes.cart_add_url }}.js', {
+          method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({ items:[{ id: {{ PROT_VARIANT_ID }}, quantity: 1 }] })
+        }).then(function(){
+          window.location.href = '/discount/PROTOCOLO12?redirect=/cart';
+        }).catch(function(){
+          window.location.href = '/discount/PROTOCOLO12?redirect=/cart';
+        });
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .vf-bump--prot{ background:linear-gradient(135deg,#EAF5EE 0%,#FFFFFF 100%); border-color:var(--vf-green,#5EBC43); }
+  .vf-bump__flag--prot{ background:var(--vf-green-dark,#1B5E20); }
+{% endstylesheet %}
+
