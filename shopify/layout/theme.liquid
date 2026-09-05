@@ -122,8 +122,12 @@
     {% section 'header' %}
 
     <main id="main" role="main" tabindex="-1">
-      {%- comment -%} Frete gratis sem minimo: banner na home e aviso nas PDPs (date-gated dentro das secoes: 05-06/09) {%- endcomment -%}
-      {%- if template.name == 'index' -%}{% section 'vf-frete-gratis-banner' %}{%- endif -%}
+      {%- comment -%}
+        Aviso slim da promo no topo das PDPs (date-gated dentro da secao: 05-06/09).
+        O BANNER nao entra aqui: ele vive na ordem das secoes de cada template
+        (index.json e product.json), pra poder ficar no meio da pagina e ser
+        movido pelo editor como qualquer outra secao.
+      {%- endcomment -%}
       {%- if template.name == 'product' -%}{% section 'vf-frete-gratis-aviso' %}{%- endif -%}
       {{ content_for_layout }}
     </main>
