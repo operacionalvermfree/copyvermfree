@@ -1,0 +1,42 @@
+{%- comment -%}
+  VermeFree — CTA Final
+  Faixa final full-width com headline gigante + botao.
+  Imagem de fundo opcional.
+{%- endcomment -%}
+
+<section
+  class="vf-cta{% if section.settings.background_image != blank %} vf-cta--has-image{% endif %}"
+  style="--vf-cta-bg: {{ section.settings.background_color }}; --vf-cta-color: {{ section.settings.text_color }};"
+  aria-labelledby="vf-cta-heading"
+>
+  {%- if section.settings.background_image != blank -%}
+    <img
+      src="{{ section.settings.background_image | image_url: width: 2000 }}"
+      srcset="{{ section.settings.background_image | image_url: width: 1000 }} 1000w, {{ section.settings.background_image | image_url: width: 2000 }} 2000w"
+      sizes="100vw"
+      alt=""
+      class="vf-cta__bg"
+      loading="lazy"
+    >
+    <div class="vf-cta__overlay"></div>
+  {%- endif -%}
+
+  <div class="vf-cta__container">
+    {%- if section.settings.heading != blank -%}
+      <h2 id="vf-cta-heading" class="vf-cta__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subheading != blank -%}
+      <p class="vf-cta__sub">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a
+        href="{{ section.settings.button_link }}"
+        class="vf-cta__btn"
+        aria-label="{{ section.settings.button_label | escape }}"
+      >
+        {{ section.settings.button_label }}
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
