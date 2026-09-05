@@ -452,10 +452,17 @@
     "vf_cross_familia": {
       "type": "vf-pdp-cross-familia",
       "settings": {}
+    },
+    "vf_diad_faixa": {
+      "type": "vf-diad-faixa",
+      "settings": {
+        "preview_frete_promo": true
+      }
     }
   },
   "order": [
     "main",
+    "vf_diad_faixa",
     "beneficios-objecoes",
     "estatistica",
     "familia-juntos",

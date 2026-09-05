@@ -1,0 +1,74 @@
+{%- comment -%}
+  vf-diad-faixa — faixa da oferta do Dia D (09/09/2026) de ponta a ponta.
+
+  Existe como secao propria (e nao dentro da vf-pdp-main) pra poder ocupar a
+  largura toda da tela: o container da PDP tem max-width e padding lateral.
+  No template das PDPs ela fica logo depois de vf-pdp-main, entao aparece
+  abaixo do bloco de galeria + compra.
+
+  O visual e o mesmo painel da home — vive em snippets/vf-diad-banner.liquid.
+{%- endcomment -%}
+
+{%- comment -%}
+  Gate do Dia D. A previa so liga ANTES ou NO dia da acao — depois de
+  09/09 a faixa nunca mais aparece, mesmo que o checkbox de previa
+  fique ligado por esquecimento. Data comparada como numero (AAAAMMDD)
+  pra nao depender de comparacao de string.
+{%- endcomment -%}
+{%- assign faixa_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
+{%- assign faixa_promo = false -%}
+{%- if faixa_today == 20260909 -%}
+  {%- assign faixa_promo = true -%}
+{%- elsif section.settings.preview_frete_promo and faixa_today < 20260909 -%}
+  {%- assign faixa_promo = true -%}
+{%- endif -%}
+
+{%- if faixa_promo -%}
+  {%- render 'vf-diad-banner',
+      badge: section.settings.promo_badge_text,
+      title: section.settings.promo_title,
+      subtitle: section.settings.promo_subtitle,
+      full: true -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VF Faixa Dia D",
+  "tag": "section",
+  "class": "vf-diad-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Faixa vermelha da oferta do Dia D, de ponta a ponta. Liga sozinha em 09/09 e some depois."
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_frete_promo",
+      "label": "🔴 PRÉVIA: forçar visual do Dia D (09/09)",
+      "info": "Ative só pra testar/ver como fica. Desative depois — no dia 09/09 ela liga sozinha, não precisa disso.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "promo_badge_text",
+      "label": "Selo",
+      "default": "🚨 Dia D · só hoje, 09/09"
+    },
+    {
+      "type": "text",
+      "id": "promo_title",
+      "label": "Título",
+      "default": "10% OFF em tudo, frete grátis e óleo de alho de brinde"
+    },
+    {
+      "type": "textarea",
+      "id": "promo_subtitle",
+      "label": "Subtítulo",
+      "default": "Hoje o preço já sai com 10% OFF — sem cupom, sem digitar nada. Frete grátis pra qualquer valor de compra, em qualquer canto do Brasil (fora do Dia D, só acima de R$ 399). E o Manual da Desparasitação chega em PDF no seu e-mail depois da compra."
+    }
+  ],
+  "presets": [
+    { "name": "VF Faixa Dia D" }
+  ]
+}
+{% endschema %}

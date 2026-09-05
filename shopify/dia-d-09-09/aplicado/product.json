@@ -22,8 +22,7 @@
         "show_rating": true,
         "rating_score": "4.9",
         "rating_count": "218",
-        "how_to_take": "<p><strong>Protocolo de 30 dias em 2 fases:</strong></p><p><strong>Fase 1 — Preparação hepática · 15 dias antes da Lua Nova:</strong> Silimarina, 2x ao dia (manhã e noite).</p><p><strong>Fase 2 — Início na Lua Nova · 15 dias:</strong> Tintura (3ml, 3x ao dia, antes do café, almoço e jantar), Óleo de Orégano (1 cápsula, 3x ao dia, junto com a tintura) e Ornitina (1 cápsula, 1x ao dia, meia hora antes de deitar).</p><p>Cronograma completo enviado junto com o kit escolhido.</p>",
-        "preview_frete_promo": true
+        "how_to_take": "<p><strong>Protocolo de 30 dias em 2 fases:</strong></p><p><strong>Fase 1 — Preparação hepática · 15 dias antes da Lua Nova:</strong> Silimarina, 2x ao dia (manhã e noite).</p><p><strong>Fase 2 — Início na Lua Nova · 15 dias:</strong> Tintura (3ml, 3x ao dia, antes do café, almoço e jantar), Óleo de Orégano (1 cápsula, 3x ao dia, junto com a tintura) e Ornitina (1 cápsula, 1x ao dia, meia hora antes de deitar).</p><p>Cronograma completo enviado junto com o kit escolhido.</p>"
       },
       "blocks": {
         "dep1": {
@@ -66,7 +65,7 @@
       "type": "vf-pdp-volta-pra-voce",
       "settings": {
         "eyebrow": "O QUE VOLTA PRA VOCÊ",
-        "heading": "Não é só sobre o protocolo. É sobre o que volta.",
+        "heading": "Não é só sobre eliminar. É sobre o que volta.",
         "subheading": "Quando o corpo para de gastar energia mantendo o que não devia estar lá, sobra disposição pra viver. É isso que os 30 dias devolvem.",
         "card_1_title": "Energia que volta",
         "card_1_text": "Acordar e já querer levantar. Aquela disposição que você tinha aos 25 não foi embora — só estava sendo gasta em outro lugar.",
@@ -98,8 +97,8 @@
             "fallback_filename": "lp-macro-cravo.jpg",
             "name": "Cravo",
             "latin_name": "Syzygium aromaticum",
-            "description": "Rico em eugenol, é o ativo que dá conta da fase que uma cápsula sozinha costuma deixar de fora. Por isso o protocolo combina mais de um ativo.",
-            "function_tag": "Age em sinergia"
+            "description": "Eugenol que destrói ovo e larva. Sem isso, em 30 dias volta tudo. Por isso protocolo de uma cápsula só falha.",
+            "function_tag": "Mata o ovo"
           }
         },
         "ing-3": {
@@ -270,8 +269,8 @@
         "row-3": {
           "type": "row",
           "settings": {
-            "label": "Espectro de ação",
-            "value": "Amplo",
+            "label": "Tipos de parasita combatidos",
+            "value": "+100",
             "highlight": true
           }
         },
@@ -537,7 +536,7 @@
             "photo_filename": "vf-prescritor-giovanna-eller.jpg",
             "name": "Dra. Giovanna Eller",
             "credential": "CRM-ES 20.998",
-            "specialty": "Nutróloga · saúde intestinal",
+            "specialty": "Nutróloga · saúde intestinal e emagrecimento",
             "instagram_handle": "@dra.giovannaeller",
             "instagram_url": "https://www.instagram.com/dra.giovannaeller/"
           }
@@ -548,7 +547,7 @@
             "photo_filename": "vf-prescritor-robson-araujo.jpg",
             "name": "Dr. Robson Araújo",
             "credential": "CRM-MG 93.787",
-            "specialty": "Saúde integrativa",
+            "specialty": "Emagrecimento e saúde integrativa",
             "instagram_handle": "@drrobson_araujo",
             "instagram_url": "https://www.instagram.com/drrobson_araujo/"
           }
@@ -565,81 +564,18 @@
           }
         }
       },
-      "block_order": [
-        "presc_1",
-        "presc_2",
-        "presc_3",
-        "presc_4"
-      ]
+      "block_order": ["presc_1", "presc_2", "presc_3", "presc_4"]
     },
-    "beneficios-objecoes": {
-      "type": "vf-pdp-benefits",
+    "vf_diad_faixa": {
+      "type": "vf-diad-faixa",
       "settings": {
-        "eyebrow": "BENEFÍCIOS & DÚVIDAS",
-        "heading": "Por que escolher o protocolo VermeFree",
-        "subheading": "Desparasitação natural, com critério — e resposta pra dúvida que todo mundo tem antes de comprar."
-      },
-      "blocks": {
-        "c1": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-01-oregano-frontal.jpg?v=1778772118",
-            "badge": "Vegetal 100%",
-            "title": "Natural, sem química pesada",
-            "text": "Fitoterápico com critério — apoia a rotina de limpeza natural.",
-            "accent": "green",
-            "featured": false
-          }
-        },
-        "c2": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/produto-card-1-adulto_901f4e4f-5bf9-4919-aa54-382006a76276.png?v=1779135064",
-            "badge": "Como funciona",
-            "title": "O protocolo completo",
-            "text": "4 frascos que agem juntos, do preparo à desparasitação.",
-            "accent": "green",
-            "featured": false
-          }
-        },
-        "c3": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-07-silimarina.jpg?v=1778772118",
-            "badge": "A dúvida mais comum",
-            "title": "E depois do protocolo?",
-            "text": "É rotina: 2 a 4x por ano, na lua nova. 🌙",
-            "accent": "amber",
-            "featured": true
-          }
-        },
-        "c4": {
-          "type": "card",
-          "settings": {
-            "image_url": "https://cdn.shopify.com/s/files/1/0827/3267/9387/files/pdp-adulto-05-tintura-gota.jpg?v=1778772119",
-            "badge": "Simples na rotina",
-            "title": "3ml na água, 3x ao dia",
-            "text": "Encaixa fácil no dia a dia.",
-            "accent": "green",
-            "featured": false
-          }
-        }
-      },
-      "block_order": [
-        "c1",
-        "c2",
-        "c3",
-        "c4"
-      ]
-    },
-    "vf_cross_familia": {
-      "type": "vf-pdp-cross-familia",
-      "settings": {}
+        "preview_frete_promo": true
+      }
     }
   },
   "order": [
     "main",
-    "beneficios-objecoes",
+    "vf_diad_faixa",
     "estatistica",
     "volta-pra-voce",
     "ingredientes-detalhe",
@@ -652,7 +588,6 @@
     "depoimentos",
     "stats",
     "faq",
-    "vf_cross_familia",
     "cta-final"
   ]
 }

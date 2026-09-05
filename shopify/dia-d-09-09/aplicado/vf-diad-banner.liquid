@@ -1,0 +1,253 @@
+{%- comment -%}
+  vf-diad-banner — painel da oferta do Dia D (09/09/2026).
+
+  Uma peca so, usada em dois lugares:
+    - home, logo abaixo do seletor de protocolos (cartao centralizado);
+    - PDPs, abaixo do bloco principal do produto (de ponta a ponta da tela).
+
+  Parametros:
+    badge     texto do selo do topo
+    title     titulo do painel
+    subtitle  paragrafo de apoio
+    full      true = faixa de largura total, sem cantos arredondados
+
+  NAO tem gate de data proprio: quem renderiza ja decidiu que a promo esta
+  ativa. Assim a regra de data mora num lugar so em cada secao.
+{%- endcomment -%}
+
+<div class="vf-diad{% if full %} vf-diad--full{% endif %}" data-promo-scope>
+  <div class="vf-diad__inner">
+    {%- if badge != blank -%}
+      <span class="vf-diad__badge">{{ badge }}</span>
+    {%- endif -%}
+    {%- if title != blank -%}
+      <h3 class="vf-diad__title">{{ title }}</h3>
+    {%- endif -%}
+    {%- if subtitle != blank -%}
+      <p class="vf-diad__sub">{{ subtitle }}</p>
+    {%- endif -%}
+
+    {%- comment -%} Brinde com destaque proprio — produto fisico, vai na caixa {%- endcomment -%}
+    <div class="vf-diad__gift">
+      <span class="vf-diad__gift-icon" aria-hidden="true">🎁</span>
+      <div class="vf-diad__gift-copy">
+        <strong>1 Óleo de Alho 500mg de brinde no seu pedido</strong>
+        <span>Vai junto na caixa, em qualquer pedido de hoje — sem valor mínimo. É o frasco que apoia a rotina de manutenção depois do protocolo.</span>
+      </div>
+    </div>
+
+    <div class="vf-diad__countdown" data-diad-countdown="2026-09-10T00:00:00-03:00">
+      <div class="vf-diad__unit">
+        <span class="vf-diad__num" data-cd="hours">00</span>
+        <span class="vf-diad__label">horas</span>
+      </div>
+      <span class="vf-diad__sep">:</span>
+      <div class="vf-diad__unit">
+        <span class="vf-diad__num" data-cd="mins">00</span>
+        <span class="vf-diad__label">min</span>
+      </div>
+      <span class="vf-diad__sep">:</span>
+      <div class="vf-diad__unit">
+        <span class="vf-diad__num" data-cd="secs">00</span>
+        <span class="vf-diad__label">seg</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .vf-diad {
+    margin: 40px auto 0;
+    max-width: 720px;
+    background: linear-gradient(135deg, #E11D2E 0%, #C11524 100%);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Inter', system-ui, sans-serif;
+    animation: vf-diad-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes vf-diad-pulse {
+    0%, 100% { box-shadow: 0 8px 24px rgba(225, 29, 46, 0.25); }
+    50% { box-shadow: 0 8px 32px rgba(225, 29, 46, 0.45); }
+  }
+
+  /* Faixa de ponta a ponta (PDP): sem cantos, sem sombra pulsante — o brilho
+     so faz sentido quando a peca e um cartao solto dentro da pagina. */
+  .vf-diad--full {
+    max-width: none;
+    margin: clamp(32px, 5vw, 56px) 0 0;
+    border-radius: 0;
+    padding: clamp(36px, 5vw, 56px) 24px;
+    animation: none;
+    box-shadow: none;
+  }
+  .vf-diad__inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .vf-diad__badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  /* Titulo em branco. Escrito como .vf-diad .vf-diad__title de proposito:
+     o tema tem regra propria de cor pros h3 e ela estava vencendo aqui,
+     deixando o titulo quase preto em cima do vermelho. */
+  .vf-diad .vf-diad__title {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(22px, 3.2vw, 32px);
+    line-height: 1.2;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+  }
+  .vf-diad__sub {
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.92);
+    max-width: 520px;
+    margin: 0 auto 24px;
+    font-weight: 500;
+  }
+
+  .vf-diad__gift {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    text-align: left;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.32);
+    border-radius: 14px;
+    padding: 16px 18px;
+    max-width: 520px;
+    margin: 0 auto 22px;
+  }
+  .vf-diad__gift-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
+  .vf-diad__gift-copy { display: flex; flex-direction: column; gap: 3px; }
+  .vf-diad__gift-copy strong {
+    font-size: 15.5px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #ffffff;
+  }
+  .vf-diad__gift-copy span {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+
+  .vf-diad__countdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .vf-diad__unit {
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 12px;
+    padding: 10px 16px;
+    min-width: 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .vf-diad__num {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(24px, 3.6vw, 34px);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: #ffffff;
+  }
+  .vf-diad__label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.85);
+  }
+  .vf-diad__sep {
+    font-family: 'Caprasimo', Georgia, serif;
+    font-size: clamp(22px, 3.2vw, 30px);
+    opacity: 0.7;
+    padding-bottom: 16px;
+  }
+
+  /* display:flex do painel venceria o atributo hidden do navegador */
+  .vf-diad[hidden] { display: none !important; }
+
+  @media (max-width: 540px) {
+    .vf-diad { padding: 26px 18px; margin-top: 28px; }
+    .vf-diad--full { padding: 32px 18px; margin: 28px 0 0; }
+    .vf-diad__gift { padding: 14px; gap: 10px; }
+    .vf-diad__gift-copy strong { font-size: 14.5px; }
+    .vf-diad__gift-copy span { font-size: 12.5px; }
+    .vf-diad__unit { min-width: 58px; padding: 8px 10px; }
+  }
+{% endstylesheet %}
+
+<script>
+(function () {
+  /* Um relogio so pra todos os paineis da pagina. Acao de 1 dia: abre
+     marcando no maximo 24h, nunca fica negativo e, ao zerar, some com o
+     painel inteiro em vez de ficar exibindo 00:00:00. */
+  if (window.__vfDiadCountdown) return;
+  window.__vfDiadCountdown = true;
+
+  var DIA = 86400000;
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function start() {
+    var wraps = document.querySelectorAll('[data-diad-countdown]');
+    if (!wraps.length) return;
+
+    function tick() {
+      var agora = Date.now();
+      var vivos = 0;
+      for (var i = 0; i < wraps.length; i++) {
+        var wrap = wraps[i];
+        var alvo = new Date(wrap.getAttribute('data-diad-countdown')).getTime();
+        if (isNaN(alvo)) continue;
+        var diff = alvo - agora;
+        if (diff <= 0) {
+          var painel = wrap.closest ? wrap.closest('[data-promo-scope]') : null;
+          if (painel) painel.hidden = true;
+          continue;
+        }
+        vivos++;
+        var mostra = diff > DIA ? DIA - 1000 : diff;
+        var h = Math.floor(mostra / 3600000);
+        var m = Math.floor((mostra % 3600000) / 60000);
+        var s = Math.floor((mostra % 60000) / 1000);
+        var eh = wrap.querySelector('[data-cd="hours"]');
+        var em = wrap.querySelector('[data-cd="mins"]');
+        var es = wrap.querySelector('[data-cd="secs"]');
+        if (eh) eh.textContent = pad(h);
+        if (em) em.textContent = pad(m);
+        if (es) es.textContent = pad(s);
+      }
+      if (vivos > 0) setTimeout(tick, 1000);
+    }
+    tick();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+})();
+</script>

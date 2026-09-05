@@ -121,37 +121,14 @@
     </div>
 
     {%- if vfkit_frete_promo -%}
-      <div class="vf-kit__promo" data-promo-scope>
-        <span class="vf-kit__promo-badge">{{ section.settings.promo_badge_text }}</span>
-        <h3 class="vf-kit__promo-title">{{ section.settings.promo_title }}</h3>
-        <p class="vf-kit__promo-sub">{{ section.settings.promo_subtitle }}</p>
-
-        {%- comment -%} Brinde com destaque proprio — produto fisico, vai na caixa {%- endcomment -%}
-        <div class="vf-kit__promo-gift">
-          <span class="vf-kit__promo-gift-icon" aria-hidden="true">🎁</span>
-          <div class="vf-kit__promo-gift-copy">
-            <strong>1 Óleo de Alho 500mg de brinde no seu pedido</strong>
-            <span>Vai junto na caixa, em qualquer pedido de hoje — sem valor mínimo. É o frasco que apoia a rotina de manutenção depois do protocolo.</span>
-          </div>
-        </div>
-
-        <div class="vf-kit__promo-countdown" data-kit-countdown="2026-09-10T00:00:00-03:00">
-          <div class="vf-kit__promo-unit">
-            <span class="vf-kit__promo-num" data-cd="hours">00</span>
-            <span class="vf-kit__promo-label">horas</span>
-          </div>
-          <span class="vf-kit__promo-sep">:</span>
-          <div class="vf-kit__promo-unit">
-            <span class="vf-kit__promo-num" data-cd="mins">00</span>
-            <span class="vf-kit__promo-label">min</span>
-          </div>
-          <span class="vf-kit__promo-sep">:</span>
-          <div class="vf-kit__promo-unit">
-            <span class="vf-kit__promo-num" data-cd="secs">00</span>
-            <span class="vf-kit__promo-label">seg</span>
-          </div>
-        </div>
-      </div>
+      {%- comment -%}
+        Mesmo painel usado nas PDPs. Mora em snippets/vf-diad-banner.liquid
+        pra copy, visual e contador viverem num arquivo so.
+      {%- endcomment -%}
+      {%- render 'vf-diad-banner',
+          badge: section.settings.promo_badge_text,
+          title: section.settings.promo_title,
+          subtitle: section.settings.promo_subtitle -%}
     {%- endif -%}
   </div>
 </section>
@@ -416,154 +393,7 @@
     .vf-kit__badge { font-size: 9px; padding: 4px 8px; }
   }
 
-  /* ==================== PROMO — frete gratis sem minimo ==================== */
-  .vf-kit__promo {
-    margin: 40px auto 0;
-    max-width: 720px;
-    background: linear-gradient(135deg, #E11D2E 0%, #C11524 100%);
-    border-radius: 20px;
-    padding: 32px 28px;
-    text-align: center;
-    color: #ffffff;
-    animation: vf-kit-promo-pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes vf-kit-promo-pulse {
-    0%, 100% { box-shadow: 0 8px 24px rgba(225, 29, 46, 0.25); }
-    50% { box-shadow: 0 8px 32px rgba(225, 29, 46, 0.45); }
-  }
-  .vf-kit__promo-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.16);
-    border: 1px solid rgba(255,255,255,0.35);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 6px 16px;
-    border-radius: 999px;
-    margin-bottom: 14px;
-  }
-  .vf-kit__promo-title {
-    font-family: 'Caprasimo', Georgia, serif;
-    font-weight: 400;
-    font-size: clamp(22px, 3.2vw, 32px);
-    line-height: 1.2;
-    margin: 0 0 10px;
-    letter-spacing: -0.01em;
-  }
-  .vf-kit__promo-sub {
-    font-size: 15px;
-    line-height: 1.5;
-    color: rgba(255,255,255,0.92);
-    max-width: 520px;
-    margin: 0 auto 24px;
-    font-weight: 500;
-  }
-  .vf-kit__promo-gift {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    text-align: left;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.32);
-    border-radius: 14px;
-    padding: 16px 18px;
-    max-width: 520px;
-    margin: 0 auto 22px;
-  }
-  .vf-kit__promo-gift-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
-  .vf-kit__promo-gift-copy { display: flex; flex-direction: column; gap: 3px; }
-  .vf-kit__promo-gift-copy strong {
-    font-size: 15.5px;
-    font-weight: 800;
-    letter-spacing: 0.01em;
-  }
-  .vf-kit__promo-gift-copy span {
-    font-size: 13.5px;
-    line-height: 1.45;
-    color: rgba(255,255,255,0.9);
-    font-weight: 500;
-  }
-  @media (max-width: 540px) {
-    .vf-kit__promo-gift { padding: 14px; gap: 10px; }
-    .vf-kit__promo-gift-copy strong { font-size: 14.5px; }
-    .vf-kit__promo-gift-copy span { font-size: 12.5px; }
-  }
-
-  .vf-kit__promo-countdown {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  .vf-kit__promo-unit {
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.28);
-    border-radius: 12px;
-    padding: 10px 16px;
-    min-width: 68px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-  }
-  .vf-kit__promo-num {
-    font-family: 'Caprasimo', Georgia, serif;
-    font-size: clamp(24px, 3.6vw, 34px);
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-  .vf-kit__promo-label {
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.85);
-  }
-  .vf-kit__promo-sep {
-    font-family: 'Caprasimo', Georgia, serif;
-    font-size: clamp(22px, 3.2vw, 30px);
-    opacity: 0.7;
-    padding-bottom: 16px;
-  }
-
-  @media (max-width: 540px) {
-    .vf-kit__promo { padding: 26px 18px; margin-top: 28px; }
-    .vf-kit__promo-unit { min-width: 58px; padding: 8px 10px; }
-  }
 {% endstylesheet %}
-
-<script>
-(function() {
-  var wrap = document.querySelector('[data-kit-countdown]');
-  if (!wrap) return;
-  var target = new Date(wrap.dataset.kitCountdown).getTime();
-  var elH = wrap.querySelector('[data-cd="hours"]');
-  var elM = wrap.querySelector('[data-cd="mins"]');
-  var elS = wrap.querySelector('[data-cd="secs"]');
-  function pad(n) { return String(n).padStart(2, '0'); }
-  function tick() {
-    var diff = target - Date.now();
-    if (diff <= 0) {
-      if (elH) elH.textContent = '00';
-      if (elM) elM.textContent = '00';
-      if (elS) elS.textContent = '00';
-      /* Acao de 1 dia: ao zerar, some com o painel de promo inteiro. */
-      var scope = wrap.closest ? wrap.closest('[data-promo-scope]') : null;
-      if (scope) scope.hidden = true;
-      return;
-    }
-    var h = Math.floor(diff / 3600000);
-    var m = Math.floor((diff % 3600000) / 60000);
-    var s = Math.floor((diff % 60000) / 1000);
-    if (elH) elH.textContent = pad(h);
-    if (elM) elM.textContent = pad(m);
-    if (elS) elS.textContent = pad(s);
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
-</script>
 
 {% schema %}
 {
