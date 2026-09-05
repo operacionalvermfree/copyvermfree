@@ -35,7 +35,7 @@
   {%- capture vf_promo_cards -%}
     <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
       <span class="vf-ticker__icon" aria-hidden="true">🚨</span>
-      <span class="vf-ticker__text">DIA D · 10% OFF EM TUDO, JÁ NO PREÇO — acaba em <strong class="vf-ann-countdown" data-countdown="2026-09-10T00:00:00-03:00">--:--:--</strong></span>
+      <span class="vf-ticker__text">DIA D · 10% OFF EM TUDO, JÁ NO PREÇO — acaba em <strong class="vf-ann-countdown" data-vf-ticker-countdown>--:--:--</strong></span>
     </div>
     |||
     <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
@@ -65,12 +65,13 @@
         {%- assign vf_promo_used = 0 -%}
         {%- for block in section.blocks -%}
           {%- comment -%}
-            Intercala: distribui os cards da oferta entre os selos em vez de
-            empilhar todos no comeco. vf_slot marca as posicoes espalhadas.
+            Alternancia 1 pra 1: um card de oferta antes de CADA selo. Se
+            houver mais selos que cards, a lista de cards recomeca do inicio,
+            entao o ritmo nunca fica com dois selos seguidos.
           {%- endcomment -%}
-          {%- assign vf_slot = forloop.index0 | times: vf_promos.size | modulo: section.blocks.size -%}
-          {%- if vf_slot < vf_promos.size and vf_promo_used < vf_promos.size -%}
-            {{ vf_promos[vf_promo_used] }}
+          {%- if vf_promos.size > 0 -%}
+            {%- assign vf_promo_i = forloop.index0 | modulo: vf_promos.size -%}
+            {{ vf_promos[vf_promo_i] }}
             {%- assign vf_promo_used = vf_promo_used | plus: 1 -%}
           {%- endif -%}
           <div class="vf-ticker__item" {{ block.shopify_attributes }}>
@@ -99,7 +100,7 @@
             <span class="vf-ticker__text">{{ block.settings.text }}</span>
           </div>
         {%- endfor -%}
-        {%- comment -%} Se houver menos selos que cards de oferta, o que sobrou vai no fim {%- endcomment -%}
+        {%- comment -%} Menos selos que cards: o que sobrou entra no fim do grupo {%- endcomment -%}
         {%- if vf_promo_used < vf_promos.size -%}
           {%- for vf_promo_left in vf_promos offset: vf_promo_used -%}
             {{ vf_promo_left }}
@@ -112,19 +113,32 @@
 </section>
 
 {%- comment -%}
-  Quando o prazo do Dia D chega a zero, os cards da oferta somem do marquee
-  (todos, nao so o que carrega o contador). Nunca fica negativo.
+  Contador do ticker. Roda aqui dentro de proposito: o script da tarja de
+  anuncio varre o DOM no momento em que ela renderiza, antes desta secao
+  existir, e por isso nunca chegava neste contador (ficava em --:--:--).
+  Abre marcando no maximo 24:00:00, nunca fica negativo e, ao zerar,
+  esconde os 4 cards da oferta (nao so o que carrega o relogio).
 {%- endcomment -%}
 {%- if ticker_frete_promo -%}
   <script>
     (function () {
       var end = new Date('2026-09-10T00:00:00-03:00').getTime();
-      function hidePromos() {
-        var cards = document.querySelectorAll('.vf-ticker__item--promo');
-        for (var i = 0; i < cards.length; i++) { cards[i].hidden = true; }
-      }
+      var els = document.querySelectorAll('.vf-ticker [data-vf-ticker-countdown]');
+      var cards = document.querySelectorAll('.vf-ticker__item--promo');
+      var DIA = 86400000;
+      function pad(n) { return n < 10 ? '0' + n : '' + n; }
       function tick() {
-        if (Date.now() >= end) { hidePromos(); return; }
+        var diff = end - Date.now();
+        if (diff <= 0) {
+          for (var i = 0; i < cards.length; i++) { cards[i].hidden = true; }
+          return;
+        }
+        var mostra = diff > DIA ? DIA - 1000 : diff;
+        var h = Math.floor(mostra / 3600000);
+        var m = Math.floor((mostra % 3600000) / 60000);
+        var sg = Math.floor((mostra % 60000) / 1000);
+        var txt = pad(h) + ':' + pad(m) + ':' + pad(sg);
+        for (var j = 0; j < els.length; j++) { els[j].textContent = txt; }
         setTimeout(tick, 1000);
       }
       tick();

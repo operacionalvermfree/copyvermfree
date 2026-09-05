@@ -237,15 +237,32 @@
           if (scope) scope.hidden = true;
           return;
         }
-        var hours = Math.floor(diff / 3600000);
-        var mins = Math.floor((diff % 3600000) / 60000);
-        var secs = Math.floor((diff % 60000) / 1000);
+        /* Trava em 24h: se faltar mais que um dia (so acontece na previa,
+           antes de 09/09), mostra 23:59:59 em vez de somar centenas de horas. */
+        var mostra = diff > 86400000 ? 86400000 - 1000 : diff;
+        var hours = Math.floor(mostra / 3600000);
+        var mins = Math.floor((mostra % 3600000) / 60000);
+        var secs = Math.floor((mostra % 60000) / 1000);
         item.el.textContent = pad(hours) + ':' + pad(mins) + ':' + pad(secs);
       });
     }
 
     tickCountdowns();
     setInterval(tickCountdowns, 1000);
+    /* A varredura acima acontece no momento em que esta tarja renderiza, entao
+       nao enxerga contadores de secoes que vem depois no DOM. Revarre quando a
+       pagina termina de montar. */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-countdown]').forEach(function (el) {
+          var achou = targets.some(function (it) { return it.el === el; });
+          if (achou) return;
+          var t = new Date(el.dataset.countdown).getTime();
+          if (!isNaN(t)) targets.push({ el: el, target: t });
+        });
+        tickCountdowns();
+      });
+    }
   }
 })();
 </script>
