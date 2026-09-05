@@ -1705,12 +1705,20 @@
         installment = calc10xParcela(totalWithDiscount);
       }
 
-      if (elInstallment) elInstallment.textContent = '10x de ' + formatBRL(installment);
+      // O card do kit e a caixa de preco calculavam a parcela por caminhos
+      // diferentes e divergiam em 1 centavo (110,51 no card, 110,52 na caixa).
+      // Agora a caixa copia o valor ja renderizado no card selecionado: uma
+      // fonte de verdade so, impossivel divergir.
+      var elCardInst = document.querySelector('.vf-pdp__kit-card.is-active [data-installment]');
+      var txtCardInst = elCardInst ? elCardInst.textContent.trim() : '';
+      var txtParcela = txtCardInst || formatBRL(installment);
+
+      if (elInstallment) elInstallment.textContent = '10x de ' + txtParcela;
       if (elCash) elCash.textContent = 'ou ' + formatBRL(totalWithDiscount) + ' à vista';
 
       // Sticky CTA price atualiza junto
       if (elStickyPrice) {
-        elStickyPrice.innerHTML = '<strong>10x ' + formatBRL(installment) + '</strong><span>ou ' + formatBRL(totalWithDiscount) + ' à vista</span>';
+        elStickyPrice.innerHTML = '<strong>10x ' + txtParcela + '</strong><span>ou ' + formatBRL(totalWithDiscount) + ' à vista</span>';
       }
 
       if (elBadge && elBadgeText) {
@@ -1719,17 +1727,10 @@
         var temFreteGratis = totalWithDiscount >= FRETE_GRATIS_THRESHOLD;
 
         if (freteGratisPromoAtiva) {
-          // Frete gratis e desconto por quantidade SOMAM — a barra mostra os dois,
-          // e segue empurrando pra proxima faixa de desconto.
-          var msgFrete = discountPct > 0
-            ? '✓ ' + discountPct + '% OFF aplicado · 🚚 frete grátis sem mínimo'
-            : '🚚 Frete grátis liberado, sem valor mínimo';
-          var tierFrete = discountPct === 10 ? 5 : (discountPct === 15 ? 8 : null);
-          var pctFrete = discountPct === 10 ? 15 : (discountPct === 15 ? 20 : null);
-          if (tierFrete && qty < tierFrete && tierFrete <= kitMaxQty) {
-            msgFrete += ' · +' + (tierFrete - qty) + ' e você leva ' + pctFrete + '% off';
-          }
-          elBadgeText.textContent = msgFrete;
+          // FIXA de proposito: nao muda ao trocar de kit. O frete e gratis em
+          // qualquer quantidade, entao qualquer texto que varie por kit sugere
+          // que a pessoa precisa comprar mais pra ganhar — o que e falso.
+          elBadgeText.textContent = '🚚 Frete grátis, sem valor mínimo';
           elBadge.hidden = false;
           return;
         }
@@ -1785,7 +1786,20 @@
       if (kitbarFill) kitbarFill.style.width = pct + '%';
       kitbarEl.classList.remove('vf-pdp__kitbar--mid', 'vf-pdp__kitbar--low');
       var m;
-      if (qty >= 3) {
+      if (freteGratisPromoAtiva) {
+        // Na promo o frete e gratis em QUALQUER quantidade. O trecho de frete
+        // fica fixo; so a faixa de desconto por quantidade varia. Sem isso a
+        // barra diria "leve 2 e ganhe frete gratis" com o frete ja gratuito.
+        if (qty >= 3) {
+          m = '🚚 Frete grátis garantido · 10% OFF aplicado — vantagem máxima';
+        } else if (qty === 2) {
+          kitbarEl.classList.add('vf-pdp__kitbar--mid');
+          m = {% if product.handle == 'protocolo-desparasitacao-adulto-vermefree' %}'🚚 Frete grátis garantido · 5% OFF — leve 3 Kits e ganhe 10% OFF'{% else %}'🚚 Frete grátis garantido · leve 3 Kits e ganhe 10% OFF'{% endif %};
+        } else {
+          kitbarEl.classList.add('vf-pdp__kitbar--low');
+          m = '🚚 Frete grátis garantido · leve 2 e ganhe 5% OFF, leve 3 e ganhe 10% OFF';
+        }
+      } else if (qty >= 3) {
         m = '🎉 Vantagem máxima: 10% OFF + frete grátis desbloqueados';
       } else if (qty === 2) {
         kitbarEl.classList.add('vf-pdp__kitbar--mid');
