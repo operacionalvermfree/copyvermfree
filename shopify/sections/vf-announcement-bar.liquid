@@ -12,20 +12,22 @@
 {%- assign ann_interval = section.settings.interval | default: 5 -%}
 
 {%- comment -%}
-  PROMO TEMPORARIA — Frete gratis sem minimo, valido so sabado 05/09 e
-  domingo 06/09/2026. Usa a data do fuso da loja ('now'), entao ativa e
-  desativa sozinho, sem precisar mexer depois.
-  MESMA JANELA do desconto automatico no Shopify "Frete Gratis · Fim de
-  Semana 05-06/09 (sem minimo)" e do snippet vf-frete-progress.liquid.
-  Mexeu na data de um, mexer nos tres — senao a tarja anuncia uma coisa
-  e o checkout cobra outra.
+  PROMO — Frete gratis SEM MINIMO. Sem trava de data: quem controla o quando
+  e a PUBLICACAO DESTE TEMA. Enquanto ele estiver no ar, a tarja anuncia a
+  promo; quando sair do ar, some junto.
+  Pra desligar sem despublicar, e so desmarcar "Modo promo" no editor.
+
+  ⚠️ O desconto de verdade e o automatico "Frete Gratis · Fim de Semana
+  05-06/09 (sem minimo)" no Shopify, que e DA LOJA e nao do tema. Esta tarja
+  so comunica — se o desconto nao estiver valendo, ela promete o que o
+  checkout nao cumpre.
+
+  O contador usa "Fim da promo". Deixe em branco pra anunciar sem contador —
+  melhor em branco do que com data vencida, que zera e fica "00:00:00".
 {%- endcomment -%}
-{%- assign ann_today = 'now' | date: '%Y-%m-%d' -%}
-{%- assign ann_promo_active = false -%}
-{%- if ann_today == '2026-09-05' or ann_today == '2026-09-06' or section.settings.preview_promo -%}
-  {%- assign ann_promo_active = true -%}
-{%- endif -%}
-{%- assign ann_promo_end = '2026-09-07T00:00:00-03:00' -%}
+{%- assign ann_promo_active = section.settings.promo_on -%}
+{%- if section.settings.promo_on == nil -%}{%- assign ann_promo_active = true -%}{%- endif -%}
+{%- assign ann_promo_end = section.settings.promo_end -%}
 {%- if ann_promo_active -%}
   {%- assign ann_bg = '#E11D2E' -%}
   {%- assign ann_text_color = '#FFFFFF' -%}
@@ -40,8 +42,12 @@
       {%- if ann_promo_active -%}
         <div class="vf-announcement__slide is-active" data-slide>
           <span class="vf-announcement__text vf-announcement__text--promo">
-            🚨 FRETE GRÁTIS SEM MÍNIMO — acaba em
-            <strong class="vf-ann-countdown" data-countdown="{{ ann_promo_end }}">--:--:--</strong>
+            {%- if ann_promo_end != blank -%}
+              🚨 FRETE GRÁTIS SEM MÍNIMO — acaba em
+              <strong class="vf-ann-countdown" data-countdown="{{ ann_promo_end }}">--:--:--</strong>
+            {%- else -%}
+              🚨 FRETE GRÁTIS SEM MÍNIMO em todo o site
+            {%- endif -%}
           </span>
         </div>
       {%- else -%}
@@ -239,10 +245,17 @@
     },
     {
       "type": "checkbox",
-      "id": "preview_promo",
-      "label": "🔴 PRÉVIA: forçar visual da promo de frete grátis (05-06/09)",
-      "info": "Ative só pra testar/ver como fica. Desative depois — nos dias 05 e 06/09 ela liga sozinha, não precisa disso.",
-      "default": false
+      "id": "promo_on",
+      "label": "🔴 Modo promo: frete grátis sem mínimo",
+      "info": "Ligado, a tarja fica vermelha anunciando frete grátis sem mínimo enquanto este tema estiver publicado. Desmarque para voltar às mensagens normais. O desconto em si é configurado em Descontos, não aqui.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_end",
+      "label": "Fim da promo (contador)",
+      "info": "Formato 2026-09-07T00:00:00-03:00. Precisa bater com a data de fim do desconto em Descontos. Deixe em branco para anunciar sem contador.",
+      "default": "2026-09-07T00:00:00-03:00"
     },
     {
       "type": "color",

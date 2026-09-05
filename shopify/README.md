@@ -80,7 +80,7 @@ Tudo só no tema **Gap Frete Gratis** (gid 164712808667).
 | Tipo | automático, frete grátis |
 | Mínimo | **nenhum** |
 | Janela | 05/09 00:00 → 06/09 23:59:59 (Brasília) |
-| Status na criação | SCHEDULED |
+| Status | **ACTIVE** (ativado em 04/09 21:12 BRT) |
 | Combina com | descontos de produto ✔ · de pedido ✔ |
 
 ## Arquivos do tema
@@ -92,15 +92,27 @@ Tudo só no tema **Gap Frete Gratis** (gid 164712808667).
 
 Originais em `backups/`.
 
-## ⚠️ A janela está escrita em TRÊS lugares
+## Tudo ativado — o gatilho é publicar o tema
 
-Mexeu em um, mexer nos três — senão a loja anuncia uma coisa e o checkout cobra outra:
+Decisão do Gabriel: nada de trava de data no tema. Quem controla o quando é a
+publicação do "Gap Frete Gratis". Enquanto ele estiver no ar, a promo aparece.
 
-1. o desconto automático no Shopify (acima);
-2. `snippets/vf-frete-progress.liquid` → `PROMO_INICIO` / `PROMO_FIM` (epoch UTC
-   `1788577200` / `1788749999`);
-3. `sections/vf-announcement-bar.liquid` → `ann_today == '2026-09-05' or '2026-09-06'`
-   e `ann_promo_end = '2026-09-07T00:00:00-03:00'`.
+**Mas atenção ao que é do TEMA e ao que é da LOJA:**
+
+| Peça | Escopo | Ligado por |
+|---|---|---|
+| Barra de frete e tarja vermelha | tema | publicar o Gap Frete Gratis |
+| Desconto de frete grátis | **loja inteira** | está ACTIVE agora, em qualquer tema |
+
+O desconto **não** é do tema. Ele já está valendo no tema que está no ar agora
+e vale até domingo 06/09 23:59:59, independente de qual tema esteja publicado.
+
+Interruptores, se precisar desligar:
+- barra: `PROMO_FRETE_GRATIS = false` em `snippets/vf-frete-progress.liquid`;
+- tarja: desmarcar "🔴 Modo promo" no editor da seção;
+- contador: campo "Fim da promo" no editor — em branco, anuncia sem contador
+  (melhor que data vencida, que zera e fica "00:00:00");
+- desconto: mudar a data de fim em Descontos.
 
 ## Como cada peça se comporta
 
@@ -118,15 +130,14 @@ Só troquei as datas. Nos dias 05 e 06/09 ela fica vermelha, com
 `preview_promo` (checkbox no editor) força o visual pra conferir antes. Conferi
 que ele está **desligado** no `settings_data.json` — a tarja não aparece agora.
 
-## ⛔ Pendência crítica: 5OFF x frete grátis não combinam
+## 5OFF x frete grátis — resolvido
 
-O cupom **5OFF** está com `combinesWith.shippingDiscounts = false`. O pop-up de
-captura aplica o 5OFF sozinho na sessão. Resultado no fim de semana: **quem pegar
-o cupom pelo pop-up não recebe o frete grátis** — a loja anuncia "frete grátis em
-tudo" e o checkout cobra frete.
+O cupom **5OFF** estava com `combinesWith.shippingDiscounts = false`. Como o
+pop-up aplica o 5OFF sozinho na sessão, quem pegasse o cupom **não** receberia o
+frete grátis: a loja anunciaria "frete grátis em tudo" e o checkout cobraria.
 
-Correção: virar `shippingDiscounts` para `true` no 5OFF. Decisão de margem
-(5% + frete grátis empilhados) — precisa de aval antes.
+Virado para `true` em 04/09. Agora 5% e frete grátis empilham. Para reverter, é
+só voltar o campo para `false` no cupom 5OFF.
 
-Os descontos automáticos de volume (10/15/20% Kits) e o do Óleo já estão com
-`shippingDiscounts: true`, então esses combinam normalmente.
+Os automáticos de volume (10/15/20% Kits) e o do Óleo já estavam com
+`shippingDiscounts: true`.

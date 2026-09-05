@@ -1,27 +1,31 @@
 {%- comment -%}
   vf-frete-progress.liquid — Barra de frete grátis
 
-  Dois estados:
-  · PROMO (sáb 05/09 00:00 → dom 06/09 23:59:59, horário de Brasília):
-    frete grátis SEM MÍNIMO. A barra vira reforço da promo — não existe
-    "falta R$X" quando não há mínimo, então o contador sairia mentindo.
-    A janela abaixo é a MESMA do desconto automático no Shopify
-    "Frete Grátis · Fim de Semana 05-06/09 (sem mínimo)". Se mexer na data
-    de um, mexer no outro — senão a barra e o checkout se contradizem.
-  · FORA DA PROMO: comportamento normal, meta de R$399, mostrando o quanto falta.
+  ESTE TEMA É O TEMA DA PROMO de frete grátis SEM MÍNIMO. A barra fica em
+  modo promo o tempo todo — sem trava de data — porque quem controla o
+  quando é a PUBLICAÇÃO DO TEMA, não o calendário.
+
+  Sem mínimo não existe gap: um contador "falta R$X" sairia mentindo, então
+  a barra vira reforço ("frete grátis liberado").
+
+  PROMO_FRETE_GRATIS é o interruptor. Em `true` (modo promo) a barra reforça.
+  Em `false` ela volta ao comportamento normal de meta de R$399, mostrando o
+  quanto falta — é só trocar essa linha.
+
+  ⚠️ O desconto de verdade é o automático "Frete Grátis · Fim de Semana
+  05-06/09 (sem mínimo)" no Shopify, que é DA LOJA e não do tema. Esta barra
+  só comunica. Se o desconto não estiver valendo, ela promete o que o
+  checkout não cumpre — conferir os dois juntos.
 
   A barra só informa — não tem CTA de adicionar produto.
 {%- endcomment -%}
 
+{%- assign PROMO_FRETE_GRATIS = true -%}
 {%- assign FRETE_META = 39900 -%}
-{%- comment -%} epoch UTC: 2026-09-05T03:00:00Z e 2026-09-07T02:59:59Z {%- endcomment -%}
-{%- assign PROMO_INICIO = 1788577200 -%}
-{%- assign PROMO_FIM = 1788749999 -%}
-{%- assign agora = 'now' | date: '%s' | plus: 0 -%}
 
-{%- if agora >= PROMO_INICIO and agora <= PROMO_FIM -%}
+{%- if PROMO_FRETE_GRATIS -%}
   <div class="vf-frete vf-frete--ok">
-    <div class="vf-frete__msg"><span class="vf-frete__ic">🚚</span> <strong>Frete grátis liberado</strong> — em qualquer pedido, só neste fim de semana.</div>
+    <div class="vf-frete__msg"><span class="vf-frete__ic">🚚</span> <strong>Frete grátis liberado</strong> — em qualquer pedido, sem valor mínimo.</div>
     <div class="vf-frete__track"><span class="vf-frete__fill" style="width:100%"></span></div>
   </div>
 {%- elsif cart.total_price >= FRETE_META -%}
