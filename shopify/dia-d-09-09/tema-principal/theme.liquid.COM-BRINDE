@@ -115,19 +115,7 @@
 
   <body class="template-{{ template | replace: '.', '-' | handle }}">
     {% render 'vf-whatsapp-float' %}
-
-    {%- comment -%}
-      Pop-up de recomendacao + captura de e-mail. Ele entrega o cupom 5OFF,
-      que e mecanica permanente da loja — mas NAO pode aparecer no Dia D
-      (09/09/2026): a acao daquele dia nao tem cupom nenhum e o preco ja
-      chega com 10% OFF, bem mais que os 5% do 5OFF. Mostrar um codigo pra
-      digitar no checkout no meio da acao confundiria a oferta e ainda
-      concorreria com ela. Volta a aparecer sozinho no dia 10.
-    {%- endcomment -%}
-    {%- assign layout_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
-    {%- unless layout_today == 20260909 -%}
-      {%- render 'vf-diagnostico-popup' -%}
-    {%- endunless -%}
+    {%- render 'vf-diagnostico-popup' -%}
     <a class="skip-to-content" href="#main">Pular para o conteúdo</a>
 
     {% section 'vf-announcement-bar' %}
@@ -149,4 +137,3 @@
     {%- render 'vf-diad-brinde' -%}
   </body>
 </html>
-

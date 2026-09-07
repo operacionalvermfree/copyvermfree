@@ -140,13 +140,6 @@
     {% section 'footer' %}
 
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
-
-    {%- comment -%}
-      Brinde automatico do Dia D (1 Oleo de Alho). O snippet tem trava de data
-      propria: so age em 09/09/2026 e faz limpeza em 10/09. Fora disso nao
-      renderiza script nenhum.
-    {%- endcomment -%}
-    {%- render 'vf-diad-brinde' -%}
   </body>
 </html>
 
