@@ -1,6 +1,8 @@
 # Banner hero — Dia D · quarta 09/09
 
-Versão **cinematográfica premium, com a linha completa de produtos**. Peças do banner hero da home para a ação relâmpago de 24h (09/09, 00h00–23h59).
+Peças do banner hero da home para a ação relâmpago de 24h (09/09, 00h00–23h59),
+em **duas versões da mesma arte**: a original **escura** (cinematográfica) e uma
+**clara**. São 8 arquivos — desktop e mobile, com texto e chapa limpa, nas duas.
 
 ## Método
 
@@ -26,7 +28,46 @@ A chapa não é medida à mão: `calib()` acha o topo do pedestal (maior queda d
 | **Chapa limpa desktop** | 98,9 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/a142502b-1cc9-4840-ab53-dfa65775c8cb.webp |
 | **Chapa limpa mobile** | 55,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/773f6445-34e2-4d98-9469-043c140cf4e6.webp |
 
-Teto do briefing: desktop < 300 KB, mobile < 150 KB. Todas passam com folga.
+### Versão CLARA
+
+| Peça | Peso | Link |
+|---|---|---|
+| **Desktop 2400×1000** (com texto) | 133,3 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/89b62799-19ab-41e6-9544-f788adecd9b5.webp |
+| **Mobile 1080×1350** (com texto) | 143,1 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/82e22116-af78-4b62-81c7-21df6eef6c39.webp |
+| **Chapa limpa desktop** | 103,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/26595711-58cc-4693-bea2-c005961555b7.webp |
+| **Chapa limpa mobile** | 121,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/0d7f83b2-eb3b-45af-a53b-d143a0e33e50.webp |
+
+Teto do briefing: desktop < 300 KB, mobile < 150 KB. Todas passam — mas o mobile
+claro, a 143,1 KB, é o único com pouca folga: chapa clara tem mais detalhe fino
+(a parede, as sombras de folha) e o WebP paga por isso. Se um dia a copy crescer,
+é essa peça que estoura primeiro.
+
+## As duas versões
+
+A composição, a tipografia, a ordem dos blocos e o recorte dos produtos são os
+mesmos nas duas. O que muda é como a luz se comporta — e isso não é troca de cor
+de fundo, é troca de física:
+
+| | Escura | Clara |
+|---|---|---|
+| Chapa | ardósia, luz-chave dura, névoa | pedra clara, luz difusa de dia |
+| Relight no produto | forte (0,68→1,38) | suave (0,88→1,14) |
+| Luz de recorte | quente e marcada | quase ausente |
+| Profundidade | recua muito, para o verde-preto | recua pouco, para o cinza claro |
+| Sombra projetada | preta, 55% | taupe quente, 34% |
+| Sombra de contato | 90% | 60% |
+| Reflexo no tampo | 30% | 15% |
+| Vinheta | fecha os cantos | desligada |
+| Cortina sob o texto | véu escuro | véu claro |
+| Texto | creme sobre o escuro | verde-preto sobre o creme |
+
+Sombra preta e reflexo forte num set claro entregariam na hora que o produto foi
+colado. Por isso os parâmetros vivem num dicionário por tema (`DARK` / `LIGHT`)
+em vez de estarem espalhados pelo código.
+
+**A clara é a mais próxima da identidade da marca** — o manual pede off-white/bege
+de fundo e verde natural. A escura continua sendo a mais dramática. Escolha do
+cliente; as duas estão prontas.
 
 ## Verificações medidas (não estimadas)
 
@@ -41,6 +82,21 @@ O build imprime estes números a cada rodada, comparando a peça com texto contr
 | Contraste da etiqueta de prazo | 17,19:1 | 16,58:1 |
 | Contraste dos bullets | 17,52:1 | 15,69:1 |
 | Linha de produtos | x 1180–2099 · y 281–707 | x 101–979 · y 583–990 |
+
+Na versão clara (texto verde-preto sobre o creme):
+
+| | Desktop | Mobile |
+|---|---|---|
+| Caixa do texto | x 403–1178 · y 231–829 | x 174–904 · y 76–1248 |
+| Dentro da área segura | ✅ | ✅ |
+| Contraste do título | 12,89:1 | 14,35:1 |
+| Contraste dos bullets | 11,75:1 | 14,45:1 |
+| Contraste do olho | 5,02:1 | 5,34:1 |
+| Etiqueta (creme sobre o vermelho) | 4,92:1 | 4,92:1 |
+| Linha de produtos | x 1100–2019 · y 308–734 | x 101–979 · y 593–1000 |
+
+O olho ("VERMEFREE · DIA D") no tema claro é o único elemento que chegou perto do
+limite: o cinza-esverdeado original media 3,3:1 e foi escurecido até passar.
 
 Mínimo WCAG AA para texto pequeno é 4,5:1 — todas as peças passam com larga folga.
 
@@ -78,5 +134,11 @@ Esta versão é **escura**, o que contraria o "fundo claro/branco" das edições
 `build_banner.py` reconstrói as 4 peças a partir de:
 
 - `fam.png` — a linha completa de produtos, fundo removido (RGBA);
-- `cine_d.png` / `cine_m.png` — as chapas de cena geradas, vazias;
+- `cine_d.png` / `cine_m.png` — as chapas escuras, vazias;
+- `cine_dl.png` / `cine_ml.png` — as chapas claras, vazias;
 - `fonts/m600.ttf` — Montserrat SemiBold (o ExtraBold vem do fontconfig do sistema).
+
+Uma rodada gera as 8 peças. `calib()` acha o pedestal em cada chapa, mas `by`
+agora é preso numa faixa: se a chapa vier com o pedestal fora de lugar (aconteceu
+— a primeira chapa clara de mobile veio com ele a 89% da altura), a linha de
+produtos não sai da composição, no máximo descola um pouco do tampo.
