@@ -44,6 +44,8 @@ RED_T = (226, 74, 66)        # vermelho de TEXTO sobre o escuro: contraste 4.9:1
 CREAM = (247, 242, 235)
 WARM = (255, 214, 150)       # temperatura da luz-chave
 DIM = (176, 168, 156)
+GREEN = (34, 68, 44)         # verde da marca: botao do tema claro (9,6:1 com creme)
+HAIR = (196, 188, 174)       # fio fino sobre o creme
 INK = (26, 38, 30)           # verde-preto: o texto do tema claro
 DIM_L = (96, 104, 92)        # olho do tema claro (4,8:1 sobre o creme)
 
@@ -53,8 +55,9 @@ DIM_L = (96, 104, 92)        # olho do tema claro (4,8:1 sobre o creme)
 # difuso (luz suave, sombra taupe curta, quase sem reflexo) — que e como
 # um objeto se comporta de verdade num set claro.
 DARK = dict(
+    layout='cine',
     plate=('cine_d.png', 'cine_m.png'),
-    ink=CREAM, dim=DIM, accent=RED_T,
+    ink=CREAM, dim=DIM, accent=RED_T, hair=(72, 78, 70), btn=RED,
     veil=(6, 9, 8), scrim_d=.74, scrim_m=.76,
     vig_d=.62, vig_m=.58,
     glow=(150, 160, 110), glow_a=74,
@@ -63,8 +66,9 @@ DARK = dict(
     shadow=(0, 0, 0), cast=.55, contact=.90, refl=.30,
 )
 LIGHT = dict(
+    layout='ed',
     plate=('cine_dl.png', 'cine_ml.png'),
-    ink=INK, dim=DIM_L, accent=RED,
+    ink=INK, dim=DIM_L, accent=RED, hair=HAIR, btn=GREEN,
     veil=(253, 250, 245), scrim_d=.58, scrim_m=.62,
     vig_d=0, vig_m=0,
     glow=None, glow_a=0,
@@ -168,7 +172,7 @@ def glow(base, cx, cy, rx, ry, col, a):
                m.filter(ImageFilter.GaussianBlur(max(rx, ry) * .48)))
 
 
-def scrim(base, horiz, amt, hold, fade, col):
+def scrim(base, horiz, amt, hold, fade, col, rev=False):
     """Cortina escura sob o texto. A chapa e uma foto: sem isto o vermelho
     do subtitulo cai no facho de luz e o contraste despenca (medido: 2.5:1).
     Fica cheia ate `hold` e some ate `hold+fade`, entao nao vira caixa dura."""
@@ -176,10 +180,11 @@ def scrim(base, horiz, amt, hold, fade, col):
     n = W if horiz else H
     g = Image.new('L', (W, 1) if horiz else (1, H))
     for i in range(n):
-        if i <= hold:
+        k = (n - 1 - i) if rev else i
+        if k <= hold:
             v = amt
         else:
-            v = amt * max(0., 1 - (i - hold) / float(fade)) ** 1.4
+            v = amt * max(0., 1 - (k - hold) / float(fade)) ** 1.4
         g.putpixel((i, 0) if horiz else (0, i), int(255 * v))
     base.paste(Image.new('RGB', (W, H), col), (0, 0), g.resize((W, H)))
 
@@ -271,7 +276,7 @@ def place(base, hero, cx, by, ht, fr, th):
     return int(cx - w / 2), int(by - ht), int(cx + w / 2), int(by)
 
 
-def cta(base, x, y, txt, fs):
+def cta(base, x, y, txt, fs, bg=RED):
     f = F(XB, fs)
     ls = fs * .08
     tw = wls(f, txt, ls)
@@ -280,7 +285,7 @@ def cta(base, x, y, txt, fs):
     w = int(tw) + int(fs * 3.0) + ar
     ov = Image.new('RGBA', base.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(ov)
-    d.rounded_rectangle((x, y, x + w, y + h), radius=h // 2, fill=RED + (255,))
+    d.rounded_rectangle((x, y, x + w, y + h), radius=h // 2, fill=bg + (255,))
     ex = dls(d, x + int((w - tw - ar - fs * .5) / 2), y + int((h - fs * 1.3) / 2), txt, f, CREAM + (255,), ls)
     cy = y + h // 2
     ax = ex + int(fs * .55)
@@ -289,6 +294,40 @@ def cta(base, x, y, txt, fs):
     d.line((ax, cy + s, ax + s, cy), fill=CREAM + (255,), width=lw)
     base.alpha_composite(ov)
     return w, h
+
+
+def hair(d, x, y, w, col, t=2):
+    """Fio fino. O tema claro se estrutura com fios, nao com blocos de cor."""
+    if w > 0:
+        d.rectangle((x, y, x + w - 1, y + t - 1), fill=col + (255,))
+
+
+def lockup(d, x, y, col, hair_col, n, s, span):
+    """Lockup do desconto empilhado: o numero manda e o OFF encosta embaixo,
+    com um fio ate a borda da coluna. Le como uma coisa so, nao duas linhas."""
+    fn = F(XB, n)
+    dls(d, x, y, '10%', fn, col + (255,), -n * .02)
+    yo = y + int(n * .88)
+    fo = F(XB, s)
+    ox = dls(d, x, yo, 'OFF', fo, col + (255,), s * .02)
+    hx = ox + int(s * .45)
+    hair(d, hx, yo + int(s * .60), (x + span) - hx, hair_col, 3)
+    return yo + int(s * .98)
+
+
+def numbered(d, x, y, items, col, dim, hair_col, fs, gap, w):
+    """Lista numerada com fio entre os itens — vocabulario de bula/editorial,
+    no lugar dos marcadores redondos do tema escuro."""
+    fn = F(XB, int(fs * .68))
+    ind = int(fs * 2.2)
+    for i, t in enumerate(items):
+        d.text((x, y + int(fs * .20)), '%02d' % (i + 1), font=fn, fill=dim + (255,))
+        ft, _ = fit(SB, t, w - ind, fs)
+        d.text((x + ind, y), t, font=ft, fill=col + (255,))
+        if i < len(items) - 1:
+            hair(d, x, y + gap - int(gap * .26), w, hair_col, 1)
+        y += gap
+    return y
 
 
 EYEBROW = 'VERMEFREE  ·  DIA D'
@@ -304,7 +343,7 @@ FAM = FAM.crop(FAM.getchannel('A').getbbox())
 RATIO = FAM.width / float(FAM.height)
 
 
-def desktop(txt=True, th=DARK):
+def desktop_cine(txt=True, th=DARK):
     """2400x1000 — a linha inteira no pedestal, texto na coluna da esquerda."""
     W, H = 2400, 1000
     src = Image.open(th['plate'][0]).convert('RGB')
@@ -341,7 +380,7 @@ def desktop(txt=True, th=DARK):
     return bg.convert('RGB'), box
 
 
-def mobile(txt=True, th=DARK):
+def mobile_cine(txt=True, th=DARK):
     """1080x1350 — redesenhado, nao recortado: oferta em cima, linha de
     produtos no pedestal, CTA embaixo."""
     W, H = 1080, 1350
@@ -375,6 +414,94 @@ def mobile(txt=True, th=DARK):
     cw = int(wls(f, CT, 38 * .08)) + int(38 * 3.0) + int(38 * .78)
     cta(bg, int((W - cw) / 2), 1152, CT, 38)
     return bg.convert('RGB'), box
+
+
+def desktop_ed(txt, th):
+    """2400x1000 — composicao espelhada: a linha de produtos ocupa a esquerda
+    e o texto a direita, em coluna editorial."""
+    W, H = 2400, 1000
+    src = Image.open(th['plate'][0]).convert('RGB')
+    yt, _xc, _sp, fr = calib(src)
+    bg = grade(cover(src, W, H)).convert('RGBA')
+
+    gw = 900
+    gh = int(gw / RATIO)
+    cx = 760
+    by = min(max(int(H * yt) + 6, 640), 760)
+    box = place(bg, FAM, cx, by, gh, fr, th)
+    scrim(bg, True, th['scrim_d'], 780, 460, th['veil'], rev=True)
+    if not txt:
+        return bg.convert('RGB'), box
+
+    X, COL = 1400, 600
+    d = ImageDraw.Draw(bg)
+    fe, _ = fit(XB, EYEBROW, COL, 23, 9)
+    dls(d, X, 150, EYEBROW, fe, th['dim'] + (255,), 9)
+    hair(d, X, 196, COL, th['hair'], 2)
+    y = lockup(d, X, 228, th['ink'], th['hair'], 250, 104, COL)
+    y += 26
+    f2, _ = fit(XB, H2, COL, 30, 6)
+    dls(d, X, y, H2, f2, th['accent'] + (255,), 6)
+    y += 56
+    hair(d, X, y, COL, th['hair'], 2)
+    y = numbered(d, X, y + 34, BULLETS, th['ink'], th['dim'], th['hair'], 26, 50, COL)
+    cta(bg, X, y + 26, CT, 28, th['btn'])
+    return bg.convert('RGB'), box
+
+
+def mobile_ed(txt, th):
+    """1080x1350 — mesmo vocabulario: display centrado, corpo alinhado a
+    esquerda, fios no lugar de blocos, botao no verde da marca."""
+    W, H = 1080, 1350
+    src = Image.open(th['plate'][1]).convert('RGB')
+    yt, _xc, _sp, fr = calib(src)
+    bg = grade(cover(src, W, H)).convert('RGBA')
+
+    gw = 820
+    gh = int(gw / RATIO)
+    by = min(max(int(H * yt) + 8, 900), 1000)
+    box = place(bg, FAM, 540, by, gh, fr, th)
+    scrim(bg, False, th['scrim_m'], 470, 190, th['veil'])
+    if not txt:
+        return bg.convert('RGB'), box
+
+    d = ImageDraw.Draw(bg)
+    fe, _ = fit(XB, EYEBROW, 900, 24, 8)
+    dls(d, (W - wls(fe, EYEBROW, 8)) / 2, 50, EYEBROW, fe, th['dim'] + (255,), 8)
+    hair(d, W / 2 - 55, 92, 110, th['hair'], 2)
+
+    n, sz = 176, 76
+    f1 = F(XB, n)
+    w1 = wls(f1, '10%', -n * .02)
+    dls(d, (W - w1) / 2, 112, '10%', f1, th['ink'] + (255,), -n * .02)
+    yo = 112 + int(n * .88)
+    fo = F(XB, sz)
+    wo = wls(fo, 'OFF', sz * .02)
+    ox = (W - wo) / 2
+    dls(d, ox, yo, 'OFF', fo, th['ink'] + (255,), sz * .02)
+    hy = yo + int(sz * .60)
+    hair(d, (W - w1) / 2, hy, int(ox - 26 - (W - w1) / 2), th['hair'], 3)
+    hair(d, ox + wo + 26, hy, int((W + w1) / 2 - (ox + wo + 26)), th['hair'], 3)
+
+    y = yo + int(sz * .98) + 22
+    f2, _ = fit(XB, H2, 940, 30, 5)
+    dls(d, (W - wls(f2, H2, 5)) / 2, y, H2, f2, th['accent'] + (255,), 5)
+    y += 54
+    hair(d, W / 2 - 55, y, 110, th['hair'], 2)
+    numbered(d, 240, y + 34, BULLETS, th['ink'], th['dim'], th['hair'], 28, 46, 600)
+
+    f = F(XB, 36)
+    cw = int(wls(f, CT, 36 * .08)) + int(36 * 3.0) + int(36 * .78)
+    cta(bg, int((W - cw) / 2), 1160, CT, 36, th['btn'])
+    return bg.convert('RGB'), box
+
+
+def desktop(txt=True, th=DARK):
+    return desktop_ed(txt, th) if th['layout'] == 'ed' else desktop_cine(txt, th)
+
+
+def mobile(txt=True, th=DARK):
+    return mobile_ed(txt, th) if th['layout'] == 'ed' else mobile_cine(txt, th)
 
 
 def save(img, name, target_kb):

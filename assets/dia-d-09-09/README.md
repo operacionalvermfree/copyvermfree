@@ -28,25 +28,42 @@ A chapa não é medida à mão: `calib()` acha o topo do pedestal (maior queda d
 | **Chapa limpa desktop** | 98,9 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/a142502b-1cc9-4840-ab53-dfa65775c8cb.webp |
 | **Chapa limpa mobile** | 55,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/773f6445-34e2-4d98-9469-043c140cf4e6.webp |
 
-### Versão CLARA
+### Versão CLARA (layout editorial)
 
 | Peça | Peso | Link |
 |---|---|---|
-| **Desktop 2400×1000** (com texto) | 133,3 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/89b62799-19ab-41e6-9544-f788adecd9b5.webp |
-| **Mobile 1080×1350** (com texto) | 143,1 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/82e22116-af78-4b62-81c7-21df6eef6c39.webp |
-| **Chapa limpa desktop** | 103,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/26595711-58cc-4693-bea2-c005961555b7.webp |
-| **Chapa limpa mobile** | 121,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/0d7f83b2-eb3b-45af-a53b-d143a0e33e50.webp |
+| **Desktop 2400×1000** (com texto) | 196,5 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/36c02c15-2f46-490f-9172-1538b04d1556.webp |
+| **Mobile 1080×1350** (com texto) | 138,0 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/903642a5-672a-4a38-a040-5f98044a00af.webp |
+| **Chapa limpa desktop** | 169,8 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/4ef7de7b-06ba-4758-a6d2-8d4758fb7078.webp |
+| **Chapa limpa mobile** | 119,5 KB | https://d2ol7oe51mr4n9.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/7b3b5970-4127-4631-a5b8-1b6d55a4821b.webp |
 
-Teto do briefing: desktop < 300 KB, mobile < 150 KB. Todas passam — mas o mobile
-claro, a 143,1 KB, é o único com pouca folga: chapa clara tem mais detalhe fino
-(a parede, as sombras de folha) e o WebP paga por isso. Se um dia a copy crescer,
-é essa peça que estoura primeiro.
+Teto do briefing: desktop < 300 KB, mobile < 150 KB. Todas passam. O mobile claro
+segue sendo o de menor folga (138 KB de 150): chapa clara tem mais detalhe fino
+(a parede, as sombras de folha) e o WebP paga por isso.
 
 ## As duas versões
 
-A composição, a tipografia, a ordem dos blocos e o recorte dos produtos são os
-mesmos nas duas. O que muda é como a luz se comporta — e isso não é troca de cor
-de fundo, é troca de física:
+A primeira tentativa de versão clara era a escura com outra luz: mesmo layout,
+fundo trocado. Ficou correta e sem personalidade. A clara agora tem **arquitetura
+própria** — só os produtos e a copy são compartilhados:
+
+| | Escura (cinematográfica) | Clara (editorial) |
+|---|---|---|
+| Composição | texto à esquerda, produtos à direita | **espelhada**: produtos à esquerda, coluna de texto à direita |
+| Desconto | `10% OFF` em uma linha | **lockup empilhado**: `10%` grande, `OFF` embaixo com fio até a borda da coluna |
+| Prazo | pílula vermelha, texto creme | **vermelho solto** sobre o creme, entre dois fios |
+| Benefícios | marcadores redondos vermelhos | **lista numerada** `01 02 03` com fio entre os itens |
+| Estrutura | blocos de cor | **fios finos** |
+| Botão | vermelho | **verde da marca** (9,8:1 com o creme) |
+| Mobile | display centrado, corpo centrado | display centrado, **corpo alinhado à esquerda** |
+
+O vermelho na clara ficou reservado ao prazo — é o único lugar onde a urgência
+precisa gritar. O botão foi para o verde primário do manual, que é o que a marca
+usa quando não está gritando. Isso também tira o risco de vermelho+verde ficarem
+brigando: são hierarquias diferentes, não uma dupla.
+
+O que continua igual nas duas é a física da luz, que não é escolha estética e sim
+o que impede o produto de parecer colado:
 
 | | Escura | Clara |
 |---|---|---|
@@ -87,16 +104,19 @@ Na versão clara (texto verde-preto sobre o creme):
 
 | | Desktop | Mobile |
 |---|---|---|
-| Caixa do texto | x 403–1178 · y 231–829 | x 174–904 · y 76–1248 |
+| Caixa do texto | x 1399–2000 · y 156–912 | x 240–841 · y 57–1251 |
 | Dentro da área segura | ✅ | ✅ |
-| Contraste do título | 12,89:1 | 14,35:1 |
-| Contraste dos bullets | 11,75:1 | 14,45:1 |
-| Contraste do olho | 5,02:1 | 5,34:1 |
-| Etiqueta (creme sobre o vermelho) | 4,92:1 | 4,92:1 |
-| Linha de produtos | x 1100–2019 · y 308–734 | x 101–979 · y 593–1000 |
+| Contraste do lockup | 13,86:1 | 14,35:1 |
+| Contraste da lista | 13,42:1 | 14,32:1 |
+| Contraste do prazo (vermelho) | 4,94:1 | 5,05:1 |
+| Contraste do olho | 5,17:1 | 5,34:1 |
+| Botão (creme sobre o verde) | 9,76:1 | 9,76:1 |
+| Linha de produtos | x 311–1209 · y 344–760 | x 131–949 · y 621–1000 |
 
-O olho ("VERMEFREE · DIA D") no tema claro é o único elemento que chegou perto do
-limite: o cinza-esverdeado original media 3,3:1 e foi escurecido até passar.
+Dois elementos da clara ficam entre 4,9:1 e 5,3:1 — passam, mas sem a folga larga
+do tema escuro. É o preço de texto colorido sobre fundo claro, e é por isso que os
+dois são medidos a cada rodada em vez de julgados no olho. O olho da peça
+("VERMEFREE · DIA D") media 3,3:1 no cinza-esverdeado original e foi escurecido.
 
 Mínimo WCAG AA para texto pequeno é 4,5:1 — todas as peças passam com larga folga.
 
