@@ -119,3 +119,48 @@ página não tem mais `__vfDiadBrinde` no HTML.
 
 ### 4. BXGY e 10% OFF
 Expiram sozinhos em `2026-09-10T02:59:59Z`. Nada a fazer.
+
+---
+
+# PASSO 1 (v2) — escada de desconto · 07/09
+
+Fonte de verdade: ClickUp `86ak8v6mh`, que é mais específico que o PDF.
+> 1 un = 12% · 2 un = 12%+5% · 3+ = 12% (volume não empilha) · cupom +5%
+
+## Criado
+`1706014933211` · **5% OFF · 2 unidades** · classe PRODUCT · só na janela
+do Dia D · Adulto + Kids 2-4 + Kids 5-9 (mesmos 3 produtos das outras
+faixas; Kit Família e Óleo continuam fora, como sempre estiveram).
+
+## Desligado durante o Dia D
+`endsAt: 2026-09-09T03:00:00Z` nas três faixas — elas param no segundo em
+que o Dia D começa. Estado ANTES: as três `ACTIVE` com `endsAt: null`.
+
+| id | antes | depois |
+|---|---|---|
+| 1656398315739 | ACTIVE, endsAt null | ACTIVE até 09/09 03:00Z |
+| 1656400085211 | ACTIVE, endsAt null | ACTIVE até 09/09 03:00Z |
+| 1656400478427 | ACTIVE, endsAt null | ACTIVE até 09/09 03:00Z |
+
+## Mecanismo de volta — TESTADO, não presumido
+Criei um desconto descartável com gatilho de 999 unidades (inócuo mesmo
+se ativo), datas no passado → nasceu `EXPIRED`. Setei `endsAt: null` →
+virou `ACTIVE`. Apaguei em seguida. Logo a reversão do item 2 funciona.
+
+## ⚠️ Aritmética que a copy não pode repetir
+O ClickUp promete 17% em 2 unidades e teto de 22%. São somas; o Shopify
+compõe:
+
+| cenário | conta | entrega |
+|---|---|---|
+| 2 unidades | 1 − (0,88 × 0,95) | **16,4%** |
+| 2 un + cupom influenciadora | 1 − (0,88 × 0,95 × 0,95) | **20,6%** |
+
+Não dá pra acertar os dois com uma faixa só: 17% pediria 5,68%, 22%
+pediria 6,70%. Ficou 5% redondo e a copy do Passo 3 não promete
+percentual somado.
+
+## ⚠️ Efeito aceito conscientemente
+Com as faixas desligadas, quem levar 8 unidades paga **12%** no Dia D
+contra os 20% de um dia normal. É o que o ClickUp determina
+("o volume não empilha além de 2"), registrado aqui porque não é óbvio.
