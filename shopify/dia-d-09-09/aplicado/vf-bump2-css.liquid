@@ -1,0 +1,176 @@
+{%- comment -%}
+  Estilos do cartao vf-bump2 (order bump do 2o protocolo no carrinho).
+  Separado do snippet principal so por tamanho: o arquivo unico nao
+  cabia num write da API. Quem renderiza e vf-order-bump-2protocolo.
+{%- endcomment -%}
+
+{% stylesheet %}
+  .vf-bump2 {
+    border: 1px solid var(--vf-border, #E3E3DD);
+    background: var(--vf-green-light, #E7F6EC);
+    border-radius: 12px;
+    padding: 14px;
+    margin: 2px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .vf-bump2.is-busy { opacity: .6; pointer-events: none; }
+
+  .vf-bump2__head { display: flex; flex-direction: column; gap: 4px; }
+  .vf-bump2__title {
+    font-family: var(--font-heading, inherit);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--vf-green-dark, #15803D);
+    line-height: 1.3;
+  }
+  .vf-bump2__desc { font-size: 12px; color: var(--vf-muted, #555); line-height: 1.45; }
+  .vf-bump2__diad {
+    margin-top: 4px;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #C11524;
+  }
+
+  .vf-bump2__options { display: flex; flex-direction: column; gap: 8px; }
+  .vf-bump2__opt { position: relative; display: block; cursor: pointer; }
+  .vf-bump2__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+
+  .vf-bump2__opt-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--vf-border, #E3E3DD);
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .vf-bump2__opt-radio {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--vf-border, #D8D8D2);
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .vf-bump2__opt-radio svg { width: 11px; height: 11px; opacity: 0; }
+  .vf-bump2__opt-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .vf-bump2__opt-dur { font-size: 13.5px; font-weight: 700; color: #1A1A1A; line-height: 1.25; }
+  .vf-bump2__opt-sub { font-size: 11px; color: var(--vf-muted, #888); font-weight: 600; line-height: 1.3; }
+  .vf-bump2__opt-priceblock {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    text-align: right;
+  }
+  .vf-bump2__opt-full {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--vf-muted, #999);
+    text-decoration: line-through;
+    line-height: 1.2;
+  }
+  .vf-bump2__opt-price {
+    font-family: var(--font-heading, inherit);
+    font-size: 15.5px;
+    font-weight: 900;
+    color: var(--vf-green-dark, #15803D);
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .vf-bump2__opt input:checked + .vf-bump2__opt-inner {
+    border-color: var(--vf-green, #16A34A);
+    background: #F0FDF4;
+    box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+  }
+  .vf-bump2__opt input:checked + .vf-bump2__opt-inner .vf-bump2__opt-radio {
+    background: var(--vf-green, #16A34A);
+    border-color: var(--vf-green, #16A34A);
+  }
+  .vf-bump2__opt input:checked + .vf-bump2__opt-inner .vf-bump2__opt-radio svg { opacity: 1; }
+  .vf-bump2__opt input:focus-visible + .vf-bump2__opt-inner {
+    outline: 2px solid var(--vf-green-dark, #15803D);
+    outline-offset: 2px;
+  }
+
+  .vf-bump2__checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1A1A1A;
+  }
+  .vf-bump2__checkbox input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .vf-bump2__checkbox-box {
+    flex-shrink: 0;
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--vf-border, #D8D8D2);
+    background: #fff;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .vf-bump2__checkbox-box svg { width: 12px; height: 12px; opacity: 0; }
+  .vf-bump2__checkbox input:checked + .vf-bump2__checkbox-box {
+    background: var(--vf-green, #16A34A);
+    border-color: var(--vf-green, #16A34A);
+  }
+  .vf-bump2__checkbox input:checked + .vf-bump2__checkbox-box svg { opacity: 1; }
+  .vf-bump2__checkbox input:focus-visible + .vf-bump2__checkbox-box {
+    outline: 2px solid var(--vf-green-dark, #15803D);
+    outline-offset: 2px;
+  }
+
+  .vf-bump2__cta {
+    width: 100%; border: 0; cursor: pointer;
+    background: var(--vf-green, #16A34A); color: #fff;
+    font-family: var(--font-heading, inherit); font-size: 13.5px; font-weight: 800;
+    padding: 12px 14px; border-radius: 10px;
+    transition: background .15s, opacity .15s;
+  }
+  .vf-bump2__cta:not(:disabled):hover { background: var(--vf-green-dark, #15803D); }
+  .vf-bump2__cta:disabled { background: #B7C4BC; cursor: default; }
+
+  .vf-bump2__spinner {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--vf-green-dark, #15803D);
+  }
+  /* ===== Variante vermelha (bump Kids-irmãos) ===== */
+  .vf-bump2--red {
+    background: #FDECEC;
+    border-color: #F5C2C2;
+    animation: vf-bump2-red-pulse 1.9s ease-in-out infinite;
+  }
+  @keyframes vf-bump2-red-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(225,29,46,.28); }
+    50% { box-shadow: 0 0 0 7px rgba(225,29,46,0); }
+  }
+  .vf-bump2--red .vf-bump2__title { color: #C11524; }
+  .vf-bump2--red .vf-bump2__opt-price { color: #C11524; }
+  .vf-bump2--red .vf-bump2__opt input:checked + .vf-bump2__opt-inner {
+    border-color: #E11D2E;
+    background: #FEF2F2;
+    box-shadow: 0 0 0 3px rgba(225,29,46,.15);
+  }
+  .vf-bump2--red .vf-bump2__opt input:checked + .vf-bump2__opt-inner .vf-bump2__opt-radio {
+    background: #E11D2E;
+    border-color: #E11D2E;
+  }
+  .vf-bump2--red .vf-bump2__checkbox input:checked + .vf-bump2__checkbox-box {
+    background: #E11D2E;
+    border-color: #E11D2E;
+  }
+  .vf-bump2--red .vf-bump2__cta { background: #E11D2E; }
+  .vf-bump2--red .vf-bump2__cta:not(:disabled):hover { background: #C11524; }
+  .vf-bump2--red .vf-bump2__spinner { color: #C11524; }
+{% endstylesheet %}

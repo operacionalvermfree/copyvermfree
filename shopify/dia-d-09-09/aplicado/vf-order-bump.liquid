@@ -3,25 +3,46 @@
   vf-order-bump.liquid  —  ORDER BUMP Óleo de Alho Desodorizado
   ============================================================
   Order bump condicional: aparece SÓ quando o carrinho tem
-  protocolo adulto OU kit família. Oferta opcional de +R$67.
+  protocolo adulto OU kit família. Ele é renderizado por
+  main-cart.liquid (página /cart).
 
-  COMO USAR:
-  - Salve este arquivo como snippet:  snippets/vf-order-bump.liquid
-  - Ele é renderizado por main-cart.liquid (página /cart).
+  PRECOS SAO CALCULADOS, NUNCA ESCRITOS A MAO.
+  ------------------------------------------------------------
+  Antes os tres valores eram texto fixo (R$ 67 / R$ 180,90 /
+  R$ 341,70), montados quando a escada do oleo era 10% e 15%.
+  A escada real sempre foi 15% e 20%, e no Dia D ela nem vale.
+  Resultado: o botao prometia "Adicionar 3 frascos — R$ 180,90"
+  e o checkout cobrava R$ 170,85. Preco na tela diferente do
+  preco no carrinho e exatamente o que nao pode acontecer.
 
-  ⚙️ CONFIGURAÇÃO (EDITE AS 2 LINHAS ABAIXO):
-  1. BUMP_VARIANT_ID  = o Variant ID do Óleo de Alho (número, ex: 45678901234567)
-  2. GATILHOS (TRIGGER_HANDLES) = handles dos produtos que ativam o bump
-     (protocolo adulto e kit família). Veja o handle na URL do produto:
-     vermefree.com.br/products/AQUI-É-O-HANDLE
+  Agora o preco unitario vem do proprio produto e o percentual
+  vem da escada que esta valendo no dia:
+
+    FORA DO DIA D — escada propria do oleo
+      1 frasco  = sem desconto
+      3 frascos = 15%  (desconto 1686134849755)
+      6 frascos = 20%  (desconto 1686134948059)
+
+    NO DIA D 09/09/2026 — escada geral do dia, que cobre os 5
+    produtos e conta TODAS as unidades do carrinho
+      1 frasco  = 12%
+      3 frascos = 15%
+      6 frascos = 18%
+    As duas escadas do oleo ficam pausadas no dia.
+
+    Como o bump so aparece com um protocolo ja no carrinho, a
+    conta fecha: 1 protocolo + 1 oleo = 2 un (12%), + 3 oleos =
+    4 un (15%), + 6 oleos = 7 un (18%). Se a pessoa tiver mais
+    protocolos, o desconto real sobe e o que mostramos aqui fica
+    ABAIXO do real — nunca acima. Errar pra baixo e seguro;
+    errar pra cima e prometer o que nao vai cobrar.
 {%- endcomment -%}
 
-{%- comment -%} ===== 1. CONFIG (JÁ PREENCHIDO — VermeFree) ===== {%- endcomment -%}
 {%- comment -%} ATENÇÃO: é o VARIANT ID (48968692891867), não o Product ID (9400206262491) {%- endcomment -%}
 {%- assign BUMP_VARIANT_ID = 48968692891867 -%}
-{%- assign TRIGGER_HANDLES = 'protocolo-desparasitacao-adulto-vermefree,antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos,antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos,kit-familia-vermefree-2-adultos-2-criancas' -%}
+{%- assign TRIGGER_HANDLES = 'protocolo-desparasitacao-adulto-vermefree,kit-familia-vermefree-2-adultos-2-criancas' -%}
 
-{%- comment -%} ===== 2. Detecta se o carrinho tem um produto-gatilho ===== {%- endcomment -%}
+{%- comment -%} ===== Detecta se o carrinho tem um produto-gatilho ===== {%- endcomment -%}
 {%- assign bump_should_show = false -%}
 {%- assign bump_already_in_cart = false -%}
 {%- assign triggers = TRIGGER_HANDLES | split: ',' -%}
@@ -38,6 +59,41 @@
   {%- endif -%}
 {%- endfor -%}
 
+{%- comment -%} ===== Preco real do produto + escada do dia ===== {%- endcomment -%}
+{%- assign bump_product = all_products['oleo-de-alho-desodorizado-500mg'] -%}
+{%- assign bump_unit = 6700 -%}
+{%- if bump_product != blank and bump_product.price > 0 -%}
+  {%- assign bump_unit = bump_product.price -%}
+{%- endif -%}
+
+{%- assign bump_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
+{%- assign bump_diad = false -%}
+{%- if bump_today == 20260909 -%}
+  {%- assign bump_diad = true -%}
+{%- endif -%}
+
+{%- if bump_diad -%}
+  {%- assign pct_1 = 12 -%}
+  {%- assign pct_3 = 15 -%}
+  {%- assign pct_6 = 18 -%}
+{%- else -%}
+  {%- assign pct_1 = 0 -%}
+  {%- assign pct_3 = 15 -%}
+  {%- assign pct_6 = 20 -%}
+{%- endif -%}
+
+{%- assign full_1 = bump_unit -%}
+{%- assign full_3 = bump_unit | times: 3 -%}
+{%- assign full_6 = bump_unit | times: 6 -%}
+{%- assign save_1 = full_1 | times: pct_1 | divided_by: 100 -%}
+{%- assign save_3 = full_3 | times: pct_3 | divided_by: 100 -%}
+{%- assign save_6 = full_6 | times: pct_6 | divided_by: 100 -%}
+{%- assign pay_1 = full_1 | minus: save_1 -%}
+{%- assign pay_3 = full_3 | minus: save_3 -%}
+{%- assign pay_6 = full_6 | minus: save_6 -%}
+{%- assign un_3 = pay_3 | divided_by: 3 -%}
+{%- assign un_6 = pay_6 | divided_by: 6 -%}
+
 {%- comment -%}
   Não mostra se o gatilho não está no carrinho,
   nem se o Óleo já foi adicionado.
@@ -47,21 +103,19 @@
   <div class="vf-bump" data-vf-bump>
     <div class="vf-bump__flag">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-      COMPLETE SEU PROTOCOLO · OFERTA DO CARRINHO
+      SÓ APARECE AQUI · NÃO ESTÁ À VENDA NO SITE
     </div>
 
     <div class="vf-bump__head">
       <span class="vf-bump__img" aria-hidden="true">
-        {%- comment -%} Imagem do produto do bump (pega do variant) {%- endcomment -%}
-        {%- assign bump_product = all_products['oleo-de-alho-desodorizado-500mg'] -%}
         {%- if bump_product.featured_image -%}
           <img src="{{ bump_product.featured_image | image_url: width: 160 }}" alt="Óleo de Alho Desodorizado" width="80" height="80" loading="lazy">
         {%- endif -%}
       </span>
 
       <span class="vf-bump__copy">
-        <span class="vf-bump__title">Mantenha a leveza depois do protocolo com o <strong>Óleo de Alho</strong></span>
-        <span class="vf-bump__desc">O Óleo de Alho é o passo de manutenção do mês — ajuda a manter a rotina de bem-estar do intestino entre um ciclo e outro. Muita gente mantém ele na rotina depois de fazer o protocolo.</span>
+        <span class="vf-bump__title">Potencialize sua desparasitação com o <strong>Óleo de Alho Desodorizado</strong></span>
+        <span class="vf-bump__desc">O alho é o antiparasitário natural mais estudado do mundo. Somado ao seu protocolo, ele <strong>ataca o que resiste e impede a reinfecção</strong> — quem faz os dois juntos sente muito mais resultado.</span>
         <span class="vf-bump__social">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
           <strong>8 em cada 10 clientes</strong> adicionam essa oferta ao pedido.
@@ -71,77 +125,61 @@
 
     <p class="vf-bump__dose">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-      Cada frasco = <strong>30 dias</strong> de manutenção da sua rotina de bem-estar.
+      Cada frasco = <strong>30 dias</strong> de manutenção. Escolha por quanto tempo quer se proteger:
     </p>
 
-    {%- comment -%} Seletor 1/3/6 de frascos do Óleo de Alho. "1 frasco" pré-selecionado; o cliente pode subir pra 3 ou 6 frascos (todos 15% OFF). {%- endcomment -%}
+    {%- comment -%} 3 opções de tempo. Valores calculados acima, a partir do preço real do produto. {%- endcomment -%}
     <div class="vf-bump__options" role="radiogroup" aria-label="Quantidade de Óleo de Alho">
-
-      <label class="vf-bump__opt vf-bump__opt--max">
-        <input type="radio" name="vf-bump-qty" value="6" data-vf-bump-opt data-qty="6">
-        <span class="vf-bump__opt-tag vf-bump__opt-tag--max">MELHOR CUSTO</span>
-        <span class="vf-bump__opt-inner">
-          <span class="vf-bump__opt-radio" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
-          </span>
-          <span class="vf-bump__opt-main">
-            <span class="vf-bump__opt-dur">6 frascos</span>
-            <span class="vf-bump__opt-sub">180 dias · R$ 56,95/un</span>
-          </span>
-          <span class="vf-bump__opt-priceblock">
-            <span class="vf-bump__opt-full">de R$ 402,00</span>
-            <span class="vf-bump__opt-installment">10x R$ 40,30</span>
-            <span class="vf-bump__opt-cash">ou R$ 341,70 à vista</span>
-            <span class="vf-bump__opt-save">Economize R$ 60,30</span>
-          </span>
-        </span>
-      </label>
-
-      <label class="vf-bump__opt vf-bump__opt--best">
-        <input type="radio" name="vf-bump-qty" value="3" data-vf-bump-opt data-qty="3" checked>
-        <span class="vf-bump__opt-tag">MAIS ESCOLHIDO</span>
-        <span class="vf-bump__opt-inner">
-          <span class="vf-bump__opt-radio" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
-          </span>
-          <span class="vf-bump__opt-main">
-            <span class="vf-bump__opt-dur">3 frascos</span>
-            <span class="vf-bump__opt-sub">90 dias · R$ 56,95/un</span>
-          </span>
-          <span class="vf-bump__opt-priceblock">
-            <span class="vf-bump__opt-full">de R$ 201,00</span>
-            <span class="vf-bump__opt-installment">10x R$ 20,15</span>
-            <span class="vf-bump__opt-cash">ou R$ 170,85 à vista</span>
-            <span class="vf-bump__opt-save">Economize R$ 30,15</span>
-          </span>
-        </span>
-      </label>
 
       <label class="vf-bump__opt">
         <input type="radio" name="vf-bump-qty" value="1" data-vf-bump-opt data-qty="1">
         <span class="vf-bump__opt-inner">
-          <span class="vf-bump__opt-radio" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
-          </span>
-          <span class="vf-bump__opt-main">
-            <span class="vf-bump__opt-dur">1 frasco</span>
-            <span class="vf-bump__opt-sub">30 dias de proteção</span>
-          </span>
-          <span class="vf-bump__opt-priceblock">
-            <span class="vf-bump__opt-full">de R$ 67,00</span>
-            <span class="vf-bump__opt-installment">10x R$ 6,72</span>
-            <span class="vf-bump__opt-cash">ou R$ 56,95 à vista</span>
-            <span class="vf-bump__opt-save">Economize R$ 10,05</span>
-          </span>
+          <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
+          <span class="vf-bump__opt-dur">1 frasco</span>
+          <span class="vf-bump__opt-price">{{ pay_1 | money }}</span>
+          <span class="vf-bump__opt-sub">30 dias</span>
+          {%- if save_1 > 0 -%}
+            <span class="vf-bump__opt-save">{{ pct_1 }}% OFF · economiza {{ save_1 | money }}</span>
+          {%- endif -%}
+        </span>
+      </label>
+
+      <label class="vf-bump__opt vf-bump__opt--best">
+        <input type="radio" name="vf-bump-qty" value="3" data-vf-bump-opt data-qty="3">
+        <span class="vf-bump__opt-tag">MAIS ESCOLHIDO</span>
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
+          <span class="vf-bump__opt-dur">3 frascos</span>
+          <span class="vf-bump__opt-price">{{ pay_3 | money }}</span>
+          <span class="vf-bump__opt-sub">90 dias · {{ un_3 | money }}/un</span>
+          <span class="vf-bump__opt-save">{{ pct_3 }}% OFF · economiza {{ save_3 | money }}</span>
+        </span>
+      </label>
+
+      <label class="vf-bump__opt">
+        <input type="radio" name="vf-bump-qty" value="6" data-vf-bump-opt data-qty="6">
+        <span class="vf-bump__opt-tag vf-bump__opt-tag--max">MELHOR CUSTO</span>
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
+          <span class="vf-bump__opt-dur">6 frascos</span>
+          <span class="vf-bump__opt-price">{{ pay_6 | money }}</span>
+          <span class="vf-bump__opt-sub">180 dias · {{ un_6 | money }}/un</span>
+          <span class="vf-bump__opt-save">{{ pct_6 }}% OFF · economiza {{ save_6 | money }}</span>
         </span>
       </label>
 
     </div>
 
-    <button type="button" class="vf-bump__cta" data-vf-bump-cta>
-      <span data-vf-bump-cta-label>Adicionar 3 frascos ao pedido — R$ 170,85</span>
+    <button type="button" class="vf-bump__cta" data-vf-bump-cta disabled>
+      <span data-vf-bump-cta-label>Selecione uma opção acima</span>
     </button>
-    <p class="vf-bump__micro">Desconto aplicado automaticamente no checkout · só nesta página</p>
+    <p class="vf-bump__micro">
+      {%- if bump_diad -%}
+        O desconto do Dia D entra sozinho no carrinho — e isso é <strong>além</strong> do frasco de brinde que já vai no seu pedido hoje.
+      {%- else -%}
+        Desconto por volume aplicado automaticamente no carrinho.
+      {%- endif -%}
+    </p>
 
     <div class="vf-bump__spinner" data-vf-bump-spinner hidden>Adicionando…</div>
   </div>
@@ -157,18 +195,21 @@
       var spinner = wrap.querySelector('[data-vf-bump-spinner]');
       var VARIANT_ID = {{ BUMP_VARIANT_ID }};
       var busy = false;
-      var chosenQty = 3;
+      var chosenQty = 0;
 
-      // rótulos do CTA por quantidade
+      /* Rotulos do CTA. Os valores vem do Liquid acima — nunca escreva
+         preco a mao aqui: era assim que o botao passou a prometer um
+         numero que o checkout nao cobrava. */
       var CTA = {
-        '1': 'Adicionar Óleo de Alho — R$ 56,95 (15% OFF)',
-        '3': 'Adicionar 3 frascos ao pedido — R$ 170,85',
-        '6': 'Adicionar 6 frascos ao pedido — R$ 341,70'
+        '1': 'Adicionar 1 frasco ao pedido — {{ pay_1 | money }}',
+        '3': 'Adicionar 3 frascos ao pedido — {{ pay_3 | money }}',
+        '6': 'Adicionar 6 frascos ao pedido — {{ pay_6 | money }}'
       };
 
       opts.forEach(function (o) {
         o.addEventListener('change', function () {
           chosenQty = parseInt(o.getAttribute('data-qty'), 10);
+          cta.disabled = false;
           ctaLbl.textContent = CTA[String(chosenQty)] || 'Adicionar ao pedido';
         });
       });
@@ -253,167 +294,59 @@
     /* Linha "cada frasco = 30 dias" */
     .vf-bump__dose {
       display: flex; align-items: center; gap: 7px;
-      margin: 14px 0 12px; font-size: 12.5px; color: #1A1A1A; line-height: 1.35;
+      margin: 14px 0 10px; font-size: 12.5px; color: #1A1A1A; line-height: 1.35;
     }
     .vf-bump__dose svg { width: 16px; height: 16px; color: var(--vf-green-dark, #15803D); flex-shrink: 0; }
     .vf-bump__dose strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
 
-    /* ==================== Opções de tempo — empilhadas, layout em linha (radio · info · preço) ==================== */
-    .vf-bump__options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .vf-bump__opt {
-      position: relative;
-      display: block;
-      cursor: pointer;
-    }
+    /* Opções de tempo (1/3/6) */
+    .vf-bump__options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    @media (max-width: 380px) { .vf-bump__options { grid-template-columns: 1fr; } }
+    .vf-bump__opt { position: relative; display: block; cursor: pointer; }
     .vf-bump__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-
     .vf-bump__opt-inner {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 2px solid var(--vf-border, #E3E3DD);
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: #fff;
-      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease, transform .1s ease;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px;
+      border: 2px solid var(--vf-border, #E3E3DD); border-radius: 10px;
+      padding: 12px 6px 10px; background: #fff; transition: border-color .15s, box-shadow .15s;
+      height: 100%;
     }
-    @media (hover: hover) {
-      .vf-bump__opt:hover .vf-bump__opt-inner {
-        border-color: var(--vf-green, #16A34A);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(22,163,74,.12);
-      }
-    }
-
-    .vf-bump__opt-radio {
-      flex-shrink: 0;
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      border: 2px solid var(--vf-border, #D8D8D2);
-      background: #fff;
+    .vf-bump__opt-check {
+      position: absolute; top: 8px; right: 8px;
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--vf-border, #D8D8D2); background: #fff;
       display: inline-flex; align-items: center; justify-content: center; color: #fff;
-      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+      transition: background .15s, border-color .15s;
     }
-    .vf-bump__opt-radio svg { width: 13px; height: 13px; opacity: 0; transform: scale(.5); transition: opacity .15s ease, transform .15s ease; }
-
-    .vf-bump__opt-main {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-    .vf-bump__opt-dur {
-      font-size: clamp(14px, 3.6vw, 16px);
-      font-weight: 800;
-      color: #1A1A1A;
-      line-height: 1.25;
-    }
-    .vf-bump__opt-sub {
-      font-size: 11.5px;
-      color: var(--vf-muted, #888);
-      font-weight: 600;
-      line-height: 1.3;
-    }
-
-    .vf-bump__opt-priceblock {
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 1px;
-      text-align: right;
-    }
-    /* valor cheio — bem discreto, só pra ancorar o desconto */
-    .vf-bump__opt-full {
-      font-size: 10.5px;
-      font-weight: 500;
-      color: var(--vf-muted, #999);
-      text-decoration: line-through;
-      line-height: 1.2;
-    }
-    /* parcela — a estrela do bloco de preço */
-    .vf-bump__opt-installment {
+    .vf-bump__opt-check svg { width: 11px; height: 11px; opacity: 0; }
+    .vf-bump__opt-dur { font-size: 14px; font-weight: 800; color: #1A1A1A; }
+    .vf-bump__opt-price {
       font-family: var(--font-heading, inherit);
-      font-size: clamp(18px, 5vw, 22px);
-      font-weight: 900;
-      color: var(--vf-green-dark, #15803D);
-      line-height: 1.15;
-      white-space: nowrap;
-      font-variant-numeric: tabular-nums;
+      font-size: 17px; font-weight: 900; color: var(--vf-green-dark, #15803D);
     }
-    .vf-bump__opt-cash {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--vf-muted, #888);
-      line-height: 1.25;
-      white-space: nowrap;
-      margin-top: 1px;
-    }
+    .vf-bump__opt-sub { font-size: 11px; color: var(--vf-muted, #888); font-weight: 600; }
     .vf-bump__opt-save {
-      margin-top: 3px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .1px;
-      color: #C2410C;
-      background: #FEF0E7;
-      padding: 2px 7px;
-      border-radius: 999px;
-      white-space: nowrap;
+      margin-top: 4px; font-size: 10.5px; font-weight: 800; color: #C2410C;
+      background: #FEF0E7; padding: 2px 7px; border-radius: 999px; line-height: 1.3;
     }
-
+    .vf-bump__opt-tag {
+      position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+      z-index: 2; white-space: nowrap;
+      background: var(--vf-green, #16A34A); color: #fff;
+      font-size: 9px; font-weight: 900; letter-spacing: .4px;
+      padding: 3px 8px; border-radius: 999px;
+    }
+    .vf-bump__opt-tag--max { background: #C2410C; }
     /* estado selecionado */
-    .vf-bump__opt input:checked + .vf-bump__opt-tag + .vf-bump__opt-inner,
     .vf-bump__opt input:checked + .vf-bump__opt-inner {
       border-color: var(--vf-green, #16A34A);
-      background: var(--vf-green-light, #F0FDF4);
       box-shadow: 0 0 0 3px rgba(22,163,74,.15);
     }
-    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-radio {
-      background: var(--vf-green, #16A34A);
-      border-color: var(--vf-green, #16A34A);
-      transform: scale(1.06);
+    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-check,
+    .vf-bump__opt input:checked + .vf-bump__opt-inner .vf-bump__opt-check {
+      background: var(--vf-green, #16A34A); border-color: var(--vf-green, #16A34A);
     }
-    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-radio svg { opacity: 1; transform: scale(1); }
-    .vf-bump__opt input:focus-visible + .vf-bump__opt-tag + .vf-bump__opt-inner,
-    .vf-bump__opt input:focus-visible + .vf-bump__opt-inner {
-      outline: 2px solid var(--vf-green-dark, #15803D);
-      outline-offset: 2px;
-    }
-
-    /* Card "MAIS ESCOLHIDO" — destaque visual mesmo sem estar selecionado */
-    .vf-bump__opt--best .vf-bump__opt-inner {
-      border-color: #A7E3B8;
-      background: #F6FEF8;
-    }
-    .vf-bump__opt--best .vf-bump__opt-installment { color: #0F7A32; }
-
-    .vf-bump__opt-tag {
-      position: absolute;
-      top: -9px;
-      left: 16px;
-      z-index: 2;
-      white-space: nowrap;
-      background: var(--vf-green, #16A34A);
-      color: #fff;
-      font-size: 9.5px;
-      font-weight: 900;
-      letter-spacing: .4px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      box-shadow: 0 2px 6px rgba(22,163,74,.35);
-    }
-    .vf-bump__opt-tag--max { background: #C2410C; box-shadow: 0 2px 6px rgba(194,65,12,.35); }
-
-    @media (max-width: 360px) {
-      .vf-bump__opt-inner { padding: 10px 12px; gap: 8px; }
-      .vf-bump__opt-radio { width: 20px; height: 20px; }
-      .vf-bump__opt-sub { font-size: 10.5px; }
-    }
+    .vf-bump__opt input:checked + .vf-bump__opt-inner .vf-bump__opt-check svg { opacity: 1; }
+    .vf-bump__opt input:focus-visible + .vf-bump__opt-inner { outline: 2px solid var(--vf-green-dark, #15803D); outline-offset: 2px; }
 
     /* CTA */
     .vf-bump__cta {
@@ -426,7 +359,8 @@
     .vf-bump__cta:not(:disabled):hover { background: var(--vf-green-dark, #15803D); }
     .vf-bump__cta:not(:disabled):active { transform: translateY(1px); }
     .vf-bump__cta:disabled { background: #C7CDC9; cursor: default; }
-    .vf-bump__micro { margin: 8px 0 0; text-align: center; font-size: 11px; color: var(--vf-muted, #888); }
+    .vf-bump__micro { margin: 8px 0 0; text-align: center; font-size: 11px; color: var(--vf-muted, #888); line-height: 1.4; }
+    .vf-bump__micro strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
 
     .vf-bump.is-busy { opacity: .55; pointer-events: none; }
     .vf-bump__spinner {
@@ -436,4 +370,3 @@
     /* garante que o atributo hidden esconde de fato o spinner (display vence hidden) */
     .vf-bump__spinner[hidden] { display: none !important; }
 {% endstylesheet %}
-
