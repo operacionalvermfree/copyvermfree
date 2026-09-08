@@ -1,0 +1,17 @@
+{%- comment -%}
+  vf-cart-quiz.liquid — DESATIVADO NO TEMA DO DIA D (pedido do Gabriel, 08/09).
+
+  Este snippet era o quiz que abria por cima da pagina do carrinho antes do
+  cliente clicar em "Finalizar compra" (sections/main-cart.liquid ainda
+  chama ele, com o comentario "Quiz interceptor antes do checkout"). No Dia
+  D a pagina ja tem faixa da promo, aviso de escada de desconto, barra de
+  frete e dois order bumps — mais um pop no caminho do checkout so custa
+  pedido.
+
+  Em vez de mexer no main-cart.liquid (20 KB, nao cabe numa gravacao da
+  API), o snippet virou um no-op: a chamada continua la e nao imprime nada.
+
+  COMO TRAZER DE VOLTA: o arquivo original, intacto, esta no tema publicado
+  (Tema OFICIAL, id 162204549339) com 17409 bytes. E so copiar
+  snippets/vf-cart-quiz.liquid de la pra ca.
+{%- endcomment -%}

@@ -1,0 +1,52 @@
+{%- comment -%}
+  vf-pdp-qty-css.liquid — CSS do seletor de quantidade da PDP.
+
+  As regras abaixo sao as MESMAS do tema publicado (Tema OFICIAL). Elas
+  saiam da PDP do Dia D quando os cards de kit tomaram o lugar do stepper;
+  com o seletor de kits revertido, voltaram.
+
+  Ficam num snippet proprio, e nao dentro de vf-pdp-main-css.liquid,
+  porque aquele arquivo ja tem 28 KB e nao cabe numa gravacao pela API.
+  Quem renderiza e snippets/vf-pdp-extras.liquid, o que basta pro Shopify
+  incluir este CSS no styles.css da pagina.
+
+  Este arquivo so pode ter UM bloco de stylesheet, e Liquid nao e
+  interpretado dentro dele.
+{%- endcomment -%}
+
+{% stylesheet %}
+  .vf-pdp__qty-wrap { display: flex; align-items: center; gap: 16px; }
+  .vf-pdp__qty-label { font-size: 13px; font-weight: 600; color: #1A1A1A; }
+  .vf-pdp__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #E8E8E8;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .vf-pdp__qty-btn {
+    background: transparent;
+    border: none;
+    width: 38px;
+    height: 42px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #1A1A1A;
+    transition: background 0.2s ease;
+  }
+  .vf-pdp__qty-btn:hover { background: #F5F5F5; }
+  .vf-pdp__qty-input {
+    border: none;
+    width: 50px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1A1A1A;
+    background: transparent;
+  }
+  .vf-pdp__qty-input::-webkit-inner-spin-button,
+  .vf-pdp__qty-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+{% endstylesheet %}

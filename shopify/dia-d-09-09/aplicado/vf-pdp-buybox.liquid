@@ -93,5 +93,22 @@
           {%- endif -%}
 
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-          <input type="hidden" id="vf-pdp-qty" name="quantity" value="1">
+          {%- comment -%}
+            SELETOR DE QUANTIDADE — igual ao do tema ao vivo.
+
+            Durante um tempo este lugar teve os cards de kit (1/3/5) e o
+            input aqui era hidden, controlado pelos cards. O seletor de
+            kits foi revertido; o stepper voltou a ser o jeito de escolher
+            quantidade, como sempre foi na loja publicada. Os -/+ sao
+            ligados em snippets/vf-pdp-main-js.liquid e o CSS mora em
+            snippets/vf-pdp-qty-css.liquid.
+          {%- endcomment -%}
+          <div class="vf-pdp__qty-wrap">
+            <label for="vf-pdp-qty" class="vf-pdp__qty-label">Quantidade</label>
+            <div class="vf-pdp__qty">
+              <button type="button" class="vf-pdp__qty-btn" data-action="minus" aria-label="Diminuir">−</button>
+              <input type="number" id="vf-pdp-qty" name="quantity" value="1" min="1" class="vf-pdp__qty-input">
+              <button type="button" class="vf-pdp__qty-btn" data-action="plus" aria-label="Aumentar">+</button>
+            </div>
+          </div>
 

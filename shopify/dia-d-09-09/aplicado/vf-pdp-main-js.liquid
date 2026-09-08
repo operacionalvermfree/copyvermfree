@@ -121,7 +121,10 @@
           var nextPct = discountPct === 10 ? 15 : (discountPct === 15 ? 20 : null);
           var msg = '✓ ' + discountPct + '% OFF aplicado';
           if (temFreteGratis) msg += ' · frete grátis ativo';
-          if (nextTier && qty < nextTier && nextTier <= kitMaxQty) {
+          /* kitMaxQty vem dos cards de kit. Com o seletor revertido nao ha
+             cards, entao kitMaxQty e 0 e a dica volta a valer sempre, como
+             no tema publicado. */
+          if (nextTier && qty < nextTier && (kitMaxQty === 0 || nextTier <= kitMaxQty)) {
             msg += ' · adicione +' + (nextTier - qty) + ' pra ganhar ' + nextPct + '% off';
           }
           elBadgeText.textContent = msg;
@@ -237,6 +240,21 @@
       updateKitbar(initialQty);
       syncBuyBoxToSticky(initialQty);
     }
+
+    /* Botoes -/+ do stepper. Voltaram junto com o seletor de quantidade
+       quando os cards de kit foram revertidos. */
+    var qtyBtns = document.querySelectorAll('.vf-pdp__qty-btn');
+    qtyBtns.forEach(function(b) {
+      b.addEventListener('click', function() {
+        if (!qtyInput) return;
+        var val = parseInt(qtyInput.value, 10) || 1;
+        if (b.dataset.action === 'plus') val++;
+        else if (b.dataset.action === 'minus' && val > 1) val--;
+        qtyInput.value = val;
+        updatePrices(val);
+        syncBuyBoxToSticky(val);
+      });
+    });
 
     if (qtyInput) {
       qtyInput.addEventListener('change', function() {
