@@ -98,8 +98,9 @@ Fabricante: **Sintonia Pharma** · Farm. Resp. Graziele Antonini CRF 6177. Todo 
 
 **Preços cheios:** Adulto R$347 · Kids 2-4 R$270 · Kids 5-9 R$389 · Óleo de Alho R$67.
 
-**Desconto por volume (protocolos adulto+kids, exclui Kit Família e Óleo):** 3 un = 10% · 5 un = 15% · 8 un = 20%.
-**Desconto por volume (Óleo de Alho):** 3 frascos = 10% · 6 frascos = 15%.
+**Desconto por volume (protocolos adulto+kids, exclui Kit Família e Óleo):** 3 un = 10% (nível único — os antigos níveis de 5 un/15% e 8 un/20% foram descontinuados).
+**Desconto por volume (Óleo de Alho):** 3 frascos = 15% · 6 frascos = 20%.
+**Order bump 2º protocolo:** ao já ter 1 protocolo (adulto ou kids) no carrinho, o 2º protocolo adicionado leva 15% OFF (aplicado automaticamente, limitado a 1 por pedido).
 
 **Cupons:**
 - **5OFF** — 5% de desconto. Cupom padrão de UGC/comunicação.
