@@ -27,14 +27,47 @@
       <p class="vf-diad__sub">{{ subtitle }}</p>
     {%- endif -%}
 
-    {%- comment -%} Brinde com destaque proprio — produto fisico, vai na caixa {%- endcomment -%}
-    <div class="vf-diad__gift">
-      <span class="vf-diad__gift-icon" aria-hidden="true">🎁</span>
-      <div class="vf-diad__gift-copy">
-        <strong>1 Óleo de Alho 500mg de brinde no seu pedido</strong>
-        <span>Vai junto na caixa, em qualquer pedido de hoje — sem valor mínimo. É o frasco que apoia a rotina de manutenção depois do protocolo.</span>
-      </div>
-    </div>
+    {%- comment -%}
+      A oferta inteira, item a item.
+
+      ATENCAO AO TEXTO DO DESCONTO: os 12% NAO estao embutidos no preco do
+      produto. Sao desconto automatico aplicado no carrinho. A PDP mostra o
+      preco cheio — entao nenhuma linha aqui pode dizer "ja no preco" ou "ja
+      aplicado". Prometer isso e exatamente o erro de a pessoa ver um valor
+      na pagina e pagar outro no carrinho.
+    {%- endcomment -%}
+    <ul class="vf-diad__list">
+      <li>
+        <span class="vf-diad__ic" aria-hidden="true">🏷️</span>
+        <div><strong>12% OFF em tudo</strong>
+        <span>Entra sozinho no carrinho, sem cupom. Levando 3 unidades vira 15%, e a partir de 5 vira 18%.</span></div>
+      </li>
+      <li>
+        <span class="vf-diad__ic" aria-hidden="true">🚚</span>
+        <div><strong>Frete grátis sem valor mínimo</strong>
+        <span>Qualquer valor de compra, pra qualquer canto do Brasil.</span></div>
+      </li>
+      <li>
+        <span class="vf-diad__ic" aria-hidden="true">🎁</span>
+        <div><strong>1 Óleo de Alho 500mg de brinde</strong>
+        <span>Em qualquer pedido de hoje. Vai junto na caixa — é o frasco que apoia a manutenção depois do protocolo.</span></div>
+      </li>
+      <li>
+        <span class="vf-diad__ic" aria-hidden="true">📩</span>
+        <div><strong>Manual da Desparasitação em PDF</strong>
+        <span>Chega no seu e-mail depois da compra.</span></div>
+      </li>
+      <li>
+        <span class="vf-diad__ic" aria-hidden="true">👶</span>
+        <div><strong>Protocolo Kids grátis acima de R$ 700</strong>
+        <span>Escolha a faixa de idade e adicione ao carrinho: ele sai R$ 0,00.</span></div>
+      </li>
+      <li>
+        <span class="vf-diad__ic" aria-hidden="true">⚡</span>
+        <div><strong>Os 100 primeiros pedidos levam mais</strong>
+        <span>Guia da Imunidade e Guia da Suplementação, também por e-mail.</span></div>
+      </li>
+    </ul>
 
     <div class="vf-diad__countdown" data-diad-countdown="2026-09-10T00:00:00-03:00">
       <div class="vf-diad__unit">
@@ -122,31 +155,37 @@
     font-weight: 500;
   }
 
-  .vf-diad__gift {
+  .vf-diad__list {
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+  }
+  .vf-diad__list li {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    text-align: left;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.32);
-    border-radius: 14px;
-    padding: 16px 18px;
-    max-width: 520px;
-    margin: 0 auto 22px;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 11px 13px;
   }
-  .vf-diad__gift-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
-  .vf-diad__gift-copy { display: flex; flex-direction: column; gap: 3px; }
-  .vf-diad__gift-copy strong {
-    font-size: 15.5px;
+  .vf-diad__ic { font-size: 17px; line-height: 1.35; flex-shrink: 0; }
+  .vf-diad__list strong {
+    display: block;
+    font-size: 14.5px;
     font-weight: 800;
-    letter-spacing: 0.01em;
+    line-height: 1.3;
     color: #ffffff;
   }
-  .vf-diad__gift-copy span {
-    font-size: 13.5px;
+  .vf-diad__list span:not(.vf-diad__ic) {
+    display: block;
+    font-size: 12.5px;
     line-height: 1.45;
-    color: rgba(255,255,255,0.9);
-    font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 2px;
   }
 
   .vf-diad__countdown {
@@ -192,9 +231,9 @@
   @media (max-width: 540px) {
     .vf-diad { padding: 26px 18px; margin-top: 28px; }
     .vf-diad--full { padding: 32px 18px; margin: 28px 0 0; }
-    .vf-diad__gift { padding: 14px; gap: 10px; }
-    .vf-diad__gift-copy strong { font-size: 14.5px; }
-    .vf-diad__gift-copy span { font-size: 12.5px; }
+    .vf-diad__list li { padding: 10px 11px; gap: 9px; }
+    .vf-diad__list strong { font-size: 13.5px; }
+    .vf-diad__list span:not(.vf-diad__ic) { font-size: 12px; }
     .vf-diad__unit { min-width: 58px; padding: 8px 10px; }
   }
 {% endstylesheet %}
