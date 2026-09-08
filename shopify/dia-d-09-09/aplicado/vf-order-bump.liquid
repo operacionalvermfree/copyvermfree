@@ -103,7 +103,7 @@
   <div class="vf-bump" data-vf-bump>
     <div class="vf-bump__flag">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-      SÓ APARECE AQUI · NÃO ESTÁ À VENDA NO SITE
+      {%- if bump_diad -%}🔥 DIA D · SÓ HOJE, 09/09 · NÃO ESTÁ À VENDA NO SITE{%- else -%}SÓ APARECE AQUI · NÃO ESTÁ À VENDA NO SITE{%- endif -%}
     </div>
 
     <div class="vf-bump__head">
@@ -120,6 +120,11 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
           <strong>8 em cada 10 clientes</strong> adicionam essa oferta ao pedido.
         </span>
+        {%- if bump_diad -%}
+        <span class="vf-bump__diad">
+          🔥 <strong>Só hoje:</strong> cada frasco sai de {{ pct_1 }}% a {{ pct_6 }}% OFF no carrinho — e isso é <strong>além</strong> do frasco de brinde que já vai no seu pedido. Amanhã volta ao preço de sempre.
+        </span>
+        {%- endif -%}
       </span>
     </div>
 
@@ -135,36 +140,46 @@
         <input type="radio" name="vf-bump-qty" value="1" data-vf-bump-opt data-qty="1">
         <span class="vf-bump__opt-inner">
           <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
-          <span class="vf-bump__opt-dur">1 frasco</span>
-          <span class="vf-bump__opt-price">{{ pay_1 | money }}</span>
-          <span class="vf-bump__opt-sub">30 dias</span>
-          {%- if save_1 > 0 -%}
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">1 frasco</span>
+            <span class="vf-bump__opt-sub">30 dias</span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-price">{{ pay_1 | money }}</span>
+            {%- if save_1 > 0 -%}
             <span class="vf-bump__opt-save">{{ pct_1 }}% OFF · economiza {{ save_1 | money }}</span>
-          {%- endif -%}
+            {%- endif -%}
+          </span>
         </span>
       </label>
 
-      <label class="vf-bump__opt vf-bump__opt--best">
+      <label class="vf-bump__opt">
         <input type="radio" name="vf-bump-qty" value="3" data-vf-bump-opt data-qty="3">
-        <span class="vf-bump__opt-tag">MAIS ESCOLHIDO</span>
         <span class="vf-bump__opt-inner">
           <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
-          <span class="vf-bump__opt-dur">3 frascos</span>
-          <span class="vf-bump__opt-price">{{ pay_3 | money }}</span>
-          <span class="vf-bump__opt-sub">90 dias · {{ un_3 | money }}/un</span>
-          <span class="vf-bump__opt-save">{{ pct_3 }}% OFF · economiza {{ save_3 | money }}</span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">3 frascos<span class="vf-bump__opt-tag">MAIS ESCOLHIDO</span></span>
+            <span class="vf-bump__opt-sub">90 dias · <span class="vf-bump__opt-un">{{ un_3 | money }}/un</span></span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-price">{{ pay_3 | money }}</span>
+            <span class="vf-bump__opt-save">{{ pct_3 }}% OFF · economiza {{ save_3 | money }}</span>
+          </span>
         </span>
       </label>
 
       <label class="vf-bump__opt">
         <input type="radio" name="vf-bump-qty" value="6" data-vf-bump-opt data-qty="6">
-        <span class="vf-bump__opt-tag vf-bump__opt-tag--max">MELHOR CUSTO</span>
         <span class="vf-bump__opt-inner">
           <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
-          <span class="vf-bump__opt-dur">6 frascos</span>
-          <span class="vf-bump__opt-price">{{ pay_6 | money }}</span>
-          <span class="vf-bump__opt-sub">180 dias · {{ un_6 | money }}/un</span>
-          <span class="vf-bump__opt-save">{{ pct_6 }}% OFF · economiza {{ save_6 | money }}</span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">6 frascos<span class="vf-bump__opt-tag vf-bump__opt-tag--max">MELHOR CUSTO</span></span>
+            <span class="vf-bump__opt-sub">180 dias · <span class="vf-bump__opt-un">{{ un_6 | money }}/un</span></span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-price">{{ pay_6 | money }}</span>
+            <span class="vf-bump__opt-save">{{ pct_6 }}% OFF · economiza {{ save_6 | money }}</span>
+          </span>
         </span>
       </label>
 
@@ -175,7 +190,7 @@
     </button>
     <p class="vf-bump__micro">
       {%- if bump_diad -%}
-        O desconto do Dia D entra sozinho no carrinho — e isso é <strong>além</strong> do frasco de brinde que já vai no seu pedido hoje.
+        <strong>Só hoje.</strong> O desconto entra sozinho no carrinho, sem cupom — e o frasco de brinde do Dia D continua indo no seu pedido, separado destes.
       {%- else -%}
         Desconto por volume aplicado automaticamente no carrinho.
       {%- endif -%}
@@ -232,141 +247,6 @@
 {%- endif -%}
 
 {%- comment -%} CSS no nível raiz (stylesheet não pode ficar dentro de {% if %}) {%- endcomment -%}
-{% stylesheet %}
-    .vf-bump {
-      position: relative;
-      border: 2px dashed var(--vf-green, #16A34A);
-      background: linear-gradient(135deg, #F1FBF3 0%, #FFFFFF 100%);
-      border-radius: 12px;
-      padding: 16px;
-      margin: 4px 0 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 18px rgba(22,163,74,.10);
-    }
-    .vf-bump__flag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #C2410C;
-      color: #fff;
-      font-size: 10.5px;
-      font-weight: 900;
-      letter-spacing: 0.6px;
-      padding: 5px 11px;
-      border-radius: 999px;
-      margin-bottom: 12px;
-      animation: vf-bump-pulse 2.2s ease-in-out infinite;
-    }
-    @keyframes vf-bump-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(194,65,12,.45); }
-      50% { box-shadow: 0 0 0 7px rgba(194,65,12,0); }
-    }
-    .vf-bump__flag svg { width: 12px; height: 12px; }
+{%- comment -%} CSS em snippets/vf-bump-css.liquid (tamanho) {%- endcomment -%}
+{% render 'vf-bump-css' %}
 
-    /* Cabeçalho: imagem + copy */
-    .vf-bump__head {
-      display: grid;
-      grid-template-columns: 72px 1fr;
-      align-items: start;
-      gap: 12px;
-    }
-    @media (max-width: 480px) { .vf-bump__head { grid-template-columns: 56px 1fr; gap: 10px; } }
-    .vf-bump__img {
-      width: 72px; height: 72px; border-radius: 10px; background: var(--vf-beige, #F5F1E8);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-    }
-    @media (max-width: 480px) { .vf-bump__img { width: 56px; height: 56px; } }
-    .vf-bump__img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
-    .vf-bump__copy { display: flex; flex-direction: column; gap: 5px; }
-    .vf-bump__title { font-size: 15px; line-height: 1.3; color: var(--vf-text, #1A1A1A); font-weight: 700; }
-    .vf-bump__title strong { color: var(--vf-green-dark, #15803D); font-weight: 900; }
-    .vf-bump__desc { font-size: 12px; color: var(--vf-muted, #555); line-height: 1.45; }
-    .vf-bump__desc strong { color: #1A1A1A; font-weight: 700; }
-    .vf-bump__social {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--vf-green-dark, #15803D); line-height: 1.3;
-      background: var(--vf-green-light, #E7F6EC); padding: 5px 9px; border-radius: 7px;
-      width: fit-content;
-    }
-    .vf-bump__social svg { width: 14px; height: 14px; flex-shrink: 0; }
-    .vf-bump__social strong { font-weight: 900; }
-
-    /* Linha "cada frasco = 30 dias" */
-    .vf-bump__dose {
-      display: flex; align-items: center; gap: 7px;
-      margin: 14px 0 10px; font-size: 12.5px; color: #1A1A1A; line-height: 1.35;
-    }
-    .vf-bump__dose svg { width: 16px; height: 16px; color: var(--vf-green-dark, #15803D); flex-shrink: 0; }
-    .vf-bump__dose strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
-
-    /* Opções de tempo (1/3/6) */
-    .vf-bump__options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    @media (max-width: 380px) { .vf-bump__options { grid-template-columns: 1fr; } }
-    .vf-bump__opt { position: relative; display: block; cursor: pointer; }
-    .vf-bump__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-    .vf-bump__opt-inner {
-      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px;
-      border: 2px solid var(--vf-border, #E3E3DD); border-radius: 10px;
-      padding: 12px 6px 10px; background: #fff; transition: border-color .15s, box-shadow .15s;
-      height: 100%;
-    }
-    .vf-bump__opt-check {
-      position: absolute; top: 8px; right: 8px;
-      width: 18px; height: 18px; border-radius: 50%;
-      border: 2px solid var(--vf-border, #D8D8D2); background: #fff;
-      display: inline-flex; align-items: center; justify-content: center; color: #fff;
-      transition: background .15s, border-color .15s;
-    }
-    .vf-bump__opt-check svg { width: 11px; height: 11px; opacity: 0; }
-    .vf-bump__opt-dur { font-size: 14px; font-weight: 800; color: #1A1A1A; }
-    .vf-bump__opt-price {
-      font-family: var(--font-heading, inherit);
-      font-size: 17px; font-weight: 900; color: var(--vf-green-dark, #15803D);
-    }
-    .vf-bump__opt-sub { font-size: 11px; color: var(--vf-muted, #888); font-weight: 600; }
-    .vf-bump__opt-save {
-      margin-top: 4px; font-size: 10.5px; font-weight: 800; color: #C2410C;
-      background: #FEF0E7; padding: 2px 7px; border-radius: 999px; line-height: 1.3;
-    }
-    .vf-bump__opt-tag {
-      position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
-      z-index: 2; white-space: nowrap;
-      background: var(--vf-green, #16A34A); color: #fff;
-      font-size: 9px; font-weight: 900; letter-spacing: .4px;
-      padding: 3px 8px; border-radius: 999px;
-    }
-    .vf-bump__opt-tag--max { background: #C2410C; }
-    /* estado selecionado */
-    .vf-bump__opt input:checked + .vf-bump__opt-inner {
-      border-color: var(--vf-green, #16A34A);
-      box-shadow: 0 0 0 3px rgba(22,163,74,.15);
-    }
-    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-check,
-    .vf-bump__opt input:checked + .vf-bump__opt-inner .vf-bump__opt-check {
-      background: var(--vf-green, #16A34A); border-color: var(--vf-green, #16A34A);
-    }
-    .vf-bump__opt input:checked + .vf-bump__opt-inner .vf-bump__opt-check svg { opacity: 1; }
-    .vf-bump__opt input:focus-visible + .vf-bump__opt-inner { outline: 2px solid var(--vf-green-dark, #15803D); outline-offset: 2px; }
-
-    /* CTA */
-    .vf-bump__cta {
-      width: 100%; margin-top: 14px; border: 0; cursor: pointer;
-      background: var(--vf-green, #16A34A); color: #fff;
-      font-family: var(--font-heading, inherit); font-size: 15px; font-weight: 800;
-      padding: 14px 16px; border-radius: 10px;
-      transition: background .15s, opacity .15s, transform .05s;
-    }
-    .vf-bump__cta:not(:disabled):hover { background: var(--vf-green-dark, #15803D); }
-    .vf-bump__cta:not(:disabled):active { transform: translateY(1px); }
-    .vf-bump__cta:disabled { background: #C7CDC9; cursor: default; }
-    .vf-bump__micro { margin: 8px 0 0; text-align: center; font-size: 11px; color: var(--vf-muted, #888); line-height: 1.4; }
-    .vf-bump__micro strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
-
-    .vf-bump.is-busy { opacity: .55; pointer-events: none; }
-    .vf-bump__spinner {
-      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,.7); font-size: 13px; font-weight: 700; color: var(--vf-green-dark, #15803D);
-    }
-    /* garante que o atributo hidden esconde de fato o spinner (display vence hidden) */
-    .vf-bump__spinner[hidden] { display: none !important; }
-{% endstylesheet %}

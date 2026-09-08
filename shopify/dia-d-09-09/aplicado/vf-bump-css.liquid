@@ -1,0 +1,170 @@
+{%- comment -%}
+  Estilos do order bump do Oleo de Alho (snippets/vf-order-bump.liquid).
+  Separado so por tamanho: o arquivo unico nao cabia num write da API.
+  Quem renderiza e vf-order-bump, o que basta pro Shopify incluir este CSS.
+{%- endcomment -%}
+
+{% stylesheet %}
+    .vf-bump {
+      position: relative;
+      border: 2px dashed var(--vf-green, #16A34A);
+      background: linear-gradient(135deg, #F1FBF3 0%, #FFFFFF 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 4px 0 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(22,163,74,.10);
+    }
+    .vf-bump__flag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #C2410C;
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      animation: vf-bump-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes vf-bump-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(194,65,12,.45); }
+      50% { box-shadow: 0 0 0 7px rgba(194,65,12,0); }
+    }
+    .vf-bump__flag svg { width: 12px; height: 12px; }
+
+    /* Cabeçalho: imagem + copy */
+    .vf-bump__head {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      align-items: start;
+      gap: 12px;
+    }
+    @media (max-width: 480px) { .vf-bump__head { grid-template-columns: 56px 1fr; gap: 10px; } }
+    .vf-bump__img {
+      width: 72px; height: 72px; border-radius: 10px; background: var(--vf-beige, #F5F1E8);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    @media (max-width: 480px) { .vf-bump__img { width: 56px; height: 56px; } }
+    .vf-bump__img img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .vf-bump__copy { display: flex; flex-direction: column; gap: 5px; }
+    .vf-bump__title { font-size: 15px; line-height: 1.3; color: var(--vf-text, #1A1A1A); font-weight: 700; }
+    .vf-bump__title strong { color: var(--vf-green-dark, #15803D); font-weight: 900; }
+    .vf-bump__desc { font-size: 12px; color: var(--vf-muted, #555); line-height: 1.45; }
+    .vf-bump__desc strong { color: #1A1A1A; font-weight: 700; }
+    .vf-bump__social {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--vf-green-dark, #15803D); line-height: 1.3;
+      background: var(--vf-green-light, #E7F6EC); padding: 5px 9px; border-radius: 7px;
+      width: fit-content;
+    }
+    .vf-bump__social svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .vf-bump__social strong { font-weight: 900; }
+    .vf-bump__diad {
+      margin-top: 2px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #C11524;
+      background: #FDECEC;
+      border: 1px dashed #F5C2C2;
+      border-radius: 8px;
+      padding: 7px 10px;
+    }
+    .vf-bump__diad strong { font-weight: 900; }
+
+    /* Linha "cada frasco = 30 dias" */
+    .vf-bump__dose {
+      display: flex; align-items: center; gap: 7px;
+      margin: 14px 0 10px; font-size: 12.5px; color: #1A1A1A; line-height: 1.35;
+    }
+    .vf-bump__dose svg { width: 16px; height: 16px; color: var(--vf-green-dark, #15803D); flex-shrink: 0; }
+    .vf-bump__dose strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
+
+    /* Opcoes de tempo (1/3/6) — LINHAS HORIZONTAIS.
+
+       Antes eram tres cards lado a lado. Na coluna do resumo do carrinho
+       cada card fica com ~140px e "R$ 170,85" na fonte de titulo nao cabe:
+       o preco quebra em duas linhas e passa por cima do radio. Em linha
+       cheia o preco tem espaco em qualquer largura, e o cartao fica igual
+       ao do bump do 2o protocolo, logo abaixo dele no carrinho. */
+    .vf-bump__options { display: flex; flex-direction: column; gap: 8px; }
+    .vf-bump__opt { position: relative; display: block; cursor: pointer; }
+    .vf-bump__opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+    .vf-bump__opt-inner {
+      display: flex; align-items: center; gap: 10px;
+      border: 2px solid var(--vf-border, #E3E3DD); border-radius: 10px;
+      padding: 10px 12px; background: #fff;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .vf-bump__opt-check {
+      flex-shrink: 0;
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid var(--vf-border, #D8D8D2); background: #fff;
+      display: inline-flex; align-items: center; justify-content: center; color: #fff;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .vf-bump__opt-check svg { width: 11px; height: 11px; opacity: 0; }
+    .vf-bump__opt-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .vf-bump__opt-dur {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      font-size: 13.5px; font-weight: 800; color: #1A1A1A; line-height: 1.25;
+    }
+    .vf-bump__opt-sub { font-size: 11px; color: var(--vf-muted, #888); font-weight: 600; line-height: 1.3; }
+    .vf-bump__opt-un { white-space: nowrap; }
+    .vf-bump__opt-priceblock {
+      flex-shrink: 0; display: flex; flex-direction: column;
+      align-items: flex-end; gap: 2px; text-align: right;
+    }
+    .vf-bump__opt-price {
+      font-family: var(--font-heading, inherit);
+      font-size: 16px; font-weight: 900; color: var(--vf-green-dark, #15803D);
+      line-height: 1.15; white-space: nowrap;
+    }
+    .vf-bump__opt-save {
+      font-size: 10.5px; font-weight: 800; color: #C2410C;
+      background: #FEF0E7; padding: 2px 7px; border-radius: 999px;
+      line-height: 1.3; white-space: nowrap;
+    }
+    .vf-bump__opt-tag {
+      white-space: nowrap;
+      background: var(--vf-green, #16A34A); color: #fff;
+      font-size: 9px; font-weight: 900; letter-spacing: .4px;
+      padding: 2px 7px; border-radius: 999px;
+    }
+    .vf-bump__opt-tag--max { background: #C2410C; }
+    /* estado selecionado */
+    .vf-bump__opt input:checked + .vf-bump__opt-inner {
+      border-color: var(--vf-green, #16A34A);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+    }
+    .vf-bump__opt input:checked ~ .vf-bump__opt-inner .vf-bump__opt-check,
+    .vf-bump__opt input:checked + .vf-bump__opt-inner .vf-bump__opt-check {
+      background: var(--vf-green, #16A34A); border-color: var(--vf-green, #16A34A);
+    }
+    .vf-bump__opt input:checked + .vf-bump__opt-inner .vf-bump__opt-check svg { opacity: 1; }
+    .vf-bump__opt input:focus-visible + .vf-bump__opt-inner { outline: 2px solid var(--vf-green-dark, #15803D); outline-offset: 2px; }
+
+    /* CTA */
+    .vf-bump__cta {
+      width: 100%; margin-top: 14px; border: 0; cursor: pointer;
+      background: var(--vf-green, #16A34A); color: #fff;
+      font-family: var(--font-heading, inherit); font-size: 15px; font-weight: 800;
+      padding: 14px 16px; border-radius: 10px;
+      transition: background .15s, opacity .15s, transform .05s;
+    }
+    .vf-bump__cta:not(:disabled):hover { background: var(--vf-green-dark, #15803D); }
+    .vf-bump__cta:not(:disabled):active { transform: translateY(1px); }
+    .vf-bump__cta:disabled { background: #C7CDC9; cursor: default; }
+    .vf-bump__micro { margin: 8px 0 0; text-align: center; font-size: 11px; color: var(--vf-muted, #888); line-height: 1.4; }
+    .vf-bump__micro strong { color: var(--vf-green-dark, #15803D); font-weight: 800; }
+
+    .vf-bump.is-busy { opacity: .55; pointer-events: none; }
+    .vf-bump__spinner {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.7); font-size: 13px; font-weight: 700; color: var(--vf-green-dark, #15803D);
+    }
+    /* garante que o atributo hidden esconde de fato o spinner (display vence hidden) */
+    .vf-bump__spinner[hidden] { display: none !important; }
+{% endstylesheet %}
