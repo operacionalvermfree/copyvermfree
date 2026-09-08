@@ -120,8 +120,14 @@
 
             {%- render 'vf-frete-progress', diad: cart_diad_promo -%}
 
-            {%- comment -%} Aviso de desconto por volume dos protocolos (3=10%, 5=15%, 8=20%) {%- endcomment -%}
-            {%- render 'vf-kits-desconto-aviso' -%}
+            {%- comment -%}
+              Aviso de desconto por volume. Recebe o MESMO gate da barra de
+              frete acima. Antes o snippet calculava a data sozinho: na previa
+              a barra dizia "frete gratis, hoje sem minimo" (Dia D) e logo
+              abaixo o aviso mostrava a escada normal, 3=10% / 5=15% / 8=20%.
+              Duas verdades diferentes na mesma coluna.
+            {%- endcomment -%}
+            {%- render 'vf-kits-desconto-aviso', diad: cart_diad_promo -%}
 
             <div class="vf-cart__summary-row vf-cart__summary-row--total">
               <span>Total</span>
@@ -186,9 +192,17 @@
             {%- assign show_oleo_bump = false -%}
             {%- if cart_has_oleo == false and cart_has_adult -%}{%- assign show_oleo_bump = true -%}{%- endif -%}
             {%- if cart_has_oleo == false and cart_has_kids_both -%}{%- assign show_oleo_bump = true -%}{%- endif -%}
-            {%- if show_oleo_bump -%}
-              {% render 'vf-order-bump' %}
-            {%- elsif render_bump2 -%}
+            {%- comment -%}
+              So sobrou o bump do 2o protocolo. O do Oleo de Alho foi desligado
+              (08/09) e o snippet dele virou no-op.
+
+              CUIDADO: isto era um if/elsif. Com o carrinho tendo protocolo
+              adulto, show_oleo_bump dava true, caia no primeiro ramo e o elsif
+              NUNCA era avaliado — entao ao desligar o oleo o carrinho ficou
+              sem bump nenhum, levando o do 2o protocolo junto. Sao duas
+              ofertas independentes; nao voltem a encadear uma na outra.
+            {%- endcomment -%}
+            {%- if render_bump2 -%}
               {% render 'vf-order-bump-2protocolo' %}
             {%- endif -%}
 
@@ -213,322 +227,8 @@
   </div>
 </section>
 
-{% stylesheet %}
-  .vf-cart {
-    padding: 48px 0 80px;
-    background: var(--vf-bg);
-    min-height: 60vh;
-  }
-  .vf-cart__header {
-    margin-bottom: 32px;
-  }
-  .vf-cart__header h1 {
-    margin: 0;
-    font-family: var(--font-heading);
-    font-size: clamp(32px, 4vw, 48px);
-  }
-  .vf-cart__count {
-    margin: 8px 0 0;
-    color: var(--vf-muted);
-    font-size: 14px;
-  }
-  .vf-cart__empty {
-    text-align: center;
-    padding: 64px 16px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  .vf-cart__empty-icon {
-    color: var(--vf-green);
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: center;
-  }
-  .vf-cart__empty h2 {
-    margin: 0 0 12px;
-    font-family: var(--font-heading);
-    font-size: 28px;
-  }
-  .vf-cart__empty p {
-    color: var(--vf-muted);
-    margin: 0 0 28px;
-  }
-
-  .vf-cart__layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  @media (min-width: 990px) {
-    .vf-cart__layout {
-      grid-template-columns: 1fr 380px;
-      gap: 48px;
-      align-items: start;
-    }
-  }
-
-  /* Items */
-  .vf-cart__items {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .vf-cart-item {
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    grid-template-areas:
-      "image body remove"
-      "image qty price";
-    gap: 14px 16px;
-    background: var(--vf-surface);
-    padding: 16px;
-    border-radius: var(--card-radius);
-    border: 1px solid var(--vf-border);
-    align-items: center;
-  }
-  @media (min-width: 750px) {
-    .vf-cart-item {
-      grid-template-columns: 100px 1fr 140px 110px auto;
-      grid-template-areas: "image body qty price remove";
-    }
-  }
-  .vf-cart-item__image {
-    grid-area: image;
-    width: 80px;
-    height: 80px;
-    background: var(--vf-beige);
-    border-radius: 10px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  @media (min-width: 750px) {
-    .vf-cart-item__image { width: 100px; height: 100px; }
-  }
-  .vf-cart-item__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 8px;
-  }
-  .vf-cart-item__body {
-    grid-area: body;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .vf-cart-item__title {
-    font-family: var(--font-heading);
-    font-size: 17px;
-    color: var(--vf-text);
-    line-height: 1.2;
-  }
-  .vf-cart-item__title:hover { color: var(--vf-green-dark); }
-  .vf-cart-item__variant {
-    font-size: 13px;
-    color: var(--vf-muted);
-  }
-  .vf-cart-item__price-mobile {
-    font-family: var(--font-heading);
-    font-size: 18px;
-    margin-top: 4px;
-  }
-  @media (min-width: 750px) {
-    .vf-cart-item__price-mobile { display: none; }
-  }
-
-  .vf-cart-item__qty {
-    grid-area: qty;
-  }
-  .vf-cart-item__qty-control {
-    display: inline-flex;
-    align-items: center;
-    border: 1.5px solid var(--vf-border);
-    border-radius: 8px;
-    overflow: hidden;
-    width: fit-content;
-  }
-  .vf-cart-item__qty-btn {
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    border: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background var(--transition);
-  }
-  .vf-cart-item__qty-btn:hover { background: var(--vf-bg); }
-  .vf-cart-item__qty-btn svg { width: 14px; height: 14px; }
-  .vf-cart-item__qty-input {
-    width: 44px;
-    height: 36px;
-    text-align: center;
-    border: 0;
-    background: transparent;
-    font-size: 14px;
-    font-weight: 600;
-    -moz-appearance: textfield;
-  }
-  .vf-cart-item__qty-input::-webkit-outer-spin-button,
-  .vf-cart-item__qty-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  .vf-cart-item__price {
-    grid-area: price;
-    font-family: var(--font-heading);
-    font-size: 18px;
-    text-align: right;
-    display: none;
-  }
-  @media (min-width: 750px) {
-    .vf-cart-item__price { display: block; }
-  }
-  .vf-cart-item__remove {
-    grid-area: remove;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--vf-muted);
-    border-radius: 50%;
-    transition: background var(--transition), color var(--transition);
-  }
-  .vf-cart-item__remove:hover {
-    background: #FDECEC;
-    color: var(--vf-danger);
-  }
-
-  /* Summary */
-  .vf-cart__summary {
-    background: var(--vf-surface);
-    border-radius: var(--card-radius);
-    border: 1px solid var(--vf-border);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    position: sticky;
-    top: 100px;
-  }
-  .vf-cart__summary-title {
-    margin: 0 0 4px;
-    font-family: var(--font-heading);
-    font-size: 22px;
-  }
-  .vf-cart__summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 15px;
-  }
-  .vf-cart__summary-row--total {
-    padding-top: 14px;
-    border-top: 1px solid var(--vf-border);
-    font-size: 18px;
-  }
-  .vf-cart__summary-row--total strong {
-    font-family: var(--font-heading);
-    font-size: 22px;
-  }
-  .vf-cart__summary-info {
-    padding: 10px 14px;
-    background: var(--vf-beige);
-    border-radius: 8px;
-    font-size: 13px;
-    color: var(--vf-text);
-  }
-  .vf-cart__summary-info--success {
-    background: var(--vf-green-light);
-    color: var(--vf-green-dark);
-    font-weight: 600;
-  }
-  .vf-cart__summary-micro {
-    margin: 0;
-    text-align: center;
-    font-size: 12px;
-    color: var(--vf-muted);
-  }
-  .vf-cart__continue {
-    margin-top: 4px;
-    text-align: center;
-    font-size: 14px;
-    color: var(--vf-text);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .vf-cart__continue:hover { color: var(--vf-green-dark); }
-
-  /* ===== BONUS DO DIA D (brindes do dia) ===== */
-  .vf-cart-bonus {
-    position: relative;
-    background: linear-gradient(135deg, #FFF8E1 0%, #FFFBEB 100%);
-    border: 2px dashed #FACC15;
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin: 4px 0 14px;
-    overflow: hidden;
-    animation: vf-cart-bonus-flash 2.4s ease-in-out infinite;
-  }
-  @keyframes vf-cart-bonus-flash {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(250, 204, 21, 0); }
-  }
-  .vf-cart-bonus__head {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .vf-cart-bonus__check {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #16A34A;
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-  }
-  .vf-cart-bonus__check svg { width: 14px; height: 14px; }
-  .vf-cart-bonus__copy {
-    flex: 1;
-    min-width: 0;
-  }
-  .vf-cart-bonus__title {
-    margin: 0 0 3px;
-    font-size: 14px;
-    line-height: 1.35;
-    color: #1A1A1A;
-    font-weight: 600;
-  }
-  .vf-cart-bonus__title strong {
-    color: #6B1212;
-    font-weight: 800;
-  }
-  .vf-cart-bonus__sub {
-    margin: 0;
-    font-size: 12px;
-    color: #555;
-    line-height: 1.4;
-  }
-  .vf-cart-bonus__pill {
-    display: inline-block;
-    background: #DC2626;
-    color: #FACC15;
-    font-weight: 900;
-    font-size: 10.5px;
-    letter-spacing: 0.8px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    margin-top: 10px;
-  }
-{% endstylesheet %}
+{%- comment -%} CSS em snippets/vf-cart-css.liquid (tamanho) {%- endcomment -%}
+{% render 'vf-cart-css' %}
 
 <script>
   (function () {

@@ -1,0 +1,330 @@
+{%- comment -%}
+  vf-diagnostico-popup.liquid
+  Pop-up recomendador (NAO diagnostica) — roteia pelo mapa de dor e captura e-mail (cupom 5OFF).
+  Gatilho: entrada ~4s, 1x a cada 5 dias (cookie). Nao empilha com o pop-up de oleo.
+  Captura: {% form 'customer' %} (contact[email] + contact[tags]) via AJAX, sem recarregar.
+  Linguagem segura (ANVISA): apoia/auxilia a rotina de limpeza natural, bem-estar, leveza.
+{%- endcomment -%}
+
+<div class="vf-diag" id="vf-diag" hidden aria-hidden="true">
+  <div class="vf-diag__overlay" data-diag-close></div>
+  <div class="vf-diag__card" role="dialog" aria-modal="true" aria-labelledby="vf-diag-title">
+    <button type="button" class="vf-diag__x" data-diag-close aria-label="Fechar">&times;</button>
+
+    <div class="vf-diag__dots" aria-hidden="true">
+      <span class="vf-diag__dot is-on" data-dot="1"></span>
+      <span class="vf-diag__dot" data-dot="2"></span>
+      <span class="vf-diag__dot" data-dot="3"></span>
+    </div>
+
+    {%- comment -%} ETAPA 1 — publico {%- endcomment -%}
+    <div class="vf-diag__step" data-step="1">
+      <p class="vf-diag__eyebrow">🌿 Cuidado natural, feito com calma</p>
+      <h2 class="vf-diag__title" id="vf-diag-title">Vamos achar o protocolo natural certo pra você</h2>
+      <p class="vf-diag__sub">Responda 2 perguntas rápidas e eu te mostro qual desparasitação natural combina com a sua rotina.</p>
+      <div class="vf-diag__opts">
+        <button type="button" class="vf-diag__opt" data-next="2" data-publico="adulto">
+          <span class="vf-diag__opt-emoji">🧍‍♀️</span>
+          <span class="vf-diag__opt-txt"><strong>Pra mim / pra nós adultos</strong><span>Quero cuidar do meu corpo</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-next="2" data-publico="kids">
+          <span class="vf-diag__opt-emoji">🧒</span>
+          <span class="vf-diag__opt-txt"><strong>Pra meu filho</strong><span>Cuidar da criança de forma natural</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-next="2" data-publico="familia">
+          <span class="vf-diag__opt-emoji">👨‍👩‍👧‍👦</span>
+          <span class="vf-diag__opt-txt"><strong>Pra família toda</strong><span>Adultos e crianças juntos</span></span>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ETAPA 2 — adulto {%- endcomment -%}
+    <div class="vf-diag__step" data-step="2" data-branch="adulto" hidden>
+      <button type="button" class="vf-diag__back" data-back="1">← voltar</button>
+      <h2 class="vf-diag__title">O que você mais quer sentir?</h2>
+      <p class="vf-diag__sub">Assim eu ajusto a recomendação pra você.</p>
+      <div class="vf-diag__opts">
+        <button type="button" class="vf-diag__opt" data-result data-angulo="leveza" data-handle="protocolo-desparasitacao-adulto-vermefree">
+          <span class="vf-diag__opt-emoji">🌿</span>
+          <span class="vf-diag__opt-txt"><strong>Leveza e intestino funcionando</strong><span>Sensação de corpo limpo por dentro</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-result data-angulo="disposicao" data-handle="protocolo-desparasitacao-adulto-vermefree">
+          <span class="vf-diag__opt-emoji">⚡</span>
+          <span class="vf-diag__opt-txt"><strong>Mais disposição no dia</strong><span>Menos aquele peso e cansaço</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-result data-angulo="sono" data-handle="protocolo-desparasitacao-adulto-vermefree">
+          <span class="vf-diag__opt-emoji">🌙</span>
+          <span class="vf-diag__opt-txt"><strong>Noites mais tranquilas</strong><span>Bem-estar pra dormir melhor</span></span>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ETAPA 2 — kids {%- endcomment -%}
+    <div class="vf-diag__step" data-step="2" data-branch="kids" hidden>
+      <button type="button" class="vf-diag__back" data-back="1">← voltar</button>
+      <h2 class="vf-diag__title">Qual a idade do seu filho?</h2>
+      <p class="vf-diag__sub">Cada faixa tem a sua fórmula em gotinhas.</p>
+      <div class="vf-diag__opts">
+        <button type="button" class="vf-diag__opt" data-result data-angulo="kids" data-handle="antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos">
+          <span class="vf-diag__opt-emoji">🧸</span>
+          <span class="vf-diag__opt-txt"><strong>2 a 4 anos</strong><span>VermeFree Kids 2–4</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-result data-angulo="kids" data-handle="antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos">
+          <span class="vf-diag__opt-emoji">🎒</span>
+          <span class="vf-diag__opt-txt"><strong>5 a 9 anos</strong><span>VermeFree Kids 5–9</span></span>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ETAPA 2 — familia {%- endcomment -%}
+    <div class="vf-diag__step" data-step="2" data-branch="familia" hidden>
+      <button type="button" class="vf-diag__back" data-back="1">← voltar</button>
+      <h2 class="vf-diag__title">O que mais pesa na rotina de vocês?</h2>
+      <p class="vf-diag__sub">O Kit Família cuida de adultos e crianças de uma vez.</p>
+      <div class="vf-diag__opts">
+        <button type="button" class="vf-diag__opt" data-result data-angulo="leveza" data-handle="kit-familia-vermefree-2-adultos-2-criancas">
+          <span class="vf-diag__opt-emoji">🌿</span>
+          <span class="vf-diag__opt-txt"><strong>Corpo mais leve pra todo mundo</strong><span>Rotina de limpeza natural em casa</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-result data-angulo="sono" data-handle="kit-familia-vermefree-2-adultos-2-criancas">
+          <span class="vf-diag__opt-emoji">🌙</span>
+          <span class="vf-diag__opt-txt"><strong>Noites tranquilas em casa</strong><span>Bem-estar pra adultos e crianças</span></span>
+        </button>
+        <button type="button" class="vf-diag__opt" data-result data-angulo="prevencao" data-handle="kit-familia-vermefree-2-adultos-2-criancas">
+          <span class="vf-diag__opt-emoji">🛡️</span>
+          <span class="vf-diag__opt-txt"><strong>Cuidado preventivo da casa</strong><span>Fazer a rotina 2 a 4x por ano</span></span>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} ETAPA 3 — resultado + captura {%- endcomment -%}
+    <div class="vf-diag__step" data-step="3" hidden>
+      <div class="vf-diag__result">
+        <p class="vf-diag__eyebrow">✨ A minha recomendação pra você</p>
+        <h2 class="vf-diag__title" data-result-title>Protocolo VermeFree</h2>
+        <p class="vf-diag__sub" data-result-desc></p>
+
+        {%- form 'customer', id: 'vf-diag-form', class: 'vf-diag__form' -%}
+          <input type="hidden" name="contact[tags]" value="quiz-diagnostico" data-tags-input>
+          <label class="vf-diag__form-label" for="vf-diag-email">Quer <strong>5% OFF</strong> pra começar? Deixo o cupom no seu e-mail:</label>
+          <div class="vf-diag__form-row">
+            <input type="email" id="vf-diag-email" name="contact[email]" placeholder="seu melhor e-mail" required autocomplete="email">
+            <button type="submit" class="vf-diag__form-btn">Liberar 5OFF</button>
+          </div>
+          <p class="vf-diag__form-mini">Sem spam. Cuidado natural, no seu tempo. 🌙</p>
+        {%- endform -%}
+
+        <div class="vf-diag__success" hidden>
+          <p class="vf-diag__success-msg">🎉 Prontinho! Use o cupom <span class="vf-diag__code">5OFF</span> no checkout.</p>
+        </div>
+
+        <a href="#" class="vf-diag__cta" data-result-cta>Ver meu protocolo →</a>
+        <button type="button" class="vf-diag__skip" data-diag-close>Agora não, obrigada</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .vf-diag { position: fixed; inset: 0; z-index: 9998; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .vf-diag[hidden] { display: none; }
+  .vf-diag__overlay { position: absolute; inset: 0; background: rgba(20, 32, 20, 0.55); backdrop-filter: blur(2px); animation: vf-diag-fade .25s ease; }
+  .vf-diag__card { position: relative; width: 100%; max-width: 440px; max-height: 92vh; overflow-y: auto; background: #FDFDF9; border-radius: 20px; padding: 26px 22px 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.28); animation: vf-diag-pop .3s cubic-bezier(.2,.8,.3,1); }
+  @keyframes vf-diag-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes vf-diag-pop { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
+  .vf-diag__x { position: absolute; top: 10px; right: 12px; border: 0; background: transparent; font-size: 26px; line-height: 1; color: #9AA69A; cursor: pointer; padding: 4px 8px; }
+  .vf-diag__x:hover { color: #444; }
+  .vf-diag__dots { display: flex; gap: 6px; justify-content: center; margin: 2px 0 16px; }
+  .vf-diag__dot { width: 7px; height: 7px; border-radius: 999px; background: #DDE4D6; transition: all .25s ease; }
+  .vf-diag__dot.is-on { background: #1B5E20; width: 20px; }
+  .vf-diag__eyebrow { margin: 0 0 6px; font-size: 12.5px; font-weight: 700; color: #5EBC43; text-align: center; }
+  .vf-diag__title { margin: 0 0 8px; font-size: 21px; line-height: 1.25; font-weight: 800; color: #16301A; text-align: center; }
+  .vf-diag__sub { margin: 0 0 18px; font-size: 14px; line-height: 1.45; color: #5B6B5B; text-align: center; }
+  .vf-diag__opts { display: flex; flex-direction: column; gap: 10px; }
+  .vf-diag__opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 13px 14px; border: 1.5px solid #E3E7DD; border-radius: 14px; background: #fff; cursor: pointer; transition: border-color .18s ease, transform .12s ease, box-shadow .18s ease; }
+  .vf-diag__opt:hover { border-color: #5EBC43; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(94,188,67,.14); }
+  .vf-diag__opt-emoji { font-size: 26px; flex: 0 0 auto; }
+  .vf-diag__opt-txt { display: flex; flex-direction: column; gap: 1px; }
+  .vf-diag__opt-txt strong { font-size: 15px; color: #16301A; font-weight: 700; }
+  .vf-diag__opt-txt span { font-size: 12.5px; color: #7A867A; }
+  .vf-diag__back { border: 0; background: transparent; color: #7A867A; font-size: 13px; cursor: pointer; padding: 0 0 12px; }
+  .vf-diag__back:hover { color: #1B5E20; }
+  .vf-diag__form { margin: 4px 0 12px; text-align: left; }
+  .vf-diag__form-label { display: block; font-size: 13.5px; color: #3D4A3D; margin: 0 0 8px; line-height: 1.4; }
+  .vf-diag__form-row { display: flex; gap: 8px; }
+  .vf-diag__form-row input { flex: 1 1 auto; min-width: 0; padding: 12px 14px; border: 1.5px solid #D8DED0; border-radius: 12px; font-size: 14px; }
+  .vf-diag__form-row input:focus { outline: none; border-color: #5EBC43; }
+  .vf-diag__form-btn { flex: 0 0 auto; border: 0; border-radius: 12px; background: #1B5E20; color: #fff; font-weight: 700; font-size: 14px; padding: 0 16px; cursor: pointer; }
+  .vf-diag__form-btn:hover { background: #164a1a; }
+  .vf-diag__form-mini { margin: 8px 0 0; font-size: 11.5px; color: #9AA69A; text-align: center; }
+  .vf-diag__success { margin: 4px 0 12px; }
+  .vf-diag__success-msg { margin: 0; background: #EAF7E4; border: 1px solid #C7E7B8; border-radius: 12px; padding: 12px 14px; font-size: 13.5px; font-weight: 600; color: #1B5E20; text-align: center; }
+  .vf-diag__code { display: inline-block; background: #1B5E20; color: #fff; font-weight: 800; letter-spacing: .04em; padding: 2px 8px; border-radius: 6px; margin: 0 2px; }
+  .vf-diag__cta { display: block; text-align: center; text-decoration: none; background: #5EBC43; color: #fff; font-weight: 800; font-size: 15.5px; padding: 14px; border-radius: 14px; box-shadow: 0 4px 0 #1B5E20; transition: transform .12s ease; }
+  .vf-diag__cta:hover { transform: translateY(-1px); }
+  .vf-diag__cta:active { transform: translateY(2px); box-shadow: 0 2px 0 #1B5E20; }
+  .vf-diag__skip { display: block; width: 100%; border: 0; background: transparent; color: #9AA69A; font-size: 12.5px; margin-top: 10px; cursor: pointer; }
+  .vf-diag__skip:hover { color: #5B6B5B; }
+  @media (max-width: 480px) {
+    .vf-diag__card { padding: 22px 16px 16px; border-radius: 18px; }
+    .vf-diag__title { font-size: 19px; }
+    .vf-diag__form-row { flex-direction: column; }
+    .vf-diag__form-btn { padding: 12px; }
+  }
+{% endstylesheet %}
+
+<script>
+(function () {
+  var root = document.getElementById('vf-diag');
+  if (!root) return;
+
+  var COOKIE = 'vf_diag_popup';
+  var DELAY_MS = 4000;
+  var SNOOZE_DAYS = 5;
+  var CONVERTED_DAYS = 30;
+
+  function getCookie(name) {
+    var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function setCookie(name, val, days) {
+    var d = new Date(); d.setTime(d.getTime() + days * 864e5);
+    document.cookie = name + '=' + encodeURIComponent(val) + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+  }
+
+  // Nao mostrar em cart/checkout/account, nem se o pop-up de oleo apareceu nesta sessao
+  var path = window.location.pathname;
+  if (/^\/(cart|checkout|account)/.test(path)) return;
+  try { if (sessionStorage.getItem('vf_oleopop_shown')) return; } catch (e) {}
+  if (getCookie(COOKIE)) return;
+
+  var state = { publico: '', angulo: '', handle: '' };
+  var steps = root.querySelectorAll('.vf-diag__step');
+  var dots = root.querySelectorAll('.vf-diag__dot');
+  var tagsInput = root.querySelector('[data-tags-input]');
+  var form = document.getElementById('vf-diag-form');
+  var successBox = root.querySelector('.vf-diag__success');
+  var resultTitle = root.querySelector('[data-result-title]');
+  var resultDesc = root.querySelector('[data-result-desc]');
+  var resultCta = root.querySelector('[data-result-cta]');
+
+  var COPY = {
+    'adulto': {
+      'leveza': ['Protocolo Adulto VermeFree', 'Pra apoiar a sua rotina de limpeza natural e aquela sensação de corpo leve por dentro — no seu tempo, sincronizado com a lua nova. 🌙'],
+      'disposicao': ['Protocolo Adulto VermeFree', 'Pra apoiar o seu bem-estar e a disposição no dia a dia, de forma natural e com constância.'],
+      'sono': ['Protocolo Adulto VermeFree', 'Pra apoiar o bem-estar do seu corpo e noites mais tranquilas — cuidado natural, sem química pesada.']
+    },
+    'kids': {
+      'kids': ['VermeFree Kids', 'Desparasitação natural, suave e em gotinhas que a criança aceita bem. Feita pra rotina da família, sincronizada com a lua nova. 🌙']
+    },
+    'familia': {
+      'leveza': ['Kit Família VermeFree', 'O cuidado natural pra adultos e crianças de uma vez — a rotina de limpeza natural da casa toda, junta.'],
+      'sono': ['Kit Família VermeFree', 'Bem-estar pra adultos e crianças na mesma rotina natural — pra noites mais tranquilas em casa.'],
+      'prevencao': ['Kit Família VermeFree', 'O cuidado preventivo natural da casa toda, pra fazer a rotina 2 a 4x por ano com constância.']
+    }
+  };
+
+  function show(stepNum, branch) {
+    steps.forEach(function (s) {
+      var match = s.getAttribute('data-step') === String(stepNum) &&
+        (!branch || !s.getAttribute('data-branch') || s.getAttribute('data-branch') === branch);
+      if (s.getAttribute('data-step') === String(stepNum)) {
+        // dentro da etapa, respeitar o branch
+        if (s.getAttribute('data-branch') && s.getAttribute('data-branch') !== branch) { s.hidden = true; }
+        else { s.hidden = false; }
+      } else {
+        s.hidden = true;
+      }
+    });
+    var dotN = stepNum === 3 ? 3 : stepNum;
+    dots.forEach(function (d) { d.classList.toggle('is-on', parseInt(d.getAttribute('data-dot'), 10) <= dotN); });
+  }
+
+  function openPopup() {
+    root.hidden = false;
+    root.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setCookie(COOKIE, '1', SNOOZE_DAYS);
+  }
+  function closePopup() {
+    root.hidden = true;
+    root.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function renderResult() {
+    var pack = (COPY[state.publico] && COPY[state.publico][state.angulo]) || ['Protocolo VermeFree', 'Cuidado natural pra sua rotina de limpeza, com critério e no seu tempo.'];
+    if (resultTitle) resultTitle.textContent = pack[0];
+    if (resultDesc) resultDesc.textContent = pack[1];
+    if (resultCta) resultCta.setAttribute('href', '/products/' + state.handle + '?utm_source=popup_diagnostico&utm_medium=onsite&utm_campaign=quiz');
+    if (tagsInput) tagsInput.value = ['quiz-diagnostico', 'quiz-' + state.publico, 'quiz-' + state.angulo].join(',');
+    show(3);
+  }
+
+  // Navegacao
+  root.addEventListener('click', function (e) {
+    var closeEl = e.target.closest('[data-diag-close]');
+    if (closeEl) { e.preventDefault(); closePopup(); return; }
+
+    var next = e.target.closest('[data-next]');
+    if (next) {
+      state.publico = next.getAttribute('data-publico') || state.publico;
+      show(2, state.publico);
+      return;
+    }
+
+    var back = e.target.closest('[data-back]');
+    if (back) { show(parseInt(back.getAttribute('data-back'), 10)); return; }
+
+    var res = e.target.closest('[data-result]');
+    if (res) {
+      state.angulo = res.getAttribute('data-angulo') || '';
+      state.handle = res.getAttribute('data-handle') || '';
+      renderResult();
+      return;
+    }
+  });
+
+  // ESC fecha
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !root.hidden) closePopup();
+  });
+
+  // Captura de e-mail (AJAX, sem recarregar)
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = (form.querySelector('[name="contact[email]"]') || {}).value || '';
+      if (!email) return;
+      var btn = form.querySelector('.vf-diag__form-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+      var data = new FormData(form);
+      fetch(form.action || '/contact', { method: 'POST', body: data, headers: { 'Accept': 'text/html' } })
+        .catch(function () {})
+        .finally(function () {
+          setCookie(COOKIE, 'converted', CONVERTED_DAYS);
+          if (state.handle) {
+            var dest = '/products/' + state.handle + '?utm_source=popup_diagnostico&utm_medium=onsite&utm_campaign=quiz';
+            window.location.href = '/discount/5OFF?redirect=' + encodeURIComponent(dest);
+          } else {
+            form.hidden = true;
+            if (successBox) successBox.hidden = false;
+          }
+        });
+    });
+  }
+
+  // CTA convertido tambem grava cookie longo
+  if (resultCta) {
+    resultCta.addEventListener('click', function () { setCookie(COOKIE, 'converted', CONVERTED_DAYS); });
+  }
+
+  // Gatilho: entrada ~4s
+  window.setTimeout(function () {
+    if (getCookie(COOKIE)) return;
+    openPopup();
+  }, DELAY_MS);
+})();
+</script>
+

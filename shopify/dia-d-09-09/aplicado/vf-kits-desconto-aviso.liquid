@@ -33,9 +33,16 @@
   COMO USAR: renderizar dentro do resumo do main-cart.liquid.
 {%- endcomment -%}
 
+{%- comment -%}
+  Gate do Dia D. Quem renderiza pode mandar `diad:` (o main-cart manda o
+  mesmo valor que usa na barra de frete, previa incluida). Sem parametro,
+  cai na data — que e o que vale no dia da acao de qualquer jeito.
+{%- endcomment -%}
 {%- assign vfk_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
 {%- assign vfk_diad = false -%}
 {%- if vfk_today == 20260909 -%}
+  {%- assign vfk_diad = true -%}
+{%- elsif diad -%}
   {%- assign vfk_diad = true -%}
 {%- endif -%}
 
