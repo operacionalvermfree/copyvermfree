@@ -13,10 +13,19 @@
 
 {%- comment -%}
   PROMO TEMPORARIA — DIA D 09/09/2026 (quarta), 00h00 as 23h59.
-  Oferta: 10% OFF ja embutido no preco (SEM CUPOM) + frete gratis sem
-  minimo + 1 Oleo de Alho de brinde + Manual da Desparasitacao em PDF
-  por e-mail. Usa a data do fuso da loja ('now'), entao liga e desliga
-  sozinho, sem precisar mexer depois.
+
+  Oferta: 12% OFF em tudo, aplicado AUTOMATICAMENTE NO CARRINHO (sem
+  cupom) — 15% levando 3 unidades, 18% a partir de 5 — mais frete gratis
+  sem minimo, 1 Oleo de Alho de brinde e o Manual da Desparasitacao em
+  PDF por e-mail.
+
+  ATENCAO: o desconto NAO esta embutido no preco do produto. A vitrine
+  mostra o preco cheio e o abatimento entra no carrinho. Nenhuma frase
+  aqui pode dizer "ja no preco" ou "ja aplicado" — senao a pessoa ve um
+  valor na tarja e outro no checkout.
+
+  Usa a data do fuso da loja ('now'), entao liga e desliga sozinho, sem
+  precisar mexer depois.
 {%- endcomment -%}
 {%- comment -%}
   Gate do Dia D. A previa so liga ANTES ou NO dia da acao — depois de
@@ -47,13 +56,18 @@
       {%- if ann_promo_active -%}
         <div class="vf-announcement__slide is-active" data-slide>
           <span class="vf-announcement__text vf-announcement__text--promo">
-            🚨 DIA D · SÓ HOJE: 10% OFF EM TUDO, JÁ NO PREÇO — acaba em
+            🚨 DIA D · SÓ HOJE: 12% OFF EM TUDO NO CARRINHO — acaba em
             <strong class="vf-ann-countdown" data-countdown="{{ ann_promo_end }}">--:--:--</strong>
           </span>
         </div>
         <div class="vf-announcement__slide" data-slide>
           <span class="vf-announcement__text vf-announcement__text--promo">
             🚚 FRETE GRÁTIS SEM VALOR MÍNIMO, pra todo o Brasil — só hoje
+          </span>
+        </div>
+        <div class="vf-announcement__slide" data-slide>
+          <span class="vf-announcement__text vf-announcement__text--promo">
+            📦 LEVANDO MAIS, O DESCONTO SOBE: 3 unidades 15% OFF · 5 unidades 18% OFF
           </span>
         </div>
         <div class="vf-announcement__slide" data-slide>

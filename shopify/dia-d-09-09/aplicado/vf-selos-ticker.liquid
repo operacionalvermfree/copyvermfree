@@ -6,9 +6,13 @@
 
 {%- comment -%}
   PROMO TEMPORARIA — DIA D 09/09/2026 (quarta), 00h00 as 23h59.
-  Marquee mostra os 4 itens da oferta em loop: 10% OFF ja no preco (sem
-  cupom), frete gratis sem minimo, 1 Oleo de Alho de brinde e o Manual
-  da Desparasitacao em PDF por e-mail.
+  Marquee mostra os itens da oferta em loop: 12% OFF aplicado no CARRINHO
+  (sem cupom, e nao embutido no preco), 15% levando 3 e 18% a partir de 5,
+  frete gratis sem minimo, 1 Oleo de Alho de brinde e o Manual da
+  Desparasitacao em PDF por e-mail.
+
+  ATENCAO: nunca escrever "ja no preco" aqui. A vitrine mostra o preco
+  cheio e o desconto entra no carrinho.
   Data pega do fuso da loja ('now'), liga/desliga sozinho.
 {%- endcomment -%}
 {%- comment -%}
@@ -35,12 +39,17 @@
   {%- capture vf_promo_cards -%}
     <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
       <span class="vf-ticker__icon" aria-hidden="true">🚨</span>
-      <span class="vf-ticker__text">DIA D · 10% OFF EM TUDO, JÁ NO PREÇO — acaba em <strong class="vf-ann-countdown" data-vf-ticker-countdown>--:--:--</strong></span>
+      <span class="vf-ticker__text">DIA D · 12% OFF EM TUDO NO CARRINHO — acaba em <strong class="vf-ann-countdown" data-vf-ticker-countdown>--:--:--</strong></span>
     </div>
     |||
     <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
       <span class="vf-ticker__icon" aria-hidden="true">🚚</span>
       <span class="vf-ticker__text">FRETE GRÁTIS SEM VALOR MÍNIMO</span>
+    </div>
+    |||
+    <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>
+      <span class="vf-ticker__icon" aria-hidden="true">📦</span>
+      <span class="vf-ticker__text">3 UNIDADES 15% OFF · 5 UNIDADES 18% OFF</span>
     </div>
     |||
     <div class="vf-ticker__item vf-ticker__item--promo" data-promo-scope>

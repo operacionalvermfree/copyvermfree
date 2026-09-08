@@ -7,8 +7,9 @@
 
 {%- comment -%}
   PROMO TEMPORARIA - DIA D 09/09/2026 (quarta), 00h00 as 23h59.
-  Oferta: 10% OFF ja embutido no preco (SEM CUPOM), frete gratis sem valor
-  minimo, 1 Oleo de Alho de brinde e Manual da Desparasitacao em PDF.
+  Oferta: 12% OFF aplicado AUTOMATICAMENTE NO CARRINHO (sem cupom) — 15%
+  levando 3 unidades, 18% a partir de 5 — frete gratis sem valor minimo,
+  1 Oleo de Alho de brinde e Manual da Desparasitacao em PDF.
   A previa so liga ANTES ou NO dia da acao - depois de 09/09 a promo nunca
   mais aparece, mesmo que o checkbox fique ligado por esquecimento.
 {%- endcomment -%}
@@ -51,7 +52,7 @@
 
         <article class="vf-kit-kids__card{% if kids_promo %} vf-kit-kids__card--promo{% endif %}" {{ block.shopify_attributes }}>
           {%- if kids_promo -%}
-            <span class="vf-kit-kids__promo-ribbon">🔥 10% OFF + FRETE GRÁTIS</span>
+            <span class="vf-kit-kids__promo-ribbon">🔥 12% OFF + FRETE GRÁTIS</span>
           {%- endif -%}
           <a href="{{ link }}" class="vf-kit-kids__media-link" aria-label="{{ block.settings.name | escape }}">
             <div class="vf-kit-kids__media">
@@ -102,19 +103,24 @@
             {%- endif -%}
 
             {%- comment -%}
-              PRECO NO DIA D: o tema NAO recalcula os 10%. O desconto ja vem
-              embutido no preco do produto, entao mostrar product.price e o
-              unico valor que bate com o checkout. A parcela escrita a mao
-              (block.settings.installment) e texto fixo e ficaria desatualizada
-              quando o preco cai, entao no dia ela nao aparece.
+              PRECO NO DIA D. O preco cadastrado no produto continua CHEIO —
+              os 12% sao desconto automatico que entra no CARRINHO, nao estao
+              embutidos no preco. Entao aqui riscamos o preco cheio e
+              mostramos o valor que a pessoa vai pagar (price x 0,88),
+              sempre dizendo que o abatimento acontece no carrinho.
+
+              Nunca escrever "ja aplicado" nem "ja no preco": e exatamente o
+              erro de mostrar um valor na vitrine e cobrar outro no checkout.
+
+              A parcela escrita a mao (block.settings.installment) e texto
+              fixo e ficaria desatualizada, entao no dia ela nao aparece.
             {%- endcomment -%}
             <div class="vf-kit-kids__price-box">
               {%- if kids_promo and product != blank and product.price > 0 -%}
-                {%- if product.compare_at_price > product.price -%}
-                  <span class="vf-kit-kids__price-compare">de {{ product.compare_at_price | money }}</span>
-                {%- endif -%}
-                <span class="vf-kit-kids__installment">{{ product.price | money }}</span>
-                <span class="vf-kit-kids__price">com 10% OFF já aplicado · à vista</span>
+                {%- assign kids_no_carrinho = product.price | times: 88 | divided_by: 100 -%}
+                <span class="vf-kit-kids__price-compare">de {{ product.price | money }}</span>
+                <span class="vf-kit-kids__installment">{{ kids_no_carrinho | money }}</span>
+                <span class="vf-kit-kids__price">com 12% OFF no carrinho · 3 un: 15% · 5 un: 18%</span>
               {%- else -%}
                 {%- if block.settings.installment != blank -%}
                   <span class="vf-kit-kids__installment">{{ block.settings.installment }}</span>
@@ -124,7 +130,7 @@
             </div>
 
             <a href="{{ link }}" class="vf-kit-kids__cta{% if kids_promo %} vf-kit-kids__cta--promo{% endif %}" aria-label="{{ block.settings.cta_label | escape }}">
-              {%- if kids_promo -%}🔥 Quero com 10% OFF{%- else -%}{{ block.settings.cta_label }}{%- endif -%}
+              {%- if kids_promo -%}🔥 Quero com 12% OFF{%- else -%}{{ block.settings.cta_label }}{%- endif -%}
               <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
@@ -211,13 +217,13 @@
       "type": "text",
       "id": "promo_title",
       "label": "Título do painel",
-      "default": "10% OFF em tudo, frete grátis e óleo de alho de brinde"
+      "default": "12% OFF em tudo, frete grátis e óleo de alho de brinde"
     },
     {
       "type": "textarea",
       "id": "promo_subtitle",
       "label": "Texto do painel",
-      "default": "Hoje o preço já sai com 10% OFF — sem cupom, sem digitar nada. Frete grátis pra qualquer valor de compra, em qualquer canto do Brasil (fora do Dia D, só acima de R$ 399). E o Manual da Desparasitação chega em PDF no seu e-mail depois da compra."
+      "default": "O desconto entra sozinho no carrinho, sem cupom: 12% em tudo, 15% levando 3 unidades e 18% a partir de 5. Frete grátis pra qualquer valor de compra, em qualquer canto do Brasil (fora do Dia D, só acima de R$ 399). E o Manual da Desparasitação chega em PDF no seu e-mail depois da compra."
     },
     {
       "type": "richtext",
