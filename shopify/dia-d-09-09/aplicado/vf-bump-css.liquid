@@ -134,6 +134,23 @@
       padding: 2px 7px; border-radius: 999px;
     }
     .vf-bump__opt-tag--max { background: #C2410C; }
+    .vf-bump__opt-tag--gift { background: #E11D2E; }
+
+    /* Linha do brinde: ja e do cliente, entao nao e clicavel nem tem
+       aparencia de escolha. Fundo verde claro, check ja marcado. */
+    .vf-bump__opt-inner--done {
+      border-color: var(--vf-green, #16A34A);
+      background: var(--vf-green-light, #E7F6EC);
+    }
+    .vf-bump__opt-check--done {
+      background: var(--vf-green, #16A34A);
+      border-color: var(--vf-green, #16A34A);
+    }
+    .vf-bump__opt-check--done svg { opacity: 1; }
+    .vf-bump__opt-price--free {
+      font-size: 14px; letter-spacing: .04em;
+      color: var(--vf-green-dark, #15803D);
+    }
     /* estado selecionado */
     .vf-bump__opt input:checked + .vf-bump__opt-inner {
       border-color: var(--vf-green, #16A34A);

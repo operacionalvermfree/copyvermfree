@@ -42,9 +42,33 @@
 {%- assign BUMP_VARIANT_ID = 48968692891867 -%}
 {%- assign TRIGGER_HANDLES = 'protocolo-desparasitacao-adulto-vermefree,kit-familia-vermefree-2-adultos-2-criancas' -%}
 
-{%- comment -%} ===== Detecta se o carrinho tem um produto-gatilho ===== {%- endcomment -%}
+{%- comment -%}
+  ===== Gatilho + o que ja tem de oleo no carrinho =====
+
+  O oleo aparece no carrinho por dois caminhos completamente diferentes e
+  eles NAO podem ser tratados igual:
+
+  BRINDE — colocado por snippets/vf-diad-brinde.liquid no Dia D, com a
+  propriedade de linha _brinde: "dia-d". E gratis (o BXGY 1705126985947
+  zera ele) e nao e uma compra.
+
+  COMPRADO — o cliente escolheu, aqui no bump ou na PDP. Nao tem a
+  propriedade.
+
+  Antes o bump so olhava a variante e escondia o cartao com qualquer oleo
+  presente. Como o brinde entra sozinho assim que ha um protocolo no
+  carrinho, no dia 09/09 o bump sumia da pagina antes de qualquer pessoa
+  ver: o script adicionava o brinde, a pagina recarregava, e o cartao nao
+  renderizava mais. O upsell inteiro morria justo no dia da acao.
+
+  Agora: com o BRINDE no carrinho o cartao continua, mudando de discurso
+  ("1 frasco ja e seu, quer mais tempo?"). Com um oleo COMPRADO ele some,
+  que e o comportamento certo — nao se oferece de novo o que a pessoa
+  acabou de comprar.
+{%- endcomment -%}
 {%- assign bump_should_show = false -%}
-{%- assign bump_already_in_cart = false -%}
+{%- assign bump_paid_oil_in_cart = false -%}
+{%- assign bump_gift_in_cart = false -%}
 {%- assign triggers = TRIGGER_HANDLES | split: ',' -%}
 
 {%- for item in cart.items -%}
@@ -55,7 +79,11 @@
     {%- endif -%}
   {%- endfor -%}
   {%- if item.variant.id == BUMP_VARIANT_ID -%}
-    {%- assign bump_already_in_cart = true -%}
+    {%- if item.properties['_brinde'] == 'dia-d' -%}
+      {%- assign bump_gift_in_cart = true -%}
+    {%- else -%}
+      {%- assign bump_paid_oil_in_cart = true -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
 
@@ -95,10 +123,28 @@
 {%- assign un_6 = pay_6 | divided_by: 6 -%}
 
 {%- comment -%}
+  Com o brinde ja no carrinho as opcoes viram "leve MAIS 2" e "leve MAIS
+  5" — o cliente fica com 3 e 6 frascos no total, contando o de graca.
+
+  Os frascos pagos entram numa linha propria (sem a propriedade _brinde),
+  entao levam a faixa do dia, nao o BXGY. A faixa e a mesma de 3 e de 6
+  frascos porque o carrinho ja tem protocolo + brinde: +2 fecha 4 unidades
+  (15%) e +5 fecha 7 (18%). Mesmo sem contar o brinde na conta, 1
+  protocolo + 2 = 3 (15%) e 1 + 5 = 6 (18%) — o percentual se sustenta dos
+  dois jeitos.
+{%- endcomment -%}
+{%- assign extra2_full = bump_unit | times: 2 -%}
+{%- assign extra2_save = extra2_full | times: pct_3 | divided_by: 100 -%}
+{%- assign extra2_pay = extra2_full | minus: extra2_save -%}
+{%- assign extra5_full = bump_unit | times: 5 -%}
+{%- assign extra5_save = extra5_full | times: pct_6 | divided_by: 100 -%}
+{%- assign extra5_pay = extra5_full | minus: extra5_save -%}
+
+{%- comment -%}
   Não mostra se o gatilho não está no carrinho,
   nem se o Óleo já foi adicionado.
 {%- endcomment -%}
-{%- if bump_should_show and bump_already_in_cart == false and BUMP_VARIANT_ID != 00000000000000 -%}
+{%- if bump_should_show and bump_paid_oil_in_cart == false and BUMP_VARIANT_ID != 00000000000000 -%}
 
   <div class="vf-bump" data-vf-bump>
     <div class="vf-bump__flag">
@@ -130,14 +176,66 @@
 
     <p class="vf-bump__dose">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-      Cada frasco = <strong>30 dias</strong> de manutenção. Escolha por quanto tempo quer se proteger:
+      {%- if bump_gift_in_cart -%}
+        Cada frasco = <strong>30 dias</strong> de manutenção. Quer esticar além do frasco de brinde?
+      {%- else -%}
+        Cada frasco = <strong>30 dias</strong> de manutenção. Escolha por quanto tempo quer se proteger:
+      {%- endif -%}
     </p>
 
     {%- comment -%} 3 opções de tempo. Valores calculados acima, a partir do preço real do produto. {%- endcomment -%}
     <div class="vf-bump__options" role="radiogroup" aria-label="Quantidade de Óleo de Alho">
 
+{%- if bump_gift_in_cart -%}
+      {%- comment -%}
+        O primeiro item nao e um radio: e o brinde que JA esta no carrinho.
+        Nao da pra clicar porque nao ha nada pra adicionar — ele ja e seu.
+        Fica aqui pra pessoa entender de onde veio o frasco de R$ 0,00 na
+        lista e pra ancorar as duas opcoes pagas logo abaixo.
+      {%- endcomment -%}
+      <div class="vf-bump__opt-inner vf-bump__opt-inner--done">
+        <span class="vf-bump__opt-check vf-bump__opt-check--done" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
+        <span class="vf-bump__opt-main">
+          <span class="vf-bump__opt-dur">1 frasco<span class="vf-bump__opt-tag vf-bump__opt-tag--gift">🎁 JÁ É SEU</span></span>
+          <span class="vf-bump__opt-sub">30 dias · brinde do Dia D, já no seu carrinho</span>
+        </span>
+        <span class="vf-bump__opt-priceblock">
+          <span class="vf-bump__opt-price vf-bump__opt-price--free">GRÁTIS</span>
+        </span>
+      </div>
+
       <label class="vf-bump__opt">
-        <input type="radio" name="vf-bump-qty" value="1" data-vf-bump-opt data-qty="1">
+        <input type="radio" name="vf-bump-qty" value="2" data-vf-bump-opt data-qty="2" data-cta="Adicionar mais 2 frascos — {{ extra2_pay | money }}">
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">Leve mais 2<span class="vf-bump__opt-tag">MAIS ESCOLHIDO</span></span>
+            <span class="vf-bump__opt-sub">fica com 3 frascos · 90 dias</span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-price">{{ extra2_pay | money }}</span>
+            <span class="vf-bump__opt-save">{{ pct_3 }}% OFF · economiza {{ extra2_save | money }}</span>
+          </span>
+        </span>
+      </label>
+
+      <label class="vf-bump__opt">
+        <input type="radio" name="vf-bump-qty" value="5" data-vf-bump-opt data-qty="5" data-cta="Adicionar mais 5 frascos — {{ extra5_pay | money }}">
+        <span class="vf-bump__opt-inner">
+          <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
+          <span class="vf-bump__opt-main">
+            <span class="vf-bump__opt-dur">Leve mais 5<span class="vf-bump__opt-tag vf-bump__opt-tag--max">MELHOR CUSTO</span></span>
+            <span class="vf-bump__opt-sub">fica com 6 frascos · 180 dias</span>
+          </span>
+          <span class="vf-bump__opt-priceblock">
+            <span class="vf-bump__opt-price">{{ extra5_pay | money }}</span>
+            <span class="vf-bump__opt-save">{{ pct_6 }}% OFF · economiza {{ extra5_save | money }}</span>
+          </span>
+        </span>
+      </label>
+      {%- else -%}
+      <label class="vf-bump__opt">
+        <input type="radio" name="vf-bump-qty" value="1" data-vf-bump-opt data-qty="1" data-cta="Adicionar 1 frasco ao pedido — {{ pay_1 | money }}">
         <span class="vf-bump__opt-inner">
           <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
           <span class="vf-bump__opt-main">
@@ -154,7 +252,7 @@
       </label>
 
       <label class="vf-bump__opt">
-        <input type="radio" name="vf-bump-qty" value="3" data-vf-bump-opt data-qty="3">
+        <input type="radio" name="vf-bump-qty" value="3" data-vf-bump-opt data-qty="3" data-cta="Adicionar 3 frascos ao pedido — {{ pay_3 | money }}">
         <span class="vf-bump__opt-inner">
           <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
           <span class="vf-bump__opt-main">
@@ -169,7 +267,7 @@
       </label>
 
       <label class="vf-bump__opt">
-        <input type="radio" name="vf-bump-qty" value="6" data-vf-bump-opt data-qty="6">
+        <input type="radio" name="vf-bump-qty" value="6" data-vf-bump-opt data-qty="6" data-cta="Adicionar 6 frascos ao pedido — {{ pay_6 | money }}">
         <span class="vf-bump__opt-inner">
           <span class="vf-bump__opt-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg></span>
           <span class="vf-bump__opt-main">
@@ -182,6 +280,7 @@
           </span>
         </span>
       </label>
+      {%- endif -%}
 
     </div>
 
@@ -212,20 +311,16 @@
       var busy = false;
       var chosenQty = 0;
 
-      /* Rotulos do CTA. Os valores vem do Liquid acima — nunca escreva
-         preco a mao aqui: era assim que o botao passou a prometer um
+      /* O rotulo do botao vem do data-cta de cada opcao, montado no Liquid
+         com o preco ja calculado. Antes era um mapa fixo por quantidade
+         aqui no JS; com "leve mais 2 / mais 5" as quantidades mudam, e um
+         mapa desatualizado e exatamente como o botao passou a prometer um
          numero que o checkout nao cobrava. */
-      var CTA = {
-        '1': 'Adicionar 1 frasco ao pedido — {{ pay_1 | money }}',
-        '3': 'Adicionar 3 frascos ao pedido — {{ pay_3 | money }}',
-        '6': 'Adicionar 6 frascos ao pedido — {{ pay_6 | money }}'
-      };
-
       opts.forEach(function (o) {
         o.addEventListener('change', function () {
           chosenQty = parseInt(o.getAttribute('data-qty'), 10);
           cta.disabled = false;
-          ctaLbl.textContent = CTA[String(chosenQty)] || 'Adicionar ao pedido';
+          ctaLbl.textContent = o.getAttribute('data-cta') || 'Adicionar ao pedido';
         });
       });
 
