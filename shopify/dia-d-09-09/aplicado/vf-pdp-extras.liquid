@@ -33,7 +33,22 @@
             <span aria-hidden="true">&rarr;</span>
           </button>
 
-          <button type="submit" name="checkout" class="vf-pdp__cta vf-pdp__cta--secondary{% if pdp_frete_promo %} vf-pdp__cta--promo-outline{% endif %}" {% if product.available == false %}disabled{% endif %}>
+          {%- comment -%}
+            "Comprar agora" e name="checkout": o Shopify adiciona o item e
+            manda direto pro /checkout, sem passar pelo /cart.
+
+            No Dia D isso fura o brinde. Quem poe o oleo de graca no carrinho
+            e o script snippets/vf-diad-brinde.liquid, e ele so roda em pagina
+            da loja — no checkout o tema nao existe mais. Entao quem comprasse
+            por este botao chegaria no checkout SEM o frasco que a campanha
+            prometeu, e sem jeito de descobrir isso antes de pagar.
+
+            No dia o botao perde o name="checkout" e vira add-to-cart comum: a
+            pessoa cai no /cart, o script poe o brinde, e ela finaliza dali —
+            vendo de quebra os 12%, o frete gratis e o brinde na tela. Fora do
+            Dia D volta a ir direto pro checkout, como sempre foi.
+          {%- endcomment -%}
+          <button type="submit"{% unless pdp_frete_promo %} name="checkout"{% endunless %} class="vf-pdp__cta vf-pdp__cta--secondary{% if pdp_frete_promo %} vf-pdp__cta--promo-outline{% endif %}" {% if product.available == false %}disabled{% endif %}>
             {% if pdp_frete_promo %}🔥 Comprar agora com 12% OFF{% else %}Comprar agora{% endif %}
           </button>
         </form>
