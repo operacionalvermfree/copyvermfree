@@ -6,26 +6,39 @@
     - PDPs, abaixo do bloco principal do produto (de ponta a ponta da tela).
 
   Parametros:
-    badge     texto do selo do topo
-    title     titulo do painel
-    subtitle  paragrafo de apoio
     full      true = faixa de largura total, sem cantos arredondados
 
   NAO tem gate de data proprio: quem renderiza ja decidiu que a promo esta
   ativa. Assim a regra de data mora num lugar so em cada secao.
+
+  ====================================================================
+  SELO, TITULO E TEXTO SAO FIXOS AQUI DE PROPOSITO.
+  ====================================================================
+  Antes vinham por parametro (section.settings.promo_title etc). O
+  problema: templates/*.json guardam uma copia das settings, e o
+  templates/product.json ficou com o texto velho de uma acao anterior
+  ("10% OFF ... o preco ja sai com 10%"). Resultado: eu corrigi o default
+  da secao e mesmo assim TODA PDP de adulto continuou anunciando 10%
+  enquanto o carrinho cobrava 12%.
+
+  O texto da oferta do dia e critico demais pra viver em cinco arquivos
+  diferentes. Agora mora so aqui. Pra mudar a oferta, muda esta linha —
+  e ela muda na home, na pagina Kids e em todas as PDPs de uma vez.
+
+  Os parametros badge/title/subtitle que as secoes ainda passam sao
+  ignorados de proposito. Nao remova a passagem deles sem antes conferir
+  que nenhuma outra peca depende disso.
 {%- endcomment -%}
+
+{%- assign diad_badge = '🚨 Dia D · só hoje, 09/09' -%}
+{%- assign diad_title = '12% OFF em tudo, frete grátis e óleo de alho de brinde' -%}
+{%- assign diad_sub = 'O desconto entra sozinho no carrinho, sem cupom: 12% em tudo, 15% levando 3 unidades e 18% a partir de 5. Frete grátis pra qualquer valor de compra, em qualquer canto do Brasil (fora do Dia D, só acima de R$ 399). E o Manual da Desparasitação chega em PDF no seu e-mail depois da compra.' -%}
 
 <div class="vf-diad{% if full %} vf-diad--full{% endif %}" data-promo-scope>
   <div class="vf-diad__inner">
-    {%- if badge != blank -%}
-      <span class="vf-diad__badge">{{ badge }}</span>
-    {%- endif -%}
-    {%- if title != blank -%}
-      <h3 class="vf-diad__title">{{ title }}</h3>
-    {%- endif -%}
-    {%- if subtitle != blank -%}
-      <p class="vf-diad__sub">{{ subtitle }}</p>
-    {%- endif -%}
+    <span class="vf-diad__badge">{{ diad_badge }}</span>
+    <h3 class="vf-diad__title">{{ diad_title }}</h3>
+    <p class="vf-diad__sub">{{ diad_sub }}</p>
 
     {%- comment -%}
       A oferta inteira, item a item.
