@@ -1,0 +1,130 @@
+{%- comment -%}
+  ============================================================
+  vf-oleo-desconto-aviso.liquid — AVISO DE DESCONTO POR VOLUME
+  ============================================================
+  Mostra na pagina /cart o status do desconto por volume do
+  Oleo de Alho conforme a quantidade no carrinho:
+    1–2 frascos → incentiva chegar a 3 (15%)
+    3–5 frascos → confirma 15%, incentiva chegar a 6 (20%)
+    6+  frascos → confirma 20% (maximo)
+
+  Espelha os descontos automaticos reais da loja:
+    3+ un = 15% (1686134849755) · 6+ un = 20% (1686134948059)
+  Esse aviso dizia 10% e 15%, que nunca foram os numeros
+  configurados — a pessoa via uma promessa e pagava outra.
+
+  NO DIA D (09/09/2026) este aviso NAO aparece: as duas escadas
+  do oleo ficam pausadas e o oleo passa a seguir a escada geral
+  do dia (12% / 15% / 18%), que e comunicada pelo
+  vf-kits-desconto-aviso. Dois avisos com percentuais diferentes
+  na mesma tela so confundiriam.
+
+  A economia mostrada e a real, tirada da diferenca entre
+  original_line_price e final_line_price da linha — nao de uma
+  conta chutada em cima do preco de tabela.
+
+  COMO USAR: renderizar dentro do resumo do main-cart.liquid.
+{%- endcomment -%}
+
+{%- assign oleo_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
+{%- unless oleo_today == 20260909 -%}
+
+{%- assign oleo_handle = 'oleo-de-alho-desodorizado-500mg' -%}
+{%- assign oleo_qty = 0 -%}
+{%- assign oleo_unit = 6700 -%}
+{%- assign oleo_cheio = 0 -%}
+{%- assign oleo_eco = 0 -%}
+{%- for item in cart.items -%}
+  {%- if item.product.handle == oleo_handle -%}
+    {%- assign oleo_qty = oleo_qty | plus: item.quantity -%}
+    {%- assign oleo_unit = item.variant.price -%}
+    {%- assign oleo_cheio = oleo_cheio | plus: item.original_line_price -%}
+    {%- assign oleo_dif = item.original_line_price | minus: item.final_line_price -%}
+    {%- assign oleo_eco = oleo_eco | plus: oleo_dif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if oleo_qty > 0 -%}
+
+  {%- if oleo_qty >= 6 -%}
+    {%- assign oleo_pct = 20 -%}
+  {%- elsif oleo_qty >= 3 -%}
+    {%- assign oleo_pct = 15 -%}
+  {%- else -%}
+    {%- assign oleo_pct = 0 -%}
+  {%- endif -%}
+
+  {%- if oleo_eco == 0 and oleo_pct > 0 -%}
+    {%- assign oleo_eco = oleo_cheio | times: oleo_pct | divided_by: 100 -%}
+  {%- endif -%}
+
+  {%- if oleo_qty >= 6 -%}
+    <div class="vf-oleo-aviso vf-oleo-aviso--ok">
+      <span class="vf-oleo-aviso__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+      </span>
+      <div class="vf-oleo-aviso__txt">
+        <strong>Desconto máximo ativado: 20% OFF no Óleo de Alho</strong>
+        <span>Você economiza {{ oleo_eco | money }} neste carrinho.</span>
+      </div>
+    </div>
+
+  {%- elsif oleo_qty >= 3 -%}
+    {%- assign falta = 6 | minus: oleo_qty -%}
+    <div class="vf-oleo-aviso vf-oleo-aviso--ok">
+      <span class="vf-oleo-aviso__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-11"/></svg>
+      </span>
+      <div class="vf-oleo-aviso__txt">
+        <strong>15% OFF ativado no Óleo de Alho</strong>
+        <span>Você economiza {{ oleo_eco | money }}. Levando mais {{ falta }} frasco{% if falta > 1 %}s{% endif %} o desconto sobe pra <b>20% OFF</b>.</span>
+      </div>
+    </div>
+
+  {%- else -%}
+    {%- assign falta = 3 | minus: oleo_qty -%}
+    {%- assign preview15 = oleo_unit | times: 3 | times: 15 | divided_by: 100 -%}
+    <div class="vf-oleo-aviso vf-oleo-aviso--nudge">
+      <span class="vf-oleo-aviso__ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3z"/></svg>
+      </span>
+      <div class="vf-oleo-aviso__txt">
+        <strong>Falta {{ falta }} frasco{% if falta > 1 %}s{% endif %} pra destravar 15% OFF no Óleo de Alho</strong>
+        <span>Levando 3 frascos você economiza {{ preview15 | money }}. E 6 frascos = 20% OFF.</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+{%- endif -%}
+
+{%- endunless -%}
+
+{% stylesheet %}
+  .vf-oleo-aviso {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 11px 13px; border-radius: 10px; margin: 2px 0 2px;
+    font-size: 12.5px; line-height: 1.35;
+  }
+  .vf-oleo-aviso__ic {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff; margin-top: 1px;
+  }
+  .vf-oleo-aviso__ic svg { width: 13px; height: 13px; }
+  .vf-oleo-aviso__txt { display: flex; flex-direction: column; gap: 2px; }
+  .vf-oleo-aviso__txt strong { font-weight: 800; }
+  .vf-oleo-aviso__txt b { font-weight: 900; }
+  /* verde: desconto ativo */
+  .vf-oleo-aviso--ok {
+    background: var(--vf-green-light, #E7F6EC);
+    color: var(--vf-green-dark, #15803D);
+  }
+  .vf-oleo-aviso--ok .vf-oleo-aviso__ic { background: var(--vf-green, #16A34A); }
+  .vf-oleo-aviso--ok .vf-oleo-aviso__txt span { color: #256b3a; }
+  /* laranja: incentivo (ainda nao destravou) */
+  .vf-oleo-aviso--nudge {
+    background: #FEF3E7; color: #9A3412;
+    border: 1px dashed #F59E0B;
+  }
+  .vf-oleo-aviso--nudge .vf-oleo-aviso__ic { background: #EA580C; }
+  .vf-oleo-aviso--nudge .vf-oleo-aviso__txt span { color: #B45309; }
+{% endstylesheet %}
