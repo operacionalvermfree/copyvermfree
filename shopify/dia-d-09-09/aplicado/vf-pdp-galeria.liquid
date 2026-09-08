@@ -1,0 +1,84 @@
+{%- comment -%}
+  Pedaco extraido de sections/vf-pdp-main.liquid.
+
+  A secao passou de 66 KB e nao cabia mais numa unica gravacao pela API,
+  entao virou secao + snippets. O corte e so de arquivo: a ordem de saida
+  e exatamente a mesma de antes, e o {%% schema %%} continua na secao.
+
+  Como o `render` isola o escopo, tudo que este pedaco usa e recebido
+  explicitamente na chamada. Se alguem adicionar uma variavel nova aqui,
+  precisa passar ela tambem em sections/vf-pdp-main.liquid — senao ela
+  chega vazia e o bloco some da tela sem dar erro.
+{%- endcomment -%}
+    <div class="vf-pdp__gallery">
+      {%- if product.images.size > 0 -%}
+        {%- assign main_img = product.featured_image -%}
+        <div class="vf-pdp__main-image">
+          <img
+            src="{{ main_img | image_url: width: 1000 }}"
+            alt="{{ main_img.alt | default: product.title | escape }}"
+            width="1000"
+            height="1000"
+            loading="eager"
+            class="vf-pdp__img"
+            id="vf-pdp-main-img"
+          >
+        </div>
+
+        {%- if product.images.size > 1 -%}
+          <div class="vf-pdp__thumbs">
+            {%- for image in product.images limit: 12 -%}
+              <button
+                type="button"
+                class="vf-pdp__thumb {% if forloop.first %}is-active{% endif %}"
+                data-src="{{ image | image_url: width: 1000 }}"
+                aria-label="Ver imagem {{ forloop.index }}"
+              >
+                <img
+                  src="{{ image | image_url: width: 200 }}"
+                  alt=""
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+      {%- else -%}
+        {%- comment -%} Fallback: fotos reais V2 do produto Adulto {%- endcomment -%}
+        {%- assign fallback_main = 'pdp-adulto-01-oregano-frontal.jpg' | asset_url -%}
+        <div class="vf-pdp__main-image">
+          <img
+            src="{{ fallback_main }}"
+            alt="Protocolo Adulto VermeFree — Óleo Essencial de Orégano"
+            width="1000"
+            height="1000"
+            loading="eager"
+            class="vf-pdp__img"
+            id="vf-pdp-main-img"
+          >
+        </div>
+        <div class="vf-pdp__thumbs">
+          {%- assign fallback_thumbs = 'pdp-adulto-01-oregano-frontal.jpg,pdp-adulto-02-oregano-flatlay.jpg,pdp-adulto-03-oregano-deitado-capsulas.jpg,pdp-adulto-05-tintura-gota.jpg,pdp-adulto-06-ornitina.jpg,pdp-adulto-07-silimarina.jpg,kit-familia-01-todos-frascos.jpg' | split: ',' -%}
+          {%- for filename in fallback_thumbs -%}
+            <button
+              type="button"
+              class="vf-pdp__thumb {% if forloop.first %}is-active{% endif %}"
+              data-src="{{ filename | asset_url }}"
+              aria-label="Ver imagem {{ forloop.index }}"
+            >
+              <img
+                src="{{ filename | asset_url }}"
+                alt=""
+                width="200"
+                height="200"
+                loading="lazy"
+              >
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+

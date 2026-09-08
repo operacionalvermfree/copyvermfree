@@ -1,0 +1,248 @@
+{%- comment -%}
+  Pedaco extraido de sections/vf-pdp-main.liquid.
+
+  A secao passou de 66 KB e nao cabia mais numa unica gravacao pela API,
+  entao virou secao + snippets. O corte e so de arquivo: a ordem de saida
+  e exatamente a mesma de antes, e o {%% schema %%} continua na secao.
+
+  Como o `render` isola o escopo, tudo que este pedaco usa e recebido
+  explicitamente na chamada. Se alguem adicionar uma variavel nova aqui,
+  precisa passar ela tambem em sections/vf-pdp-main.liquid — senao ela
+  chega vazia e o bloco some da tela sem dar erro.
+{%- endcomment -%}
+          {%- comment -%}
+            SELETOR DE KITS (estilo Botanika)
+            Cards clicaveis que definem a quantidade. Tiers configuraveis
+            via section settings, com os mesmos descontos que ja existiam
+            no stepper (3=10%, 5=15%, 8=20%). No Dia D essa escada e
+            substituida pela do dia: 1=12%, 3=15%, 5=18%.
+          {%- endcomment -%}
+          {%- if section.settings.kits_enabled -%}
+            <div class="vf-pdp__kits" role="radiogroup" aria-label="Escolha a quantidade de kits">
+              {%- if section.settings.kits_socialproof_enabled -%}
+                <div class="vf-pdp__kits-social">
+                  <span class="vf-pdp__kits-stars" aria-hidden="true">★★★★★</span>
+                  {%- if section.settings.kits_socialproof_text != blank -%}
+                    <span class="vf-pdp__kits-social-text">{{ section.settings.kits_socialproof_text }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              {%- if section.settings.kits_legend != blank -%}
+                <p class="vf-pdp__kits-legend">{{ section.settings.kits_legend }} <strong id="vf-pdp-kits-legend-value">{{ section.settings.tier1_title }}</strong></p>
+              {%- endif -%}
+
+              {%- comment -%} Selecao invertida (3/2/1) so nos protocolos {%- endcomment -%}
+              {%- assign kit_is_protocol = false -%}
+              {%- assign kit_proto_handles = 'protocolo-desparasitacao-adulto-vermefree,antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos,antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' | split: ',' -%}
+              {%- if kit_proto_handles contains product.handle -%}{%- assign kit_is_protocol = true -%}{%- endif -%}
+
+              {%- if kit_is_protocol -%}
+                <div class="vf-pdp__kitbar" id="vf-pdp-kitbar">
+                  <div class="vf-pdp__kitbar-track"><div class="vf-pdp__kitbar-fill" id="vf-pdp-kitbar-fill"></div></div>
+                  <p class="vf-pdp__kitbar-msg" id="vf-pdp-kitbar-msg"></p>
+                </div>
+              {%- endif -%}
+
+              <div class="vf-pdp__kits-grid" id="vf-pdp-kits-grid">
+                {%- if kit_is_protocol -%}
+                  {%- assign kit_proto_qtys = '3,2,1' | split: ',' -%}
+                  {%- comment -%} Adulto: 2 kits com 5% OFF (desconto automatico "5% OFF · 2 Protocolos Adulto", por produto, min 2). Kids seguem sem o 5% ate a acao ser estendida. {%- endcomment -%}
+                  {%- if product.handle == 'protocolo-desparasitacao-adulto-vermefree' -%}
+                    {%- assign kit_proto_discs = '10,5,0' | split: ',' -%}
+                  {%- else -%}
+                    {%- assign kit_proto_discs = '10,0,0' | split: ',' -%}
+                  {%- endif -%}
+                  {%- comment -%}
+                    No Dia D a escada do dia vale pra todos os produtos e
+                    ja no primeiro frasco: 1-2 un = 12%, 3-4 = 15%, 5+ = 18%.
+                    Os cards aqui sao 3 / 2 / 1, entao 15 / 12 / 12.
+                  {%- endcomment -%}
+                  {%- if pdp_frete_promo -%}
+                    {%- assign kit_proto_discs = '15,12,12' | split: ',' -%}
+                  {%- endif -%}
+                  {%- assign kit_proto_titles = '3 Kits,2 Kits,1 Kit' | split: ',' -%}
+                  {%- for idx in (0..2) -%}
+                    {%- assign t_qty = kit_proto_qtys[idx] | plus: 0 -%}
+                    {%- assign t_disc = kit_proto_discs[idx] | plus: 0 -%}
+                    {%- assign t_title = kit_proto_titles[idx] -%}
+                    {%- assign t_total = unit_price_cents | times: t_qty -%}
+                    {%- assign t_disc_amt = t_total | times: t_disc | divided_by: 100 -%}
+                    {%- assign t_price = t_total | minus: t_disc_amt -%}
+                    {%- assign t_installment = t_price | times: installment_ratio | round -%}
+                    {%- assign t_badge1 = '' -%}
+                    {%- assign t_badge2 = '' -%}
+                    {%- assign t_msg = '' -%}
+                    {%- if t_qty == 3 -%}
+                      {%- assign t_badge1 = 'Mais vantajoso' -%}
+                      {%- assign t_badge2 = 'Frete grátis' -%}
+                      {%- comment -%}
+                        Claim removido: a mensagem anterior prometia resultado
+                        ("garantido"), o que nao pode em comunicacao. Trocada
+                        por leitura de rotina, sem promessa.
+                      {%- endcomment -%}
+                      {%- assign t_msg = 'Dá pra acompanhar a rotina do ano todo 🌙' -%}
+                    {%- elsif t_qty == 2 -%}
+                      {%- assign t_badge2 = 'Frete grátis' -%}
+                    {%- endif -%}
+                    {%- comment -%}
+                      Dia D: badge em TODOS os niveis, inclusive no de 1 kit.
+                      Fora do Dia D o frete gratis so vale acima de R$ 399 e o
+                      protocolo sozinho custa menos que isso — entao quem leva
+                      1 kit normalmente paga frete e hoje nao paga.
+                    {%- endcomment -%}
+                    {%- if pdp_frete_promo -%}
+                      {%- capture t_badge2 -%}{{ t_disc }}% OFF + Frete grátis{%- endcapture -%}
+                    {%- endif -%}
+                    <div class="vf-pdp__kit-card{% if forloop.first %} is-active{% endif %}{% if pdp_frete_promo %} vf-pdp__kit-card--promo{% endif %}" data-qty="{{ t_qty }}" data-discount="{{ t_disc }}" role="radio" aria-checked="{% if forloop.first %}true{% else %}false{% endif %}" tabindex="0">
+                      {%- if pdp_frete_promo -%}
+                        <span class="vf-pdp__kit-promo-ribbon">🔥 {{ t_disc }}% OFF + FRETE GRÁTIS</span>
+                      {%- endif -%}
+                      {%- if t_badge1 != blank or t_badge2 != blank -%}
+                        <div class="vf-pdp__kit-badges">
+                          {%- if t_badge1 != blank -%}<span class="vf-pdp__kit-badge vf-pdp__kit-badge--1">{{ t_badge1 }}</span>{%- endif -%}
+                          {%- if t_badge2 != blank -%}<span class="vf-pdp__kit-badge vf-pdp__kit-badge--2">{{ t_badge2 }}</span>{%- endif -%}
+                        </div>
+                      {%- endif -%}
+                      <div class="vf-pdp__kit-row">
+                        <span class="vf-pdp__kit-radio" aria-hidden="true"></span>
+                        <div class="vf-pdp__kit-image">
+                          {%- if product.featured_image != blank -%}<img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ t_title | escape }}" loading="lazy">{%- else -%}<div class="vf-pdp__kit-image-ph"></div>{%- endif -%}
+                        </div>
+                        <div class="vf-pdp__kit-info">
+                          <span class="vf-pdp__kit-title">{{ t_title }}</span>
+                          <div class="vf-pdp__kit-pricing">
+                            <span class="vf-pdp__kit-installments-label">10x de</span>
+                            <span class="vf-pdp__kit-installment-value" data-installment>{{ t_installment | money }}</span>
+                          </div>
+                          <div class="vf-pdp__kit-cash">
+                            <span class="vf-pdp__kit-cash-or">ou</span>
+                            <span class="vf-pdp__kit-cash-value" data-total>{{ t_price | money }}</span>
+                            <span class="vf-pdp__kit-cash-label">à vista</span>
+                            {%- if t_disc > 0 -%}<s class="vf-pdp__kit-compare" data-compare>{{ t_total | money }}</s>{%- endif -%}
+                          </div>
+                          {%- if t_disc > 0 -%}<span class="vf-pdp__kit-discount">{{ t_disc }}% OFF{% if pdp_frete_promo %} no carrinho{% endif %} · você economiza <span data-save>{{ t_disc_amt | money }}</span></span>{%- endif -%}
+                        </div>
+                      </div>
+                      {%- if t_msg != blank -%}<div class="vf-pdp__kit-message">{{ t_msg }}</div>{%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                {%- else -%}
+                {%- for i in (1..4) -%}
+                  {%- assign tier_key = i | prepend: 'tier' -%}
+                  {%- assign enabled_key = tier_key | append: '_enabled' -%}
+                  {%- if section.settings[enabled_key] -%}
+                    {%- assign qty_key = tier_key | append: '_quantity' -%}
+                    {%- assign disc_key = tier_key | append: '_discount' -%}
+                    {%- assign title_key = tier_key | append: '_title' -%}
+                    {%- assign image_key = tier_key | append: '_image' -%}
+                    {%- assign badge1_key = tier_key | append: '_badge1' -%}
+                    {%- assign badge2_key = tier_key | append: '_badge2' -%}
+                    {%- assign msg_key = tier_key | append: '_message' -%}
+
+                    {%- assign t_qty = section.settings[qty_key] -%}
+                    {%- assign t_disc = section.settings[disc_key] -%}
+                    {%- assign t_image = section.settings[image_key] -%}
+                    {%- assign t_total = unit_price_cents | times: t_qty -%}
+                    {%- assign t_disc_amt = t_total | times: t_disc | divided_by: 100 -%}
+                    {%- assign t_price = t_total | minus: t_disc_amt -%}
+                    {%- assign t_installment = t_price | times: installment_ratio | round -%}
+                    {%- assign t_badge2 = section.settings[badge2_key] -%}
+                    {%- comment -%}
+                      No Dia D o percentual da faixa vem da escada do dia
+                      (12 / 15 / 18 por quantidade), nao do valor fixo
+                      cadastrado no editor.
+                    {%- endcomment -%}
+                    {%- if pdp_frete_promo -%}
+                      {%- if t_qty >= 5 -%}
+                        {%- assign t_disc = 18 -%}
+                      {%- elsif t_qty >= 3 -%}
+                        {%- assign t_disc = 15 -%}
+                      {%- else -%}
+                        {%- assign t_disc = 12 -%}
+                      {%- endif -%}
+                      {%- assign t_disc_amt = t_total | times: t_disc | divided_by: 100 -%}
+                      {%- assign t_price = t_total | minus: t_disc_amt -%}
+                      {%- assign t_installment = t_price | times: installment_ratio | round -%}
+                    {%- endif -%}
+                    {%- comment -%}
+                      Dia D: badge em TODOS os niveis, inclusive no de 1 kit.
+                      Fora do Dia D o frete gratis so vale acima de R$ 399 e
+                      quatro dos cinco produtos custam menos que isso.
+                    {%- endcomment -%}
+                    {%- if pdp_frete_promo -%}
+                      {%- capture t_badge2 -%}{{ t_disc }}% OFF + Frete grátis{%- endcapture -%}
+                    {%- endif -%}
+                    {%- assign has_badges = false -%}
+                    {%- if section.settings[badge1_key] != blank or t_badge2 != blank -%}
+                      {%- assign has_badges = true -%}
+                    {%- endif -%}
+
+                    <div
+                      class="vf-pdp__kit-card{% if forloop.first %} is-active{% endif %}{% if pdp_frete_promo %} vf-pdp__kit-card--promo{% endif %}"
+                      data-qty="{{ t_qty }}"
+                      data-discount="{{ t_disc }}"
+                      role="radio"
+                      aria-checked="{% if forloop.first %}true{% else %}false{% endif %}"
+                      tabindex="0"
+                    >
+                      {%- if pdp_frete_promo -%}
+                        <span class="vf-pdp__kit-promo-ribbon">🔥 {{ t_disc }}% OFF + FRETE GRÁTIS</span>
+                      {%- endif -%}
+                      {%- if has_badges -%}
+                        <div class="vf-pdp__kit-badges">
+                          {%- if section.settings[badge1_key] != blank -%}
+                            <span class="vf-pdp__kit-badge vf-pdp__kit-badge--1">{{ section.settings[badge1_key] }}</span>
+                          {%- endif -%}
+                          {%- if t_badge2 != blank -%}
+                            <span class="vf-pdp__kit-badge vf-pdp__kit-badge--2">{{ t_badge2 }}</span>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+
+                      <div class="vf-pdp__kit-row">
+                        <span class="vf-pdp__kit-radio" aria-hidden="true"></span>
+
+                        <div class="vf-pdp__kit-image">
+                          {%- if t_image != blank -%}
+                            <img src="{{ t_image | image_url: width: 200 }}" alt="{{ section.settings[title_key] | escape }}" loading="lazy">
+                          {%- elsif product.featured_image != blank -%}
+                            <img src="{{ product.featured_image | image_url: width: 200 }}" alt="{{ section.settings[title_key] | escape }}" loading="lazy">
+                          {%- else -%}
+                            <div class="vf-pdp__kit-image-ph"></div>
+                          {%- endif -%}
+                        </div>
+
+                        <div class="vf-pdp__kit-info">
+                          <span class="vf-pdp__kit-title">{{ section.settings[title_key] }}</span>
+
+                          <div class="vf-pdp__kit-pricing">
+                            <span class="vf-pdp__kit-installments-label">10x de</span>
+                            <span class="vf-pdp__kit-installment-value" data-installment>{{ t_installment | money }}</span>
+                          </div>
+                          <div class="vf-pdp__kit-cash">
+                            <span class="vf-pdp__kit-cash-or">ou</span>
+                            <span class="vf-pdp__kit-cash-value" data-total>{{ t_price | money }}</span>
+                            <span class="vf-pdp__kit-cash-label">à vista</span>
+                            {%- if t_disc > 0 -%}
+                              <s class="vf-pdp__kit-compare" data-compare>{{ t_total | money }}</s>
+                            {%- endif -%}
+                          </div>
+
+                          {%- if t_disc > 0 -%}
+                            <span class="vf-pdp__kit-discount">{{ t_disc }}% OFF{% if pdp_frete_promo %} no carrinho{% endif %} · você economiza <span data-save>{{ t_disc_amt | money }}</span></span>
+                          {%- endif -%}
+                        </div>
+                      </div>
+
+                      {%- if section.settings[msg_key] != blank -%}
+                        <div class="vf-pdp__kit-message">{{ section.settings[msg_key] }}</div>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+

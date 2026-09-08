@@ -1,0 +1,262 @@
+{%- comment -%}
+  Pedaco extraido de sections/vf-pdp-main.liquid.
+
+  A secao passou de 66 KB e nao cabia mais numa unica gravacao pela API,
+  entao virou secao + snippets. O corte e so de arquivo: a ordem de saida
+  e exatamente a mesma de antes, e o {%% schema %%} continua na secao.
+
+  Como o `render` isola o escopo, tudo que este pedaco usa e recebido
+  explicitamente na chamada. Se alguem adicionar uma variavel nova aqui,
+  precisa passar ela tambem em sections/vf-pdp-main.liquid — senao ela
+  chega vazia e o bloco some da tela sem dar erro.
+{%- endcomment -%}
+          {%- comment -%}
+            FAIXA CUPOM 5OFF (discreta, elegante).
+            NO DIA D ELA NAO APARECE. O 5OFF ate empilha (ele e classe ORDER
+            e as faixas do dia sao classe PRODUCT), mas anunciar "digite
+            5OFF" na pagina no dia da acao competiria com os cupons das
+            influenciadoras, que sao o que atribui a venda a elas. Se a
+            decisao mudar, e so tirar este unless. Fora do Dia D o 5OFF
+            continua normal — e mecanica permanente da loja.
+          {%- endcomment -%}
+          {%- unless pdp_frete_promo -%}
+          <div class="vf-pdp__cupom-badge">
+            <span class="vf-pdp__cupom-badge-icon">🎟️</span>
+            <span class="vf-pdp__cupom-badge-text">
+              Use o cupom <strong>5OFF</strong> no checkout e ganhe <strong>5% de desconto</strong>
+            </span>
+          </div>
+          {%- endunless -%}
+
+          <button type="submit" class="vf-pdp__cta vf-pdp__cta--primary{% if pdp_frete_promo %} vf-pdp__cta--promo{% endif %}" {% if product.available == false %}disabled{% endif %}>
+            {% if product.available == false %}Esgotado{% elsif pdp_frete_promo %}🔥 Quero com 12% OFF + frete grátis{% else %}Adicionar ao carrinho{% endif %}
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+
+          <button type="submit" name="checkout" class="vf-pdp__cta vf-pdp__cta--secondary{% if pdp_frete_promo %} vf-pdp__cta--promo-outline{% endif %}" {% if product.available == false %}disabled{% endif %}>
+            {% if pdp_frete_promo %}🔥 Comprar agora com 12% OFF{% else %}Comprar agora{% endif %}
+          </button>
+        </form>
+
+        {%- comment -%}
+          DIA D 09/09 — aviso da oferta completa, logo acima dos depoimentos.
+          O brinde do Oleo de Alho tem bloco proprio porque e produto fisico
+          que chega em casa: quem vem do trafego nao viu o e-mail nem o
+          WhatsApp e precisa descobrir o brinde aqui na pagina.
+        {%- endcomment -%}
+        {%- if pdp_frete_promo -%}
+          <div class="vf-pdp__gift" data-promo-scope>
+            <span class="vf-pdp__gift-icon" aria-hidden="true">🎁</span>
+            <div class="vf-pdp__gift-copy">
+              <strong>Hoje vai 1 Óleo de Alho 500mg de brinde na sua caixa</strong>
+              <span>Em qualquer pedido, sem valor mínimo. É o frasco que apoia a rotina de manutenção depois do protocolo — a gente manda junto, sem você precisar pedir.</span>
+            </div>
+          </div>
+
+          <div class="vf-pdp__frete-promo" data-promo-scope>
+            <span class="vf-pdp__frete-promo-icon" aria-hidden="true">🔥</span>
+            <div class="vf-pdp__frete-promo-copy">
+              <strong>DIA D: 12% OFF EM TUDO + FRETE GRÁTIS SEM MÍNIMO</strong>
+              <span>O desconto entra sozinho no carrinho, sem cupom: 12% em tudo, 15% levando 3 unidades e 18% a partir de 5. Frete grátis pra qualquer valor (fora de hoje, só acima de R$ 399) e o Manual da Desparasitação chega em PDF no seu e-mail. Acaba em <strong class="vf-ann-countdown" data-countdown="2026-09-10T00:00:00-03:00">--:--:--</strong></span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%}
+          DEPOIMENTOS (carrossel de fotos) — estilo Botanika
+          Carrossel horizontal com fotos de clientes, logo abaixo do CTA.
+          Prioridade 1: blocos "Depoimento (foto)" cadastrados no editor.
+          Prioridade 2: fallback com reposts reais de clientes (asset_url),
+                        usado enquanto os blocos não tiverem foto.
+        {%- endcomment -%}
+        {%- assign has_depoimento = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'depoimento' and block.settings.photo != blank -%}
+            {%- assign has_depoimento = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign fallback_reposts = 'vf-depoimento-01.jpg,vf-depoimento-02.jpg,vf-depoimento-03.jpg,vf-depoimento-04.jpg,vf-depoimento-05.jpg,vf-depoimento-06.jpg,vf-depoimento-07.jpg,vf-depoimento-08.jpg,vf-depoimento-09.jpg,vf-depoimento-10.jpg' | split: ',' -%}
+        {%- if has_depoimento or fallback_reposts.size > 0 or request.design_mode -%}
+          <div class="vf-pdp__dep">
+            {%- if section.settings.depoimentos_heading != blank -%}
+              <h3 class="vf-pdp__dep-title">{{ section.settings.depoimentos_heading }}</h3>
+            {%- endif -%}
+            {%- if section.settings.depoimentos_subheading != blank -%}
+              <p class="vf-pdp__dep-sub">{{ section.settings.depoimentos_subheading }}</p>
+            {%- endif -%}
+            <div class="vf-pdp__dep-row">
+              {%- if has_depoimento -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'depoimento' -%}
+                    {%- if block.settings.photo != blank -%}
+                      <div class="vf-pdp__dep-card" {{ block.shopify_attributes }}>
+                        <div class="vf-pdp__dep-media">
+                          <img
+                            src="{{ block.settings.photo | image_url: width: 640 }}"
+                            alt="{{ block.settings.name | default: 'Depoimento VermeFree' | escape }}"
+                            loading="lazy"
+                            class="vf-pdp__dep-img"
+                          >
+                        </div>
+                        {%- if block.settings.quote != blank or block.settings.name != blank -%}
+                          <div class="vf-pdp__dep-info">
+                            <span class="vf-pdp__dep-stars" aria-hidden="true">★★★★★</span>
+                            {%- if block.settings.quote != blank -%}
+                              <span class="vf-pdp__dep-quote">{{ block.settings.quote }}</span>
+                            {%- endif -%}
+                            {%- if block.settings.name != blank -%}
+                              <span class="vf-pdp__dep-name">{{ block.settings.name }}</span>
+                            {%- endif -%}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    {%- elsif request.design_mode -%}
+                      <div class="vf-pdp__dep-card vf-pdp__dep-card--placeholder" {{ block.shopify_attributes }}>
+                        <div class="vf-pdp__dep-media"><div class="vf-pdp__dep-ph"></div></div>
+                      </div>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- comment -%} Fallback: reposts reais de clientes (screenshots de Stories) {%- endcomment -%}
+                {%- for filename in fallback_reposts -%}
+                  <div class="vf-pdp__dep-card vf-pdp__dep-card--repost">
+                    <div class="vf-pdp__dep-media vf-pdp__dep-media--repost">
+                      <img
+                        src="{{ filename | asset_url }}"
+                        alt="Cliente VermeFree compartilhando o protocolo"
+                        loading="lazy"
+                        class="vf-pdp__dep-img"
+                      >
+                    </div>
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} BADGES DE CONFIANÇA {%- endcomment -%}
+        <ul class="vf-pdp__badges">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19C5 10 11 5 20 5c0 9-6 14-15 14z"/></svg>
+            <span>Vegetal 100%</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3 8-8 9-5-1-8-4-8-9V6z"/></svg>
+            <span>Metais Free</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18l-2 12H5L3 8z"/><path d="M8 8V5a4 4 0 0 1 8 0v3"/></svg>
+            <span>Frete 5-9 dias</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Compra segura</span>
+          </li>
+        </ul>
+
+        {%- if pdp_frete_promo -%}
+          <div class="vf-pdp__frete-mini" data-promo-scope>
+            <span class="vf-pdp__frete-mini-icon" aria-hidden="true">🚚</span>
+            <span class="vf-pdp__frete-mini-text"><strong>12% OFF no carrinho + frete grátis sem mínimo + óleo de alho de brinde</strong> nesse pedido — só hoje, 09/09.</span>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ACCORDIONS de info extra {%- endcomment -%}
+        <div class="vf-pdp__accordions">
+          {%- if section.settings.how_to_take != blank -%}
+            <details class="vf-pdp__accordion">
+              <summary>Como tomar<span class="vf-pdp__acc-icon" aria-hidden="true"></span></summary>
+              <div class="vf-pdp__acc-content">{{ section.settings.how_to_take }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.composition != blank -%}
+            <details class="vf-pdp__accordion">
+              <summary>Composição completa<span class="vf-pdp__acc-icon" aria-hidden="true"></span></summary>
+              <div class="vf-pdp__acc-content">{{ section.settings.composition }}</div>
+            </details>
+          {%- endif -%}
+          {%- if section.settings.benefits != blank -%}
+            <details class="vf-pdp__accordion">
+              <summary>Benefícios do VermeFree<span class="vf-pdp__acc-icon" aria-hidden="true"></span></summary>
+              <div class="vf-pdp__acc-content">{{ section.settings.benefits }}</div>
+            </details>
+          {%- endif -%}
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{%- if section.settings.show_sticky_cta -%}
+  {%- comment -%} STICKY CTA BAR — aparece após scroll {%- endcomment -%}
+  <div class="vf-pdp-sticky" id="vf-pdp-sticky" data-trigger-px="800" aria-hidden="true">
+    <div class="vf-pdp-sticky__inner">
+      <div class="vf-pdp-sticky__product">
+        {%- if product.featured_image -%}
+          <img
+            src="{{ product.featured_image | image_url: width: 120 }}"
+            alt=""
+            class="vf-pdp-sticky__thumb"
+            width="60"
+            height="60"
+            loading="lazy">
+        {%- endif -%}
+        <div class="vf-pdp-sticky__info">
+          <span class="vf-pdp-sticky__name">{{ product.title | default: section.settings.fallback_title | truncate: 38 }}</span>
+          <span class="vf-pdp-sticky__price" id="vf-pdp-sticky-price">
+            {%- if product != blank and product.selected_or_first_available_variant != blank -%}
+              {%- assign sticky_price = product.selected_or_first_available_variant.price -%}
+              {%- if installment_10x_cents > 0 -%}
+                <strong>10x {{ installment_10x_cents | money }}</strong>
+              {%- else -%}
+                <strong>3x {{ sticky_price | divided_by: 3 | money }}</strong>
+              {%- endif -%}
+              <span>ou {{ sticky_price | money }} à vista</span>
+            {%- else -%}
+              <strong>10x R$ 40,93</strong>
+              <span>ou R$ 347 à vista</span>
+            {%- endif -%}
+          </span>
+        </div>
+      </div>
+
+      <div class="vf-pdp-sticky__actions">
+        <div class="vf-pdp-sticky__qty">
+          <button type="button" class="vf-pdp-sticky__qty-btn" data-action="minus" aria-label="Diminuir quantidade">−</button>
+          <input
+            type="number"
+            id="vf-pdp-sticky-qty"
+            value="1"
+            min="1"
+            class="vf-pdp-sticky__qty-input"
+            aria-label="Quantidade">
+          <button type="button" class="vf-pdp-sticky__qty-btn" data-action="plus" aria-label="Aumentar quantidade">+</button>
+        </div>
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data" class="vf-pdp-sticky__form">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="quantity" id="vf-pdp-sticky-qty-hidden" value="1">
+          <button
+            type="submit"
+            class="vf-pdp-sticky__cta{% if pdp_frete_promo %} vf-pdp-sticky__cta--promo{% endif %}"
+            {% if product.available == false %}disabled{% endif %}>
+            {% if product.available == false %}Esgotado{% elsif pdp_frete_promo %}🔥 Quero com 12% OFF{% else %}Adicionar ao carrinho{% endif %}
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- comment -%}
+  O CSS desta secao vive em snippets/vf-pdp-main-css.liquid (a secao ficou
+  grande demais pra carregar o CSS junto). O render abaixo mantem o snippet
+  na arvore de render da pagina, que e o que faz o Shopify incluir o CSS.
+{%- endcomment -%}
+{% render 'vf-pdp-main-css' %}
+
+

@@ -1,0 +1,330 @@
+{%- comment -%}
+  Pedaco extraido de sections/vf-pdp-main.liquid.
+
+  A secao passou de 66 KB e nao cabia mais numa unica gravacao pela API,
+  entao virou secao + snippets. O corte e so de arquivo: a ordem de saida
+  e exatamente a mesma de antes, e o {%% schema %%} continua na secao.
+
+  Como o `render` isola o escopo, tudo que este pedaco usa e recebido
+  explicitamente na chamada. Se alguem adicionar uma variavel nova aqui,
+  precisa passar ela tambem em sections/vf-pdp-main.liquid — senao ela
+  chega vazia e o bloco some da tela sem dar erro.
+{%- endcomment -%}
+<script>
+  (function() {
+    var thumbs = document.querySelectorAll('.vf-pdp__thumb[data-src]');
+    var mainImg = document.getElementById('vf-pdp-main-img');
+    thumbs.forEach(function(t) {
+      t.addEventListener('click', function() {
+        if (!mainImg) return;
+        mainImg.src = t.dataset.src;
+        thumbs.forEach(function(x) { x.classList.remove('is-active'); });
+        t.classList.add('is-active');
+      });
+    });
+
+    var qtyInput = document.getElementById('vf-pdp-qty');
+
+    /* ===== ATUALIZAÇÃO DE PREÇO COM DESCONTO PROGRESSIVO ===== */
+    var priceBox = document.querySelector('.vf-pdp__price-box');
+    var unitPriceCents = priceBox ? parseInt(priceBox.dataset.unitPrice, 10) || 0 : 0;
+    var elInstallment = document.getElementById('vf-pdp-installment');
+    var elCash = document.getElementById('vf-pdp-cash');
+    var elBadge = document.getElementById('vf-pdp-volume-badge');
+    var elBadgeText = document.getElementById('vf-pdp-volume-badge-text');
+
+    function formatBRL(cents) {
+      var value = cents / 100;
+      return 'R$ ' + value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    var freteGratisPromoAtiva = priceBox ? priceBox.dataset.fretePromo === 'true' : false;
+
+    /* Escada de desconto por quantidade.
+       No Dia D 09/09 a loja inteira roda 12 / 15 / 18 (e ja no primeiro
+       frasco); fora dele vale a escada normal de volume, 10 / 15 / 20 a
+       partir de 3 unidades. As faixas nunca somam: a Shopify aplica um
+       unico desconto de produto por linha, o melhor pro cliente — entao
+       aqui tambem e um percentual so.
+
+       Em qualquer um dos casos o preco do produto continua CHEIO: o
+       abatimento acontece no carrinho. O valor calculado abaixo e o que a
+       pessoa vai pagar la, e a tela precisa dizer isso com todas as
+       letras. */
+    function getDiscountPct(qty) {
+      if (freteGratisPromoAtiva) {
+        if (qty >= 5) return 18;
+        if (qty >= 3) return 15;
+        return 12;
+      }
+      if (qty >= 8) return 20;
+      if (qty >= 5) return 15;
+      if (qty >= 3) return 10;
+      return 0;
+    }
+
+    var elStickyPrice = document.getElementById('vf-pdp-sticky-price');
+
+    // Valor fixo da parcela 10x (em centavos) vindo da section settings
+    var installment10xCents = priceBox ? parseInt(priceBox.dataset.installment10x, 10) || 0 : 0;
+    // Razão parcela10x/preço base (escala linear pra qualquer quantidade)
+    var INSTALLMENT_RATIO = (installment10xCents > 0 && unitPriceCents > 0)
+      ? (installment10xCents / unitPriceCents)
+      : 0.11796;  // fallback equivalente a ~3.12%/mês (R$347 → R$40,93)
+
+    function calc10xParcela(totalCents) {
+      // Escala linear preservando o valor fixo do setting
+      return Math.round(totalCents * INSTALLMENT_RATIO);
+    }
+
+    function updatePrices(qty) {
+      if (!unitPriceCents) return;
+      var subtotal = unitPriceCents * qty;
+      var discountPct = getDiscountPct(qty);
+      var totalWithDiscount = subtotal * (1 - discountPct / 100);
+      var installment;
+      if (qty === 1 && installment10xCents > 0) {
+        // qty=1: usa valor fixo do setting (mais preciso)
+        installment = installment10xCents;
+      } else {
+        // qty>1: escala linear sobre o total com desconto
+        installment = calc10xParcela(totalWithDiscount);
+      }
+
+      if (elInstallment) elInstallment.textContent = '10x de ' + formatBRL(installment);
+      if (elCash) elCash.textContent = 'ou ' + formatBRL(totalWithDiscount) + ' à vista';
+
+      // Sticky CTA price atualiza junto
+      if (elStickyPrice) {
+        elStickyPrice.innerHTML = '<strong>10x ' + formatBRL(installment) + '</strong><span>ou ' + formatBRL(totalWithDiscount) + ' à vista</span>';
+      }
+
+      if (elBadge && elBadgeText) {
+        // Dia D 09/09: frete gratis sem valor minimo (ver data-frete-promo)
+        var FRETE_GRATIS_THRESHOLD = freteGratisPromoAtiva ? 0 : 39900; // R$ 399 em centavos
+        var temFreteGratis = totalWithDiscount >= FRETE_GRATIS_THRESHOLD;
+
+        if (freteGratisPromoAtiva) {
+          var msgDiaD = '✓ ' + discountPct + '% OFF no carrinho · frete grátis + óleo de alho de brinde';
+          if (discountPct === 12) {
+            msgDiaD += ' · leve 3 e sobe pra 15%';
+          } else if (discountPct === 15) {
+            msgDiaD += ' · leve 5 e sobe pra 18%';
+          }
+          elBadgeText.textContent = msgDiaD;
+          elBadge.hidden = false;
+          return;
+        }
+
+        if (discountPct > 0) {
+          var nextTier = discountPct === 10 ? 5 : (discountPct === 15 ? 8 : null);
+          var nextPct = discountPct === 10 ? 15 : (discountPct === 15 ? 20 : null);
+          var msg = '✓ ' + discountPct + '% OFF aplicado';
+          if (temFreteGratis) msg += ' · frete grátis ativo';
+          if (nextTier && qty < nextTier && nextTier <= kitMaxQty) {
+            msg += ' · adicione +' + (nextTier - qty) + ' pra ganhar ' + nextPct + '% off';
+          }
+          elBadgeText.textContent = msg;
+          elBadge.hidden = false;
+        } else if (temFreteGratis) {
+          elBadgeText.textContent = '✓ Frete grátis aplicado';
+          elBadge.hidden = false;
+        } else {
+          var faltaCentavos = FRETE_GRATIS_THRESHOLD - totalWithDiscount;
+          var faltaBRL = 'R$ ' + (faltaCentavos / 100).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+          elBadgeText.textContent = '🚚 Falta ' + faltaBRL + ' pra frete grátis';
+          elBadge.hidden = false;
+        }
+      }
+    }
+
+    /* Sincroniza buy box → sticky (definido aqui pra usar nos handlers abaixo) */
+    function syncBuyBoxToSticky(val) {
+      var sQty = document.getElementById('vf-pdp-sticky-qty');
+      var sQtyHidden = document.getElementById('vf-pdp-sticky-qty-hidden');
+      if (sQty) sQty.value = val;
+      if (sQtyHidden) sQtyHidden.value = val;
+    }
+
+    /* ===== SELETOR DE KITS (cards) ===== */
+    var kitCards = document.querySelectorAll('.vf-pdp__kit-card');
+    var kitMaxQty = 0;
+    kitCards.forEach(function(c) { var q = parseInt(c.dataset.qty, 10) || 0; if (q > kitMaxQty) kitMaxQty = q; });
+    var kitLegendValue = document.getElementById('vf-pdp-kits-legend-value');
+
+    function updateKitLegend(card) {
+      if (!kitLegendValue) return;
+      var title = card.querySelector('.vf-pdp__kit-title');
+      kitLegendValue.textContent = title ? title.textContent.trim() : '';
+    }
+
+    var kitbarEl = document.getElementById('vf-pdp-kitbar');
+    var kitbarFill = document.getElementById('vf-pdp-kitbar-fill');
+    var kitbarMsg = document.getElementById('vf-pdp-kitbar-msg');
+    function updateKitbar(qty) {
+      if (!kitbarEl) return;
+      var pct = qty >= 3 ? 100 : (qty === 2 ? 50 : 8);
+      if (kitbarFill) kitbarFill.style.width = pct + '%';
+      kitbarEl.classList.remove('vf-pdp__kitbar--mid', 'vf-pdp__kitbar--low');
+      var m;
+      if (freteGratisPromoAtiva) {
+        /* Dia D: os cards sao 3 / 2 / 1, entao 15% / 12% / 12%. */
+        if (qty >= 3) {
+          m = '🎉 Vantagem máxima destes cards: 15% OFF no carrinho + frete grátis';
+        } else if (qty === 2) {
+          kitbarEl.classList.add('vf-pdp__kitbar--mid');
+          m = '12% OFF no carrinho · volte pra 3 Kits e o desconto sobe pra 15%';
+        } else {
+          kitbarEl.classList.add('vf-pdp__kitbar--low');
+          m = '12% OFF no carrinho · leve 3 e sobe pra 15% · 5 e vai a 18%';
+        }
+      } else if (qty >= 3) {
+        m = '🎉 Vantagem máxima: 10% OFF + frete grátis desbloqueados';
+      } else if (qty === 2) {
+        kitbarEl.classList.add('vf-pdp__kitbar--mid');
+        m = {% if product.handle == 'protocolo-desparasitacao-adulto-vermefree' %}'🎉 5% OFF + frete grátis · volte pra 3 Kits e ganhe 10% OFF'{% else %}'🚚 Frete grátis ativo — volte pra 3 Kits e ganhe 10% OFF'{% endif %};
+      } else {
+        kitbarEl.classList.add('vf-pdp__kitbar--low');
+        m = {% if product.handle == 'protocolo-desparasitacao-adulto-vermefree' %}'Leve 2 e ganhe 5% OFF · leve 3 e ganhe 10% OFF'{% else %}'Leve 2 e ganhe frete grátis · leve 3 e ganhe 10% OFF'{% endif %};
+      }
+      if (kitbarMsg) kitbarMsg.textContent = m;
+    }
+
+    function selectKitCard(card) {
+      kitCards.forEach(function(c) {
+        c.classList.remove('is-active');
+        c.setAttribute('aria-checked', 'false');
+      });
+      card.classList.add('is-active');
+      card.setAttribute('aria-checked', 'true');
+      updateKitLegend(card);
+
+      if (!qtyInput) return;
+      var qty = parseInt(card.dataset.qty, 10) || 1;
+      qtyInput.value = qty;
+      updatePrices(qty);
+      updateKitbar(qty);
+      syncBuyBoxToSticky(qty);
+    }
+
+    function syncActiveCardFromQty(qty) {
+      var matched = false;
+      kitCards.forEach(function(c) {
+        var isMatch = parseInt(c.dataset.qty, 10) === qty;
+        c.classList.toggle('is-active', isMatch);
+        c.setAttribute('aria-checked', isMatch ? 'true' : 'false');
+        if (isMatch) { matched = true; updateKitLegend(c); }
+      });
+      return matched;
+    }
+
+    kitCards.forEach(function(card) {
+      card.addEventListener('click', function() { selectKitCard(card); });
+      card.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectKitCard(card);
+        }
+      });
+    });
+
+    var initialActiveCard = document.querySelector('.vf-pdp__kit-card.is-active');
+    if (initialActiveCard) {
+      updateKitLegend(initialActiveCard);
+      var initialQty = parseInt(initialActiveCard.dataset.qty, 10) || 1;
+      if (qtyInput) qtyInput.value = initialQty;
+      updatePrices(initialQty);
+      updateKitbar(initialQty);
+      syncBuyBoxToSticky(initialQty);
+    }
+
+    if (qtyInput) {
+      qtyInput.addEventListener('change', function() {
+        var v = parseInt(qtyInput.value, 10) || 1;
+        if (v < 1) v = 1;
+        qtyInput.value = v;
+        updatePrices(v);
+        syncBuyBoxToSticky(v);
+      });
+      qtyInput.addEventListener('input', function() {
+        var v = parseInt(qtyInput.value, 10) || 1;
+        if (v >= 1) {
+          updatePrices(v);
+          syncBuyBoxToSticky(v);
+        }
+      });
+      // Estado inicial
+      updatePrices(parseInt(qtyInput.value, 10) || 1);
+      syncBuyBoxToSticky(parseInt(qtyInput.value, 10) || 1);
+    }
+
+    /* ===== STICKY CTA BAR ===== */
+    var sticky = document.getElementById('vf-pdp-sticky');
+    if (sticky) {
+      var triggerPx = parseInt(sticky.dataset.triggerPx, 10) || 600;
+      var ticking = false;
+      function onScroll() {
+        if (window.scrollY > triggerPx) {
+          sticky.classList.add('is-visible');
+          sticky.setAttribute('aria-hidden', 'false');
+        } else {
+          sticky.classList.remove('is-visible');
+          sticky.setAttribute('aria-hidden', 'true');
+        }
+        ticking = false;
+      }
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Sticky qty buttons + sync com input hidden
+      var stickyQty = document.getElementById('vf-pdp-sticky-qty');
+      var stickyQtyHidden = document.getElementById('vf-pdp-sticky-qty-hidden');
+      var stickyBtns = sticky.querySelectorAll('.vf-pdp-sticky__qty-btn');
+      function syncStickyQty() {
+        if (!stickyQty || !stickyQtyHidden) return;
+        var v = parseInt(stickyQty.value, 10) || 1;
+        if (v < 1) v = 1;
+        stickyQty.value = v;
+        stickyQtyHidden.value = v;
+      }
+      stickyBtns.forEach(function(b) {
+        b.addEventListener('click', function() {
+          if (!stickyQty) return;
+          var val = parseInt(stickyQty.value, 10) || 1;
+          if (b.dataset.action === 'plus') val++;
+          else if (b.dataset.action === 'minus' && val > 1) val--;
+          stickyQty.value = val;
+          syncStickyQty();
+          // Sincroniza com o input do buy box e recalcula preços
+          if (qtyInput) {
+            qtyInput.value = val;
+            updatePrices(val);
+            syncActiveCardFromQty(val);
+          }
+        });
+      });
+      if (stickyQty) {
+        stickyQty.addEventListener('change', function() {
+          syncStickyQty();
+          if (qtyInput) {
+            qtyInput.value = stickyQty.value;
+            updatePrices(parseInt(stickyQty.value, 10) || 1);
+            syncActiveCardFromQty(parseInt(stickyQty.value, 10) || 1);
+          }
+        });
+        stickyQty.addEventListener('input', function() {
+          syncStickyQty();
+          if (qtyInput) {
+            qtyInput.value = stickyQty.value;
+            updatePrices(parseInt(stickyQty.value, 10) || 1);
+            syncActiveCardFromQty(parseInt(stickyQty.value, 10) || 1);
+          }
+        });
+      }
+    }
+  })();
+</script>
