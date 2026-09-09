@@ -45,6 +45,35 @@
 
   var ocupado = false;
   var refazer = false;
+  var passadas = 0;
+
+  /* TRAVA ENTRE ABAS (09/09 ~14h)
+     Os pedidos #3112 e #3113 sairam com DOIS frascos numa linha so, os dois
+     carregando a propriedade _brinde — ou seja, foi este script que adicionou
+     duas vezes, nao o cliente. O motivo: adicionar() pergunta "ja tem oleo?"
+     e so depois adiciona; entre a pergunta e a resposta ha uma ida ao
+     servidor. Duas abas abertas (ou uma passada disparada enquanto a outra
+     estava no ar) ouvem as duas "nao tem" e as duas adicionam. A Shopify
+     junta variante+propriedades iguais numa linha so e soma a quantidade.
+     A marca no localStorage e compartilhada entre abas do mesmo dominio,
+     entao serializa a adicao. TTL curto pra nunca travar pra sempre se a
+     aba morrer no meio. */
+  var TRAVA_KEY = 'vf_brinde_add_lock';
+  var TRAVA_TTL = 8000;
+
+  function pegarTrava() {
+    try {
+      var agora = Date.now();
+      var marca = parseInt(localStorage.getItem(TRAVA_KEY) || '0', 10);
+      if (marca && (agora - marca) < TRAVA_TTL) return false;
+      localStorage.setItem(TRAVA_KEY, String(agora));
+      return true;
+    } catch (e) { return true; }
+  }
+
+  function soltarTrava() {
+    try { localStorage.removeItem(TRAVA_KEY); } catch (e) {}
+  }
 
   /* Janela do Dia D em horario de Brasilia (UTC-3), independente do fuso do
      visitante: desloco o epoch para o relogio de parede de Brasilia e leio
@@ -75,6 +104,7 @@
   function lerCarrinho() { return pedir(URL_CART + '.js'); }
 
   function adicionar() {
+    if (!pegarTrava()) return Promise.resolve(false);
     var corpo = { items: [{ id: VARIANTE_BRINDE, quantity: 1, properties: {} }] };
     corpo.items[0].properties[PROP] = VALOR;
     return pedir(URL_ADD, {
@@ -83,7 +113,13 @@
       body: JSON.stringify(corpo)
     }).then(confirmar(function (cart) {
       return cart.items.some(ehBrinde);
-    }));
+    })).then(function (ok) {
+      soltarTrava();
+      return ok;
+    }, function () {
+      soltarTrava();
+      return false;
+    });
   }
 
   function remover(linha) {
@@ -101,13 +137,17 @@
      e o que garante que cada passada reduz de verdade — sem isso a
      condicao continuaria verdadeira e o avaliar() rodaria pra sempre. */
   function ajustar(linha, qtd, totalAntes) {
+    return mudarLinha(linha.key, qtd).then(confirmar(function (cart) {
+      return totalDeOleo(cart.items) < totalAntes;
+    }));
+  }
+
+  function mudarLinha(key, qtd) {
     return pedir(URL_CHANGE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: linha.key, quantity: qtd })
-    }).then(confirmar(function (cart) {
-      return totalDeOleo(cart.items) < totalAntes;
-    }));
+      body: JSON.stringify({ id: key, quantity: qtd })
+    });
   }
 
   function totalDeOleo(items) {
@@ -171,9 +211,71 @@
       ocupado = false;
       if (mudou) {
         if (naPaginaDoCarrinho()) { window.location.reload(); return; }
+        /* Fora do carrinho nao ha reload, e ate agora a correcao so voltava
+           a rodar na PROXIMA pagina. Era essa a brecha: adicionar um oleo
+           numa PDP e ir direto pro checkout com dois. Agora a propria
+           passada continua ate o carrinho estar certo.
+           Termina sempre: adicionar() so roda com zero oleo no carrinho, e
+           ajustar() so reduz. O teto de passadas e cinto de seguranca. */
+        if (passadas < 5) { passadas += 1; avaliar(); return; }
       }
       if (refazer) { refazer = false; avaliar(); return; }
       marcarBrinde();
+      blindarCheckout();
+    });
+  }
+
+  /* PONTO 3: segurar o "Finalizar compra".
+     Mesmo com tudo acima, quem clicasse em finalizar no mesmo segundo da
+     adicao escapava. Agora o clique para, o carrinho e conferido e cortado,
+     e so entao segue pro checkout.
+     NUNCA bloqueia a venda: se a conferencia falhar ou passar de 3s, o
+     cliente vai pro checkout do mesmo jeito. Um frasco a mais custa R$ 67;
+     uma compra travada custa a compra inteira. */
+  function comTimeout(promessa, ms) {
+    return new Promise(function (resolve) {
+      var feito = false;
+      function fim() { if (!feito) { feito = true; resolve(); } }
+      setTimeout(fim, ms);
+      promessa.then(fim, fim);
+    });
+  }
+
+  function normalizarAgora() {
+    return lerCarrinho().then(function (cart) {
+      if (!cart || !cart.items) return null;
+      if (totalDeOleo(cart.items) <= 1) return null;
+      var oleos   = cart.items.filter(ehOleo);
+      var brindes = cart.items.filter(ehBrinde);
+      var manter  = brindes.length ? brindes[0] : oleos[0];
+      var fila = Promise.resolve();
+      oleos.forEach(function (o) {
+        if (o.key === manter.key) return;
+        fila = fila.then(function () { return mudarLinha(o.key, 0); });
+      });
+      return fila.then(function () { return mudarLinha(manter.key, 1); });
+    });
+  }
+
+  function blindarCheckout() {
+    if (!naPaginaDoCarrinho()) return;
+    var form = document.querySelector('[data-vf-cart-form]');
+    if (!form || form.getAttribute('data-vf-blindado')) return;
+    form.setAttribute('data-vf-blindado', '1');
+    form.addEventListener('submit', function (ev) {
+      if (!naJanela()) return;
+      ev.preventDefault();
+      comTimeout(normalizarAgora().catch(function () {}), 3000).then(function () {
+        /* Reenvio o proprio form com o campo "checkout" em vez de mandar
+           pra /checkout na mao: e assim que a Shopify decide o destino, e
+           form.submit() nao dispara este listener de novo (sem laco). */
+        var flag = document.createElement('input');
+        flag.type = 'hidden';
+        flag.name = 'checkout';
+        flag.value = '';
+        form.appendChild(flag);
+        form.submit();
+      });
     });
   }
 
@@ -200,6 +302,13 @@
         tag.className = 'vf-brinde-tag';
         tag.textContent = '🎁 Brinde do Dia D · Grátis';
         alvo.parentNode.insertBefore(tag, alvo.nextSibling);
+
+        /* Sem isto, o segundo frasco some da tela sem explicacao e parece
+           bug do site. */
+        var nota = document.createElement('span');
+        nota.className = 'vf-brinde-nota';
+        nota.textContent = 'O brinde do Dia D e 1 frasco por pedido.';
+        tag.parentNode.insertBefore(nota, tag.nextSibling);
 
         /* O "de R$ 67,00" riscado saiu daqui em 09/09 ~01h: agora quem
            desenha isso e o proprio main-cart, em Liquid, pra TODA linha
@@ -233,8 +342,9 @@
   });
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', avaliar);
+    document.addEventListener('DOMContentLoaded', function () { blindarCheckout(); avaliar(); });
   } else {
+    blindarCheckout();
     avaliar();
   }
 })();
@@ -254,6 +364,13 @@
     letter-spacing: 0.02em;
     line-height: 1.5;
     white-space: nowrap;
+  }
+  .vf-brinde-nota {
+    display: block;
+    margin: 3px 0 0;
+    font-size: 11.5px;
+    color: #6B6B6B;
+    line-height: 1.4;
   }
   .vf-brinde-de {
     color: #9A9A9A;
