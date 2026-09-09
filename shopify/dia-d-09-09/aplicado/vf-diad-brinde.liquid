@@ -96,6 +96,24 @@
     }));
   }
 
+  /* Muda a quantidade de UMA linha e so confirma se o total de oleo no
+     carrinho realmente caiu. Confirmar a queda (e nao so o "deu 200 ok")
+     e o que garante que cada passada reduz de verdade — sem isso a
+     condicao continuaria verdadeira e o avaliar() rodaria pra sempre. */
+  function ajustar(linha, qtd, totalAntes) {
+    return pedir(URL_CHANGE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: linha.key, quantity: qtd })
+    }).then(confirmar(function (cart) {
+      return totalDeOleo(cart.items) < totalAntes;
+    }));
+  }
+
+  function totalDeOleo(items) {
+    return items.filter(ehOleo).reduce(function (n, i) { return n + i.quantity; }, 0);
+  }
+
   /* Só considero que mudou algo depois de reler o carrinho e confirmar.
      Isso e o que impede laco: se o add falhou (esgotado, 422), a condicao
      continua verdadeira mas nao ha reload, entao nao rodamos de novo. */
@@ -126,6 +144,26 @@
          O BXGY zera o que ja esta la — que e exatamente "1 oleo de brinde". */
       if (temProtocolo && oleos.length === 0) return adicionar();
       if (!temProtocolo && brindes.length)    return remover(brindes[0]);
+
+      /* TRAVA DE 1 FRASCO (09/09 ~01h30)
+         O brinde e um desconto simples de 100% na linha do oleo, e desconto
+         simples NAO tem trava de quantidade: com 7 frascos no carrinho, os 7
+         saiam de graca (R$ 469,00 a zero, visto em teste).
+         Quem tem trava de quantidade e o BXGY (discountOnQuantity) — mas BXGY
+         consome a linha do protocolo como compra qualificadora e derruba os
+         12/15/18% do dia. Da pra ter a trava OU as faixas, nao os dois.
+         Entao a trava vive aqui: dentro do Dia D o carrinho nunca fica com
+         mais de UM oleo. Hoje o oleo e gratis, entao o cliente nao perde
+         nada com isso — so nao consegue estocar de graca.
+         Reduz de uma linha por passada; o reload/refazer cuida do resto. */
+      var totalOleo = totalDeOleo(cart.items);
+      if (totalOleo > 1) {
+        var manter = brindes.length ? brindes[0] : oleos[0];
+        for (var i = 0; i < oleos.length; i++) {
+          if (oleos[i].key !== manter.key) return ajustar(oleos[i], 0, totalOleo);
+        }
+        return ajustar(manter, 1, totalOleo);
+      }
       return false;
     })
     .catch(function () { return false; })
