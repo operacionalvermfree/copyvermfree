@@ -126,6 +126,10 @@
 {%- elsif section.settings.preview_frete_promo and pdp_today < 20260909 -%}
   {%- assign pdp_frete_promo = true -%}
 {%- endif -%}
+{%- comment -%} Kit Familia saiu das faixas do Dia D (08/09) — motivo completo em vf-diad-faixa {%- endcomment -%}
+{%- if product.handle == 'kit-familia-vermefree-2-adultos-2-criancas' -%}
+  {%- assign pdp_frete_promo = false -%}
+{%- endif -%}
 {%- render 'vf-pdp-buybox', product: product, section: section, unit_price_cents: unit_price_cents, installment_10x_cents: installment_10x_cents, pdp_frete_promo: pdp_frete_promo -%}
 {%- comment -%}
   SELETOR DE KITS REVERTIDO (pedido do Gabriel, 08/09).

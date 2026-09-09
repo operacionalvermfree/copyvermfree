@@ -23,19 +23,6 @@
   {%- assign faixa_promo = true -%}
 {%- endif -%}
 
-{%- comment -%}
-  KIT FAMILIA FORA DO DIA D (08/09). Ele saiu das faixas 12/15/18% — os
-  tres descontos foram editados no admin e nao cobrem mais o produto
-  9345668251867 — entao a faixa vermelha tambem nao pode aparecer na PDP
-  dele, senao a pagina promete um abatimento que o carrinho nao aplica.
-  O kit mantem o desconto proprio de 15% vs comprar os 4 separados, que
-  ja esta embutido no preco de R$ 1.150.
-  Brinde e frete gratis do dia CONTINUAM valendo pra ele.
-{%- endcomment -%}
-{%- if product.handle == 'kit-familia-vermefree-2-adultos-2-criancas' -%}
-  {%- assign faixa_promo = false -%}
-{%- endif -%}
-
 {%- if faixa_promo -%}
   {%- render 'vf-diad-banner',
       badge: section.settings.promo_badge_text,
