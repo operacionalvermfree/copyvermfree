@@ -10,13 +10,29 @@
   Agora o preco cheio vem de all_products[handle].price e o percentual
   de b2_pct.
 
-  O PERCENTUAL. Fora do Dia D: 15%, do desconto automatico "Order Bump
-  · 2o Protocolo 15% OFF" (BXGY, limite 1). No Dia D (09/09/2026) a
-  acao e 12% / 15% (3 un) / 18% (5 un); descontos de produto nao somam
-  na mesma linha, o Shopify aplica o melhor dos dois. Logo: ate 4
-  unidades os 15% do bump ganham ou empatam, de 5 em diante ganham os
-  18% do dia. Por isso b2_pct so sobe pra 18 quando cart.item_count + 1
-  chega a 5 — nunca anuncia mais desconto do que o checkout aplica.
+  O PERCENTUAL. ATENCAO, ISTO MUDOU EM 09/09 ~01h.
+
+  Os 15% de fora do Dia D vinham do BXGY "Order Bump · 2o Protocolo 15%
+  OFF". Esse BXGY (e a copia dele) foi PAUSADO no Dia D, porque BXGY
+  consome a linha do protocolo como "compra qualificadora" e a Shopify
+  so aplica UM desconto de produto por linha — com ele ligado, as faixas
+  de 12/15/18% do dia simplesmente nao entravam. Era isso que fazia o
+  checkout cobrar R$ 347,00 num pedido que devia sair R$ 305,36.
+
+  NO DIA D o percentual agora vem da escada real da acao:
+  12% (1-2 un) / 15% (3-4 un) / 18% (5+ un), contando UNIDADES DE
+  PROTOCOLO no carrinho + 1 (a que o bump vai adicionar).
+
+  Conta so protocolo, NAO conta o oleo de brinde — mesmo o oleo estando
+  na lista de produtos das faixas e provavelmente valendo pro minimo de
+  quantidade. E de proposito: se ele contar, o cliente cai numa faixa
+  melhor do que a anunciada aqui; se nao contar, o anuncio continua
+  certo. Erra sempre a favor do cliente, nunca contra.
+
+  FORA DO DIA D (a partir de 10/09) o b2_pct volta pra 15 — mas o BXGY
+  que dava esses 15% esta pausado. Ou alguem reativa um dos dois
+  (1701896650971 / 1706004283611), ou este bump promete um desconto que
+  nao existe. RESOLVER ANTES DE 10/09.
 {%- endcomment -%}
 
 {%- assign ADULTO_HANDLE = 'protocolo-desparasitacao-adulto-vermefree' -%}
@@ -32,7 +48,15 @@
 
 {%- assign b2_pct = 15 -%}
 {%- if b2_diad -%}
-  {%- assign b2_apos = cart.item_count | plus: 1 -%}
+  {%- assign b2_prot = 0 -%}
+  {%- for b2_item in cart.items -%}
+    {%- if b2_item.product.handle == ADULTO_HANDLE or b2_item.product.handle == KIDS24_HANDLE or b2_item.product.handle == KIDS59_HANDLE -%}
+      {%- assign b2_prot = b2_prot | plus: b2_item.quantity -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign b2_apos = b2_prot | plus: 1 -%}
+  {%- assign b2_pct = 12 -%}
+  {%- if b2_apos >= 3 -%}{%- assign b2_pct = 15 -%}{%- endif -%}
   {%- if b2_apos >= 5 -%}{%- assign b2_pct = 18 -%}{%- endif -%}
 {%- endif -%}
 {%- assign b2_paga = 100 | minus: b2_pct -%}
