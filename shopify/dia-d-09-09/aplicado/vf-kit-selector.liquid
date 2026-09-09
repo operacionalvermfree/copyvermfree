@@ -112,10 +112,26 @@
             {%- endcomment -%}
             <div class="vf-kit__price-box">
               {%- if card_promo and product != blank and product.price > 0 -%}
+                {%- comment -%}
+                  MESMA HIERARQUIA DO TEMA PADRAO (pedido do Gabriel, 08/09):
+                  parcela em destaque em cima, valor a vista embaixo — so que
+                  os dois ja com os 12% do Dia D.
+
+                  O fator 0,11796 e a razao parcela/preco do 10x da loja
+                  (34700 -> 4093, 27000 -> 3185, 38900 -> 4589: bate nos tres).
+                  NAO e preco/10: o 10x da loja tem juros embutidos. Calcular
+                  em cima do preco ja com desconto mantem parcela e a vista
+                  coerentes entre si.
+
+                  Saiu a linha "com 12% OFF no carrinho · 3 un: 15% · 5 un: 18%".
+                  A escada por volume continua aparecendo no painel vermelho
+                  abaixo dos cards e no aviso do carrinho.
+                {%- endcomment -%}
                 {%- assign vfkit_no_carrinho = product.price | times: 88 | divided_by: 100 -%}
+                {%- assign vfkit_parcela = vfkit_no_carrinho | times: 11796 | divided_by: 100000 -%}
                 <span class="vf-kit__price-compare">de {{ product.price | money }}</span>
-                <span class="vf-kit__installment">{{ vfkit_no_carrinho | money }}</span>
-                <span class="vf-kit__price">com 12% OFF no carrinho · 3 un: 15% · 5 un: 18%</span>
+                <span class="vf-kit__installment">10x de {{ vfkit_parcela | money }}</span>
+                <span class="vf-kit__price">ou {{ vfkit_no_carrinho | money }} à vista</span>
               {%- else -%}
                 {%- if block.settings.installment != blank -%}
                   <span class="vf-kit__installment">{{ block.settings.installment }}</span>

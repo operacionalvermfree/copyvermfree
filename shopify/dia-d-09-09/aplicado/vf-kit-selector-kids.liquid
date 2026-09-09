@@ -117,10 +117,18 @@
             {%- endcomment -%}
             <div class="vf-kit-kids__price-box">
               {%- if kids_promo and product != blank and product.price > 0 -%}
+                {%- comment -%}
+                  Mesma hierarquia do tema padrao: parcela em cima, a vista
+                  embaixo, os dois ja com os 12% do Dia D.
+                  AQUI E 3x SEM JUROS (nao o 10x da home): 27000/3 = 9000 e
+                  38900/3 = 12967, que e o que os settings dizem. Entao a
+                  parcela e divisao simples por 3, sem fator de juros.
+                {%- endcomment -%}
                 {%- assign kids_no_carrinho = product.price | times: 88 | divided_by: 100 -%}
+                {%- assign kids_parcela = kids_no_carrinho | divided_by: 3 -%}
                 <span class="vf-kit-kids__price-compare">de {{ product.price | money }}</span>
-                <span class="vf-kit-kids__installment">{{ kids_no_carrinho | money }}</span>
-                <span class="vf-kit-kids__price">com 12% OFF no carrinho · 3 un: 15% · 5 un: 18%</span>
+                <span class="vf-kit-kids__installment">3x de {{ kids_parcela | money }} sem juros</span>
+                <span class="vf-kit-kids__price">ou {{ kids_no_carrinho | money }} à vista</span>
               {%- else -%}
                 {%- if block.settings.installment != blank -%}
                   <span class="vf-kit-kids__installment">{{ block.settings.installment }}</span>
