@@ -169,6 +169,30 @@
     margin: 0;
   }
 
+  {%- comment -%}
+    Preco da linha com desconto: "de R$ X" riscado em cima, valor pago embaixo.
+    Vale pra qualquer desconto automatico (faixas do Dia D, brinde 100%),
+    porque le original_line_price vs final_line_price da propria linha.
+  {%- endcomment -%}
+  .vf-cart-item__was {
+    display: block;
+    font-family: var(--font-body, inherit);
+    font-size: 13px;
+    font-weight: 400;
+    color: #9A9A9A;
+    line-height: 1.3;
+  }
+  .vf-cart-item__now {
+    display: block;
+    color: #1B5E20;
+    font-weight: 800;
+  }
+  .vf-cart-item__price-mobile .vf-cart-item__was,
+  .vf-cart-item__price-mobile .vf-cart-item__now {
+    display: inline;
+  }
+  .vf-cart-item__price-mobile .vf-cart-item__was { margin-right: 8px; }
+
   .vf-cart-item__price {
     grid-area: price;
     font-family: var(--font-heading);

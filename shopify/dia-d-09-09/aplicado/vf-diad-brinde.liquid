@@ -163,16 +163,9 @@
         tag.textContent = '🎁 Brinde do Dia D · Grátis';
         alvo.parentNode.insertBefore(tag, alvo.nextSibling);
 
-        if (item.original_line_price > item.final_line_price) {
-          linha.querySelectorAll('.vf-cart-item__price, .vf-cart-item__price-mobile')
-            .forEach(function (el) {
-              if (el.querySelector('.vf-brinde-de')) return;
-              var de = document.createElement('s');
-              de.className = 'vf-brinde-de';
-              de.textContent = dinheiro(item.original_line_price);
-              el.insertBefore(de, el.firstChild);
-            });
-        }
+        /* O "de R$ 67,00" riscado saiu daqui em 09/09 ~01h: agora quem
+           desenha isso e o proprio main-cart, em Liquid, pra TODA linha
+           com desconto. Deixar os dois desenhando duplicava o riscado. */
       });
     }).catch(function () {});
   }

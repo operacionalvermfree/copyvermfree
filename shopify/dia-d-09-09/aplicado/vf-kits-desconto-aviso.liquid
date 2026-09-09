@@ -12,13 +12,16 @@
     Conta so protocolos: NAO entra Oleo de Alho (desconto proprio)
     nem Kit Familia (ja e um combo).
 
-  NO DIA D (09/09/2026), a loja inteira muda de escada:
+  NO DIA D (09/09/2026) a escada muda, mas SO pros protocolos:
     1 un = 12% · 3 un = 15% · 5 un = 18%
     Descontos 1706029940955 / 1706029973723 / 1706030104795,
-    classe PRODUCT, cobrindo os 5 produtos. Como o minimo de
-    quantidade da Shopify conta TODAS as unidades dos produtos
-    cobertos, no Dia D o Oleo de Alho e o Kit Familia ENTRAM na
-    conta — por isso a lista de handles muda.
+    classe PRODUCT, cobrindo APENAS os 3 protocolos.
+    Em 09/09 ~01h tiramos o Oleo de Alho dessas tres faixas: ele
+    e brinde (100% OFF na linha dele) e a Shopify so aplica UM
+    desconto de produto por linha — enquanto o oleo estava nas
+    faixas, os 12% caiam na linha dele e o brinde nunca entrava.
+    Kit Familia ja tinha saido antes (mantem o combo de 15%).
+    Logo: no Dia D nem oleo nem Kit Familia contam como unidade.
     As escadas do oleo (3=15% / 6=20%) ficam pausadas no dia.
 
   AS FAIXAS NAO SOMAM. A Shopify aplica um unico desconto de
@@ -46,8 +49,14 @@
   {%- assign vfk_diad = true -%}
 {%- endif -%}
 
-{%- comment -%} No Dia D contamos os 5 produtos cobertos pelo desconto {%- endcomment -%}
-{%- assign VFK_DIAD = 'protocolo-desparasitacao-adulto-vermefree,antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos,antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos,oleo-de-alho-desodorizado-500mg' -%}
+{%- comment -%}
+  No Dia D contamos SO os tres protocolos. O oleo saiu desta lista em 09/09 ~01h:
+  ele e brinde (100% OFF na linha dele) e nao esta mais nas faixas de 12/15/18%,
+  entao nao pode contar como unidade nem entrar na conta da economia. Enquanto
+  contava, um carrinho com 2 protocolos + 1 oleo de brinde anunciava "15% OFF"
+  num carrinho que pagava 12%. Kit Familia tambem nao entra (saiu das faixas).
+{%- endcomment -%}
+{%- assign VFK_DIAD = 'protocolo-desparasitacao-adulto-vermefree,antiparasitario-infantil-natural-vermefree-kids-2-a-4-anos,antiparasitario-infantil-natural-vermefree-kids-5-a-9-anos' -%}
 {%- comment -%} Fora do Dia D, estes NAO contam pro volume dos protocolos {%- endcomment -%}
 {%- assign VFK_FORA = 'oleo-de-alho-desodorizado-500mg,kit-familia-vermefree-2-adultos-2-criancas' -%}
 
