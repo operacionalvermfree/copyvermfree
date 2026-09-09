@@ -117,17 +117,24 @@
     {% render 'vf-whatsapp-float' %}
 
     {%- comment -%}
-      Pop-up de recomendacao + captura de e-mail. Ele entrega o cupom 5OFF,
-      que e mecanica permanente da loja — mas NAO pode aparecer no Dia D
-      (09/09/2026): a acao daquele dia nao tem cupom nenhum e o preco ja
-      chega com 10% OFF, bem mais que os 5% do 5OFF. Mostrar um codigo pra
-      digitar no checkout no meio da acao confundiria a oferta e ainda
-      concorreria com ela. Volta a aparecer sozinho no dia 10.
+      POP-UP REMOVIDO (08/09, pedido do Gabriel).
+
+      Era o pop-up de captura de e-mail com o cupom 5OFF, refeito em um
+      passo so nesse mesmo dia. O arquivo continua no tema, intacto, em
+      snippets/vf-diagnostico-popup.liquid — so nao e mais renderizado.
+      Nenhuma outra pagina chama ele, entao esta e a unica linha que
+      precisava sair.
+
+      PRA TRAZER DE VOLTA, e uma linha:
+
+        {%% render 'vf-diagnostico-popup' %%}
+
+      Aqui existia um gate de data que escondia o pop-up SO no Dia D
+      (09/09) e o devolvia sozinho no dia 10. O gate saiu junto: agora ele
+      nao aparece em dia nenhum ate alguem devolver o render acima. Se a
+      ideia for so tirar do Dia D e nao pra sempre, e o gate que tem que
+      voltar, nao so o render.
     {%- endcomment -%}
-    {%- assign layout_today = 'now' | date: '%Y%m%d' | plus: 0 -%}
-    {%- unless layout_today == 20260909 -%}
-      {%- render 'vf-diagnostico-popup' -%}
-    {%- endunless -%}
     <a class="skip-to-content" href="#main">Pular para o conteúdo</a>
 
     {% section 'vf-announcement-bar' %}
