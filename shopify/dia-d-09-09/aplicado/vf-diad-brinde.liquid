@@ -310,6 +310,20 @@
         nota.textContent = 'O brinde do Dia D e 1 frasco por pedido.';
         tag.parentNode.insertBefore(nota, tag.nextSibling);
 
+        /* Brinde nao tem quantidade escolhivel. Enquanto o "+" existia nesta
+           linha, dava pra subir pra 2 e ver o carrinho errado PISCAR antes da
+           correcao chegar — parecia que a trava nao funcionava.
+           Escondo os botoes por CSS (classe vf-brinde-linha, ja aplicada
+           acima) e travo o campo. NAO removo o input: o form do carrinho
+           manda updates[] por POSICAO, entao tirar um input desalinharia as
+           quantidades de todas as outras linhas. */
+        var qtd = linha.querySelector('.vf-cart-item__qty-input');
+        if (qtd) {
+          qtd.readOnly = true;
+          qtd.setAttribute('tabindex', '-1');
+          qtd.setAttribute('aria-label', 'Brinde: 1 frasco, quantidade fixa');
+        }
+
         /* O "de R$ 67,00" riscado saiu daqui em 09/09 ~01h: agora quem
            desenha isso e o proprio main-cart, em Liquid, pra TODA linha
            com desconto. Deixar os dois desenhando duplicava o riscado. */
@@ -381,5 +395,15 @@
   .vf-brinde-linha .vf-cart-item__price-mobile {
     color: #1B5E20;
     font-weight: 800;
+  }
+  {%- comment -%} Linha do brinde: sem +/-, quantidade fixa em 1 {%- endcomment -%}
+  .vf-brinde-linha .vf-cart-item__qty-btn { display: none; }
+  .vf-brinde-linha .vf-cart-item__qty-control {
+    border-color: transparent;
+    background: #F2F2F2;
+  }
+  .vf-brinde-linha .vf-cart-item__qty-input {
+    pointer-events: none;
+    color: #6B6B6B;
   }
 {% endstylesheet %}
