@@ -20,7 +20,7 @@ Branch de publicação: `lp`. Pasta: `landing-<slug>/index.html` (HTML autoconti
 | Kids 2 a 4 anos | `kids-2-4` | `landing-kids-2-4/` | não iniciada | — |
 | Kids 5 a 9 anos | `kids-5-9` | `landing-kids-5-9/` | não iniciada | — |
 | Kit Família | `kit-familia` | `landing-kit-familia/` | não iniciada | — |
-| Óleo de Alho Desodorizado | `oleo-de-alho` | `landing-oleo-de-alho/` | não iniciada | — |
+| Óleo de Alho Desodorizado | `oleo-de-alho` | `landing-oleo-de-alho/` | em revisão — pronta pra preview antes de apontar domínio; falta um humano validar a 320px de verdade (bloqueio de rede do meu ambiente) | https://raw.githack.com/operacionalvermfree/copyvermfree/lp/landing-oleo-de-alho/index.html |
 
 Status possíveis: `não iniciada` · `em construção` · `publicada` · `pausada`.
 
