@@ -329,6 +329,28 @@
   .quiz-disclaimer{font-size:0.75rem;color:var(--muted);font-style:italic;margin:0.9rem 0 1.1rem;}
 
   ::selection{background:var(--green-light);color:var(--black);}
+
+  /* ===== GLIFO — câmera de scroll entrando na palavra da marca. Técnica
+     adaptada (reimplementada em vanilla JS, sem framework) de uma referência
+     de clip-path + scroll que usamos como repertório, não como template —
+     ver vermefree-lp-kit/REPERTORIO-TECNICO.md. Autocontida, sem dependência
+     externa além das fontes já carregadas pela página. ===== */
+  .glifo{position:relative;height:220vh;}
+  .glifo-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--bg);}
+  .glifo-field{position:absolute;inset:0;background:linear-gradient(165deg, var(--green-dark) 0%, var(--deep-base) 100%);}
+  .glifo-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+  #glifo-glyph{font-family:'Inter',sans-serif;font-weight:800;font-kerning:none;letter-spacing:0;}
+  .glifo-hint{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);font-size:0.78rem;color:var(--muted);letter-spacing:.04em;transition:opacity .3s var(--ease);}
+  .glifo-content{position:relative;min-height:100svh;margin-top:calc(1.2 * var(--glifo-h, 100svh));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 1.25rem;color:var(--white);background:linear-gradient(165deg, var(--green-dark) 0%, var(--deep-base) 100%);opacity:0;pointer-events:none;}
+  .glifo-content.is-in{pointer-events:auto;}
+  .glifo-content h2{font-size:clamp(1.6rem, 1.1rem + 2.2vw, 2.4rem);margin:0.6rem 0 0.9rem;color:var(--white);}
+  .glifo-content p{max-width:34ch;color:var(--muted-on-dark);font-size:0.98rem;line-height:1.6;margin-bottom:1.6rem;}
+  @media (prefers-reduced-motion: reduce){
+    .glifo-stage{position:relative;height:auto;min-height:50svh;}
+    .glifo-field{clip-path:none !important;}
+    .glifo-content{margin-top:0;opacity:1 !important;pointer-events:auto;}
+    .glifo-hint{display:none;}
+  }
 </style>
 </head>
 <body>
@@ -467,6 +489,28 @@
     </div>
   </div>
 </section>
+
+<!-- GLIFO — a marca como ponte entre a virada e a composição -->
+<section class="glifo" id="glifo">
+  <div class="glifo-stage" id="glifo-stage">
+    <div class="glifo-field" id="glifo-field"></div>
+    <svg class="glifo-svg" id="glifo-svg" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id="glifo-clip" clipPathUnits="userSpaceOnUse">
+          <text id="glifo-glyph" x="0" y="0">VERMEFREE</text>
+        </clipPath>
+      </defs>
+    </svg>
+    <p class="glifo-hint" id="glifo-hint">role pra entrar ↓</p>
+  </div>
+  <div class="glifo-content" id="glifo-content">
+    <div class="eyebrow on-dark">A marca</div>
+    <h2>Um ritual, não um remédio.</h2>
+    <p>Quatro frascos, uma ordem, uma lua nova. Cada detalhe da composição existe por um motivo — vamos ver frasco a frasco.</p>
+    <a class="btn btn-bronze" href="#composicao">Ver a composição ↓</a>
+  </div>
+</section>
+<noscript><style>.glifo-stage{display:none;}.glifo-content{opacity:1!important;margin-top:0!important;}</style></noscript>
 
 <!-- COMPOSIÇÃO -->
 <section class="composicao" id="composicao">
@@ -1114,6 +1158,157 @@ float snoise(vec3 v){
     new IntersectionObserver((entries)=>{
       entries.forEach(entry=>{ entry.isIntersecting ? start() : stop(); });
     }, {threshold:0}).observe(sectionEl);
+  } else { start(); }
+})();
+</script>
+
+<script>
+/* GLIFO — câmera de scroll entrando na palavra "VERMEFREE" via clip-path SVG.
+   Acha automaticamente a maior área "cheia de tinta" dentro das letras
+   (mesma ideia de inscrever o maior quadrado num glifo, via varredura de
+   alfa em canvas) e usa esse ponto como alvo do zoom — não é um valor
+   chutado a dedo, então continua funcionando se a fonte mudar. */
+(function(){
+  var section = document.getElementById('glifo');
+  var stage = document.getElementById('glifo-stage');
+  var field = document.getElementById('glifo-field');
+  var svg = document.getElementById('glifo-svg');
+  var glyph = document.getElementById('glifo-glyph');
+  var content = document.getElementById('glifo-content');
+  var hint = document.getElementById('glifo-hint');
+  if (!section || !stage || !glyph) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var TEXT = 'VERMEFREE';
+  var LENGTH = 2.2;
+  var clamp = function(v, lo, hi){ if (lo === undefined) lo = 0; if (hi === undefined) hi = 1; return Math.max(lo, Math.min(hi, v)); };
+  var lerp = function(a, b, t){ return a + (b - a) * t; };
+
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  // maior quadrado opaco dentro de um glifo, em tempo linear (varredura de alfa)
+  function interior(char, font){
+    ctx.font = font;
+    var m = ctx.measureText(char);
+    var pad = 8;
+    var left = Math.ceil(m.actualBoundingBoxLeft);
+    var ascent = Math.ceil(m.actualBoundingBoxAscent);
+    canvas.width = Math.max(1, Math.ceil(m.actualBoundingBoxLeft + m.actualBoundingBoxRight) + pad * 2);
+    canvas.height = Math.max(1, Math.ceil(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent) + pad * 2);
+    ctx.font = font;
+    ctx.fillStyle = '#000';
+    ctx.fillText(char, pad + left, pad + ascent);
+    var width = canvas.width, height = canvas.height;
+    var pixels = ctx.getImageData(0, 0, width, height).data;
+    var rows = new Uint16Array(width + 1);
+    var size = 0, bx = 0, by = 0;
+    for (var y = 0; y < height; y++) {
+      var diag = 0;
+      for (var x = 0; x < width; x++) {
+        var above = rows[x + 1];
+        rows[x + 1] = pixels[(y * width + x) * 4 + 3] > 245 ? Math.min(above, rows[x], diag) + 1 : 0;
+        diag = above;
+        if (rows[x + 1] > size) { size = rows[x + 1]; bx = x; by = y; }
+      }
+    }
+    if (size < 3) return null;
+    // varredura a 3x (font 300px vs. medido a 100px) pra ganhar precisão de subpixel
+    return { x: (bx + 1 - size / 2 - pad - left) / 3, y: (by + 1 - size / 2 - pad - ascent) / 3, radius: (size / 2 - 1) / 3 };
+  }
+
+  var bounds = null, center = { x: 0, y: 0 }, target = null;
+
+  function measure(){
+    var cs = getComputedStyle(glyph);
+    var font100 = cs.fontWeight + ' 100px ' + cs.fontFamily;
+    var fontScan = cs.fontWeight + ' 300px ' + cs.fontFamily;
+    ctx.font = font100; ctx.fontKerning = 'none';
+    var m = ctx.measureText(TEXT);
+    bounds = {
+      x: -m.actualBoundingBoxLeft, y: -m.actualBoundingBoxAscent,
+      width: m.actualBoundingBoxLeft + m.actualBoundingBoxRight,
+      height: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent
+    };
+    if (!bounds.width || !bounds.height) return false;
+    center = { x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 };
+    var candidates = [];
+    var chars = Array.from(TEXT);
+    for (var i = 0; i < chars.length; i++) {
+      ctx.font = font100; ctx.fontKerning = 'none';
+      var advance = ctx.measureText(TEXT.slice(0, i)).width;
+      var found = interior(chars[i], fontScan);
+      if (found) candidates.push({ x: found.x + advance, y: found.y, radius: found.radius });
+    }
+    candidates.sort(function(a, b){ return b.radius - a.radius; });
+    target = candidates[0] || null;
+    return !!target;
+  }
+
+  var W = 1, H = 1, startScale = 1, endScale = 1;
+
+  function layout(){
+    W = stage.clientWidth; H = stage.clientHeight;
+    if (!W || !H) return;
+    section.style.setProperty('--glifo-h', H + 'px');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    if (!bounds && !measure()) return;
+    var band = H * 0.34;
+    startScale = Math.min(W * 0.8 / bounds.width, band / bounds.height);
+    endScale = target ? Math.max(startScale, Math.hypot(W, H) / (target.radius * 1.3)) : startScale;
+  }
+
+  function scrollProgress(){
+    var r = section.getBoundingClientRect();
+    var total = r.height - window.innerHeight;
+    return total > 0 ? clamp(-r.top / total, 0, 1) : 0;
+  }
+
+  function paint(p){
+    var t = clamp(p / 0.82);
+    var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    var scale = Math.exp(lerp(Math.log(startScale), Math.log(endScale), eased));
+    var blend = endScale === startScale ? 0 : (1 / scale - 1 / startScale) / (1 / endScale - 1 / startScale);
+    blend = clamp(blend);
+    var tx = target ? target.x : center.x, ty = target ? target.y : center.y;
+    var cx = center.x + (tx - center.x) * blend;
+    var cy = center.y + (ty - center.y) * blend;
+    glyph.setAttribute('transform', 'translate(' + (W / 2) + ' ' + (H * 0.46) + ') scale(' + scale + ') translate(' + (-cx) + ' ' + (-cy) + ')');
+    field.style.clipPath = t >= 0.985 ? 'none' : 'url(#glifo-clip)';
+    hint.style.opacity = String(1 - clamp((p - 0.01) / 0.1));
+    var reveal = clamp((p - 0.74) / (0.9 - 0.74));
+    content.style.opacity = String(reveal);
+    content.classList.toggle('is-in', reveal > 0.5);
+  }
+
+  var progressTarget = 0, progressSmooth = 0;
+  function computeTarget(){ progressTarget = scrollProgress(); }
+  window.addEventListener('scroll', computeTarget, { passive: true });
+
+  var running = false, raf = null;
+  function loop(){
+    if (!running) return;
+    raf = requestAnimationFrame(loop);
+    progressSmooth = lerp(progressSmooth, progressTarget, 0.16);
+    paint(progressSmooth);
+  }
+  function start(){ if (!running) { running = true; loop(); } }
+  function stop(){ running = false; if (raf) cancelAnimationFrame(raf); }
+
+  function resize(){ layout(); computeTarget(); paint(progressTarget); }
+  window.addEventListener('resize', resize);
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function(){ bounds = null; resize(); });
+  }
+
+  resize();
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ entry.isIntersecting ? start() : stop(); });
+    }, { threshold: 0 }).observe(section);
   } else { start(); }
 })();
 </script>
