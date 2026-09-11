@@ -148,6 +148,10 @@
      fixa na tela enquanto os 3 "beats" de texto se revezam por cima,
      dirigidos pelo progresso de rolagem só dentro desta seção. ===== */
   .jornada{position:relative;height:260vh;}
+  /* no celular, 260vh de rolagem "presa" pra um efeito só é a causa nº1 de
+     sensação de "travou" — encurtar deixa o progresso visual acompanhar o
+     dedo, sem esticar o gesto de rolagem além do que a tela pequena pede. */
+  @media (max-width:700px){.jornada{height:190vh;}}
   .jornada-stage{position:sticky;top:0;height:100svh;overflow:hidden;color:var(--white);background:linear-gradient(165deg,#2a0f0a 0%,#140604 100%);}
   #tunnel-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;}
   .jornada-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(10,10,8,.25) 0%, rgba(10,10,8,.05) 40%, rgba(8,8,7,.7) 100%);pointer-events:none;}
@@ -336,6 +340,7 @@
      ver vermefree-lp-kit/REPERTORIO-TECNICO.md. Autocontida, sem dependência
      externa além das fontes já carregadas pela página. ===== */
   .glifo{position:relative;height:220vh;}
+  @media (max-width:700px){.glifo{height:160vh;}}
   .glifo-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--bg);}
   .glifo-field{position:absolute;inset:0;background:linear-gradient(165deg, var(--green-dark) 0%, var(--deep-base) 100%);}
   .glifo-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
@@ -913,6 +918,13 @@
   const beats = document.querySelectorAll('.beat');
   const scrollHint = document.getElementById('scroll-hint');
 
+  // headline e CTA aparecem JÁ — não esperam o three.js/GLTF carregar da CDN.
+  // Em rede móvel lenta isso podia deixar a herói em branco por vários
+  // segundos (só o gradiente, sem texto nem botão clicável) até o WebGL
+  // terminar de inicializar. O loop do WebGL assume o controle do beat
+  // ativo assim que a cena estiver pronta — isso aqui é só o estado inicial.
+  if (beats[0]) beats[0].classList.add('is-active');
+
   function setBeatProgress(p){
     // 3 beats distribuídos ao longo do progresso 0..1 da seção
     var idx = p < 0.30 ? 0 : (p < 0.68 ? 1 : 2);
@@ -920,8 +932,13 @@
     if (scrollHint) scrollHint.classList.toggle('is-visible', p < 0.06);
   }
 
-  if (!canvas || reduceMotion || !window.WebGLRenderingContext){
-    // sem WebGL/CDN/ou reduced-motion: mostra o beat 1 fixo, página segue normal
+  // celular de entrada (pouca RAM) — pula o WebGL de vez e fica só no
+  // gradiente + texto. navigator.deviceMemory só existe em Chromium/Android;
+  // em Safari/iOS o campo nem existe, então isso nunca afeta iPhone.
+  const isLowEndDevice = navigator.deviceMemory && navigator.deviceMemory <= 2;
+
+  if (!canvas || reduceMotion || !window.WebGLRenderingContext || isLowEndDevice){
+    // sem WebGL/CDN/reduced-motion/hardware fraco: mostra o beat 1 fixo, página segue normal
     if (beats[0]) beats[0].classList.add('is-active');
     return;
   }
@@ -1188,17 +1205,19 @@ float snoise(vec3 v){
   }
   const dummy = new THREE.Object3D();
 
-  let wormMesh = null, wormUpdateFn = function(){};
-  try {
-    const real = await buildRealWorm();
+  // procedural primeiro (síncrono, sem rede) pra nunca travar o início da
+  // cena — o GLB real (CDN externa, até 9s de timeout) troca por cima
+  // depois, em segundo plano, se e quando terminar de carregar.
+  const proc0 = buildProceduralWorm();
+  let wormMesh = proc0.mesh, wormUpdateFn = proc0.update;
+  scene.add(wormMesh);
+  buildRealWorm().then(function(real){
+    scene.remove(wormMesh);
+    wormMesh.geometry.dispose(); wormMesh.material.dispose();
     wormMesh = real.mesh;
     wormUpdateFn = real.update;
-  } catch(e){
-    const proc = buildProceduralWorm();
-    wormMesh = proc.mesh;
-    wormUpdateFn = proc.update;
-  }
-  scene.add(wormMesh);
+    scene.add(wormMesh);
+  }).catch(function(){ /* mantém o procedural — cena já está completa */ });
 
   function updateWorms(t,dt,progress){
     for (let w=0; w<worms.length; w++){
@@ -1238,13 +1257,16 @@ float snoise(vec3 v){
   window.addEventListener('resize', resize);
   resize();
 
+  // no toque, o dedo já é inércia — suavizar demais por cima disso lê como
+  // "atraso". No mouse/trackpad (desktop) o lerp mais lento fica cinemático.
+  const scrollLerpFactor = isMobile ? 0.24 : 0.08;
   let running=false, rafId=null, t0=performance.now()/1000;
   function loop(){
     if (!running) return;
     rafId = requestAnimationFrame(loop);
     const t = performance.now()/1000;
     const dt = Math.min(0.05, t-t0); t0=t;
-    scrollSmooth = Lerp(scrollSmooth, scrollTarget, 0.08);
+    scrollSmooth = Lerp(scrollSmooth, scrollTarget, scrollLerpFactor);
     mouse.x = Lerp(mouse.x, mouseTarget.x, 0.06);
     mouse.y = Lerp(mouse.y, mouseTarget.y, 0.06);
 
@@ -1394,6 +1416,7 @@ float snoise(vec3 v){
   }
 
   var progressTarget = 0, progressSmooth = 0;
+  var glifoLerpFactor = window.innerWidth < 700 ? 0.28 : 0.16;
   function computeTarget(){ progressTarget = scrollProgress(); }
   window.addEventListener('scroll', computeTarget, { passive: true });
 
@@ -1401,7 +1424,7 @@ float snoise(vec3 v){
   function loop(){
     if (!running) return;
     raf = requestAnimationFrame(loop);
-    progressSmooth = lerp(progressSmooth, progressTarget, 0.16);
+    progressSmooth = lerp(progressSmooth, progressTarget, glifoLerpFactor);
     paint(progressSmooth);
   }
   function start(){ if (!running) { running = true; loop(); } }
