@@ -351,6 +351,61 @@
     .glifo-content{margin-top:0;opacity:1 !important;pointer-events:auto;}
     .glifo-hint{display:none;}
   }
+
+  /* DORES OCULTAS — agitação sem diagnosticar: sinais do dia a dia que
+     raramente são associados a uma rotina de limpeza natural adiada. */
+  .dores{background:var(--black);color:var(--white);padding:4.5rem 0;}
+  .dores .eyebrow{color:var(--bronze);}
+  .dores .section-head p{color:var(--muted-on-dark);}
+  .dores-hero{border-radius:1.5rem;overflow:hidden;position:relative;aspect-ratio:16/9;margin-bottom:2.25rem;background:#0d0908;}
+  .dores-hero img{width:100%;height:100%;object-fit:cover;display:block;}
+  .dores-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,8,7,0) 35%, rgba(10,8,7,.92) 100%);}
+  .dores-hero-cap{position:absolute;left:0;right:0;bottom:0;padding:1.5rem;}
+  .dores-hero-cap p{font-family:'Fraunces',serif;font-size:clamp(1.05rem,0.9rem+1vw,1.4rem);max-width:28ch;line-height:1.35;}
+  .dores-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
+  @media (min-width:46rem){.dores-grid{grid-template-columns:0.9fr 1.1fr;align-items:stretch;}}
+  .dores-visual{border-radius:1.25rem;overflow:hidden;position:relative;min-height:14rem;}
+  .dores-visual img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+  .dores-list{display:flex;flex-direction:column;gap:0.85rem;justify-content:center;}
+  .dor-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius-sm);padding:1.05rem 1.25rem;}
+  .dor-item .q{font-family:'Fraunces',serif;font-size:1.02rem;margin-bottom:0.35rem;color:var(--white);line-height:1.35;}
+  .dor-item p{font-size:0.85rem;line-height:1.55;color:var(--muted-on-dark);}
+  .dores-note{text-align:center;font-size:0.82rem;color:var(--muted-on-dark);margin-top:2.25rem;max-width:32rem;margin-left:auto;margin-right:auto;font-style:italic;}
+
+  /* VIRADA — agora com visual de transformação ao lado dos benefícios */
+  .virada-wrap{display:grid;grid-template-columns:1fr;gap:1.75rem;align-items:center;}
+  @media (min-width:58rem){.virada-wrap{grid-template-columns:0.85fr 1.15fr;}}
+  .virada-visual{border-radius:1.5rem;overflow:hidden;position:relative;aspect-ratio:4/3;}
+  .virada-visual img{width:100%;height:100%;object-fit:cover;}
+  .virada-authority{margin-top:1.1rem;font-size:0.85rem;color:var(--text);background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);padding:0.9rem 1.1rem;line-height:1.5;}
+  .virada-authority strong{color:var(--green-dark);}
+
+  /* AUTORIDADE MÉDICA — curadoria científica do protocolo */
+  .autoridade{background:var(--soft-green);padding:4.5rem 0;}
+  .medicos-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
+  @media (min-width:36rem){.medicos-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (min-width:60rem){.medicos-grid{grid-template-columns:repeat(4,1fr);}}
+  .medico{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:1.35rem 1.1rem;text-align:center;}
+  .medico.destaque{border-color:var(--bronze);box-shadow:0 1.1rem 2.5rem -1.3rem var(--bronze-glow);}
+  .medico .foto{width:5.5rem;height:5.5rem;border-radius:50%;overflow:hidden;margin:0 auto 0.9rem;border:3px solid var(--soft-green);background:var(--soft-green);}
+  .medico.destaque .foto{border-color:var(--bronze);}
+  .medico .foto img{width:100%;height:100%;object-fit:cover;}
+  .medico h3{font-size:0.98rem;margin-bottom:0.15rem;}
+  .medico .cred{font-size:0.68rem;font-weight:800;letter-spacing:.02em;color:var(--green-dark);margin-bottom:0.4rem;}
+  .medico.destaque .cred{color:var(--bronze);}
+  .medico .esp{font-size:0.8rem;color:var(--muted);line-height:1.45;}
+  .autoridade-quote{max-width:38rem;margin:2.75rem auto 0;text-align:center;}
+  .autoridade-quote p{font-family:'Fraunces',serif;font-style:italic;font-size:1.08rem;line-height:1.55;color:var(--text);}
+  .autoridade-quote .who{margin-top:0.75rem;font-size:0.82rem;font-weight:700;color:var(--green-dark);}
+
+  /* CTA FINAL — com imagem de fundo da linha "solução" */
+  .cta-final{
+    position:relative;background:var(--grad-deep);color:var(--white);padding:4.5rem 0;text-align:center;overflow:hidden;
+  }
+  .cta-final .cta-bg{position:absolute;inset:0;z-index:0;}
+  .cta-final .cta-bg img{width:100%;height:100%;object-fit:cover;opacity:.42;}
+  .cta-final .cta-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(165deg, rgba(31,61,31,.88) 0%, rgba(20,36,26,.96) 100%);}
+  .cta-final .wrap{position:relative;z-index:1;}
 </style>
 </head>
 <body>
@@ -402,6 +457,46 @@
     </div>
 
     <div class="scroll-hint" id="scroll-hint">role e sinta a rotina limpar essa jornada</div>
+  </div>
+</section>
+
+<!-- DORES OCULTAS — agitação forte, sem diagnosticar o leitor -->
+<section class="dores" id="dores">
+  <div class="wrap">
+    <div class="section-head" data-observe>
+      <div class="eyebrow" style="text-align:center;">Dores que a rotina não explica</div>
+      <h2><span class="split-line" data-split>E se parte do que você sente todo dia tiver uma causa que ninguém te mostrou?</span></h2>
+      <p>Cansaço, inchaço, sono que não recupera, apetite que muda sem motivo — são sinais tão comuns que a gente aprende a conviver com eles. Isso não é um diagnóstico. É só uma pergunta que vale a pena se fazer.</p>
+    </div>
+
+    <div class="dores-hero" data-observe>
+      <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260911_132637_cdba411d-22da-431b-a380-ce214f86b866.png" alt="Representação visual do interior do intestino — o motivo pelo qual a desparasitação natural existe como cuidado de rotina" loading="lazy">
+      <div class="dores-hero-cap">
+        <p>O intestino é um ecossistema inteiro — e ele nem sempre avisa com clareza quando pede uma pausa pra se limpar.</p>
+      </div>
+    </div>
+
+    <div class="dores-grid" data-observe>
+      <div class="dores-visual">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260911_132638_054944da-4c75-4fa7-8d71-e0c7d0af6556.png" alt="Ilustração conceitual do sistema digestivo, representando o que a desparasitação natural de rotina busca cuidar" loading="lazy">
+      </div>
+      <div class="dores-list">
+        <div class="dor-item">
+          <p class="q">Vive cansada e inchada mesmo comendo bem?</p>
+          <p>Talvez não seja só a alimentação. O corpo pede uma pausa pra se limpar de vez em quando — e isso raramente vem de uma dieta nova.</p>
+        </div>
+        <div class="dor-item">
+          <p class="q">Sono que não é tão tranquilo assim, ou aquele ranger de dentes à noite?</p>
+          <p>São sinais pequenos, fáceis de ignorar no meio da correria — mas que a rotina raramente para pra observar com calma.</p>
+        </div>
+        <div class="dor-item">
+          <p class="q">A cada quantos meses você realmente faz uma limpeza natural do intestino?</p>
+          <p>Pra muita gente, a resposta sincera é "nunca parei pra pensar nisso". E tudo bem — é exatamente pra isso que existe um protocolo, não um susto.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="dores-note" data-observe>Isso não é diagnóstico, é reflexão. Se algo aqui soou familiar, talvez seja hora de conhecer o Protocolo Adulto — com curadoria científica e sem promessa de milagre.</p>
   </div>
 </section>
 
@@ -469,22 +564,30 @@
       <h2><span class="split-line" data-split>O que muda quando isso entra na sua rotina</span></h2>
       <p>Sem prometer milagre — é constância. É o que costuma mudar quando o protocolo passa a fazer parte do seu ciclo, algumas vezes ao ano.</p>
     </div>
-    <div class="virada-grid" data-observe>
-      <div class="virada-item">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9Z"/></svg></span>
-        <p><strong>Corpo mais leve</strong>Sensação de leveza no dia a dia, sem inchaço depois das refeições.</p>
+    <div class="virada-wrap" data-observe>
+      <div>
+        <div class="virada-visual">
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260911_134351_6b686829-9781-44ed-b783-efc9e4e66ec0.png" alt="Kit Protocolo Adulto VermeFree em uma cozinha iluminada pela luz da manhã, representando a rotina de bem-estar depois do protocolo" loading="lazy">
+        </div>
+        <p class="virada-authority">Cada fórmula do Protocolo Adulto passa pela <strong>curadoria científica do Dr. William Araújo (CRM-MG 76.962)</strong> antes de chegar até você — não é só planta escolhida no achismo.</p>
       </div>
-      <div class="virada-item">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 13c1 1.5 2.3 2 4 2s3-.5 4-2"/></svg></span>
-        <p><strong>Intestino funcionando melhor</strong>Rotina intestinal mais regular, sem depender só da alimentação.</p>
-      </div>
-      <div class="virada-item">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/></svg></span>
-        <p><strong>Mais disposição</strong>Aquela sensação de energia que parecia ter sumido no meio do dia.</p>
-      </div>
-      <div class="virada-item">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 8-8m8 8a8 8 0 0 1-8 8"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4"/></svg></span>
-        <p><strong>Prevenção consciente</strong>Uma limpeza natural de rotina, feita com calma, 2 a 4 vezes por ano.</p>
+      <div class="virada-grid">
+        <div class="virada-item">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.5 2.6 4 6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-6-4-9s1.5-6.4 4-9Z"/></svg></span>
+          <p><strong>Corpo mais leve</strong>Sensação de leveza no dia a dia, sem inchaço depois das refeições.</p>
+        </div>
+        <div class="virada-item">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 13c1 1.5 2.3 2 4 2s3-.5 4-2"/></svg></span>
+          <p><strong>Intestino funcionando melhor</strong>Rotina intestinal mais regular, sem depender só da alimentação.</p>
+        </div>
+        <div class="virada-item">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h7l-1 7 9-11h-7l1-7Z"/></svg></span>
+          <p><strong>Mais disposição</strong>Aquela sensação de energia que parecia ter sumido no meio do dia.</p>
+        </div>
+        <div class="virada-item">
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 8-8m8 8a8 8 0 0 1-8 8"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4"/></svg></span>
+          <p><strong>Prevenção consciente</strong>Uma limpeza natural de rotina, feita com calma, 2 a 4 vezes por ano.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -518,7 +621,7 @@
     <div class="section-head" data-observe>
       <div class="eyebrow on-dark" style="text-align:center;">Prova &amp; composição</div>
       <h2><span class="split-line" data-split>4 frascos, cada um no seu momento certo</span></h2>
-      <p>Ingredientes de origem vegetal, num protocolo pensado pra atuar em conjunto com o ciclo da lua nova.</p>
+      <p>Ingredientes de origem vegetal, num protocolo com curadoria científica, pensado pra atuar em conjunto com o ciclo da lua nova.</p>
     </div>
     <div class="composicao-grid" data-observe>
       <div class="composicao-visual">
@@ -568,27 +671,28 @@
     <div class="section-head" data-observe>
       <div class="eyebrow" style="text-align:center;">Bem-estar &amp; dúvidas comuns</div>
       <h2><span class="split-line" data-split>Feito pra quem quer entender antes de comprar</span></h2>
+      <p>Depois do ciclo, o que a maioria relata não é "milagre" — é a volta de coisas simples que tinham sumido da rotina sem ninguém perceber quando.</p>
     </div>
     <div class="cards-grid" data-observe>
       <div class="card">
         <div class="tag">Bem-estar</div>
         <h3>Sensação de leveza</h3>
-        <p>Rotina pensada pra apoiar a sensação de corpo limpo por dentro, sem química pesada.</p>
+        <p>Rotina pensada pra apoiar a sensação de corpo limpo por dentro, sem química pesada — o inchaço depois das refeições costuma ser o primeiro a ficar pra trás.</p>
       </div>
       <div class="card">
         <div class="tag">Bem-estar</div>
         <h3>Sono mais tranquilo</h3>
-        <p>Ornitina à noite, pensada pra fechar o dia com mais calma.</p>
+        <p>Ornitina à noite, pensada pra fechar o dia com mais calma — pra quem vinha notando um sono mais agitado sem saber apontar o motivo.</p>
       </div>
       <div class="card">
         <div class="tag">Bem-estar</div>
         <h3>Disposição no dia a dia</h3>
-        <p>Menos aquela sensação de cansaço sem explicação nenhuma.</p>
+        <p>Menos aquela sensação de cansaço sem explicação nenhuma — a energia que parecia ter ficado só na lembrança.</p>
       </div>
       <div class="card objecao">
         <div class="tag">É seguro?</div>
         <h3>Composição 100% vegetal</h3>
-        <p>Selo Vegetal 100% e Metais Free, com posologia clara no rótulo.</p>
+        <p>Selo Vegetal 100% e Metais Free, com posologia clara no rótulo e curadoria científica por trás de cada fórmula.</p>
       </div>
       <div class="card objecao">
         <div class="tag">Vou passar mal?</div>
@@ -646,19 +750,19 @@
     </div>
     <div class="testi-grid" data-observe>
       <div class="testi">
-        <p>"Comecei o protocolo na lua nova passada e já sinto o intestino funcionando melhor, bem mais leve."</p>
+        <p>"Comecei o protocolo na lua nova passada e já sinto o intestino funcionando melhor, bem mais leve. Só descobri o tanto que vivia inchada depois que parei de viver assim."</p>
         <div class="who">Renata, 38 anos</div>
       </div>
       <div class="testi">
-        <p>"Não prometeram milagre, e isso me deixou confiante. É rotina, é constância — senti a diferença depois do segundo ciclo."</p>
+        <p>"Não prometeram milagre, e isso me deixou confiante — ainda mais sabendo que tem médico por trás da fórmula. É rotina, é constância — senti a diferença depois do segundo ciclo."</p>
         <div class="who">Camila, 41 anos</div>
       </div>
       <div class="testi">
-        <p>"Gosto de entender o que estou tomando antes de comprar. O rótulo é transparente, veio bem explicado."</p>
+        <p>"Gosto de entender o que estou tomando antes de comprar. O rótulo é transparente, veio bem explicado, e pesquisei a credencial do médico responsável antes de decidir."</p>
         <div class="who">Juliana, 45 anos</div>
       </div>
       <div class="testi">
-        <p>"O que mais gostei foi a calma no processo — nada de prometer resultado da noite pro dia, é rotina mesmo."</p>
+        <p>"O que mais gostei foi a calma no processo — nada de prometer resultado da noite pro dia. O sono voltou a ser tranquilo, e isso eu nem esperava."</p>
         <div class="who">Fernanda, 47 anos</div>
       </div>
     </div>
@@ -705,17 +809,24 @@
         <summary>O frete é grátis?<span class="plus"></span></summary>
         <p class="faq-a">Sim, acima de R$399 em pedidos pra todo o Brasil.</p>
       </details>
+      <details class="faq-item">
+        <summary>Vocês têm apoio médico real por trás do protocolo?<span class="plus"></span></summary>
+        <p class="faq-a">Sim. A curadoria científica do Protocolo Adulto é do Dr. William Araújo (CRM-MG 76.962), com participação de mais 3 profissionais de saúde na composição e nas orientações de uso — veja a seção "Autoridade médica" acima com nome, CRM/CRO e especialidade de cada um.</p>
+      </details>
     </div>
   </div>
 </section>
 
 <!-- CTA FINAL -->
 <section class="cta-final">
+  <div class="cta-bg" aria-hidden="true">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_3DxKyMs0lPMnTsxEPVz0TBl1Jco/hf_20260911_134351_eb499109-f783-4bc4-b13e-0d89c2fcec7e.png" alt="" loading="lazy">
+  </div>
   <div class="wrap">
     <div data-observe>
       <div class="eyebrow on-dark">Protocolo Adulto</div>
       <h2>Sua rotina de leveza começa na próxima lua nova</h2>
-      <p class="lede">Natural, com critério e transparência. Sem promessa de milagre — só constância.</p>
+      <p class="lede">Natural, com curadoria científica e transparência. Sem promessa de milagre — só constância.</p>
       <div class="selo-row">
         <span class="selo on-dark">Vegetal 100%</span>
         <span class="selo on-dark">Metais Free</span>
