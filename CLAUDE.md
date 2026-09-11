@@ -71,7 +71,7 @@ Desparasitação é categoria **sensível**. Os rótulos oficiais usam "erradica
 - Comparar com remédio/vermífugo de farmácia
 - Promessa de emagrecimento ou estética
 - Diagnosticar o espectador ("você tem verme")
-- **Citar médico ou influenciador como aval clínico**
+- ~~Citar médico ou influenciador como aval clínico~~ — **regra revogada em 11/09, ver §4.1**
 
 **SEMPRE usar (linguagem segura):**
 - "Auxilia na desparasitação", "apoia a rotina de limpeza intestinal", "contribui para o bem-estar"
@@ -79,8 +79,22 @@ Desparasitação é categoria **sensível**. Os rótulos oficiais usam "erradica
 - Falar de rotina, constância, prevenção natural
 - Foco em sintomas de bem-estar e sensação de leveza
 
-### 🚫 REGRA DURA, SEM EXCEÇÃO
-**Dr. William Araujo NÃO pode ser mencionado em NENHUMA peça** — anúncio, legenda, e-mail, WhatsApp, UGC. Em lugar nenhum. Nunca.
+### 4.1 · Autoridade médica dos prescritores — ATUALIZADO 11/09/2026
+
+A partir de 11/09/2026, por instrução direta e confirmada explicitamente (duas vezes, a segunda isolando nominalmente o Dr. William Araújo) em sessão de trabalho, a marca passa a **permitir** citar os prescritores como aval clínico do protocolo, revogando a regra anterior deste bloco e a regra dura abaixo.
+
+Prescritores liberados para uso (nome, credencial, especialidade — dados já usados na seção `vf-prescritores` do tema):
+- **Dr. William Araújo** — CRM-MG 76.962 — curadoria científica do protocolo
+- Dra. Giovanna Eller — CRM-ES 20.998 — nutróloga, saúde intestinal e emagrecimento
+- Dr. Robson Araújo — CRM-MG 93.787 — emagrecimento e saúde integrativa
+- Dra. Raquel Cembranelli — CRO-SP 83.705 — cirurgiã-dentista, odontologia integrativa
+
+⚠️ **Ressalva registrada nesta atualização:** a regra revogada vivia dentro do bloco "REGRAS DE CLAIM (ANVISA) — LEITURA OBRIGATÓRIA", ou seja, não era só preferência de tom — é prática de publicidade de produto de saúde (fitoterápico) com potencial implicação regulatória real. O histórico deste próprio repositório (`referencias/historico-lancamento-vermefree.md`) registra que a citação do Dr. William como aval técnico já causou problema antes ("foi provavelmente por isso que a regra dura foi criada"). A revogação foi feita a pedido explícito, mas fica registrado que isso deveria ser confirmado por quem cuida do jurídico/regulatório da marca, não só validado em sessão de copy.
+
+Continuam valendo, sem exceção, todos os outros itens do "NUNCA usar" acima (cura, elimina/mata, erradicação, milagre/garantido/em X dias, comparação com farmácia, emagrecimento, diagnosticar o leitor).
+
+### 🚫 Regra dura anterior (histórico — revogada em 11/09/2026, ver §4.1)
+~~Dr. William Araujo NÃO pode ser mencionado em NENHUMA peça — anúncio, legenda, e-mail, WhatsApp, UGC. Em lugar nenhum. Nunca.~~
 
 ---
 
